@@ -901,6 +901,53 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &364462214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 364462215}
+  - component: {fileID: 364462216}
+  m_Layer: 9
+  m_Name: rangeColliderL
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &364462215
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364462214}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.47, y: 0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1840445277}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &364462216
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 364462214}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
 --- !u!1 &440480523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1403,10 +1450,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rangeActive: 1
   AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
   iconXOffset: -0.2
   iconYOffset: 0.4
-  distanceRangeDisable: 1.4
 --- !u!1 &622161098
 GameObject:
   m_ObjectHideFlags: 0
@@ -2010,10 +2058,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rangeActive: 1
   AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
   iconXOffset: -0.2
   iconYOffset: 0.5
-  distanceRangeDisable: 1.4
 --- !u!114 &730584302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2995,6 +3044,53 @@ Transform:
   m_Father: {fileID: 1194112661}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1638706195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1638706196}
+  - component: {fileID: 1638706197}
+  m_Layer: 9
+  m_Name: rangeColliderR
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1638706196
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638706195}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.55, y: 0.28, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1840445277}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1638706197
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638706195}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
 --- !u!1 &1666076272
 GameObject:
   m_ObjectHideFlags: 0
@@ -3341,6 +3437,8 @@ Transform:
   - {fileID: 965069182}
   - {fileID: 1982529470}
   - {fileID: 698369449}
+  - {fileID: 364462215}
+  - {fileID: 1638706196}
   m_Father: {fileID: 1194112661}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3363,6 +3461,7 @@ MonoBehaviour:
   jumpAnimatorBool: 
   pushingAnimatorBool: 
   speedAnimatorFloat: 
+  pickupAnimatorBool: 
   pushingDressSprite: Art/RippedFromGMXPrototype/sprDressAngry_0
 --- !u!114 &1840445279
 MonoBehaviour:
@@ -3385,7 +3484,6 @@ MonoBehaviour:
   canCrouch: 0
   canPush: 1
   canPickup: 1
-  m_pickupRadius: 0.4
   canDoubleJump: 0
   infiniteJump: 0
   m_WhatIsGround:
@@ -3395,9 +3493,8 @@ MonoBehaviour:
   m_CeilingCheck: {fileID: 678911732}
   m_SideCheckL: {fileID: 1982529470}
   m_SideCheckR: {fileID: 698369449}
-  m_pickupTop: {fileID: 678911732}
-  m_pickupSideL: {fileID: 1982529470}
-  m_pickupSideR: {fileID: 698369449}
+  m_rangeColliderL: {fileID: 364462216}
+  m_rangeColliderR: {fileID: 1638706197}
   m_CrouchDisableCollider: {fileID: 0}
   maxVelocity: 20
   spriteFlipMethod: 1

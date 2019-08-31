@@ -7,15 +7,17 @@ using UnityEngine;
 
 public class actionInRange : MonoBehaviour
 {
+    public bool rangeActive = true;
+
     public string AIPrefabResource = "Prefabs/ActionIcons/ActionIcon_Carry"; //A prefab object for the action icon
+    public string rangeColliderTag = "RangeCollider";  //This is the tag that any range colliders should have
     public float iconXOffset = -0.2f;
     public float iconYOffset = 0.5f;
-    public float distanceRangeDisable = 1.4f; //The amount of distance the character must be when inRange is disabled
 
     private GameObject ActionIcon;
     private actionIcon iScript;
 
-    private GameObject characterObject; //The characterObject that is currently (or was last) in range
+    private GameObject characterObject; //The characterObject that is currently in range, or null if nothing is in range
     private bool range = false; //Set to true when an object is in range
 
     // Start is called before the first frame update
@@ -32,21 +34,52 @@ public class actionInRange : MonoBehaviour
         ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
     }
 
-    void LateUpdate()
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (range == true)
+        if (other.gameObject.tag == "RangeCollider" && rangeActive)
         {
-            if (Vector2.Distance(characterObject.transform.position, gameObject.transform.position) > distanceRangeDisable)
-            {
-                setInRange(false, null);
-            }
+            setInRange(true, other.gameObject.transform.parent.gameObject);
+        }
+    }
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "RangeCollider" && rangeActive)
+        {
+            setInRange(false, null);
         }
     }
 
+    public void setRangeActive(bool rangeActive)
+    {
+        this.rangeActive = rangeActive;
+        if (!rangeActive)
+        {
+            setInRange(false, null);
+        }
+    }
+    public bool israngeActive()
+    {
+        return rangeActive;
+    }
     public void setInRange(bool inRange, GameObject go)
     {
         iScript.setVisible(inRange);
         range = inRange;
+
+        if (characterObject != null)
+        {
+            CharacterController2D cont = characterObject.GetComponent<CharacterController2D>() as CharacterController2D;
+            if (cont.getActionObjectInRange() == gameObject)
+            {
+                cont.setActionObjectInRange(null);
+            }
+        }
+
         characterObject = go;
+
+        if (characterObject != null)
+        {
+            characterObject.GetComponent<CharacterController2D>().setActionObjectInRange(gameObject);
+        }
     }
 }

@@ -11,11 +11,13 @@ public class PlayerMovement : MonoBehaviour
     public float runSpeed = 40f;
     bool jump = false;
     bool crouch = false;
+    bool pickup = false;
 
     public string crouchAnimatorBool = "IsCrouching"; //The Animator's boolean flag to set for crouching animations. Leave empty for no animation change.
     public string jumpAnimatorBool = "IsJumping"; //The Animator's boolean flag to set for jump animations. Leave empty for no animation change.
     public string pushingAnimatorBool = "IsPushing"; //The Animator's boolean flag to set for jump animations. Leave empty for no animation change.
     public string speedAnimatorFloat = "Speed"; //The Animator's float to set for walking animations. Leave empty for no animation change.
+    public string pickupAnimatorBool = "isPickingUp"; //Character is picking something up
 
     public string pushingDressSprite=""; // A resource path to a sprite. If set, this sprite gets loaded and added as a child to the player while pushing
 
@@ -43,6 +45,15 @@ public class PlayerMovement : MonoBehaviour
                 jump = true;
                 if (jumpAnimatorBool!="")
                     animator.SetBool(jumpAnimatorBool, true);
+            }
+        }
+        if (controller.pickupEnabled())
+        {
+            if (pickup != true)
+            {
+                pickup = true;
+                if (pickupAnimatorBool != "")
+                    animator.SetBool(pickupAnimatorBool, true);
             }
         }
 
@@ -94,8 +105,9 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+        controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup);
         jump = false;
+        pickup = false;
     }
 
     public void OnLanding()

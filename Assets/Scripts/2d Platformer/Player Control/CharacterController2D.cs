@@ -12,17 +12,16 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private bool canCrouch = true;                             // Whether or not the player can crouch
     [SerializeField] private bool canPush = true;                               // Whether or not the player can push
     [SerializeField] private bool canPickup = true;                             // Whether or not the player can push
-    [SerializeField] private float m_pickupRadius = 0.1f;                       // How close you have to be to an object before you can pick it up. Note: This circle is cast from pickupSide transforms
     [SerializeField] private bool canDoubleJump = false;                        // Whether or not the player can jump a second time
-    [SerializeField] private bool infiniteJump = false;                         // Jump every time, grounded or not
+    [SerializeField] private bool infiniteJump = false;                         // Jump whenever you want!
     [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
 	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
     [SerializeField] private Transform m_SideCheckL;                            // A position marking where to check if the player is grounded.
     [SerializeField] private Transform m_SideCheckR;                            // A position marking where to check for ceilings
-    [SerializeField] private Transform m_pickupTop;                             // A position marking where to check for ceilings
-    [SerializeField] private Transform m_pickupSideL;                            // A position marking where to check if the player is grounded.
-    [SerializeField] private Transform m_pickupSideR;                            // A position marking where to check for ceilings
+    //[SerializeField] private Transform m_pickupTop;                             // A position marking where to check for ceilings
+    [SerializeField] private Collider2D m_rangeColliderL;                            // A position marking where to check if the player is grounded.
+    [SerializeField] private Collider2D m_rangeColliderR;                            // A position marking where to check for ceilings
     [SerializeField] private Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
     [SerializeField] private float maxVelocity=-1;                              // The maximum velocity that the character is limited to. -1 = none.
 
@@ -44,8 +43,9 @@ public class CharacterController2D : MonoBehaviour
     private float pushTimer = -1; //Stores the timer for PushWait. -1 means countdown hasn't started yet.
     private bool timerComplete=false; //Set to true when a timer has completed for pushing
     private bool isHolding = false; //Set to true if we're holding an object
-    private GameObject holding;     //The object we are currently (or were last) holding
-    private bool isOnConveyor = false; //Set by the conveyor script.
+    private pickupObject holding;     //The object we are currently (or were last) holding
+    private GameObject actionObjectInRange; //This is set to the most recent gameobject using actionInRange that is colliding with this character's range colliders. Null if nothing in range.
+    private bool isOnConveyor = false; //Set by the conveyor script
 
     [Header("Events")]
 	[Space]
@@ -110,31 +110,6 @@ public class CharacterController2D : MonoBehaviour
             platformPreviousPosition = new Vector2(currentPlatform.transform.position.x, currentPlatform.transform.position.y);
         }
 
-        //Start pickup item code
-        if (m_Grounded)
-        {
-            if (canPickup && !isHolding)
-            {
-                Collider2D[] col;
-                if (m_FacingRight) col = Physics2D.OverlapCircleAll(m_pickupSideR.position, m_pickupRadius);
-                else col = Physics2D.OverlapCircleAll(m_pickupSideL.position, m_pickupRadius);
-                if (col.Length>0)
-                {
-                    foreach (Collider2D c in col)
-                    {
-                        pickupObject pscript = c.GetComponent(typeof(pickupObject)) as pickupObject;
-                        if (pscript != null)
-                        {
-                            pscript.setInRange(true,gameObject);
-                            break;
-                        }
-                    }
-
-                    //foreach (Collider2D c in col)
-                        //c.gameObject.SendMessage("setInRange",true, SendMessageOptions.DontRequireReceiver);
-                }
-            }
-        }
     }
 
 
@@ -244,7 +219,16 @@ public class CharacterController2D : MonoBehaviour
 				Flip();
 			}
 
-		}
+            //Start pickup item code
+            if (canPickup && !isHolding && m_Grounded && actionObjectInRange!=null && pickup) //We're in range of something, can pick it up, and trying to pick it up
+            {
+                holding = actionObjectInRange.GetComponent<pickupObject>() as pickupObject;
+                holding.pickMeUp(gameObject);
+                isHolding = true;
+                setActionObjectInRange(null);
+            }
+
+        }
 		// If the player should jump...
 		if (jump)
 		{
@@ -287,7 +271,14 @@ public class CharacterController2D : MonoBehaviour
     {
         return isPushing;
     }
-
+    public void setActionObjectInRange(GameObject go)
+    {
+        this.actionObjectInRange = go;
+    }
+    public GameObject getActionObjectInRange()
+    {
+        return actionObjectInRange;
+    }
     private void Flip()
 	{
 		// Switch the way the player is labelled as facing.
@@ -315,6 +306,13 @@ public class CharacterController2D : MonoBehaviour
                     renderer.flipX = !m_FacingRight;
                 }
             }
+        }
+
+
+        if (canPickup && (m_rangeColliderL!=null && m_rangeColliderR != null))
+        {
+            m_rangeColliderR.enabled = m_FacingRight;
+            m_rangeColliderL.enabled = !m_FacingRight;
         }
     }
 }

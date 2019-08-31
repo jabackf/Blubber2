@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - triggerDirectional
+  - RangeCollider
   layers:
   - Default
   - TransparentFX
