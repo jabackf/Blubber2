@@ -105,6 +105,6 @@ public class PlayerMovement : MonoBehaviour
     }
     public void OnCrouch()
     {
-        Debug.Log("CROUCH!");
+
     }
 }
