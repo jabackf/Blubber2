@@ -47,9 +47,10 @@ public class PlayerMovement : MonoBehaviour
                     animator.SetBool(jumpAnimatorBool, true);
             }
         }
+
         if (controller.pickupEnabled())
         {
-            if (pickup != true)
+            if (Input.GetButtonDown("Pickup"))
             {
                 pickup = true;
                 if (pickupAnimatorBool != "")

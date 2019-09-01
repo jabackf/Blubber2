@@ -14,6 +14,7 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private bool canPickup = true;                             // Whether or not the player can push
     [SerializeField] private bool canDoubleJump = false;                        // Whether or not the player can jump a second time
     [SerializeField] private bool infiniteJump = false;                         // Jump whenever you want!
+    [SerializeField] private bool pickupWithJump = false;                       // If "Jump" and "Pickup" inputs are the same, set this to true to prevent jumping when picking something up
     [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
 	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
@@ -115,8 +116,10 @@ public class CharacterController2D : MonoBehaviour
 
     public void Move(float move, bool crouch, bool jump, bool pickup=false)
 	{
-		// If crouching, check to see if the character can stand up
-		if (!crouch && canCrouch)
+        bool justPickedUp = false;
+
+        // If crouching, check to see if the character can stand up
+        if (!crouch && canCrouch)
 		{
 			// If the character has a ceiling preventing them from standing up, keep them crouching
 			if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
@@ -226,11 +229,12 @@ public class CharacterController2D : MonoBehaviour
                 holding.pickMeUp(gameObject);
                 isHolding = true;
                 setActionObjectInRange(null);
+                justPickedUp = true;
             }
 
         }
 		// If the player should jump...
-		if (jump)
+		if (jump && (!justPickedUp||!pickupWithJump) )
 		{
             if (infiniteJump || (canDoubleJump && numJumps < 1) || m_Grounded)
             {
@@ -241,7 +245,7 @@ public class CharacterController2D : MonoBehaviour
                 m_Rigidbody2D.velocity += (new Vector2(0f, m_JumpVelocity));
             }
 		}
-	}
+    }
 
     public void setIsOnConveyor(bool val)
     {
