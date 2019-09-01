@@ -16,6 +16,8 @@ public class pickupObject : actionInRange
     public bool flipOnY = true;
     private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
     private Rigidbody2D rb;
+    public lineArc throwArc;   //The reference to the lineArc script
+    private GameObject throwArcObj;    //The reference to the object containing the lineArc script
 
     private Vector3 refVelocity = new Vector3(0,0,0);
 
@@ -27,7 +29,37 @@ public class pickupObject : actionInRange
         base.Start();
         rb = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
         initialMass = rb.mass;
+
+        throwArcObj = new GameObject(gameObject.name + "_throwArc");
+        throwArc = throwArcObj.AddComponent<lineArc>() as lineArc;
+        throwArc.lr.startWidth = 0.3f;
+        throwArc.lr.endWidth = 0.1f;
+        throwArc.lr.startColor = Color.red;
+        throwArc.lr.endColor = Color.yellow;
+        throwArc.lr.material = Resources.Load("Materials/Flat", typeof(Material)) as Material;
+        throwArc.lr.useWorldSpace = false;
+        throwArc.lr.enabled = false;
     }
+
+    //Use the throwing retical. Called by the holding object.
+    //Arguments = Horizontal movement, vertical movement, release and throw, use the object's action
+    public void Aim(float h, float v, bool release, bool action)
+    {
+        throwArc.lr.enabled = true;
+        if (release)
+        {
+            //Debug.Log("RELEASED");
+            throwArc.lr.enabled = false;
+            releaseFromHolder();
+        }
+        else
+        {
+            throwArc.angle += v;
+            throwArc.velocity += h;
+            throwArc.CalculateArc();
+        }
+    }
+
 
     public void pickMeUp(GameObject character, Transform top, Transform front)
     {
@@ -58,6 +90,7 @@ public class pickupObject : actionInRange
         if (holder != null)
         {
             gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position+new Vector3(offset.x,offset.y,0), ref refVelocity, 0.1f);
+            throwArcObj.transform.position = carryTrans.position + new Vector3(offset.x+throwArc.offset.x, offset.y + throwArc.offset.y, 0);
         }
     }
 

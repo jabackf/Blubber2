@@ -115,6 +115,15 @@ public class CharacterController2D : MonoBehaviour
 
     }
 
+    //Use the throwing retical
+    //Arguments = Horizontal movement, vertical movement, release and throw, use the object's action
+    public void Aim(float h, float v, bool release, bool action)
+    {
+        if (!isHolding || !canPickup || holding==null) return;
+
+        holding.Aim(h, v, release, action);
+    }
+
 
     public void Move(float move, bool crouch, bool jump, bool pickup=false)
 	{

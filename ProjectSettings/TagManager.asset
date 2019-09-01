@@ -52,3 +52,6 @@ TagManager:
   - name: CharacterDress
     uniqueID: 601985539
     locked: 0
+  - name: InGameGUI
+    uniqueID: 3888596403
+    locked: 0
