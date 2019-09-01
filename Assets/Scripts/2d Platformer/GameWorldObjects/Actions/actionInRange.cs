@@ -21,7 +21,7 @@ public class actionInRange : MonoBehaviour
     private bool range = false; //Set to true when an object is in range
 
     // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
         ActionIcon = (GameObject)Instantiate(Resources.Load(AIPrefabResource));
         ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);

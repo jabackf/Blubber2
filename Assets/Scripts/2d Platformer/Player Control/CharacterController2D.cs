@@ -20,7 +20,9 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
     [SerializeField] private Transform m_SideCheckL;                            // A position marking where to check if the player is grounded.
     [SerializeField] private Transform m_SideCheckR;                            // A position marking where to check for ceilings
-    //[SerializeField] private Transform m_pickupTop;                             // A position marking where to check for ceilings
+    [SerializeField] private Transform m_pickupTop;                             // Where to attach objects if carrying them above your head
+    [SerializeField] private Transform m_pickupL;                             // Where to attach objects if carrying them in front left
+    [SerializeField] private Transform m_pickupR;                             // Where to attach objects if carrying them in front right
     [SerializeField] private Collider2D m_rangeColliderL;                            // A position marking where to check if the player is grounded.
     [SerializeField] private Collider2D m_rangeColliderR;                            // A position marking where to check for ceilings
     [SerializeField] private Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
@@ -226,7 +228,7 @@ public class CharacterController2D : MonoBehaviour
             if (canPickup && !isHolding && m_Grounded && actionObjectInRange!=null && pickup) //We're in range of something, can pick it up, and trying to pick it up
             {
                 holding = actionObjectInRange.GetComponent<pickupObject>() as pickupObject;
-                holding.pickMeUp(gameObject);
+                holding.pickMeUp(gameObject, m_pickupTop, m_FacingRight ? m_pickupR : m_pickupL);
                 isHolding = true;
                 setActionObjectInRange(null);
                 justPickedUp = true;
@@ -287,6 +289,11 @@ public class CharacterController2D : MonoBehaviour
 	{
 		// Switch the way the player is labelled as facing.
 		m_FacingRight = !m_FacingRight;
+        if (isHolding)
+        {
+            holding.SendMessage("changeFrontTransform", m_FacingRight ? m_pickupR : m_pickupL);
+            holding.SendMessage("flipSpriteX", !m_FacingRight);
+        }
 
         if (spriteFlipMethod == flipType.scale)
         {
@@ -319,4 +326,12 @@ public class CharacterController2D : MonoBehaviour
             m_rangeColliderL.enabled = !m_FacingRight;
         }
     }
+
+    //Called from pickupObject script when holding item is released (dropped, thrown, added to inventory, etc)
+    public void pickupReleased()
+    {
+        Debug.Log("PickupReleased called");
+        isHolding = false;
+    }
+
 }
