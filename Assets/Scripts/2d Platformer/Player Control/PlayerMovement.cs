@@ -8,10 +8,12 @@ public class PlayerMovement : MonoBehaviour
     public Animator animator;
     public CharacterController2D controller;
     float horizontalMove = 0f;
-    float verticalMove = 0f;    //Used in aiming the throw retical
+    float aimAngleMove = 0f;    //Used in aiming the throw retical (angle)
+    float aimForceMove = 0f;    //Used in aiming the throw retical (force)
     bool throwRelease = false;
     public float runSpeed = 40f;
-    public float aimSpeed = 40f; //Speed for aiming the throwing retical
+    public float aimAngleSpeed = 200f; //Speed for aiming the angle of the throwing retical
+    public float aimForceSpeed = 50f; //Speed for aiming the angle of the throwing retical
     bool jump = false;
     bool crouch = false;
     bool pickup = false;
@@ -59,7 +61,7 @@ public class PlayerMovement : MonoBehaviour
                 if (controller.holdingSomething())
                 {
                     isThrowing = true;
-                    controller.Move(0, false, false, false); //Stop moving if we're walking
+                    //controller.Move(0, false, false, false); //Stop moving if we're walking
                     //Debug.Log("Throwing mode ACTIVE");
                     if (prepThrowAnimatorBool != "")
                         animator.SetBool(prepThrowAnimatorBool, true);
@@ -117,8 +119,16 @@ public class PlayerMovement : MonoBehaviour
                     animator.SetBool(ThrowingAnimatorBool, true);
             }
 
-            //horizontalMove = Input.GetAxisRaw("throwAimHorizontal") * aimSpeed;
-            verticalMove = Input.GetAxisRaw("throwAimVertical") * aimSpeed;
+            if (!Input.GetButton("throwAimHorizontal"))
+            {   //Changing the angle
+                aimAngleMove = Input.GetAxisRaw("throwAimVertical") * aimAngleSpeed;
+                aimForceMove = 0;
+            }
+            else
+            {   //Changing the force
+                aimForceMove = Input.GetAxisRaw("throwAimVertical") * aimForceSpeed;
+                aimAngleMove = 0;
+            }
 
             if (!Input.GetButtonDown("holdingAction"))
             {
@@ -156,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup);
         else
         {
-            controller.Aim(/*horizontalMove*/0 * Time.fixedDeltaTime, verticalMove * Time.fixedDeltaTime, throwRelease, holdingAction);
+            controller.Aim(aimForceMove * Time.fixedDeltaTime, aimAngleMove * Time.fixedDeltaTime, throwRelease, holdingAction);
             controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false);
             if (throwRelease) isThrowing = false;
         }

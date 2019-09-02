@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 49422425}
   - component: {fileID: 49422424}
   - component: {fileID: 49422423}
+  - component: {fileID: 49422427}
   m_Layer: 8
   m_Name: sprWoodBox_0 (3)
   m_TagString: Untagged
@@ -264,6 +265,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &49422427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49422421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 0.5
+  offset: {x: 0, y: 0.6}
+  disableCollider: 0
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 600
+  carryMass: 0.5
+  flipOnX: 1
+  flipOnY: 1
+  throwArc: {fileID: 0}
+  mCarryType: 0
 --- !u!1 &156845573
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,6 +632,7 @@ GameObject:
   - component: {fileID: 217138308}
   - component: {fileID: 217138310}
   - component: {fileID: 217138307}
+  - component: {fileID: 217138311}
   m_Layer: 8
   m_Name: sprWoodBox_0 (2)
   m_TagString: Untagged
@@ -735,6 +764,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 25
+--- !u!114 &217138311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217138305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 0.5
+  offset: {x: 0, y: 0.6}
+  disableCollider: 0
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 600
+  carryMass: 0.5
+  flipOnX: 1
+  flipOnY: 1
+  throwArc: {fileID: 0}
+  mCarryType: 0
 --- !u!1 &258289290
 GameObject:
   m_ObjectHideFlags: 0
@@ -961,6 +1017,7 @@ GameObject:
   - component: {fileID: 440480527}
   - component: {fileID: 440480526}
   - component: {fileID: 440480525}
+  - component: {fileID: 440480529}
   m_Layer: 8
   m_Name: sprWoodBox_0 (5)
   m_TagString: Untagged
@@ -1092,6 +1149,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &440480529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440480523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 0.5
+  offset: {x: 0, y: 0.6}
+  disableCollider: 0
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 600
+  carryMass: 0.5
+  flipOnX: 1
+  flipOnY: 1
+  throwArc: {fileID: 0}
+  mCarryType: 0
 --- !u!1 &461519964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1459,9 +1543,11 @@ MonoBehaviour:
   disableCollider: 0
   breakForce: 520
   breakTorque: 520
+  throwForce: 160
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
+  throwArc: {fileID: 0}
   mCarryType: 0
 --- !u!1 &622161098
 GameObject:
@@ -2075,9 +2161,11 @@ MonoBehaviour:
   disableCollider: 0
   breakForce: 500
   breakTorque: 500
+  throwForce: 600
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  throwArc: {fileID: 0}
   mCarryType: 0
 --- !u!114 &730584302
 MonoBehaviour:
@@ -2431,6 +2519,7 @@ GameObject:
   - component: {fileID: 1171531247}
   - component: {fileID: 1171531248}
   - component: {fileID: 1171531245}
+  - component: {fileID: 1171531251}
   m_Layer: 8
   m_Name: sprBounceBlock_0
   m_TagString: Untagged
@@ -2659,6 +2748,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 24
+--- !u!114 &1171531251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171531241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 0.5
+  offset: {x: 0, y: 0.4}
+  disableCollider: 1
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 600
+  carryMass: 0.5
+  flipOnX: 1
+  flipOnY: 1
+  throwArc: {fileID: 0}
+  mCarryType: 0
 --- !u!1 &1194112659
 GameObject:
   m_ObjectHideFlags: 0
@@ -2897,6 +3013,7 @@ GameObject:
   - component: {fileID: 1512907397}
   - component: {fileID: 1512907396}
   - component: {fileID: 1512907395}
+  - component: {fileID: 1512907399}
   m_Layer: 8
   m_Name: sprWoodBox_0 (4)
   m_TagString: Untagged
@@ -3028,6 +3145,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1512907399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512907393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 0.5
+  offset: {x: 0, y: 0.6}
+  disableCollider: 0
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 600
+  carryMass: 0.5
+  flipOnX: 1
+  flipOnY: 1
+  throwArc: {fileID: 0}
+  mCarryType: 0
 --- !u!1 &1630521634
 GameObject:
   m_ObjectHideFlags: 0
@@ -3284,6 +3428,7 @@ GameObject:
   - component: {fileID: 1722069326}
   - component: {fileID: 1722069328}
   - component: {fileID: 1722069325}
+  - component: {fileID: 1722069329}
   m_Layer: 8
   m_Name: sprWoodBox_0 (1)
   m_TagString: Untagged
@@ -3415,6 +3560,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVelocity: 25
+--- !u!114 &1722069329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1722069323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  AIPrefabResource: Prefabs/ActionIcons/ActionIcon_Carry
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 0.5
+  offset: {x: 0, y: 0.6}
+  disableCollider: 0
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 600
+  carryMass: 0.5
+  flipOnX: 1
+  flipOnY: 1
+  throwArc: {fileID: 0}
+  mCarryType: 0
 --- !u!1 &1840445276
 GameObject:
   m_ObjectHideFlags: 0
@@ -3474,11 +3646,15 @@ MonoBehaviour:
   animator: {fileID: 1840445283}
   controller: {fileID: 1840445279}
   runSpeed: 35
+  aimAngleSpeed: 200
+  aimForceSpeed: 15
   crouchAnimatorBool: 
   jumpAnimatorBool: 
   pushingAnimatorBool: 
   speedAnimatorFloat: 
   pickupAnimatorBool: 
+  prepThrowAnimatorBool: 
+  ThrowingAnimatorBool: 
   pushingDressSprite: Art/RippedFromGMXPrototype/sprDressAngry_0
 --- !u!114 &1840445279
 MonoBehaviour:
@@ -3761,9 +3937,11 @@ MonoBehaviour:
   disableCollider: 1
   breakForce: 500
   breakTorque: 500
+  throwForce: 100
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
+  throwArc: {fileID: 0}
   mCarryType: 1
 --- !u!61 &1848374734
 BoxCollider2D:

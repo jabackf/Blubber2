@@ -7,3 +7,13 @@
 -When pushing against wall:
 NullReferenceException: Object reference not set to an instance of an object
 CharacterController2D.Move (System.Single move, System.Boolean crouch, System.Boolean jump)
+
+-Coneyor warning thingy
+
+-Seperate player input script from animation script / general cleanup needs done
+
+-Check for ceiling before pickup up items
+
+-Get get on stuck walls when holding some items.
+
+-Heavy items can land on head and be hard to get off. Try making character head collider round?

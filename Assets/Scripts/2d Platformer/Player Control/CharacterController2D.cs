@@ -241,6 +241,7 @@ public class CharacterController2D : MonoBehaviour
                 isHolding = true;
                 setActionObjectInRange(null);
                 justPickedUp = true;
+                holding.SendMessage("flipSpriteX", !m_FacingRight); //Update the held object's facing direction
             }
 
         }

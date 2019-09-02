@@ -11,13 +11,15 @@ public class pickupObject : actionInRange
     public bool disableCollider = true; //if true, the collider will be changed to a trigger when the object is carried.
     public float breakForce = 500;  //The amount of force needed to break the joint between the holding character this object
     public float breakTorque = 500;
+    public float throwForce = 200; //This number is multiplied by length of the throw arrow.
     public float carryMass = 0.5f;  //This is the mass of the object while it's being carried
     public bool flipOnX = true;     //Flips with the character holding it if set to true
     public bool flipOnY = true;
     private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
     private Rigidbody2D rb;
-    public lineArc throwArc;   //The reference to the lineArc script
-    private GameObject throwArcObj;    //The reference to the object containing the lineArc script
+    public lineArrow throwArc;   //The reference to the lineArrow script
+    private GameObject throwArcObj;    //The reference to the object containing the lineArrow script
+    bool flippedX=false;  //Tracks if the holding character is currently flipped horizontally
 
     private Vector3 refVelocity = new Vector3(0,0,0);
 
@@ -31,30 +33,30 @@ public class pickupObject : actionInRange
         initialMass = rb.mass;
 
         throwArcObj = new GameObject(gameObject.name + "_throwArc");
-        throwArc = throwArcObj.AddComponent<lineArc>() as lineArc;
-        throwArc.lr.startWidth = 0.3f;
-        throwArc.lr.endWidth = 0.1f;
-        throwArc.lr.startColor = Color.red;
-        throwArc.lr.endColor = Color.yellow;
-        throwArc.lr.material = Resources.Load("Materials/Flat", typeof(Material)) as Material;
-        throwArc.lr.useWorldSpace = false;
-        throwArc.lr.enabled = false;
+        throwArc = throwArcObj.AddComponent<lineArrow>() as lineArrow;
+        throwArc.hide();
+        
     }
 
     //Use the throwing retical. Called by the holding object.
     //Arguments = Horizontal movement, vertical movement, release and throw, use the object's action
     public void Aim(float h, float v, bool release, bool action)
     {
-        throwArc.lr.enabled = true;
+        if (!throwArc.isShowing())
+        {
+            throwArc.show();
+            throwArc.setAngle(flippedX ? 50 : 130);
+            throwArc.setMinMax(flippedX ? 0 : 90, flippedX ? 90 : 180);
+        }
         if (release)
         {
-            releaseFromHolder();
+            throwItem();
         }
         else
         {
-            throwArc.angle += v;
-            throwArc.velocity += h;
-            throwArc.CalculateArc();
+
+            throwArc.setAngle(throwArc.angle += (flippedX ? v : -v));
+            throwArc.setLength(throwArc.length+h);
         }
     }
 
@@ -88,7 +90,7 @@ public class pickupObject : actionInRange
         if (holder != null)
         {
             gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position+new Vector3(offset.x,offset.y,0), ref refVelocity, 0.1f);
-            throwArcObj.transform.position = carryTrans.position + new Vector3(offset.x+throwArc.offset.x, offset.y + throwArc.offset.y, 0);
+            throwArc.follow(gameObject.transform);
         }
     }
 
@@ -100,10 +102,19 @@ public class pickupObject : actionInRange
         }
     }
 
+
+    public void throwItem()
+    {
+        Destroy(joint);
+        releaseFromHolder();
+        float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
+        rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle))*throwForce*throwArc.length);
+    }
+
     void releaseFromHolder()
     {
         this.setRangeActive(true);
-        throwArc.lr.enabled = false;
+        throwArc.hide();
         holder.SendMessage("pickupReleased");
         holder = null;
         rb.mass = initialMass;
@@ -130,10 +141,12 @@ public class pickupObject : actionInRange
             gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
         }
 
+        flippedX = !flipX ;
+
         //We still want to change the throw arc to the direction we're facing, even if we're not flipping the sprite.
-        //throwArc.angle = flipX ? throwArc.angle - 180 : throwArc.angle + 180;
-        throwArc.velocity = - throwArc.velocity;
-        if (throwArc.lr.enabled) throwArc.CalculateArc();
+        if (!flippedX) throwArc.setMinMax(90, 180);
+        else throwArc.setMinMax(0, 90);
+        throwArc.setAngle( (180-throwArc.angle) );
     }
     public void flipSpriteY(bool flipY)
     {
