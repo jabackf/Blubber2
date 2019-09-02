@@ -67,11 +67,12 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+        if (speedAnimatorFloat != "")
+            animator.SetFloat(speedAnimatorFloat, Mathf.Abs(horizontalMove));
+
         if (!isThrowing && controller.pickupEnabled())
         {
-            horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-            if (speedAnimatorFloat != "")
-                animator.SetFloat(speedAnimatorFloat, Mathf.Abs(horizontalMove));
 
             if (Input.GetButtonDown("Jump"))
             {
@@ -116,8 +117,8 @@ public class PlayerMovement : MonoBehaviour
                     animator.SetBool(ThrowingAnimatorBool, true);
             }
 
-            horizontalMove = Input.GetAxisRaw("throwAimHorizontal") * aimSpeed;
-            verticalMove = Input.GetAxisRaw("throwAimHorizontal") * aimSpeed;
+            //horizontalMove = Input.GetAxisRaw("throwAimHorizontal") * aimSpeed;
+            verticalMove = Input.GetAxisRaw("throwAimVertical") * aimSpeed;
 
             if (!Input.GetButtonDown("holdingAction"))
             {
@@ -155,7 +156,8 @@ public class PlayerMovement : MonoBehaviour
             controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup);
         else
         {
-            controller.Aim(horizontalMove * Time.fixedDeltaTime, verticalMove * Time.fixedDeltaTime, throwRelease, holdingAction);
+            controller.Aim(/*horizontalMove*/0 * Time.fixedDeltaTime, verticalMove * Time.fixedDeltaTime, throwRelease, holdingAction);
+            controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false);
             if (throwRelease) isThrowing = false;
         }
         jump = false;

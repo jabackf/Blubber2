@@ -48,8 +48,6 @@ public class pickupObject : actionInRange
         throwArc.lr.enabled = true;
         if (release)
         {
-            //Debug.Log("RELEASED");
-            throwArc.lr.enabled = false;
             releaseFromHolder();
         }
         else
@@ -105,6 +103,7 @@ public class pickupObject : actionInRange
     void releaseFromHolder()
     {
         this.setRangeActive(true);
+        throwArc.lr.enabled = false;
         holder.SendMessage("pickupReleased");
         holder = null;
         rb.mass = initialMass;
@@ -130,6 +129,11 @@ public class pickupObject : actionInRange
             offset.x = -offset.x;
             gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
         }
+
+        //We still want to change the throw arc to the direction we're facing, even if we're not flipping the sprite.
+        //throwArc.angle = flipX ? throwArc.angle - 180 : throwArc.angle + 180;
+        throwArc.velocity = - throwArc.velocity;
+        if (throwArc.lr.enabled) throwArc.CalculateArc();
     }
     public void flipSpriteY(bool flipY)
     {

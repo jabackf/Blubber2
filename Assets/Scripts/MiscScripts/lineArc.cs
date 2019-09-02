@@ -11,6 +11,7 @@ public class lineArc : MonoBehaviour
     public float velocity = 10;
     public float angle=45;
     public int resolution = 15;
+    //public int hFlip = 1; //Multiples the line horizontally. Set to -1 to flip the line.
 
     public Vector2 offset=new Vector2(0,0);
 
@@ -62,7 +63,7 @@ public class lineArc : MonoBehaviour
 
     Vector3 CalculateArcPoint(float t, float maxDistance)
     {
-        float x = (t * maxDistance)+offset.x;
+        float x = ((t * maxDistance) + offset.x);
         float y = (x * Mathf.Tan(radianAngle) - ((g * x * x) / (2 * velocity * velocity * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle))))+offset.y;
         return new Vector3(x, y);
     }
