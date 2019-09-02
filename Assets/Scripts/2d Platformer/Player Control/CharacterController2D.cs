@@ -41,6 +41,7 @@ public class CharacterController2D : MonoBehaviour
     private int numJumps = 0; //Counts the number of jumps while in air. Resets when player lands. Used, for example, in double jumping.
     private GameObject currentPlatform = null; //One of the current platforms we are standing on. Null if not grounded.
     private GameObject previousPlatform = null; 
+    private CharacterAnimation charAnim = null;
     private Vector2 platformPreviousPosition;
     private bool isPushing = false; //Set to true when the character is trying to push something while grounded
     private float pushTimer = -1; //Stores the timer for PushWait. -1 means countdown hasn't started yet.
@@ -70,6 +71,8 @@ public class CharacterController2D : MonoBehaviour
 
 		if (OnCrouchEvent == null)
 			OnCrouchEvent = new BoolEvent();
+
+        charAnim = gameObject.GetComponent<CharacterAnimation>() as CharacterAnimation;
 	}
 
 	private void FixedUpdate()
@@ -96,6 +99,7 @@ public class CharacterController2D : MonoBehaviour
                 if (!wasGrounded)
                 {
                     OnLandEvent.Invoke();
+                    if (charAnim!=null) charAnim.jump = false;
                     numJumps = 0;
                 }
 			}
@@ -122,11 +126,14 @@ public class CharacterController2D : MonoBehaviour
         if (!isHolding || !canPickup || holding==null) return;
 
         holding.Aim(h, v, release, action);
+
+        if (charAnim != null) charAnim.throwing = release;
     }
 
 
     public void Move(float move, bool crouch, bool jump, bool pickup=false)
 	{
+
         bool justPickedUp = false;
 
         // If crouching, check to see if the character can stand up
@@ -136,7 +143,7 @@ public class CharacterController2D : MonoBehaviour
 			if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
 			{
 				crouch = true;
-			}
+            }
 		}
 
 		//only control the player if grounded or airControl is turned on
@@ -150,13 +157,15 @@ public class CharacterController2D : MonoBehaviour
 				{
 					m_wasCrouching = true;
 					OnCrouchEvent.Invoke(true);
-				}
+                }
 
 				// Reduce the speed by the crouchSpeed multiplier
 				move *= m_CrouchSpeed;
 
-				// Disable one of the colliders when crouching
-				if (m_CrouchDisableCollider != null)
+                if (charAnim != null) charAnim.crouch = true;
+
+                // Disable one of the colliders when crouching
+                if (m_CrouchDisableCollider != null)
 					m_CrouchDisableCollider.enabled = false;
 			} else
 			{
@@ -168,10 +177,12 @@ public class CharacterController2D : MonoBehaviour
 				{
 					m_wasCrouching = false;
 					OnCrouchEvent.Invoke(false);
-				}
+                    if (charAnim != null) charAnim.crouch = false;
+                }
 			}
 
 
+            if (charAnim != null) charAnim.pushing = false;
             //Start pushing logic
             if (move==0)
             {
@@ -197,9 +208,9 @@ public class CharacterController2D : MonoBehaviour
                         timerComplete = true;
                     }
                     if (timerComplete)
-                    { 
+                    {
+                        if (charAnim != null) charAnim.pushing = true;
                         isPushing = true;
-                        //Debug.Log(gameObject.name + " is Pushing!");
                         if (pushingLeft) 
                             leftCol.attachedRigidbody.AddForceAtPosition(new Vector2(-m_PushForce, 0f), new Vector2(m_SideCheckL.position.x, m_SideCheckL.position.y) );
                         if (pushingRight)
@@ -220,8 +231,10 @@ public class CharacterController2D : MonoBehaviour
 			// And then smoothing it out and applying it to the character
 			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 
-			// If the input is moving the player right and the player is facing left...
-			if (move > 0 && !m_FacingRight)
+            if (charAnim != null) charAnim.speed = Mathf.Abs(move);
+
+            // If the input is moving the player right and the player is facing left...
+            if (move > 0 && !m_FacingRight)
 			{
 				// ... flip the player.
 				Flip();
@@ -234,6 +247,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 
             //Start pickup item code
+            if(charAnim != null) charAnim.pickingUp = false;
             if (canPickup && !isHolding && m_Grounded && actionObjectInRange!=null && pickup) //We're in range of something, can pick it up, and trying to pick it up
             {
                 holding = actionObjectInRange.GetComponent<pickupObject>() as pickupObject;
@@ -241,15 +255,32 @@ public class CharacterController2D : MonoBehaviour
                 isHolding = true;
                 setActionObjectInRange(null);
                 justPickedUp = true;
+                if (charAnim != null) charAnim.pickingUp = true;
                 holding.SendMessage("flipSpriteX", !m_FacingRight); //Update the held object's facing direction
             }
 
         }
-		// If the player should jump...
-		if (jump && (!justPickedUp||!pickupWithJump) )
+
+        charAnim.carryTop = false;
+        charAnim.carryFront = false;
+
+        if (isHolding && charAnim!=null)
+        {
+            if (holding.mCarryType == pickupObject.carryType.Top) charAnim.carryTop = true;
+            if (holding.mCarryType == pickupObject.carryType.Front) charAnim.carryFront = true;
+        }
+
+        // If the player should jump...
+        charAnim.doubleJump = false;
+        if (jump && (!justPickedUp||!pickupWithJump) )
 		{
             if (infiniteJump || (canDoubleJump && numJumps < 1) || m_Grounded)
             {
+                if (charAnim != null)
+                {
+                    charAnim.jump = true;
+                    if (numJumps>0) charAnim.doubleJump = true;
+                }
                 // Add a vertical force to the player.
                 m_Grounded = false;
                 numJumps++;
