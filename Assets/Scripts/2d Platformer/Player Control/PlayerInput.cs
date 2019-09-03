@@ -12,10 +12,10 @@ public class PlayerInput : MonoBehaviour
 
     public CharacterController2D controller;
     float horizontalMove = 0f;
-    float aimAngleMove = 0f;    //Used in aiming the throw retical (angle)
-    float aimForceMove = 0f;    //Used in aiming the throw retical (force)
+    float aimAngleMove = 200f;    //Used in aiming the throw retical (angle)
+    float aimForceMove = 15f;    //Used in aiming the throw retical (force)
     bool throwRelease = false;
-    public float runSpeed = 40f;
+    public float runSpeed = 35f;
     public float aimAngleSpeed = 200f; //Speed for aiming the angle of the throwing retical
     public float aimForceSpeed = 50f; //Speed for aiming the angle of the throwing retical
     bool jump = false;

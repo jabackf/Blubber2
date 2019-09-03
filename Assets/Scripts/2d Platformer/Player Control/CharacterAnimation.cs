@@ -46,15 +46,45 @@ public class CharacterAnimation : MonoBehaviour
     public string topCarryAnimatorBool = "IsCarryingTop"; //Releasing the throw button down.
     public string climbingAnimatorBool = "IsClimbing"; //Climbing
 
-    public string pushingDressSprite = ""; // A resource path to a sprite. If set, this sprite gets loaded and added as a child to the player while pushing
-    private GameObject pushingDressSpriteObj = null;
-    private int dressSortingOrder = 0;
+    public string pushingDressName = "angry"; //The name of a dress to activate when we are pushing. Leave blank for none.
+
+    public class dress
+    {
+        public static int listSortingOrder = 0;
+
+        public string resourceName; // A resource path to a sprite.
+        public string name;
+        public string layerName = "CharacterDress";
+        public SpriteRenderer renderer;
+        public int dressSortingOrder = 0;
+        public GameObject gameObject;
+
+        public dress(string name, string resourcePath, Transform parent, string layerName = "CharacterDress", int m_dressSortingOrder = -1)
+        {
+            if (m_dressSortingOrder == -1)
+            {
+                m_dressSortingOrder = listSortingOrder;
+                listSortingOrder++;
+            }
+            this.name = name;
+            this.gameObject = new GameObject();
+            this.gameObject.name = "dress_"+name;
+            this.gameObject.transform.parent = parent;
+            this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+            this.gameObject.layer = LayerMask.NameToLayer(layerName);
+            this.renderer = this.gameObject.AddComponent<SpriteRenderer>();
+            this.renderer.sprite = Resources.Load(resourcePath, typeof(Sprite)) as Sprite;
+            this.renderer.sortingLayerName = layerName;
+            this.renderer.sortingOrder = m_dressSortingOrder;
+        }
+    }
+
+    public List<dress> dressList = new List<dress>();
 
     // Start is called before the first frame update
     void Start()
     {
-        if (pushingDressSprite != "" && controller.pushEnabled())
-            pushingDressSpriteObj = addDress("pushingDress", pushingDressSprite);
+        dressList.Add(new dress("angry", "Art/RippedFromGMXPrototype/sprDressAngry_0", gameObject.transform));
     }
 
     void Update()
@@ -86,6 +116,8 @@ public class CharacterAnimation : MonoBehaviour
 
         if (pushingAnimatorBool != "")
             animator.SetBool(pushingAnimatorBool, pushing);
+        if (pushingDressName != "")
+            dressShowHide(pushingDressName, pushing);
 
         if (pickingUpTimer > 0)
         {
@@ -121,134 +153,10 @@ public class CharacterAnimation : MonoBehaviour
             animator.SetBool(throwingAnimatorBool, throwing);
     }
 
-    public void animateOnMove(float move, bool crouch, bool jump, bool pickup = false)
-    {/*
-
-        if (controller.pickupEnabled())
-        {
-            if (Input.GetButtonDown("Pickup"))
-            {
-                if (!controller.holdingSomething())
-                {
-                    pickup = true;
-                    if (pickupAnimatorBool != "")
-                        animator.SetBool(pickupAnimatorBool, true);
-                }
-            }
-            if (Input.GetButtonDown("Throw"))
-            {
-                if (controller.holdingSomething())
-                {
-                    isThrowing = true;
-                    //controller.Move(0, false, false, false); //Stop moving if we're walking
-                    //Debug.Log("Throwing mode ACTIVE");
-                    if (prepThrowAnimatorBool != "")
-                        animator.SetBool(prepThrowAnimatorBool, true);
-                }
-            }
-        }
-
-        if (!isThrowing && controller.pickupEnabled())
-        {
-
-            if (Input.GetButtonDown("Jump"))
-            {
-                if (jump != true)
-                {
-                    jump = true;
-                    if (jumpAnimatorBool != "")
-                        animator.SetBool(jumpAnimatorBool, true);
-                }
-            }
-
-
-            if (controller.crouchEnabled())
-            {
-                if (Input.GetButtonDown("Crouch"))
-                {
-                    crouch = true;
-                }
-                else if (Input.GetButtonUp("Crouch"))
-                {
-                    crouch = false;
-                }
-
-                if (crouchAnimatorBool != "")
-                    animator.SetBool(crouchAnimatorBool, crouch);
-
-                if (pushingAnimatorBool != "")
-                    animator.SetBool(pushingAnimatorBool, controller.isPushingSomething());
-            }
-            if (pushingDressSpriteObj != null)
-            {
-                dressShowHide(pushingDressSpriteObj, controller.isPushingSomething());
-            }
-        }//end !isThrowing
-        else
-        {//We're throwing something
-            if (!Input.GetButton("Throw"))
-            {
-                throwRelease = true;
-                //Debug.Log("Throwing mode INACTIVE");
-                if (ThrowingAnimatorBool != "")
-                    animator.SetBool(ThrowingAnimatorBool, true);
-            }
-
-            if (!Input.GetButton("throwAimHorizontal"))
-            {   //Changing the angle
-                aimAngleMove = Input.GetAxisRaw("throwAimVertical") * aimAngleSpeed;
-                aimForceMove = 0;
-            }
-            else
-            {   //Changing the force
-                aimForceMove = Input.GetAxisRaw("throwAimVertical") * aimForceSpeed;
-                aimAngleMove = 0;
-            }
-
-            if (!Input.GetButtonDown("holdingAction"))
-            {
-                holdingAction = true;
-            }
-        }*/
-
-    }
-
-    public GameObject addDress(string name, string resourcePath, string layerName = "CharacterDress", int m_dressSortingOrder = -1)
+    public void dressShowHide(string name, bool show)
     {
-        if (m_dressSortingOrder == -1)
-        {
-            m_dressSortingOrder = dressSortingOrder;
-            dressSortingOrder++;
-        }
-        GameObject dress = new GameObject();
-        dress.name = name;
-        dress.transform.parent = gameObject.transform;
-        dress.transform.localPosition = new Vector3(0f, 0f, 0f);
-        dress.layer = LayerMask.NameToLayer(layerName);
-        SpriteRenderer renderer = dress.AddComponent<SpriteRenderer>();
-        renderer.sprite = Resources.Load(resourcePath, typeof(Sprite)) as Sprite;
-        renderer.sortingLayerName = layerName;
-        return dress;
-    }
-    public void dressShowHide(GameObject dress, bool show)
-    {
-        dress.GetComponent<SpriteRenderer>().enabled = show;
-    }
-
-    void FixedUpdate()
-    {/*
-        if (!isThrowing)
-            controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup);
-        else
-        {
-            controller.Aim(aimForceMove * Time.fixedDeltaTime, aimAngleMove * Time.fixedDeltaTime, throwRelease, holdingAction);
-            controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false);
-            if (throwRelease) isThrowing = false;
-        }
-        jump = false;
-        pickup = false;
-        holdingAction = false;
-        throwRelease = false;*/
+        dress d = dressList.Find(dress => dress.name == name);
+        if (d != null) d.renderer.enabled = show;
     }
 
 }

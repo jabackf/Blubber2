@@ -12,7 +12,7 @@ CharacterController2D.Move (System.Single move, System.Boolean crouch, System.Bo
 
 -Conveyor warning thingy
 
--Seperate player input script from animation script / general cleanup needs done
+-general cleanup needs done
 
 -Check for ceiling before pickup up items
 
@@ -20,4 +20,4 @@ CharacterController2D.Move (System.Single move, System.Boolean crouch, System.Bo
 
 -Heavy items can land on head and be hard to get off. Try making character head collider round?
 
--CreatClimbing
+-CreateClimbing
