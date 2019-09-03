@@ -38,7 +38,7 @@ public class CharacterController2D : MonoBehaviour
     private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
-    private int numJumps = 0; //Counts the number of jumps while in air. Resets when player lands. Used, for example, in double jumping.
+    public int numJumps = 0; //Counts the number of jumps while in air. Resets when player lands. Used, for example, in double jumping.
     private GameObject currentPlatform = null; //One of the current platforms we are standing on. Null if not grounded.
     private GameObject previousPlatform = null; 
     private CharacterAnimation charAnim = null;
@@ -79,7 +79,7 @@ public class CharacterController2D : MonoBehaviour
 	{
         if (maxVelocity != -1)
         {
-            GetComponent<Rigidbody2D>().velocity = Vector2.ClampMagnitude(GetComponent<Rigidbody2D>().velocity, maxVelocity);
+            m_Rigidbody2D.velocity = Vector2.ClampMagnitude(m_Rigidbody2D.velocity, maxVelocity);
         }
 
         bool wasGrounded = m_Grounded;
@@ -96,11 +96,15 @@ public class CharacterController2D : MonoBehaviour
 			{
 				m_Grounded = true;
                 currentPlatform = colliders[i].gameObject;
-                if (!wasGrounded)
+                if (!wasGrounded && m_Rigidbody2D.velocity.y<0)
                 {
                     OnLandEvent.Invoke();
-                    if (charAnim!=null) charAnim.jump = false;
-                    numJumps = 0;
+                    if (charAnim != null)
+                    {
+                        charAnim.jump = false;
+                        charAnim.doubleJump = false;
+                    }
+                        numJumps = 0;
                 }
 			}
 		}
@@ -247,7 +251,6 @@ public class CharacterController2D : MonoBehaviour
 			}
 
             //Start pickup item code
-            if(charAnim != null) charAnim.pickingUp = false;
             if (canPickup && !isHolding && m_Grounded && actionObjectInRange!=null && pickup) //We're in range of something, can pick it up, and trying to pick it up
             {
                 holding = actionObjectInRange.GetComponent<pickupObject>() as pickupObject;
@@ -271,19 +274,18 @@ public class CharacterController2D : MonoBehaviour
         }
 
         // If the player should jump...
-        charAnim.doubleJump = false;
         if (jump && (!justPickedUp||!pickupWithJump) )
 		{
-            if (infiniteJump || (canDoubleJump && numJumps < 1) || m_Grounded)
+            if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded)
             {
-                if (charAnim != null)
-                {
-                    charAnim.jump = true;
-                    if (numJumps>0) charAnim.doubleJump = true;
-                }
                 // Add a vertical force to the player.
                 m_Grounded = false;
                 numJumps++;
+                if (charAnim != null)
+                {
+                    charAnim.jump = true;
+                    if (numJumps > 1) charAnim.doubleJump = true;
+                }
                 //m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
                 m_Rigidbody2D.velocity += (new Vector2(0f, m_JumpVelocity));
             }

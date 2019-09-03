@@ -13,27 +13,37 @@ public class CharacterAnimation : MonoBehaviour
     public Animator animator;
     public CharacterController2D controller;
 
-    public float speed = 0f; //Controls the speed of walking animations.
-    public bool jump = false; //Stays true for duration of jump, until landing
-    public bool doubleJump = false; //Only true for one frame. Jump will also be true.
-    public bool crouch = false; //True for the full duration of crouch
-    public bool pushing = false; //True for the full duration of push
-    public bool pickingUp = false; //Set to true for one frame after the player initiates an item pickup
-    public bool carryTop = false; //Set to true for the full duration of carry action
+    //The following variables are mostly set automatically by the character controller, though a few are unset by this script. They give us info about the character's current state.
+    public float speed = 0f; //Controls the speed of walking animations. Set by the character controller
+    public float speedMultiplier = 1.5f; //Use to adjust the speed of the animation.
+    public bool jump = false; //Stays true for duration of jump, until landing. Set and unset by the character controller.
+    public bool doubleJump = false; //Only true for a fixed duration. Jump will also be true. Set by character controller, unset by this charAnim script
+    public bool crouch = false; //True for the full duration of crouch. Set and unset by the character controller.
+    public bool pushing = false; //True for the full duration of push. Set and unset by the character controller.
+    public bool pickingUp = false; //Only true for a fixed duration, initiated after the player initiates an item pickup. Set by character controller, unset by this charAnim script
+    public bool carryTop = false; //Set to true for the full duration of carry action. Set and unset by the character controller
     public bool carryFront = false; //Ditto
-    public bool throwing = false; //Set to true after an object is thrown. DOES NOT RESET IN CHARACTER CONTROLLER, AND MUST BE IMPLICITLY RESET AFTER ANIMATION IS INITIATED
-
-
+    public bool throwing = false; //Set to true after an object is thrown. Set by the character controller, unset by this charAnim script
     public bool climb = false; //Not yet implemented in character controller.
+
+    public float doubleJumpDuration = 0.3f;  //The amount of time to play the double jump animation
+    private float doubleJumpTimer = 0;
+
+    public float pickingUpDuration = 0.2f;  //The amount of time to play the picking up animation
+    private float pickingUpTimer = 0;
+
+    public float throwingDuration = 0.2f;  //The amount of time to play the picking up animation
+    private float throwingTimer = 0;
 
     public string crouchAnimatorBool = "IsCrouching"; //The Animator's boolean flag to set for crouching animations. Leave empty for no animation change.
     public string jumpAnimatorBool = "IsJumping"; //The Animator's boolean flag to set for jump animations. Leave empty for no animation change.
+    public string doubleJumpAnimatorBool = "IsDoubleJumping"; //The Animator's boolean flag to set for jump animations. Leave empty for no animation change.
     public string pushingAnimatorBool = "IsPushing"; //The Animator's boolean flag to set for jump animations. Leave empty for no animation change.
     public string speedAnimatorFloat = "Speed"; //The Animator's float to set for walking animations. Leave empty for no animation change.
     public string pickupAnimatorBool = "IsPickingUp"; //Character is picking something up
     public string throwingAnimatorBool = "IsThrowing"; //Releasing the throw button down.
     public string frontCarryAnimatorBool = "IsCarryingFront"; //Releasing the throw button down.
-    public string topCarryAnimatorBool = "IsCarryinTop"; //Releasing the throw button down.
+    public string topCarryAnimatorBool = "IsCarryingTop"; //Releasing the throw button down.
     public string climbingAnimatorBool = "IsClimbing"; //Climbing
 
     public string pushingDressSprite = ""; // A resource path to a sprite. If set, this sprite gets loaded and added as a child to the player while pushing
@@ -45,6 +55,70 @@ public class CharacterAnimation : MonoBehaviour
     {
         if (pushingDressSprite != "" && controller.pushEnabled())
             pushingDressSpriteObj = addDress("pushingDress", pushingDressSprite);
+    }
+
+    void Update()
+    {
+        //Set speed for movement
+        if (speedAnimatorFloat != "")
+            animator.SetFloat(speedAnimatorFloat, Mathf.Abs(speed*speedMultiplier));
+
+        if (crouchAnimatorBool != "")
+            animator.SetBool(crouchAnimatorBool, crouch);
+
+
+        if (jumpAnimatorBool != "")
+            animator.SetBool(jumpAnimatorBool, jump);
+
+        if (doubleJumpTimer > 0)
+        {
+            doubleJumpTimer -= Time.deltaTime;
+            if (doubleJumpTimer <= 0)
+            {
+                doubleJump = false;
+                doubleJumpTimer = 0;
+            }
+        }
+        if (doubleJumpTimer == 0 && doubleJump) doubleJumpTimer = doubleJumpDuration;
+        if (!doubleJump) doubleJumpTimer = 0;
+        if (doubleJumpAnimatorBool != "")
+            animator.SetBool(doubleJumpAnimatorBool, doubleJump);
+
+        if (pushingAnimatorBool != "")
+            animator.SetBool(pushingAnimatorBool, pushing);
+
+        if (pickingUpTimer > 0)
+        {
+            pickingUpTimer -= Time.deltaTime;
+            if (pickingUpTimer <= 0)
+            {
+                pickingUp = false;
+                pickingUpTimer = 0;
+            }
+        }
+        if (pickingUpTimer == 0 && pickingUp) pickingUpTimer = pickingUpDuration;
+        if (!pickingUp) pickingUpTimer = 0;
+        if (pickupAnimatorBool != "")
+            animator.SetBool(pickupAnimatorBool, pickingUp);
+
+        if (frontCarryAnimatorBool != "")
+            animator.SetBool(frontCarryAnimatorBool, carryFront);
+        if (topCarryAnimatorBool != "")
+            animator.SetBool(topCarryAnimatorBool, carryTop);
+
+        if (throwingTimer > 0)
+        {
+            throwingTimer -= Time.deltaTime;
+            if (throwingTimer <= 0)
+            {
+                throwing = false;
+                throwingTimer = 0;
+            }
+        }
+        if (throwingTimer == 0 && throwing) throwingTimer = throwingDuration;
+        if (!throwing) throwingTimer = 0;
+        if (throwingAnimatorBool != "")
+            animator.SetBool(throwingAnimatorBool, throwing);
     }
 
     public void animateOnMove(float move, bool crouch, bool jump, bool pickup = false)
@@ -73,9 +147,6 @@ public class CharacterAnimation : MonoBehaviour
                 }
             }
         }
-
-        if (speedAnimatorFloat != "")
-            animator.SetFloat(speedAnimatorFloat, Mathf.Abs(horizontalMove));
 
         if (!isThrowing && controller.pickupEnabled())
         {

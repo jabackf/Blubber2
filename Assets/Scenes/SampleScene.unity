@@ -369,7 +369,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: cc6b1a0fff6ca47428543fa1a603aa7f, type: 2}
+      objectReference: {fileID: 9100000, guid: 1852fb3742220f94eac2be743ed81aa4, type: 2}
     - target: {fileID: 3582234677797093665, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}
       propertyPath: m_Enabled
@@ -450,6 +450,7 @@ MonoBehaviour:
   animator: {fileID: 92100540}
   controller: {fileID: 92100536}
   speed: 0
+  speedMultiplier: 1.2
   jump: 0
   doubleJump: 0
   crouch: 0
@@ -459,14 +460,18 @@ MonoBehaviour:
   carryFront: 0
   throwing: 0
   climb: 0
+  doubleJumpDuration: 0.3
+  pickingUpDuration: 0.2
+  throwingDuration: 0.2
   crouchAnimatorBool: IsCrouching
   jumpAnimatorBool: IsJumping
+  doubleJumpAnimatorBool: IsDoubleJumping
   pushingAnimatorBool: IsPushing
   speedAnimatorFloat: Speed
-  pickupAnimatorBool: isPickingUp
+  pickupAnimatorBool: IsPickingUp
   throwingAnimatorBool: IsThrowing
   frontCarryAnimatorBool: IsCarryingFront
-  topCarryAnimatorBool: IsCarryinTop
+  topCarryAnimatorBool: IsCarryingTop
   climbingAnimatorBool: IsClimbing
   pushingDressSprite: 
 --- !u!114 &92100535
