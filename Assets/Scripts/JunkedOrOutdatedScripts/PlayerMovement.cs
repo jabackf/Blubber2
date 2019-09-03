@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//This originally handled player input and character animation. It was split off into PlayerInput and CharacterAnimation.
+
 public class PlayerMovement : MonoBehaviour
 {
 

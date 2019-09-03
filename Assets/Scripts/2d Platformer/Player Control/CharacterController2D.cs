@@ -8,16 +8,20 @@ public class CharacterController2D : MonoBehaviour
 	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
     [SerializeField] private float m_PushForce = 90f;                          // if canPush is true, this is the additional force applied when pushing
     [SerializeField] private float m_PushWait = 1f;                             // The amount of time to press against something before going into push mode
+    [SerializeField] private float m_ClimbSpeed = 3f;
     [SerializeField] private bool m_AirControl = true;							// Whether or not a player can steer while jumping;
     [SerializeField] private bool canCrouch = true;                             // Whether or not the player can crouch
+    [SerializeField] private bool canClimb = true;                             // Whether or not the player can climb
     [SerializeField] private bool canPush = true;                               // Whether or not the player can push
     [SerializeField] private bool canPickup = true;                             // Whether or not the player can push
     [SerializeField] private bool canDoubleJump = false;                        // Whether or not the player can jump a second time
     [SerializeField] private bool infiniteJump = false;                         // Jump whenever you want!
     [SerializeField] private bool pickupWithJump = false;                       // If "Jump" and "Pickup" inputs are the same, set this to true to prevent jumping when picking something up
+    [SerializeField] private bool climbWithJump = false;                       // If "Jump" and "Climb" inputs are the same, set this to true to prevent jumping when climbing
     [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
-	[SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
-	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings
+    [SerializeField] private LayerMask m_WhatIsClimb;                          // A mask determining what is ground to the character
+    [SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
+	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings. Also used to test for ladders.
     [SerializeField] private Transform m_SideCheckL;                            // A position marking where to check if the player is grounded.
     [SerializeField] private Transform m_SideCheckR;                            // A position marking where to check for ceilings
     [SerializeField] private Transform m_pickupTop;                             // Where to attach objects if carrying them above your head
@@ -135,7 +139,7 @@ public class CharacterController2D : MonoBehaviour
     }
 
 
-    public void Move(float move, bool crouch, bool jump, bool pickup=false)
+    public void Move(float move, bool crouch, bool jump, bool pickup=false, bool climb=false)
 	{
 
         bool justPickedUp = false;
@@ -149,6 +153,21 @@ public class CharacterController2D : MonoBehaviour
 				crouch = true;
             }
 		}
+
+        if (climb && canClimb)
+        {
+            Collider2D collider = Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsClimb);
+            if (collider==null) climb = false;
+            else
+            {
+                if (charAnim != null) charAnim.climb = true;
+                // Move the character by finding the target velocity
+                Vector3 climbVelocity = new Vector2(m_Rigidbody2D.velocity.x, m_ClimbSpeed);
+                // And then smoothing it out and applying it to the character
+                m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, climbVelocity, ref m_Velocity, m_MovementSmoothing);
+            }
+        }
+        if (!climb && charAnim != null) charAnim.climb = false;
 
 		//only control the player if grounded or airControl is turned on
 		if (m_Grounded || m_AirControl)
@@ -274,7 +293,7 @@ public class CharacterController2D : MonoBehaviour
         }
 
         // If the player should jump...
-        if (jump && (!justPickedUp||!pickupWithJump) )
+        if (jump && (!justPickedUp||!pickupWithJump||!canPickup) && (!climb||!climbWithJump||!canClimb) )
 		{
             if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded)
             {
