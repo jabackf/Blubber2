@@ -21,6 +21,7 @@ public class PlayerInput : MonoBehaviour
     bool jump = false;
     bool crouch = false;
     bool pickup = false;
+    bool dropDown = false; //The action for dropping through platforms that have the dropDownPlatform script
     float climb = 0;
     public float climbSpeed = 10f;
     bool holdingAction = false;
@@ -57,6 +58,11 @@ public class PlayerInput : MonoBehaviour
             {
                 if (jump != true)
                     jump = true;
+            }
+
+            if (Input.GetButtonDown("dropDown"))
+            {
+                dropDown = true;
             }
 
             if (controller.getCanClimb())
@@ -107,17 +113,18 @@ public class PlayerInput : MonoBehaviour
     void FixedUpdate()
     {
         if (!isThrowing)
-            controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb * Time.fixedDeltaTime);
+            controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb * Time.fixedDeltaTime, dropDown);
         else
         {
             controller.Aim(aimForceMove * Time.fixedDeltaTime, aimAngleMove * Time.fixedDeltaTime, throwRelease, holdingAction);
-            controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false, 0);
+            controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false, 0,false);
             if (throwRelease) isThrowing = false;
         }
         jump = false;
         pickup = false;
         holdingAction = false;
         throwRelease = false;
+        dropDown = false;
     }
 
     public void OnLanding()

@@ -66,14 +66,10 @@ public class pickupObject : actionInRange
         this.setRangeActive(false);
         rb.mass = carryMass;
         holder = character;
-        Debug.Log(holder.name + " picked up " + gameObject.name);
         if (mCarryType == carryType.Top)
             carryTrans = top;
         if (mCarryType == carryType.Front)
             carryTrans = front;
-        //Debug.Log(front +" - "+top);
-        //joint = holder.AddComponent<FixedJoint2D>() as FixedJoint2D;
-        //joint.connectedBody = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
         joint = gameObject.AddComponent<FixedJoint2D>() as FixedJoint2D;
         joint.connectedBody = holder.GetComponent<Rigidbody2D>() as Rigidbody2D;
         joint.anchor = new Vector2(carryTrans.position.x+offset.x, carryTrans.position.y+offset.y);
@@ -82,7 +78,6 @@ public class pickupObject : actionInRange
 
         if (disableCollider)
             gameObject.GetComponent<Collider2D>().isTrigger = true;
-        //gameObject.transform.position = new Vector3(top.x, top.y, 0);
     }
 
     void FixedUpdate()

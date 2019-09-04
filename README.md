@@ -20,6 +20,4 @@ CharacterController2D.Move (System.Single move, System.Boolean crouch, System.Bo
 
 -Heavy items can land on head and be hard to get off. Try making character head collider round?
 
--CreateClimbing
-
 -Add random offset to squishanim

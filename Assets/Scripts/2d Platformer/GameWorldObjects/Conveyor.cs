@@ -10,7 +10,7 @@ public class Conveyor : MonoBehaviour
     public bool pauseFor5 = false;
     public bool printTopList = false; 
 
-    private Animator animator;
+    private Animator animator=null;
     private string animSpeedMultiplier = "SpeedMultiplier";
     private bool paused = false;
     private float pauseTime = 4f;
@@ -40,9 +40,8 @@ public class Conveyor : MonoBehaviour
 
     void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>() as Animator;
         animator.SetFloat(animSpeedMultiplier, speed);
-
     }
 
     public void changeSpeed(float newSpeed)

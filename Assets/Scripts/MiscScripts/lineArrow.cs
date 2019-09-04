@@ -116,7 +116,6 @@ public class lineArrow : MonoBehaviour
 
     public void calculate()
     {
-        Debug.Log(angle);
         float radAngle = (-angle+90) * Mathf.Deg2Rad;
         lr.SetPosition(0, new Vector3(Mathf.Sin(radAngle),Mathf.Cos(radAngle),0f) + new Vector3(offset.x,offset.y,0));
         Vector3 endPos = new Vector3(Mathf.Sin(radAngle) * length ,Mathf.Cos(radAngle) * length, 0f) + new Vector3(offset.x, offset.y, 0);

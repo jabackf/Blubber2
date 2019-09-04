@@ -6,7 +6,7 @@ TagManager:
   tags:
   - triggerDirectional
   - RangeCollider
-  - climbTop
+  - dropDownPlatform
   layers:
   - Default
   - TransparentFX

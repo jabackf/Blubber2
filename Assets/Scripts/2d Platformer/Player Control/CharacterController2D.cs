@@ -7,6 +7,7 @@ public class CharacterController2D : MonoBehaviour
     [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
     [SerializeField] private float maxVelocity = -1;                              // The maximum velocity that the character is limited to. -1 = none.
     [SerializeField] private bool m_AirControl = true;                          // Whether or not a player can steer while jumping;
+    [SerializeField] private bool canUseDropDownPlatforms = true;              // Whether or not a player can steer while jumping;
 
     [Space]
     [Header("Jumping")]
@@ -40,7 +41,6 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private bool canCarryWhileClimbing = true;                // Whether or not the player can climb while holding something
     [SerializeField] private bool climbWithJump = false;                       // If "Jump" and "Climb" inputs are the same, set this to true to prevent jumping when climbing
     [SerializeField] private LayerMask m_WhatIsClimb;                          // A mask determining what is ground to the character
-    [SerializeField] private string climbTopTag = "climbTop";                  // Ladders and other climbing surfaces need invisible platforms at the top to stand on / climb down. These platforms should have this tag.
 
     [Space]
     [Header("Other")]
@@ -76,6 +76,7 @@ public class CharacterController2D : MonoBehaviour
     private bool isOnConveyor = false; //Set by the conveyor script
     private float initialGravityScale; //Used to store our gravity state in case we have to turn gravity off.
     private bool isClimbing = false;
+    private dropDownPlatform onDropPlatformScript = null;
 
     [Header("Events")]
 	[Space]
@@ -113,16 +114,21 @@ public class CharacterController2D : MonoBehaviour
 		m_Grounded = false;
         previousPlatform = currentPlatform;
         currentPlatform = null;
+        onDropPlatformScript = null;
 
 		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
 		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
 		Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
 		for (int i = 0; i < colliders.Length; i++)
 		{
-			if (colliders[i].gameObject != gameObject)
+            //Get the dropDown platform if we're on it
+            onDropPlatformScript = colliders[i].gameObject.GetComponent<dropDownPlatform>() as dropDownPlatform;
+
+            if (colliders[i].gameObject != gameObject)
 			{
 				m_Grounded = true;
                 currentPlatform = colliders[i].gameObject;
+
                 if (!wasGrounded && m_Rigidbody2D.velocity.y<0)
                 {
                     OnLandEvent.Invoke();
@@ -162,10 +168,16 @@ public class CharacterController2D : MonoBehaviour
     }
 
 
-    public void Move(float move, bool crouch, bool jump, bool pickup=false, float climb=0)
+    public void Move(float move, bool crouch, bool jump, bool pickup=false, float climb=0, bool dropDown=false)
 	{
 
         bool justPickedUp = false;
+
+        //Handle drop down platforms
+        if (dropDown && onDropPlatformScript != null && canUseDropDownPlatforms)
+        {
+            onDropPlatformScript.DropObject(gameObject);
+        }
 
         // If crouching, check to see if the character can stand up
         if (!crouch && canCrouch)
@@ -182,20 +194,7 @@ public class CharacterController2D : MonoBehaviour
         if (charAnim != null) charAnim.climb = 0f;
         if ( (climb!=0||isClimbing) && canClimb && (!isHolding||canCarryWhileClimbing) ) //We meet some conditions for climbing, so let's check for something to climb
         {
-            //First, lets see if we're standing on top of a climb surface and respond to it. But only if we're trying to climb down.
-            if (climb < 0)
-            {
-                Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-                foreach(Collider2D c in colliders)
-                {
-                    if (c.gameObject.tag == climbTopTag)//We're standing at the top of a climbing surface!
-                    {
-                        m_Rigidbody2D.MovePosition((Vector2)gameObject.transform.position + new Vector2(0, -1));
-                    }
-                }
-            }
-
-            //Now, check for climbing up and down the climb surface
+            //check for climbing up and down the climb surface
             Collider2D collider = Physics2D.OverlapCircle(m_GroundCheck.position, k_GroundedRadius, m_WhatIsClimb);
             if (collider==null) isClimbing = false;
             else
@@ -447,7 +446,6 @@ public class CharacterController2D : MonoBehaviour
     //Called from pickupObject script when holding item is released (dropped, thrown, added to inventory, etc)
     public void pickupReleased()
     {
-        Debug.Log("PickupReleased called");
         isHolding = false;
     }
 
