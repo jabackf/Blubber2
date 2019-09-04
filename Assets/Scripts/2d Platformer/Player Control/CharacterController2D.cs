@@ -3,34 +3,54 @@ using UnityEngine.Events;
 
 public class CharacterController2D : MonoBehaviour
 {
+    [Header("Movement")]
+    [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
+    [SerializeField] private float maxVelocity = -1;                              // The maximum velocity that the character is limited to. -1 = none.
+    [SerializeField] private bool m_AirControl = true;                          // Whether or not a player can steer while jumping;
+
+    [Space]
+    [Header("Jumping")]
     [SerializeField] private float m_JumpVelocity = 10.5f;                       // Amount of velocity added when the player jumps. 
-    [Range(0, 1)] [SerializeField] private float m_CrouchSpeed = .36f;			// Amount of maxSpeed applied to crouching movement. 1 = 100%
-	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
-    [SerializeField] private float m_PushForce = 90f;                          // if canPush is true, this is the additional force applied when pushing
-    [SerializeField] private float m_PushWait = 1f;                             // The amount of time to press against something before going into push mode
-    [SerializeField] private float m_ClimbSpeed = 3f;
-    [SerializeField] private bool m_AirControl = true;							// Whether or not a player can steer while jumping;
-    [SerializeField] private bool canCrouch = true;                             // Whether or not the player can crouch
-    [SerializeField] private bool canClimb = true;                             // Whether or not the player can climb
-    [SerializeField] private bool canPush = true;                               // Whether or not the player can push
-    [SerializeField] private bool canPickup = true;                             // Whether or not the player can push
     [SerializeField] private bool canDoubleJump = false;                        // Whether or not the player can jump a second time
     [SerializeField] private bool infiniteJump = false;                         // Jump whenever you want!
+
+    [Space]
+    [Header("Crouching")]
+    [SerializeField] private bool canCrouch = true;                             // Whether or not the player can crouch
+    [Range(0, 1)] [SerializeField] private float m_CrouchSpeed = .36f;			// Amount of maxSpeed applied to crouching movement. 1 = 100%
+    [SerializeField] private Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
+
+    [Space]
+    [Header("Pushing")]
+    [SerializeField] private bool canPush = true;                               // Whether or not the player can push
+    [SerializeField] private float m_PushForce = 90f;                          // if canPush is true, this is the additional force applied when pushing
+    [SerializeField] private float m_PushWait = 1f;                             // The amount of time to press against something before going into push mode
+
+    [Space]
+    [Header("Item Pickup")]
+    [SerializeField] private bool canPickup = true;                             // Whether or not the player can push
     [SerializeField] private bool pickupWithJump = false;                       // If "Jump" and "Pickup" inputs are the same, set this to true to prevent jumping when picking something up
+    [SerializeField] private Transform m_pickupTop;                             // Where to attach objects if carrying them above your head
+    [SerializeField] private Transform m_pickupL;                             // Where to attach objects if carrying them in front left
+    [SerializeField] private Transform m_pickupR;                             // Where to attach objects if carrying them in front right
+
+    [Space]
+    [Header("Climbing")]
+    [SerializeField] private bool canClimb = true;                             // Whether or not the player can climb
+    [SerializeField] private bool canCarryWhileClimbing = true;                // Whether or not the player can climb while holding something
     [SerializeField] private bool climbWithJump = false;                       // If "Jump" and "Climb" inputs are the same, set this to true to prevent jumping when climbing
-    [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
     [SerializeField] private LayerMask m_WhatIsClimb;                          // A mask determining what is ground to the character
+    [SerializeField] private string climbTopTag = "climbTop";                  // Ladders and other climbing surfaces need invisible platforms at the top to stand on / climb down. These platforms should have this tag.
+
+    [Space]
+    [Header("Other")]
+    [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
     [SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings. Also used to test for ladders.
     [SerializeField] private Transform m_SideCheckL;                            // A position marking where to check if the player is grounded.
     [SerializeField] private Transform m_SideCheckR;                            // A position marking where to check for ceilings
-    [SerializeField] private Transform m_pickupTop;                             // Where to attach objects if carrying them above your head
-    [SerializeField] private Transform m_pickupL;                             // Where to attach objects if carrying them in front left
-    [SerializeField] private Transform m_pickupR;                             // Where to attach objects if carrying them in front right
-    [SerializeField] private Collider2D m_rangeColliderL;                            // A position marking where to check if the player is grounded.
-    [SerializeField] private Collider2D m_rangeColliderR;                            // A position marking where to check for ceilings
-    [SerializeField] private Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
-    [SerializeField] private float maxVelocity=-1;                              // The maximum velocity that the character is limited to. -1 = none.
+    [SerializeField] private Collider2D m_rangeColliderL;                       // A position marking where to check if the player is grounded.
+    [SerializeField] private Collider2D m_rangeColliderR;                       // A position marking where to check for ceilings
 
     private enum flipType { none, spriteRenderer, scale}
     [SerializeField] private flipType spriteFlipMethod = flipType.scale;  // The method used for flipping the sprite when the character turns around. NOTE: Sprite renderer will also flip sprites of child objects       
@@ -42,7 +62,7 @@ public class CharacterController2D : MonoBehaviour
     private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
-    public int numJumps = 0; //Counts the number of jumps while in air. Resets when player lands. Used, for example, in double jumping.
+    private int numJumps = 0; //Counts the number of jumps while in air. Resets when player lands. Used, for example, in double jumping.
     private GameObject currentPlatform = null; //One of the current platforms we are standing on. Null if not grounded.
     private GameObject previousPlatform = null; 
     private CharacterAnimation charAnim = null;
@@ -54,6 +74,8 @@ public class CharacterController2D : MonoBehaviour
     private pickupObject holding;     //The object we are currently (or were last) holding
     private GameObject actionObjectInRange; //This is set to the most recent gameobject using actionInRange that is colliding with this character's range colliders. Null if nothing in range.
     private bool isOnConveyor = false; //Set by the conveyor script
+    private float initialGravityScale; //Used to store our gravity state in case we have to turn gravity off.
+    private bool isClimbing = false;
 
     [Header("Events")]
 	[Space]
@@ -69,6 +91,7 @@ public class CharacterController2D : MonoBehaviour
 	private void Awake()
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        initialGravityScale = m_Rigidbody2D.gravityScale;
 
 		if (OnLandEvent == null)
 			OnLandEvent = new UnityEvent();
@@ -108,7 +131,7 @@ public class CharacterController2D : MonoBehaviour
                         charAnim.jump = false;
                         charAnim.doubleJump = false;
                     }
-                        numJumps = 0;
+                    numJumps = 0;
                 }
 			}
 		}
@@ -139,7 +162,7 @@ public class CharacterController2D : MonoBehaviour
     }
 
 
-    public void Move(float move, bool crouch, bool jump, bool pickup=false, bool climb=false)
+    public void Move(float move, bool crouch, bool jump, bool pickup=false, float climb=0)
 	{
 
         bool justPickedUp = false;
@@ -154,27 +177,55 @@ public class CharacterController2D : MonoBehaviour
             }
 		}
 
-        if (climb && canClimb)
+        //Climbing Code
+        m_Rigidbody2D.gravityScale = initialGravityScale;
+        if (charAnim != null) charAnim.climb = 0f;
+        if ( (climb!=0||isClimbing) && canClimb && (!isHolding||canCarryWhileClimbing) ) //We meet some conditions for climbing, so let's check for something to climb
         {
-            Collider2D collider = Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsClimb);
-            if (collider==null) climb = false;
+            //First, lets see if we're standing on top of a climb surface and respond to it. But only if we're trying to climb down.
+            if (climb < 0)
+            {
+                Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+                foreach(Collider2D c in colliders)
+                {
+                    if (c.gameObject.tag == climbTopTag)//We're standing at the top of a climbing surface!
+                    {
+                        m_Rigidbody2D.MovePosition((Vector2)gameObject.transform.position + new Vector2(0, -1));
+                    }
+                }
+            }
+
+            //Now, check for climbing up and down the climb surface
+            Collider2D collider = Physics2D.OverlapCircle(m_GroundCheck.position, k_GroundedRadius, m_WhatIsClimb);
+            if (collider==null) isClimbing = false;
             else
             {
-                if (charAnim != null) charAnim.climb = true;
+                isClimbing = true;
+                m_Grounded = true;
+                m_Rigidbody2D.gravityScale = 0;
+                m_Rigidbody2D.velocity = new Vector3(0,0,0);
+                numJumps = 0;
+                if (charAnim != null)
+                {
+                    charAnim.climb = climb;
+                    charAnim.jump = false; //Sometimes the jump animation sticks. This fixes that.
+                }
                 // Move the character by finding the target velocity
-                Vector3 climbVelocity = new Vector2(m_Rigidbody2D.velocity.x, m_ClimbSpeed);
+                //Vector3 climbVelocity = new Vector2(m_Rigidbody2D.velocity.x, m_ClimbSpeed);
                 // And then smoothing it out and applying it to the character
-                m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, climbVelocity, ref m_Velocity, m_MovementSmoothing);
+                //m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, climbVelocity, ref m_Velocity, m_MovementSmoothing);
+                if (climb!=0)
+                    m_Rigidbody2D.MovePosition((Vector2)gameObject.transform.position + new Vector2(0,climb));
             }
         }
-        if (!climb && charAnim != null) charAnim.climb = false;
+        if (charAnim != null) charAnim.isClimbing = isClimbing;
 
-		//only control the player if grounded or airControl is turned on
-		if (m_Grounded || m_AirControl)
+        //only control the player if grounded or airControl is turned on
+        if (m_Grounded || m_AirControl)
 		{
 
 			// If crouching
-			if (crouch && canCrouch)
+			if (crouch && canCrouch && (!isClimbing || !canClimb))
 			{
 				if (!m_wasCrouching)
 				{
@@ -213,7 +264,7 @@ public class CharacterController2D : MonoBehaviour
                 isPushing = false;
                 timerComplete = false;
             }
-            if (m_Grounded && (move>0 || move<0) && canPush)
+            if (m_Grounded && (move>0 || move<0) && canPush && (!isClimbing || !canClimb) ) //If we're in a situation where we can potentially push
             {
                 bool pushingLeft = false;
                 bool pushingRight = false;
@@ -270,7 +321,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 
             //Start pickup item code
-            if (canPickup && !isHolding && m_Grounded && actionObjectInRange!=null && pickup) //We're in range of something, can pick it up, and trying to pick it up
+            if (canPickup && !isHolding && m_Grounded && actionObjectInRange!=null && pickup && (!isClimbing || !canClimb)) //We're in range of something, can pick it up, and trying to pick it up
             {
                 holding = actionObjectInRange.GetComponent<pickupObject>() as pickupObject;
                 holding.pickMeUp(gameObject, m_pickupTop, m_FacingRight ? m_pickupR : m_pickupL);
@@ -293,7 +344,7 @@ public class CharacterController2D : MonoBehaviour
         }
 
         // If the player should jump...
-        if (jump && (!justPickedUp||!pickupWithJump||!canPickup) && (!climb||!climbWithJump||!canClimb) )
+        if (jump && (!justPickedUp||!pickupWithJump||!canPickup) && (!isClimbing||!climbWithJump||!canClimb) )
 		{
             if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded)
             {
@@ -318,6 +369,10 @@ public class CharacterController2D : MonoBehaviour
     public bool getIsOnConveyor()
     {
        return isOnConveyor;
+    }
+    public bool getCanClimb()
+    {
+        return canClimb;
     }
     public bool crouchEnabled()
     {

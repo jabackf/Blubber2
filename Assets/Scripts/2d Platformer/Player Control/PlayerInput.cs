@@ -21,7 +21,8 @@ public class PlayerInput : MonoBehaviour
     bool jump = false;
     bool crouch = false;
     bool pickup = false;
-    bool climb = false;
+    float climb = 0;
+    public float climbSpeed = 10f;
     bool holdingAction = false;
     private bool isThrowing = false; //Set to true if we're throwing an object (changing the throw angle and velocity).
 
@@ -49,7 +50,7 @@ public class PlayerInput : MonoBehaviour
 
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-        if (!isThrowing)
+        if (!isThrowing) //Not in aiming mode
         {
 
             if (Input.GetButtonDown("Jump"))
@@ -58,9 +59,9 @@ public class PlayerInput : MonoBehaviour
                     jump = true;
             }
 
-            if (Input.GetButton("Climb"))
+            if (controller.getCanClimb())
             {
-                climb = true;
+                climb = Input.GetAxisRaw("Climb") * climbSpeed;
             }
 
             if (controller.crouchEnabled())
@@ -106,18 +107,17 @@ public class PlayerInput : MonoBehaviour
     void FixedUpdate()
     {
         if (!isThrowing)
-            controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb);
+            controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb * Time.fixedDeltaTime);
         else
         {
             controller.Aim(aimForceMove * Time.fixedDeltaTime, aimAngleMove * Time.fixedDeltaTime, throwRelease, holdingAction);
-            controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false, false);
+            controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false, 0);
             if (throwRelease) isThrowing = false;
         }
         jump = false;
         pickup = false;
         holdingAction = false;
         throwRelease = false;
-        climb = false;
     }
 
     public void OnLanding()

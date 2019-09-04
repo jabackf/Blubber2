@@ -1514,7 +1514,7 @@ GameObject:
   - component: {fileID: 622161103}
   - component: {fileID: 622161101}
   - component: {fileID: 622161100}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: trigger1 (1)
   m_TagString: triggerDirectional
   m_Icon: {fileID: 0}
@@ -2213,7 +2213,7 @@ GameObject:
   - component: {fileID: 959234114}
   - component: {fileID: 959234112}
   - component: {fileID: 959234111}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: trigger1 (2)
   m_TagString: triggerDirectional
   m_Icon: {fileID: 0}
@@ -2876,6 +2876,8 @@ GameObject:
   - component: {fileID: 1431487703}
   - component: {fileID: 1431487702}
   - component: {fileID: 1431487704}
+  - component: {fileID: 1431487706}
+  - component: {fileID: 1431487705}
   m_Layer: 11
   m_Name: sprLadderTall_0
   m_TagString: Untagged
@@ -2972,6 +2974,51 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 10.25}
+  m_EdgeRadius: 0
+--- !u!251 &1431487705
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431487701}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: 0
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 160
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
+--- !u!61 &1431487706
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431487701}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 1
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 4.756628}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 10.25}
+    newSize: {x: 1, y: 10.25}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.16341925}
   m_EdgeRadius: 0
 --- !u!1 &1512907393
 GameObject:
@@ -3191,7 +3238,7 @@ GameObject:
   - component: {fileID: 1666076276}
   - component: {fileID: 1666076277}
   - component: {fileID: 1666076274}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: trigger1
   m_TagString: triggerDirectional
   m_Icon: {fileID: 0}
@@ -4723,7 +4770,7 @@ GameObject:
   - component: {fileID: 2041789209}
   - component: {fileID: 2041789207}
   - component: {fileID: 2041789206}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: trigger1
   m_TagString: triggerDirectional
   m_Icon: {fileID: 0}
@@ -5121,6 +5168,16 @@ PrefabInstance:
       propertyPath: climbWithJump
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3685091812325713495, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: climbingAnimatorFloat
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3685091812325713495, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: climbingAnimatorBool
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52f8e2b24f27b914297658a81385bc12, type: 3}
 --- !u!4 &3582234677883426476 stripped
@@ -5144,7 +5201,7 @@ PrefabInstance:
     - target: {fileID: 4963789790119401714, guid: 21c2f7ca55ab320468db4feaa72ab366,
         type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4963789790119401714, guid: 21c2f7ca55ab320468db4feaa72ab366,
         type: 3}
@@ -5309,7 +5366,27 @@ PrefabInstance:
     - target: {fileID: 8515733358541877372, guid: f5ff5924c655ea647b56f001c63ce138,
         type: 3}
       propertyPath: m_ClimbSpeed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159807042369335652, guid: f5ff5924c655ea647b56f001c63ce138,
+        type: 3}
+      propertyPath: pushingDressName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159807042369335652, guid: f5ff5924c655ea647b56f001c63ce138,
+        type: 3}
+      propertyPath: speedMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159807042369335653, guid: f5ff5924c655ea647b56f001c63ce138,
+        type: 3}
+      propertyPath: climbSpeed
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159807042369335653, guid: f5ff5924c655ea647b56f001c63ce138,
+        type: 3}
+      propertyPath: runSpeed
+      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5ff5924c655ea647b56f001c63ce138, type: 3}
