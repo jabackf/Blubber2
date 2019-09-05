@@ -284,10 +284,16 @@ public class CharacterController2D : MonoBehaviour
                     {
                         if (charAnim != null) charAnim.pushing = true;
                         isPushing = true;
-                        if (pushingLeft) 
-                            leftCol.attachedRigidbody.AddForceAtPosition(new Vector2(-m_PushForce, 0f), new Vector2(m_SideCheckL.position.x, m_SideCheckL.position.y) );
+                        if (pushingLeft)
+                        {
+                            if (leftCol.attachedRigidbody!=null)
+                                leftCol.attachedRigidbody.AddForceAtPosition(new Vector2(-m_PushForce, 0f), new Vector2(m_SideCheckL.position.x, m_SideCheckL.position.y));
+                        }
                         if (pushingRight)
-                            rightCol.attachedRigidbody.AddForceAtPosition(new Vector2(m_PushForce, 0f), new Vector2(m_SideCheckR.position.x, m_SideCheckR.position.y) );
+                        {
+                            if (rightCol.attachedRigidbody!=null)
+                                rightCol.attachedRigidbody.AddForceAtPosition(new Vector2(m_PushForce, 0f), new Vector2(m_SideCheckR.position.x, m_SideCheckR.position.y));
+                        }
                     }
                 }
                 else

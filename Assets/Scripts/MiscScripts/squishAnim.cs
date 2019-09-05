@@ -15,6 +15,7 @@ public class squishAnim : MonoBehaviour
     public bool goingUp = false; //Whether we are currently squishing up or down
     public float targetTop = 1f; //The amount at full not-squish
     public float targetBottom = 0.3f;  //The amount at full squish
+    public bool randomOffset = true;
     public bool squishXAxis = false;
     public bool squishYAxis = true;
     public bool squishZAxis = false;
@@ -24,7 +25,11 @@ public class squishAnim : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (randomOffset)
+        {
+            squish = UnityEngine.Random.Range(targetBottom, targetTop);
+            goingUp = UnityEngine.Random.Range(0f, 1f) <= 0.5f ? true : false;
+        }
     }
 
     // Update is called once per frame

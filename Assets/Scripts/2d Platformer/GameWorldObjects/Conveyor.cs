@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class Conveyor : MonoBehaviour
 {
+    public Animator animator;
     public float speed = -2f;
     public bool printDebugInfo = false;
     public bool pauseFor5 = false;
     public bool printTopList = false; 
 
-    private Animator animator=null;
     private string animSpeedMultiplier = "SpeedMultiplier";
     private bool paused = false;
     private float pauseTime = 4f;

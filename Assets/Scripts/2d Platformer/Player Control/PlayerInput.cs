@@ -23,7 +23,7 @@ public class PlayerInput : MonoBehaviour
     bool pickup = false;
     bool dropDown = false; //The action for dropping through platforms that have the dropDownPlatform script
     float climb = 0;
-    public float climbSpeed = 10f;
+    public float climbSpeed = 5f;
     bool holdingAction = false;
     private bool isThrowing = false; //Set to true if we're throwing an object (changing the throw angle and velocity).
 

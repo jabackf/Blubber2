@@ -292,6 +292,71 @@ MonoBehaviour:
   flipOnY: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+--- !u!1 &105885313 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3582234677797093662, guid: 52f8e2b24f27b914297658a81385bc12,
+    type: 3}
+  m_PrefabInstance: {fileID: 3582234677485532738}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &105885314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105885313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62345e93238d81048950c1b78535167b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 105885320}
+  controller: {fileID: 105885316}
+  climbSpeedMultiplier: 10
+  speedMultiplier: 1.5
+  speed: 0
+  jump: 0
+  doubleJump: 0
+  crouch: 0
+  pushing: 0
+  pickingUp: 0
+  carryTop: 0
+  carryFront: 0
+  throwing: 0
+  climb: 0
+  isClimbing: 0
+  doubleJumpDuration: 0.3
+  pickingUpDuration: 0.2
+  throwingDuration: 0.2
+  crouchAnimatorBool: 
+  jumpAnimatorBool: 
+  doubleJumpAnimatorBool: 
+  pushingAnimatorBool: 
+  speedAnimatorFloat: 
+  pickupAnimatorBool: 
+  throwingAnimatorBool: 
+  frontCarryAnimatorBool: 
+  topCarryAnimatorBool: 
+  climbingAnimatorFloat: 
+  climbingAnimatorBool: 
+--- !u!114 &105885316 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3582234677797093661, guid: 52f8e2b24f27b914297658a81385bc12,
+    type: 3}
+  m_PrefabInstance: {fileID: 3582234677485532738}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105885313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 297514db87f77e345bdf18ab6bcbc1d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &105885320 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3582234677797093665, guid: 52f8e2b24f27b914297658a81385bc12,
+    type: 3}
+  m_PrefabInstance: {fileID: 3582234677485532738}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &156845573
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +439,7 @@ PlatformEffector2D:
     m_Bits: 512
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 175
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -518,7 +583,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195138193}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.5, y: 2.5, z: 0}
+  m_LocalPosition: {x: 1.55, y: 0.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1157142981}
@@ -538,7 +603,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 180
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -866,7 +931,7 @@ PlatformEffector2D:
     m_Bits: 512
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 175
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -1252,7 +1317,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 180
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -1703,7 +1768,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 170
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -1816,6 +1881,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae93eaa60f86cb846861de6bdcf860c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 700889756}
   speed: 2
   printDebugInfo: 0
   pauseFor5: 0
@@ -1930,7 +1996,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 730584296}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2, y: -4, z: 0}
+  m_LocalPosition: {x: 1.5, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1905244056}
@@ -2120,7 +2186,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 175
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -2417,7 +2483,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 160
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -2805,7 +2871,6 @@ Transform:
   - {fileID: 1840445277}
   - {fileID: 1936085468}
   - {fileID: 1848374732}
-  - {fileID: 3582234677883426476}
   - {fileID: 1431487703}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -2857,7 +2922,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 175
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -3063,7 +3128,7 @@ Transform:
   m_Children:
   - {fileID: 1145199516}
   m_Father: {fileID: 1194112661}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1431487704
 BoxCollider2D:
@@ -5126,7 +5191,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 170
   m_UseSideFriction: 0
   m_UseSideBounce: 0
@@ -5143,6 +5208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae93eaa60f86cb846861de6bdcf860c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 2051888721}
   speed: -2
   printDebugInfo: 0
   pauseFor5: 0
@@ -5157,12 +5223,12 @@ PrefabInstance:
     - target: {fileID: 3582234677797093663, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3582234677797093663, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 3582234677797093663, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}
@@ -5249,14 +5315,35 @@ PrefabInstance:
       propertyPath: climbingAnimatorBool
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3582234677797093670, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2b62fa34bc96eea43b4f170425370c7a,
+        type: 3}
+    - target: {fileID: 3582234677797093670, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.1971567
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582234677797093670, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.114142045
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582234677797093670, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.8962264
+      objectReference: {fileID: 0}
+    - target: {fileID: 1389400413668929669, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: climbSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3685091812325713495, guid: 52f8e2b24f27b914297658a81385bc12, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 52f8e2b24f27b914297658a81385bc12, type: 3}
---- !u!4 &3582234677883426476 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-    type: 3}
-  m_PrefabInstance: {fileID: 5159807042277795538}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4963789789528151682
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5357,107 +5444,3 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 21c2f7ca55ab320468db4feaa72ab366, type: 3}
---- !u!1001 &5159807042277795538
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1194112661}
-    m_Modifications:
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877374, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877375, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_Name
-      value: IceMan
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877372, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_WhatIsClimb.m_Bits
-      value: 2048
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877372, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: climbWithJump
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8515733358541877372, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: m_ClimbSpeed
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5159807042369335652, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: pushingDressName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5159807042369335652, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: speedMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5159807042369335653, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: climbSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5159807042369335653, guid: f5ff5924c655ea647b56f001c63ce138,
-        type: 3}
-      propertyPath: runSpeed
-      value: 30
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f5ff5924c655ea647b56f001c63ce138, type: 3}

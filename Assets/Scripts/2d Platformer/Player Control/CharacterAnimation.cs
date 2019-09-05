@@ -28,6 +28,10 @@ public class CharacterAnimation : MonoBehaviour
     [HideInInspector] public float climb = 0; //Set to true for the duration of the climb by the character controller.
     [HideInInspector] public bool isClimbing = false;
     
+    //The variables above are set for general logic, and multiple variables can be true at a time.
+    //The state variable is set to give the character one overall state for reference.
+    public enum states {idle,walk,jump,doubleJump,crouch,pushing,carryTop,carryFront,throwing,climbing};
+    public states state = states.idle;
 
     public float doubleJumpDuration = 0.3f;  //The amount of time to play the double jump animation
     private float doubleJumpTimer = 0;
@@ -52,10 +56,8 @@ public class CharacterAnimation : MonoBehaviour
     public string climbingAnimatorFloat = "ClimbSpeed"; //Climbing AnimSpeed
     public string climbingAnimatorBool = "IsClimbing"; //Climbing
 
-    [Space]
-    [Header("Dresses")]
-    public string pushingDressName = "angry"; //The name of a dress to activate when we are pushing. Leave blank for none.
 
+    //A single dress item
     public class dress
     {
         public static int listSortingOrder = 0;
@@ -87,27 +89,81 @@ public class CharacterAnimation : MonoBehaviour
         }
     }
 
-    public List<dress> dressList = new List<dress>();
+    public List<dress> dressList = new List<dress>();  //A list of all dress items attached to this character
 
-    // Start is called before the first frame update
-    void Start()
+    //A multiDress is a dress item that can have multiple states for multiple sprites. A multiDress will have one state at a time.
+    //For example, eyes might be added as a dress, and they can in multiple states (angry, sad, ect.)
+    //A state is a name in dressList[dress].name
+    public class multiDress
     {
-        dressList.Add(new dress("angry", "Art/RippedFromGMXPrototype/sprDressAngry_0", gameObject.transform));
-        dressShowHide("angry", false);
+        public string state = "";
+        public string[] states;
+        public List<dress> dressList;
+        public multiDress(ref List<dress> list, string state, string[] states)
+        {
+            this.state = state;
+            this.states = states;
+            this.dressList = list;
+            setEnabled();
+        }
+        public void changeState(string state)
+        {
+            this.state = state;
+            setEnabled();
+        }
+        void setEnabled()
+        {
+            foreach (dress d in this.dressList)
+            {
+                foreach (string s in this.states)
+                {
+                    if (d.name == s)
+                    {
+                        d.renderer.enabled = s == this.state ? true : false;
+                    }
+                }
+            }
+        }
     }
 
-    void Update()
+
+    // Start is called before the first frame update
+    public void Start()
     {
+        SetupCharacter();
+    }
+
+    //Overload setup function for unique characters.
+    public virtual void SetupCharacter()
+    {
+    }
+
+    //Overload setup function for unique characters. Called each update
+    public virtual void UpdateCharacter()
+    {
+
+    }
+
+    public void Update()
+    {
+        UpdateCharacter();
+
         //Set speed for movement
         if (speedAnimatorFloat != "")
             animator.SetFloat(speedAnimatorFloat, Mathf.Abs(speed*speedMultiplier));
 
+        if (speed == 0) state = states.idle;
+        else state = states.walk;
+
         if (crouchAnimatorBool != "")
             animator.SetBool(crouchAnimatorBool, crouch);
 
+        if (crouch) state = states.crouch;
 
         if (jumpAnimatorBool != "")
             animator.SetBool(jumpAnimatorBool, jump);
+
+        if (jump) state = states.jump;
 
         if (doubleJumpTimer > 0)
         {
@@ -123,10 +179,12 @@ public class CharacterAnimation : MonoBehaviour
         if (doubleJumpAnimatorBool != "")
             animator.SetBool(doubleJumpAnimatorBool, doubleJump);
 
+        if (doubleJump) state = states.doubleJump;
+
         if (pushingAnimatorBool != "")
             animator.SetBool(pushingAnimatorBool, pushing);
-        if (pushingDressName != "")
-            dressShowHide(pushingDressName, pushing);
+
+        if (pushing) state = states.pushing;
 
         if (pickingUpTimer > 0)
         {
@@ -147,6 +205,9 @@ public class CharacterAnimation : MonoBehaviour
         if (topCarryAnimatorBool != "")
             animator.SetBool(topCarryAnimatorBool, carryTop);
 
+        if (carryFront) state = states.carryFront;
+        if (carryTop) state = states.carryTop;
+
         if (throwingTimer > 0)
         {
             throwingTimer -= Time.deltaTime;
@@ -161,10 +222,14 @@ public class CharacterAnimation : MonoBehaviour
         if (throwingAnimatorBool != "")
             animator.SetBool(throwingAnimatorBool, throwing);
 
+        if (throwing) state = states.throwing;
+
         if (climbingAnimatorFloat != "")
             animator.SetFloat(climbingAnimatorFloat, Mathf.Abs(climb *climbSpeedMultiplier) );
         if (climbingAnimatorBool != "")
             animator.SetBool(climbingAnimatorBool, isClimbing);
+
+        if (isClimbing) state = states.climbing;
     }
 
     public void dressShowHide(string name, bool show)
