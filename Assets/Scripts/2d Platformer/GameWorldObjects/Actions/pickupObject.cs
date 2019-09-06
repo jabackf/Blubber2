@@ -20,6 +20,8 @@ public class pickupObject : actionInRange
     public lineArrow throwArc;   //The reference to the lineArrow script
     private GameObject throwArcObj;    //The reference to the object containing the lineArrow script
     bool flippedX=false;  //Tracks if the holding character is currently flipped horizontally
+    float releaseTimer = 0; //Timer. When set, the object will be released after it hits zero. This fixes a bug with attempting to pickup an object when something, like a ceiling, is in the way
+    float releaseWaitTime = 0.015f; //The default time that the timer above will be set to.
 
     private Vector3 refVelocity = new Vector3(0,0,0);
 
@@ -76,16 +78,53 @@ public class pickupObject : actionInRange
         joint.breakForce = this.breakForce;
         joint.breakTorque = this.breakTorque;
 
-        if (disableCollider)
-            gameObject.GetComponent<Collider2D>().isTrigger = true;
+        if (disableCollider) //We're not using a collider for this item
+            gameObject.GetComponent<Collider2D>().isTrigger = true; 
+        else //We are using it. Better make sure there's nothing in the way of us picking it up, like a ceiling above the character
+        {
+            RaycastHit2D[] hit = new RaycastHit2D[10];
+            Vector2 v = ((Vector2)carryTrans.position + offset) - (Vector2)gameObject.transform.position;
+            var dis = v.magnitude; //Distance
+            var dir = v / dis;  //Direction
+            int count = rb.Cast(dir, hit, dis);
+            if (count > 0)
+            {
+                for(int i=0; i<count; i++)
+                {
+                    Debug.Log("Hit this: " + hit[i].collider.name);
+
+                    //Check to see if something is in the way, and drop it if so.
+                    if (hit[i].collider.attachedRigidbody==null && !hit[i].collider.isTrigger)
+                    {
+                        releaseTimer = releaseWaitTime;
+                        Debug.Log("Can't Pick Up!");
+                    }
+                }
+            }
+        }
     }
 
     void FixedUpdate()
     {
         if (holder != null)
         {
+            //var pos = rb.position;
+            //pos += new Vector2(carryTrans.position.x, carryTrans.position.y) + new Vector2(offset.x,offset.y);
+            //pos = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
             gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position+new Vector3(offset.x,offset.y,0), ref refVelocity, 0.1f);
+            //rb.MovePosition(pos);
+                
             throwArc.follow(gameObject.transform);
+
+            if (releaseTimer>0)
+            {
+                releaseTimer-=Time.fixedDeltaTime;
+                if (releaseTimer <= 0)
+                {
+                    releaseFromHolder();
+                    releaseTimer = 0;
+                }
+            }
         }
     }
 
@@ -100,7 +139,6 @@ public class pickupObject : actionInRange
 
     public void throwItem()
     {
-        Destroy(joint);
         releaseFromHolder();
         float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
         rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle))*throwForce*throwArc.length);
@@ -108,6 +146,7 @@ public class pickupObject : actionInRange
 
     void releaseFromHolder()
     {
+        Destroy(joint);
         this.setRangeActive(true);
         throwArc.hide();
         holder.SendMessage("pickupReleased");

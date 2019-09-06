@@ -44,6 +44,9 @@ TagManager:
   - name: Background
     uniqueID: 1006801551
     locked: 0
+  - name: ObjectsBehindDefault
+    uniqueID: 671181451
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
@@ -55,6 +58,12 @@ TagManager:
     locked: 0
   - name: CharacterDress
     uniqueID: 601985539
+    locked: 0
+  - name: ObjectInFronofCharacter
+    uniqueID: 1319655185
+    locked: 0
+  - name: ActionIcons
+    uniqueID: 3083013769
     locked: 0
   - name: InGameGUI
     uniqueID: 3888596403
