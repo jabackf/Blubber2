@@ -12,11 +12,12 @@ public class movingPlatformMotion : MonoBehaviour
     private GameObject lastTrigger = null;
     private bool isStopped = false;
     private float timer = 0f;
+    private Rigidbody2D rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+       rb = gameObject.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -24,12 +25,21 @@ public class movingPlatformMotion : MonoBehaviour
     {
         if (!isStopped)
         {
-            //transform.Translate(moveDirection.x * moveSpeed * Time.deltaTime, moveDirection.y * moveSpeed * Time.deltaTime, 0f);
-            Rigidbody2D rb = gameObject.GetComponent<Rigidbody2D>();
-            rb.MovePosition( (new Vector2(gameObject.transform.position.x, gameObject.transform.position.y)) + (new Vector2(moveDirection.x * moveSpeed * Time.deltaTime, moveDirection.y * moveSpeed * Time.deltaTime)));
+            //transform.Translate(moveDirection.x * moveSpeed * Time.fixedDeltaTime, moveDirection.y * moveSpeed * Time.fixedDeltaTime, 0f);
+            //rb.MovePosition( (new Vector2(gameObject.transform.position.x, gameObject.transform.position.y)) + (new Vector2(moveDirection.x * moveSpeed * Time.fixedDeltaTime, moveDirection.y * moveSpeed * Time.fixedDeltaTime)));
+            rb.velocity = (new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed));
+
+            /*var pos = rb.position;
+            float xPosition = gameObject.transform.position.x+ moveDirection.x;
+            float yPosition = gameObject.transform.position.y + moveDirection.y;
+            pos.x = Mathf.Lerp(pos.x, xPosition, moveSpeed * Time.fixedDeltaTime);
+            pos.y = Mathf.Lerp(pos.y, yPosition, moveSpeed * Time.fixedDeltaTime);
+            //rb.MovePosition(pos);
+            //rb.position = pos;*/
         }
         else
         {
+            rb.velocity = new Vector3(0f,0f,0f);
             timer -= Time.deltaTime;
             if (timer <= 0) isStopped = false;
         }

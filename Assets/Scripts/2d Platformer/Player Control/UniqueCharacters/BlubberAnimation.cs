@@ -7,10 +7,10 @@ public class BlubberAnimation : CharacterAnimation
     multiDress eyes;
 
     bool blink = false;
-    float blinkTimerMin = 2f;
-    float blinkTimerMax = 6f;
+    float blinkTimerMin = 4f;
+    float blinkTimerMax = 8f;
     float blinkTimer = 0f;
-    float blinkCloseTime = 0.3f;
+    float blinkCloseTime = 0.25f;
 
 
     void Start()

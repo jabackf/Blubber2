@@ -325,6 +325,7 @@ MonoBehaviour:
   throwing: 0
   climb: 0
   isClimbing: 0
+  state: 0
   doubleJumpDuration: 0.3
   pickingUpDuration: 0.2
   throwingDuration: 0.2
@@ -545,16 +546,16 @@ Rigidbody2D:
   m_GameObject: {fileID: 172348338}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!1 &195138193
 GameObject:
@@ -1011,17 +1012,17 @@ Rigidbody2D:
   m_GameObject: {fileID: 258289290}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1 &440480523
 GameObject:
   m_ObjectHideFlags: 0
@@ -1996,7 +1997,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 730584296}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: -1.5, z: 0}
+  m_LocalPosition: {x: 9.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1905244056}
@@ -3730,7 +3731,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1848374731}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.5, y: 1, z: 0}
+  m_LocalPosition: {x: -14.5, y: 5.5, z: 0}
   m_LocalScale: {x: 0.9, y: 0.7, z: 1}
   m_Children: []
   m_Father: {fileID: 1194112661}
@@ -4738,7 +4739,7 @@ Tilemap:
   - m_RefCount: 5
     m_Data: {fileID: 11400000, guid: 7c00d5d07b8927d4e903fb83454e0f3e, type: 2}
   - m_RefCount: 4
-    m_Data: {fileID: 11400000, guid: b054e08b899f433438c24e7a8b7642c0, type: 2}
+    m_Data: {fileID: 11400000, guid: c419cb7d7af969348b6a172bcc00d9ba, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 5
     m_Data: {fileID: -9004924519719666918, guid: a85bcd98b316023418df24bc5a7616b3,
@@ -4759,7 +4760,7 @@ Tilemap:
     m_Data: {fileID: 5141838806793301053, guid: a85bcd98b316023418df24bc5a7616b3,
       type: 3}
   - m_RefCount: 4
-    m_Data: {fileID: -302302467212283638, guid: a85bcd98b316023418df24bc5a7616b3,
+    m_Data: {fileID: -1829684001418200315, guid: a85bcd98b316023418df24bc5a7616b3,
       type: 3}
   m_TileMatrixArray:
   - m_RefCount: 86
@@ -5335,6 +5336,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Color.b
       value: 0.8962264
+      objectReference: {fileID: 0}
+    - target: {fileID: 3582234677797093666, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1389400413668929669, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}
