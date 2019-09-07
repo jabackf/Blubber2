@@ -9,7 +9,7 @@ public class DialogBox : MonoBehaviour
 {
     public GameObject dBox;
     public Transform follow;
-    public int lineBreakWidth = 350; //This max number of characters a string can have before a linebreak is used. The linebreak will replace the nearest space behind this number.
+    public int lineBreakWidth = 60; //This max number of characters a string can have before a linebreak is used. The linebreak will replace the nearest space behind this number.
 
     private GameObject bg;
     private GameObject tail;
@@ -40,20 +40,23 @@ public class DialogBox : MonoBehaviour
     public string breakLine(string text, int width)
     {
         int l = text.Length;
-        if (l < width) return text;
+        if (l <= width) return text;
         else
         {
             string output = "";
-            for (int i = 0; i < System.Math.Floor((float)(l / width))-1; i++)
+            while (l > width)
             {
-                string s = text.Substring(i * width, (i + 1) * width);
+                string s = text.Substring(0, width);
+                text = text.Remove(0, width);
+                l -= width;
                 int ind = s.LastIndexOf(' ');
                 var aStringBuilder = new StringBuilder(s);
                 aStringBuilder.Remove(ind, 1);
                 aStringBuilder.Insert(ind, "\n");
                 output += aStringBuilder.ToString();
             }
-            return output;
+
+            return output+text;
         }
     }
 

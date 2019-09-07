@@ -2429,13 +2429,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-    tempor incididunt ut labore
-
-    net dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-    eu fugiat nulla pariatur.'
+  m_Text: "Lorem ipsum dolor sit amet, consectetur \nadipiscing elit, sed do eiusmod
+    tempor incididunt \nut labore\n"
 --- !u!222 &1083401035
 CanvasRenderer:
   m_ObjectHideFlags: 0
