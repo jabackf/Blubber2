@@ -7,6 +7,8 @@ TagManager:
   - triggerDirectional
   - RangeCollider
   - dropDownPlatform
+  - menuItem
+  - menu
   layers:
   - Default
   - TransparentFX
