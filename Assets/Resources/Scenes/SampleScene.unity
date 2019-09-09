@@ -3816,7 +3816,7 @@ MonoBehaviour:
   followTop: {fileID: 1419440604}
   followBottom: {fileID: 1001714352}
   lineBreakWidth: 60
-  dbOffset: {x: 0, y: 2}
+  dbOffset: {x: 0, y: 1.2}
   stayOnScreen: 1
   imgResource: 
   imgSprite: {fileID: 0}
@@ -3826,14 +3826,15 @@ MonoBehaviour:
     type: 3}
   selItemPrefab: {fileID: 8964117528771551504, guid: a26453c2e94725b44aab8b64684436aa,
     type: 3}
-  selectCursorPrefab: {fileID: 8651272919455989470, guid: ce8205e1d24a4394bbafaef33b3aa77e,
+  selectCursorPrefab: {fileID: 5352880889229869703, guid: 0357a27dafdad4247bc206eb20bf6d09,
     type: 3}
   selectItemHeight: 20
+  selectedIndex: 0
+  cursorOffset: {x: 8, y: -8}
   answers:
   - Answer One
   - Answer Two
   - Answer Three
-  menuSelect: 0
 --- !u!1 &1570310646
 GameObject:
   m_ObjectHideFlags: 0

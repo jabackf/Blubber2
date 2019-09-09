@@ -22,6 +22,9 @@ public class squishAnim : MonoBehaviour
 
     private float velocity = 0;
 
+    private RectTransform rt;
+    private Transform t;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +33,7 @@ public class squishAnim : MonoBehaviour
             squish = UnityEngine.Random.Range(targetBottom, targetTop);
             goingUp = UnityEngine.Random.Range(0f, 1f) <= 0.5f ? true : false;
         }
+
     }
 
     // Update is called once per frame
@@ -63,5 +67,7 @@ public class squishAnim : MonoBehaviour
         }
 
         gameObject.transform.localScale = new Vector3(squishXAxis ? squish : gameObject.transform.localScale.x, squishYAxis ? squish : gameObject.transform.localScale.y, squishZAxis ? squish : gameObject.transform.localScale.z);
+
+
     }
 }

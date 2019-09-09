@@ -14,7 +14,7 @@ public class DialogBox : MonoBehaviour
     public Transform followTop;  //The top point of the character/sign/whatever that the dbox should point to. Leave this variable and the bottom variable null to show the dialog in the center.
     public Transform followBottom; //The bottom part (used mainly if the character/sign/whatever is near the top of the screen, or used exclusively if no topFollow is provided)
     public int lineBreakWidth = 60; //This max number of characters a string can have before a linebreak is used. The linebreak will replace the nearest space behind this number.
-    public Vector2 dbOffset = new Vector2(0f, 2f);
+    public Vector2 dbOffset = new Vector2(0f, .5f);
     public bool stayOnScreen = true; //If set to true, the script will adjust the dialog box to try to keep it on screen.
 
     private Image image;  //An image to display in the text box
@@ -41,10 +41,11 @@ public class DialogBox : MonoBehaviour
     public GameObject selectCursorPrefab;
     public int selectItemHeight = 20;
     private GameObject menuGo;
+    private RectTransform menuRect;
     private GameObject selectCursor;
+    public int selectedIndex = 0;
+    public Vector2 cursorOffset = new Vector2(8, -8);
     [SerializeField] public List<string> answers = new List<string>(); //If list has two or more elements, a menu will be created
-    //private List<GameObject> answersGo = new List<GameObject>(); //This is generated automatically based on answers list. Contains list item gameobjects.
-    public int menuSelect = 0;
     
     
 
@@ -77,6 +78,7 @@ public class DialogBox : MonoBehaviour
         if (menuGo != null) Destroy(menuGo);
         menuGo = Instantiate(selListPrefab);
         menuGo.transform.parent = bg.transform;
+        menuRect = menuGo.GetComponent<RectTransform>() as RectTransform;
         foreach (string s in answers)
         {
             GameObject item = Instantiate(selItemPrefab);
@@ -84,9 +86,10 @@ public class DialogBox : MonoBehaviour
             item.transform.parent = menuGo.transform;
             //answersGo.Add(item);
         }
-        menuSelect = 0;
-        //selectCursor = Instantiate(selectCursorPrefab);
-        //selectCursor.transform.parent = dBox.transform;
+        selectedIndex = 0;
+
+        selectCursor = Instantiate(selectCursorPrefab);
+        selectCursor.transform.parent = dBox.transform;
     }
 
     public void LoadImage(string resource)
@@ -138,7 +141,23 @@ public class DialogBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (menuGo != null)
+        {
+            if (Input.GetButtonDown("MenuUp"))
+            {
+                selectedIndex -= 1;
+                if (selectedIndex < 0) selectedIndex = answers.Count - 1;
+            }
+            if (Input.GetButtonDown("MenuDown"))
+            {
+                selectedIndex += 1;
+                if (selectedIndex > answers.Count - 1) selectedIndex = 0;
+            }
+            if (Input.GetButtonDown("MenuSelect"))
+            {
+                Debug.Log("You selected: " + answers[selectedIndex]);
+            }
+        }
     }
 
     //Updates the positioning of the dialog box on the screen
@@ -151,7 +170,6 @@ public class DialogBox : MonoBehaviour
             Debug.Log("!");
             bgRect.sizeDelta = new Vector2(100, 100);
         }
-        
 
         float halfW = bgRect.rect.width / 2;
         float halfH = bgRect.rect.height / 2;
@@ -165,7 +183,8 @@ public class DialogBox : MonoBehaviour
 
         if (followTop != null)
         {
-            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x, dbOffset.y, 0));
+            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x, dbOffset.y, 0) );
+            pos.y += halfH;
             tailY = pos.y - halfH - (tailHalfH);
         }
 
@@ -173,6 +192,8 @@ public class DialogBox : MonoBehaviour
         if (followBottom != null && (pos.y > (Screen.height - halfH) || followTop == null))
         {
             pos = Camera.main.WorldToScreenPoint(new Vector3(followBottom.position.x + dbOffset.x, followBottom.position.y - dbOffset.y, 0));
+            pos.y -= halfH;
+
             tailY = pos.y + halfH + (tailHalfH);
             tailFlip = true;
         }
@@ -217,7 +238,10 @@ public class DialogBox : MonoBehaviour
     {
         if (menuGo != null)
         {
-            //selectCursor.transform.position = new Vector3(menuGo.transform.position.x, menuGo.transform.position.y + (menuSelect * selectItemHeight));
+
+            float halfW = menuRect.rect.width / 2;
+            float halfH = menuRect.rect.height / 2;
+            selectCursor.transform.position = new Vector3(menuGo.transform.position.x-halfW+cursorOffset.x, menuGo.transform.position.y+cursorOffset.y + halfH - (selectedIndex * selectItemHeight));
         }
     }
 
