@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1343072802687410315
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6675723415603677115}
+  - component: {fileID: 4292242557934373788}
+  m_Layer: 0
+  m_Name: DialogBox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6675723415603677115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343072802687410315}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4292242557934373788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1343072802687410315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8aa54d6ee2e3b948b7243b2cd291d22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  title: ERROR
+  text: This dialog box has not been assigned any text
+  dialogCanvasPrefab: {fileID: 2496172979223554600, guid: b5a99feb6ad6da349a5cfbf920534616,
+    type: 3}
+  followTop: {fileID: 0}
+  followBottom: {fileID: 0}
+  lineBreakWidth: 60
+  dbOffset: {x: 0, y: 1.2}
+  stayOnScreen: 1
+  imgResource: 
+  imgSprite: {fileID: 0}
+  maxWidth: 150
+  maxHeight: 150
+  selListPrefab: {fileID: 7559009157587396383, guid: 7e68608224fd22d428266296e8ec3d08,
+    type: 3}
+  selItemPrefab: {fileID: 8964117528771551504, guid: a26453c2e94725b44aab8b64684436aa,
+    type: 3}
+  selectCursorPrefab: {fileID: 5352880889229869703, guid: 0357a27dafdad4247bc206eb20bf6d09,
+    type: 3}
+  selectItemHeight: 20
+  selectedIndex: 0
+  cursorOffset: {x: 8, y: -7}
+  answers: []
+  dialogParent: {fileID: 0}

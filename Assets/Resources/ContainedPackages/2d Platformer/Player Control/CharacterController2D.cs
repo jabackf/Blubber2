@@ -3,6 +3,8 @@ using UnityEngine.Events;
 
 public class CharacterController2D : MonoBehaviour
 {
+    [SerializeField] public string CharacterName = "Blubber";                     //The name of this character, used for dialog and stuff
+
     [Header("Movement")]
     [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
     [SerializeField] private float maxVelocity = -1;                              // The maximum velocity that the character is limited to. -1 = none.
@@ -51,6 +53,8 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Transform m_SideCheckR;                            // A position marking where to check for ceilings
     [SerializeField] private Collider2D m_rangeColliderL;                       // A position marking where to check if the player is grounded.
     [SerializeField] private Collider2D m_rangeColliderR;                       // A position marking where to check for ceilings
+    [SerializeField] private Transform m_DialogTop;                             // The top position that the dialog box will point to
+    [SerializeField] private Transform m_DialogBottom;                          // The bottom position that the dialot box will point to
 
     private enum flipType { none, spriteRenderer, scale}
     [SerializeField] private flipType spriteFlipMethod = flipType.scale;  // The method used for flipping the sprite when the character turns around. NOTE: Sprite renderer will also flip sprites of child objects       
@@ -347,7 +351,7 @@ public class CharacterController2D : MonoBehaviour
                 DialogRange d = actionObjectInRange.GetComponent<DialogRange>() as DialogRange;
                 if (d != null)
                 {
-                    d.Initiate(gameObject);
+                    d.Initiate(CharacterName, gameObject, m_DialogTop, m_DialogBottom);
                     isTalking = true;
                     setActionObjectInRange(null);
                 }
@@ -385,6 +389,7 @@ public class CharacterController2D : MonoBehaviour
     public void StopTalking()
     {
         isTalking = false;
+        Debug.Log("StopTalking called");
     }
     public void setIsOnConveyor(bool val)
     {

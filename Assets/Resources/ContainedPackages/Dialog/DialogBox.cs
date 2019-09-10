@@ -8,8 +8,7 @@ using UnityEngine.UI;
 public class DialogBox : MonoBehaviour
 {
     public string title = "Mr. Sign";
-    public string text = "Hello! I'm Mr. Sign. I'm the best sign in the world.";// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
-
+    public string text = "Hello! I'm Mr. Sign. I'm the best sign in the world.";
     public GameObject dialogCanvasPrefab;
     private GameObject dBox;
     private GameObject canvas;
@@ -20,13 +19,13 @@ public class DialogBox : MonoBehaviour
     public bool stayOnScreen = true; //If set to true, the script will adjust the dialog box to try to keep it on screen.
 
     private Image image;  //An image to display in the text box
-    public string imgResource=""; //A resource location for an image to display in the box. Leave blank for none. Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
+    public string imgResource=""; //A resource location for an image to display in the box. Leave blank for none.
     public Sprite imgSprite = null;
     private RectTransform imgRect;
     private LayoutElement imgElement;
 
-    public float maxWidth = 400; //Max width/height of dialog bg rect
-    public float maxHeight = 300;
+    public float maxWidth = 150; //Max width/height of dialog bg rect
+    public float maxHeight = 150;
 
     private GameObject bg;
     private GameObject tail;
@@ -49,7 +48,8 @@ public class DialogBox : MonoBehaviour
     public int selectedIndex = 0;
     public Vector2 cursorOffset = new Vector2(8, -7);
     [SerializeField] public List<string> answers = new List<string>(); //If list has two or more elements, a menu will be created
-    
+
+    public Dialog dialogParent;
     
 
     // Start is called before the first frame update
@@ -77,6 +77,17 @@ public class DialogBox : MonoBehaviour
             GenerateMenu();
         }
 
+    }
+
+    public void Kill()
+    {
+        Destroy(bg);
+        Destroy(tail);
+        Destroy(image);
+        Destroy(selectCursor);
+        Destroy(menuGo);
+        Destroy(dBox);
+        Destroy(canvas);
     }
 
     public void GenerateMenu()
@@ -184,7 +195,14 @@ public class DialogBox : MonoBehaviour
             }
             if (Input.GetButtonDown("MenuSelect"))
             {
-                Debug.Log("You selected: " + answers[selectedIndex]);
+                if (dialogParent!=null) dialogParent.Next(answers[selectedIndex]);
+            }
+        }
+        else
+        {
+            if (Input.GetButtonDown("MenuSelect"))
+            {
+                if (dialogParent != null) dialogParent.Next();
             }
         }
     }
