@@ -1075,6 +1075,7 @@ GameObject:
   - component: {fileID: 397217719}
   - component: {fileID: 397217722}
   - component: {fileID: 397217720}
+  - component: {fileID: 397217721}
   m_Layer: 5
   m_Name: img
   m_TagString: Untagged
@@ -1131,6 +1132,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &397217721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 397217718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!222 &397217722
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2499,11 +2520,11 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 839c0124c1a2c494eae802e7010c23e9, type: 3}
-    m_FontSize: 12
+    m_Font: {fileID: 12800000, guid: 997880253079d2144bd313a2f0e43aaf, type: 3}
+    m_FontSize: 16
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -3818,10 +3839,10 @@ MonoBehaviour:
   lineBreakWidth: 60
   dbOffset: {x: 0, y: 1.2}
   stayOnScreen: 1
-  imgResource: 
-  imgSprite: {fileID: 0}
-  maxWidth: 400
-  maxHeight: 300
+  imgResource: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
+  imgSprite: {fileID: 21300000, guid: 354fa3727c472ab49ba3eb80a1547ac0, type: 3}
+  maxWidth: 150
+  maxHeight: 150
   selListPrefab: {fileID: 7559009157587396383, guid: 7e68608224fd22d428266296e8ec3d08,
     type: 3}
   selItemPrefab: {fileID: 8964117528771551504, guid: a26453c2e94725b44aab8b64684436aa,
@@ -3830,11 +3851,8 @@ MonoBehaviour:
     type: 3}
   selectItemHeight: 20
   selectedIndex: 0
-  cursorOffset: {x: 8, y: -8}
-  answers:
-  - Answer One
-  - Answer Two
-  - Answer Three
+  cursorOffset: {x: 8, y: -7}
+  answers: []
 --- !u!1 &1570310646
 GameObject:
   m_ObjectHideFlags: 0
@@ -4538,11 +4556,11 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: fb5c9f0415a53904d9935987c11fa217, type: 3}
-    m_FontSize: 12
+    m_Font: {fileID: 12800000, guid: 50941bd6672788a49bae51a29c4214ce, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -6330,12 +6348,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 8
-    m_Right: 8
-    m_Top: 4
-    m_Bottom: 4
+    m_Left: 10
+    m_Right: 10
+    m_Top: 6
+    m_Bottom: 6
   m_ChildAlignment: 0
-  m_Spacing: 0.5
+  m_Spacing: 4
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1

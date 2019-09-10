@@ -10,7 +10,9 @@ public class DialogBox : MonoBehaviour
     public string title = "Mr. Sign";
     public string text = "Hello! I'm Mr. Sign. I'm the best sign in the world.";// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.";
 
-    public GameObject dBox;
+    public GameObject dialogCanvasPrefab;
+    private GameObject dBox;
+    private GameObject canvas;
     public Transform followTop;  //The top point of the character/sign/whatever that the dbox should point to. Leave this variable and the bottom variable null to show the dialog in the center.
     public Transform followBottom; //The bottom part (used mainly if the character/sign/whatever is near the top of the screen, or used exclusively if no topFollow is provided)
     public int lineBreakWidth = 60; //This max number of characters a string can have before a linebreak is used. The linebreak will replace the nearest space behind this number.
@@ -21,6 +23,7 @@ public class DialogBox : MonoBehaviour
     public string imgResource=""; //A resource location for an image to display in the box. Leave blank for none. Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
     public Sprite imgSprite = null;
     private RectTransform imgRect;
+    private LayoutElement imgElement;
 
     public float maxWidth = 400; //Max width/height of dialog bg rect
     public float maxHeight = 300;
@@ -44,7 +47,7 @@ public class DialogBox : MonoBehaviour
     private RectTransform menuRect;
     private GameObject selectCursor;
     public int selectedIndex = 0;
-    public Vector2 cursorOffset = new Vector2(8, -8);
+    public Vector2 cursorOffset = new Vector2(8, -7);
     [SerializeField] public List<string> answers = new List<string>(); //If list has two or more elements, a menu will be created
     
     
@@ -52,6 +55,8 @@ public class DialogBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        canvas = Instantiate(dialogCanvasPrefab);
+        dBox = canvas.transform.Find("dBox").gameObject;
         bg = dBox.transform.Find("bg").gameObject;
         bgRect = bg.GetComponent<RectTransform>() as RectTransform;
         tail = dBox.transform.Find("tail").gameObject;
@@ -60,8 +65,9 @@ public class DialogBox : MonoBehaviour
         txtMessage = bg.transform.Find("txtMessage").gameObject.GetComponent<Text>();
 
         image = bg.transform.Find("img").gameObject.GetComponent<Image>() as Image;
-        imgRect = image.gameObject.GetComponent<RectTransform>() as RectTransform;
         LoadImage(imgResource);
+        imgRect = image.gameObject.GetComponent<RectTransform>() as RectTransform;
+        imgElement = image.gameObject.GetComponent<LayoutElement>() as LayoutElement;
 
         txtTitle.text = title;
         txtMessage.text = breakLine(text, lineBreakWidth);
@@ -104,6 +110,29 @@ public class DialogBox : MonoBehaviour
         {
             imgSprite = null;
             image.sprite = null;
+        }
+    }
+
+    public void ResizeImage()
+    {
+        if (imgSprite != null)
+        {
+            float imgInitialHeight = imgRect.rect.height;
+            float imgInitialWidth = imgRect.rect.width;
+            if (imgRect.rect.width > maxWidth)
+            {
+                //imgRect.sizeDelta = new Vector2(maxWidth, maxWidth*(imgRect.height/imgRect.width));
+                imgElement.preferredWidth = maxWidth;
+                imgElement.preferredHeight = maxWidth * (imgInitialHeight / imgInitialWidth);
+
+            }
+            if (imgRect.rect.height > maxHeight)
+            {
+                //imgRect.sizeDelta = new Vector2(maxHeight * (imgRect.width / imgRect.height),maxHeight);
+                imgElement.preferredWidth = maxHeight * (imgInitialWidth / imgInitialHeight);
+                imgElement.preferredHeight = maxHeight;
+
+            }
         }
     }
 
@@ -164,13 +193,6 @@ public class DialogBox : MonoBehaviour
     void UpdatePosition()
     {
 
-        if (bgRect.rect.width>maxWidth || bgRect.rect.height > maxHeight)
-        {
-
-            Debug.Log("!");
-            bgRect.sizeDelta = new Vector2(100, 100);
-        }
-
         float halfW = bgRect.rect.width / 2;
         float halfH = bgRect.rect.height / 2;
         float tailHalfW = tailRect.rect.width / 2;
@@ -224,14 +246,6 @@ public class DialogBox : MonoBehaviour
 
         dBox.transform.position = pos;
 
-        //Resize the image
-       /* if (imgSprite != null)
-        {
-            //imgRect.rect.width = 100;
-            //Debug.Log(imgRect.rect.width);
-            //if (imgRect.rect.width > imgMaxWidth) image.transform.localScale = new Vector3((1 / imgRect.rect.width) * imgMaxWidth, (1 / imgRect.rect.height) * imgMaxWidth);//imgRect.sizeDelta = new Vector2(imgMaxWidth, imgRect.rect.height); 
-            if (imgRect.rect.height > imgMaxHeight) imgRect.sizeDelta = new Vector2(64,64);
-        }*/
     }
 
     void UpdateMenu()
@@ -247,6 +261,7 @@ public class DialogBox : MonoBehaviour
 
     void OnGUI()
     {
+        ResizeImage();
         UpdatePosition();
         UpdateMenu();
     }
