@@ -54,6 +54,10 @@ MonoBehaviour:
   stayOnScreen: 1
   imgResource: 
   imgSprite: {fileID: 0}
+  getTextInput: 0
+  textInputNumbersOnly: 0
+  inputFieldPrefab: {fileID: 4006614611733881831, guid: c4e8b2c0b86c09c4293e24ac230aaa4b,
+    type: 3}
   maxWidth: 150
   maxHeight: 150
   selListPrefab: {fileID: 7559009157587396383, guid: 7e68608224fd22d428266296e8ec3d08,

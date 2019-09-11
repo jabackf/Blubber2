@@ -17,6 +17,8 @@ public class Dialog : MonoBehaviour
         public int jumpTo = -1;
         public string Message = "";
         public string Title = "";
+        public bool getTextInput = false;
+        public bool inputNumersOnly = false;
         public string imageResource = "";
         public List<string> answers = new List<string>();
         public List<int> answerBranch = new List<int>();
@@ -106,6 +108,8 @@ public class Dialog : MonoBehaviour
         dialogBox.imgResource = entries[index].imageResource;
         dialogBox.dialogParent = this;
         dialogBox.answers = entries[index].answers;
+        dialogBox.getTextInput = entries[index].getTextInput;
+        dialogBox.textInputNumbersOnly = entries[index].inputNumersOnly;
     }
 
     public void KillBox()

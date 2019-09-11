@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 6702993792493117226}
   - component: {fileID: 6702993792493117227}
   - component: {fileID: 6702993792493117221}
+  - component: {fileID: 2636563271383401138}
   m_Layer: 5
   m_Name: txtTitle
   m_TagString: Untagged
@@ -219,6 +220,20 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &2636563271383401138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6702993792493117225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cb12cc7e1f1e1b409ddb334c46be2f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitTime: 0.0005
+  done: 0
 --- !u!1 &6702993792702604891
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +320,7 @@ GameObject:
   - component: {fileID: 6702993792886476004}
   - component: {fileID: 6702993792886476006}
   - component: {fileID: 6702993792886476007}
+  - component: {fileID: 4010660711409797519}
   - component: {fileID: 6702993792886476001}
   m_Layer: 5
   m_Name: txtMessage
@@ -375,6 +391,20 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "Lorem ipsum dolor sit amet, consectetur \nadipiscing elit, sed do eiusmod
     tempor incididunt \nut labore\n"
+--- !u!114 &4010660711409797519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6702993792886476005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cb12cc7e1f1e1b409ddb334c46be2f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waitTime: 0.0001
+  done: 0
 --- !u!114 &6702993792886476001
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -389,7 +389,6 @@ public class CharacterController2D : MonoBehaviour
     public void StopTalking()
     {
         isTalking = false;
-        Debug.Log("StopTalking called");
     }
     public void setIsOnConveyor(bool val)
     {

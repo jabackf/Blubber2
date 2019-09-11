@@ -10,8 +10,10 @@ public class DialogBox : MonoBehaviour
     public string title = "Mr. Sign";
     public string text = "Hello! I'm Mr. Sign. I'm the best sign in the world.";
     public GameObject dialogCanvasPrefab;
+    private UITextTypewriter textTyper;
     private GameObject dBox;
     private GameObject canvas;
+    private CanvasGroup canvasGroup;
     public Transform followTop;  //The top point of the character/sign/whatever that the dbox should point to. Leave this variable and the bottom variable null to show the dialog in the center.
     public Transform followBottom; //The bottom part (used mainly if the character/sign/whatever is near the top of the screen, or used exclusively if no topFollow is provided)
     public int lineBreakWidth = 60; //This max number of characters a string can have before a linebreak is used. The linebreak will replace the nearest space behind this number.
@@ -24,6 +26,12 @@ public class DialogBox : MonoBehaviour
     private RectTransform imgRect;
     private LayoutElement imgElement;
 
+    public bool getTextInput = false;
+    public bool textInputNumbersOnly = false;
+    public GameObject inputFieldPrefab;
+    private GameObject inputFieldGO;
+    private InputField inputField;
+
     public float maxWidth = 150; //Max width/height of dialog bg rect
     public float maxHeight = 150;
 
@@ -34,6 +42,12 @@ public class DialogBox : MonoBehaviour
     private RectTransform bgRect;
     private RectTransform tailRect;
     private const float tailBufferX = 20; //How close the tail is allowed to get to the edges of the screen.
+
+    private float fadeInAlpha = 0;
+    private float fadeInSpeed = 3;
+    private bool fadeOut = false;
+
+    private bool transition = false;
 
     [Space]
     [Header("Menu")]
@@ -52,10 +66,16 @@ public class DialogBox : MonoBehaviour
     public Dialog dialogParent;
     
 
+    void Awake()
+    {
+        canvas = Instantiate(dialogCanvasPrefab);
+        canvasGroup = canvas.GetComponent<CanvasGroup>() as CanvasGroup;
+        canvas.SetActive(false); //We don't want to enable the canvas until after the firt OnGui event completes. This prevents some glitchy looking artifacts.
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        canvas = Instantiate(dialogCanvasPrefab);
         dBox = canvas.transform.Find("dBox").gameObject;
         bg = dBox.transform.Find("bg").gameObject;
         bgRect = bg.GetComponent<RectTransform>() as RectTransform;
@@ -63,6 +83,7 @@ public class DialogBox : MonoBehaviour
         tailRect = tail.GetComponent<RectTransform>() as RectTransform;
         txtTitle = bg.transform.Find("txtTitle").gameObject.GetComponent<Text>();
         txtMessage = bg.transform.Find("txtMessage").gameObject.GetComponent<Text>();
+        textTyper = txtMessage.GetComponent<UITextTypewriter>() as UITextTypewriter;
 
         image = bg.transform.Find("img").gameObject.GetComponent<Image>() as Image;
         LoadImage(imgResource);
@@ -71,6 +92,13 @@ public class DialogBox : MonoBehaviour
 
         txtTitle.text = title;
         txtMessage.text = breakLine(text, lineBreakWidth);
+
+        if (getTextInput)
+        {
+            inputFieldGO = Instantiate(inputFieldPrefab);
+            inputFieldGO.transform.parent = bg.transform;
+            inputField = inputFieldGO.GetComponent<InputField>() as InputField;
+        }
 
         if (answers.Count > 1)
         {
@@ -183,27 +211,63 @@ public class DialogBox : MonoBehaviour
     {
         if (menuGo != null)
         {
-            if (Input.GetButtonDown("MenuUp"))
+            if (Input.GetButtonDown("MenuUp") && !transition)
             {
                 selectedIndex -= 1;
                 if (selectedIndex < 0) selectedIndex = answers.Count - 1;
             }
-            if (Input.GetButtonDown("MenuDown"))
+            if (Input.GetButtonDown("MenuDown") && !transition)
             {
                 selectedIndex += 1;
                 if (selectedIndex > answers.Count - 1) selectedIndex = 0;
             }
-            if (Input.GetButtonDown("MenuSelect"))
+            if (Input.GetButtonDown("MenuSelect") && !transition)
             {
-                if (dialogParent!=null) dialogParent.Next(answers[selectedIndex]);
+                fadeOut = true;
             }
         }
         else
         {
-            if (Input.GetButtonDown("MenuSelect"))
+            if (Input.GetButtonDown("MenuSelect") && !transition)
             {
-                if (dialogParent != null) dialogParent.Next();
+                fadeOut = true;
             }
+        }
+
+        //Handle fading in and out, and other transition stuff
+        if (fadeOut==false && fadeInAlpha < 1)
+        {
+            fadeInAlpha += fadeInSpeed*Time.deltaTime;
+        }
+        if (fadeInAlpha > 1) fadeInAlpha = 1;
+        if (fadeOut)
+        {
+            fadeInAlpha -= fadeInSpeed * Time.deltaTime;
+            if (fadeInAlpha <= 0)
+            {
+                if (dialogParent != null)
+                {
+                    if (answers.Count>1)
+                        dialogParent.Next(answers[selectedIndex]);
+                    else
+                        dialogParent.Next();
+                }
+            }
+        }
+
+        bool doneTyping = true;
+        if (textTyper != null)
+        {
+            doneTyping = textTyper.done;
+        }
+
+        if ( fadeOut || fadeInAlpha < 1 || !doneTyping )
+        {
+            transition = true;
+        }
+        else
+        {
+            transition = false;
         }
     }
 
@@ -279,8 +343,14 @@ public class DialogBox : MonoBehaviour
 
     void OnGUI()
     {
+        //Handle canvas opacity
+        canvasGroup.alpha = fadeInAlpha;
+
+        //Handle some other crap
         ResizeImage();
         UpdatePosition();
         UpdateMenu();
+
+        canvas.SetActive(true);
     }
 }
