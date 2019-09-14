@@ -3549,6 +3549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1543154690}
   - component: {fileID: 1543154692}
+  - component: {fileID: 1543154694}
   - component: {fileID: 1543154691}
   - component: {fileID: 1543154695}
   - component: {fileID: 1543154693}
@@ -3669,6 +3670,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.2916666, y: 1.4166666}
   m_EdgeRadius: 0
+--- !u!114 &1543154694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543154689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258b4facb2c6e9b42b02a51e2691123c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1543154695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3683,8 +3696,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogBoxPrefab: {fileID: 1343072802687410315, guid: 25238196577895041a5d4a1ee4a009f8,
     type: 3}
+  active: 0
   entries:
-  - saidByInitiator: 0
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3693,11 +3712,16 @@ MonoBehaviour:
       I'm here to test the new dialog system!
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 1
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 1
     gameObject: {fileID: 0}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
@@ -3705,11 +3729,16 @@ MonoBehaviour:
     Message: Oh no...
     Title: 
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3717,11 +3746,16 @@ MonoBehaviour:
     Message: Oh YES!
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3730,14 +3764,25 @@ MonoBehaviour:
       following question. Do you like to eat boogers?
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers:
     - Yes
     - No
     - Sometimes
-    answerBranch: 040000000500000006000000
-  - saidByInitiator: 0
+    answerBranch:
+    - answer: Yes
+      index: 4
+    - answer: No
+      index: 5
+    - answer: Sometimes
+      index: 6
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3745,11 +3790,16 @@ MonoBehaviour:
     Message: Aha! You answered [answer]! I knew it!
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3757,11 +3807,16 @@ MonoBehaviour:
     Message: Oh, so you're a liar. That's good to know. Moving on...
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3770,11 +3825,16 @@ MonoBehaviour:
       bet you're eating one right now!
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3784,11 +3844,16 @@ MonoBehaviour:
       I'm showing it to you anyway.
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3796,11 +3861,16 @@ MonoBehaviour:
     Message: 
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3808,11 +3878,16 @@ MonoBehaviour:
     Message: That was BEAUTIFUL wasn't it?
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3820,11 +3895,16 @@ MonoBehaviour:
     Message: Now, let me ask you something. What's you're favorite thing ever?
     Title: Mr. Sign
     getTextInput: 1
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  - saidByInitiator: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
@@ -3832,11 +3912,55 @@ MonoBehaviour:
     Message: What a coincidence! I hate [answer]!
     Title: Mr. Sign
     getTextInput: 0
-    inputNumersOnly: 0
+    inputType: 3
     imageResource: 
     answers: []
-    answerBranch: 
-  active: 0
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1543154694}
+          m_MethodName: TestCallbackOne
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1543154695}
+            m_ObjectArgumentAssemblyTypeName: Dialog, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    jumpTo: -1
+    Message: How old are you?
+    Title: Mr. Sign
+    getTextInput: 1
+    inputType: 1
+    imageResource: 
+    answers: []
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    jumpTo: -1
+    Message: '[answer] years old? I see.'
+    Title: Mr. Sign
+    getTextInput: 0
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
 --- !u!1 &1630521634
 GameObject:
   m_ObjectHideFlags: 0

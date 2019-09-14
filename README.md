@@ -15,3 +15,5 @@
 -Maybe throw aim with the mouse?
 
 -Stuff to add: Item spawner pipe, push buttons, drop platforms, dissappearing platforms, enemies, water, dialog system, inventory system, items with actions
+
+-Reduce velocity to 0 when dialog initiated

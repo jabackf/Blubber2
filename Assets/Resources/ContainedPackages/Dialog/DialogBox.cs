@@ -27,7 +27,7 @@ public class DialogBox : MonoBehaviour
     private LayoutElement imgElement;
 
     public bool getTextInput = false;
-    public bool textInputNumbersOnly = false;
+    public InputField.CharacterValidation inputType = InputField.CharacterValidation.Alphanumeric;
     public GameObject inputFieldPrefab;
     private GameObject inputFieldGO;
     private InputField inputField;
@@ -98,6 +98,7 @@ public class DialogBox : MonoBehaviour
             inputFieldGO = Instantiate(inputFieldPrefab);
             inputFieldGO.transform.parent = bg.transform;
             inputField = inputFieldGO.GetComponent<InputField>() as InputField;
+            inputField.characterValidation = inputType;
         }
 
         if (answers.Count > 1)
@@ -247,10 +248,15 @@ public class DialogBox : MonoBehaviour
             {
                 if (dialogParent != null)
                 {
-                    if (answers.Count>1)
+                    if (answers.Count > 1)
                         dialogParent.Next(answers[selectedIndex]);
                     else
-                        dialogParent.Next();
+                    {
+                        if (getTextInput)
+                            dialogParent.Next(inputField.text);
+                        else
+                            dialogParent.Next();
+                    }
                 }
             }
         }
