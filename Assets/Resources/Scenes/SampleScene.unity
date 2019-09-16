@@ -293,6 +293,36 @@ MonoBehaviour:
   flipOnY: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+--- !u!1 &111272894
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 111272895}
+  m_Layer: 0
+  m_Name: dialogLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &111272895
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111272894}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.06, y: 1.22, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 458327880}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &156845573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1230,6 +1260,250 @@ MonoBehaviour:
   flipOnY: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+--- !u!1 &458327879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 458327880}
+  - component: {fileID: 458327885}
+  - component: {fileID: 458327884}
+  - component: {fileID: 458327883}
+  - component: {fileID: 458327882}
+  - component: {fileID: 458327881}
+  m_Layer: 0
+  m_Name: Sign1 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &458327880
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458327879}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3, y: -2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 111272895}
+  m_Father: {fileID: 1194112661}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &458327881
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458327879}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.7083333}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 1.2916666, y: 1.4166666}
+    newSize: {x: 1.2916666, y: 1.4166666}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.2916666, y: 1.4166666}
+  m_EdgeRadius: 0
+--- !u!114 &458327882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458327879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff0d4c1a4f5d304db1fef9a0e40ef00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBoxPrefab: {fileID: 1343072802687410315, guid: 25238196577895041a5d4a1ee4a009f8,
+    type: 3}
+  active: 0
+  myType: 7
+  startGroup: 0
+  dontRepeatRandoms: 0
+  autoOnTimeMultiplier: 0.5
+  autoOffTimeMultiplier: 0.5
+  entries:
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 111272895}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 7
+    timeOffScreen: 1.2
+    Message: Here is a group 0 message
+    Title: Mr. Sign
+    getTextInput: 0
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 111272895}
+    locationBottom: {fileID: 0}
+    group: 1
+    jumpTo: -1
+    timeOnScreen: 7
+    timeOffScreen: 1.2
+    Message: g1 m1
+    Title: Mr Sign
+    getTextInput: 0
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 111272895}
+    locationBottom: {fileID: 0}
+    group: 1
+    jumpTo: -1
+    timeOnScreen: 7
+    timeOffScreen: 1.2
+    Message: g1 m2
+    Title: Mr Sign
+    getTextInput: 0
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+  - callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    saidByInitiator: 0
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 111272895}
+    locationBottom: {fileID: 0}
+    group: 1
+    jumpTo: -1
+    timeOnScreen: 7
+    timeOffScreen: 1.2
+    Message: g1 m3
+    Title: Mr Sign
+    getTextInput: 0
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+--- !u!114 &458327883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458327879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 992ae2fe5f0c7bc4db76cb3a82e61c57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
+    type: 3}
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 1.4
+  dialog: {fileID: 458327882}
+--- !u!114 &458327884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458327879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258b4facb2c6e9b42b02a51e2691123c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!212 &458327885
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458327879}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: bd1f9c5fcad96c64eaee5dc37f6e9753, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.2916666, y: 1.4166666}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &461519964
 GameObject:
   m_ObjectHideFlags: 0
@@ -2904,6 +3178,7 @@ Transform:
   - {fileID: 1721247610}
   - {fileID: 1543154690}
   - {fileID: 1028409930}
+  - {fileID: 458327880}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3697,6 +3972,11 @@ MonoBehaviour:
   dialogBoxPrefab: {fileID: 1343072802687410315, guid: 25238196577895041a5d4a1ee4a009f8,
     type: 3}
   active: 0
+  myType: 0
+  startGroup: 0
+  dontRepeatRandoms: 0
+  autoOnTimeMultiplier: 1
+  autoOffTimeMultiplier: 1
   entries:
   - callback:
       m_PersistentCalls:
@@ -3707,7 +3987,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Hello! My name is Mr. Sign. I'm the best sign in the world, because
       I'm here to test the new dialog system!
     Title: Mr. Sign
@@ -3725,7 +4008,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Oh no...
     Title: 
     getTextInput: 0
@@ -3742,7 +4028,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Oh YES!
     Title: Mr. Sign
     getTextInput: 0
@@ -3759,7 +4048,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: First, let's test the question and answer system. Please answer the
       following question. Do you like to eat boogers?
     Title: Mr. Sign
@@ -3786,7 +4078,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: 7
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Aha! You answered [answer]! I knew it!
     Title: Mr. Sign
     getTextInput: 0
@@ -3803,7 +4098,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: 7
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Oh, so you're a liar. That's good to know. Moving on...
     Title: Mr. Sign
     getTextInput: 0
@@ -3820,7 +4118,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: 7
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Uh huh. "[answer]" you say? More like "All the time!" In fact, I'll
       bet you're eating one right now!
     Title: Mr. Sign
@@ -3838,7 +4139,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Now, let's test the image system. I'm going to show you an amazing picture.
       It's the greatest picture you've ever seen. Are you ready? Don't answer that.
       I'm showing it to you anyway.
@@ -3857,7 +4161,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: 
     Title: Mr. Sign
     getTextInput: 0
@@ -3874,7 +4181,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: That was BEAUTIFUL wasn't it?
     Title: Mr. Sign
     getTextInput: 0
@@ -3891,7 +4201,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: Now, let me ask you something. What's you're favorite thing ever?
     Title: Mr. Sign
     getTextInput: 1
@@ -3908,7 +4221,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: What a coincidence! I hate [answer]!
     Title: Mr. Sign
     getTextInput: 0
@@ -3936,7 +4252,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: How old are you?
     Title: Mr. Sign
     getTextInput: 1
@@ -3953,7 +4272,10 @@ MonoBehaviour:
     gameObject: {fileID: 0}
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
+    group: 0
     jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
     Message: '[answer] years old? I see.'
     Title: Mr. Sign
     getTextInput: 0
@@ -6203,12 +6525,12 @@ PrefabInstance:
     - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.5
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
         type: 3}

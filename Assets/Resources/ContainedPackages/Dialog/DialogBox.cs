@@ -9,6 +9,7 @@ public class DialogBox : MonoBehaviour
 {
     public string title = "Mr. Sign";
     public string text = "Hello! I'm Mr. Sign. I'm the best sign in the world.";
+    public bool useInput = true;    //Set to true to accept user input for controlling dialog menu, progress, input, ect.
     public GameObject dialogCanvasPrefab;
     private UITextTypewriter textTyper;
     private GameObject dBox;
@@ -64,6 +65,7 @@ public class DialogBox : MonoBehaviour
     [SerializeField] public List<string> answers = new List<string>(); //If list has two or more elements, a menu will be created
 
     public Dialog dialogParent;
+
     
 
     void Awake()
@@ -117,6 +119,12 @@ public class DialogBox : MonoBehaviour
         Destroy(menuGo);
         Destroy(dBox);
         Destroy(canvas);
+    }
+
+    //Starts fading the box out
+    public void closeBox()
+    {
+        fadeOut = true;
     }
 
     public void GenerateMenu()
@@ -212,26 +220,26 @@ public class DialogBox : MonoBehaviour
     {
         if (menuGo != null)
         {
-            if (Input.GetButtonDown("MenuUp") && !transition)
+            if (Input.GetButtonDown("MenuUp") && !transition && useInput)
             {
                 selectedIndex -= 1;
                 if (selectedIndex < 0) selectedIndex = answers.Count - 1;
             }
-            if (Input.GetButtonDown("MenuDown") && !transition)
+            if (Input.GetButtonDown("MenuDown") && !transition && useInput)
             {
                 selectedIndex += 1;
                 if (selectedIndex > answers.Count - 1) selectedIndex = 0;
             }
-            if (Input.GetButtonDown("MenuSelect") && !transition)
+            if (Input.GetButtonDown("MenuSelect") && !transition && useInput)
             {
-                fadeOut = true;
+                closeBox();
             }
         }
         else
         {
-            if (Input.GetButtonDown("MenuSelect") && !transition)
+            if (Input.GetButtonDown("MenuSelect") && !transition && useInput)
             {
-                fadeOut = true;
+                closeBox();
             }
         }
 

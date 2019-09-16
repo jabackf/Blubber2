@@ -12,15 +12,33 @@ public class Dialog : MonoBehaviour
 
     /*Types:
      * Straightshot plays whole dialog through to finish, using player input to initiate and progress through dialog boxes
-     * RandomSingle picks a random message and shows it once, using player input to initiate and close the dialog box
-     * Auto plays the whole dialog through to finish, played automatically with timers.
-     * AutoRandom plays random message entries automatically with timers
+     * Group plays through the currently selected message group, using player input to initiate and progress through dialog boxes
+     * Random picks a message group randomly and plays through it, using player input to initiate and close the dialog box
+     * AutoRandom plays random message group entries automatically with timers
      * AutoStraightshot plays the whole conversation through from beginning to end automatically with timers.
      * AutoStraightLoop does the same as above, but loops back to the beginning every time it ends
-     * AutoSingle plays the selected index automatically with timers.
+     * AutoGroup plays the selected group automatically with timers.
+     * AutoGroupLoop works like above, but loops to the beginning of the group when it reaches the end
+     * 
+     * NOTES: The auto types aren't intended to work with menus, answer branches, etc. Those features are built for boxes that require input
     */
     
-    public enum type {Straightshot, RandomSingle, Auto, AutoRandom, AutoStraightshot, AutoStraightshotLoop, AutoSingle };
+    public enum type {Straightshot, Group, Random, AutoRandom, AutoStraightshot, AutoStraightshotLoop, AutoGroup, AutoGroupLoop };
+    public type myType = type.Straightshot;
+
+    private int currentGroup = 0;   //This stores the current group we're playing (only applies to types that use groups)
+    public int startGroup = 0;      //This can be used in the inspector to set the currentGroup in the Start() function
+    public void setCurrentGroup(int g) { currentGroup = g; }
+    public int getCurrentGroup(int g) { return currentGroup; }
+    public bool dontRepeatRandoms = false; //If true, then any random type will avoid showing the same message twice in a row.
+
+    //The following timers are used for initiating / closing auto types
+    private bool isAutoType = false;
+    private float onScreenTimer;
+    private float offScreenTimer;
+    private bool onScreen = false; //used by auto types to know if dbox is on screen, or if we're waiting before showing the next one
+    public float autoOnTimeMultiplier = 1; //This is multiplied to all onScreen times. A value greater than one, for example, will make all dialog entries show for longer
+    public float autoOffTimeMultiplier = 1; //This is multiplied to all offScreen times. A value less than one, for example, will make dialogs stay off screen for a shorter period of time
 
     //This struct couples potential answers to dialog questions with entries indexes to jump to if that answer is provided.
     [System.Serializable]
@@ -38,7 +56,10 @@ public class Dialog : MonoBehaviour
         public GameObject gameObject; 
         public Transform locationTop; //If both transforms are null and saidByInitiator is false, the dialog will appear in the center of the screen
         public Transform locationBottom;
+        public int group = 0; //This can be used to cluster together messages in groups. For instance, if the conversation is RandomSingle, then a random group will be chosen and all messages in that group will be displayed in order
         public int jumpTo = -1;
+        public float timeOnScreen = 8f; //For auto types only. The amount of time the box will be displayed on screen
+        public float timeOffScreen = 1.4f; //For auto types only. The amount of time AFTER this box closes before the next box displays
         public string Message = "";
         public string Title = "";
         public bool getTextInput = false;
@@ -70,63 +91,172 @@ public class Dialog : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        currentGroup = startGroup;
+        if (myType == type.AutoGroup || myType == type.AutoGroupLoop || myType == type.AutoRandom || myType == type.AutoStraightshot || myType == type.AutoStraightshotLoop)
+        {
+            isAutoType = true;
+            Initiate();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (isAutoType)
+        {
+            if (onScreen)
+            {
+                if (onScreenTimer > 0) onScreenTimer -= Time.deltaTime;
+                else
+                {
+                    if (dialogBox != null) KillBox();
+                    offScreenTimer = entries[index].timeOffScreen*autoOffTimeMultiplier;
+                    onScreen = false;
+                }
+            }
+            else //Not currently on the screen
+            {
+                if (offScreenTimer > 0) offScreenTimer -= Time.deltaTime;
+                else
+                {
+                    Next();
+                    onScreen = true;
+                    onScreenTimer = entries[index].timeOnScreen*autoOnTimeMultiplier;
+                }
+            }
+        }
     }
 
-    public void Initiate(string name, GameObject go, Transform top, Transform bottom)
+    //Initiates a dialog sequence
+    public void Initiate(string name="", GameObject go=null, Transform top=null, Transform bottom=null)
     {
         initiator = go;
         initiatorName = name;
         initiatorTop = top;
         initiatorBottom = bottom;
         active = true;
-        index = 0;
+
+        if (myType == type.AutoStraightshot|| myType == type.Straightshot|| myType == type.AutoStraightshotLoop) //Starting at 0
+            index = 0;
+        else //The type uses groups
+        {
+            if (myType == type.AutoRandom || myType == type.Random) //Pick a random group
+            {
+                currentGroup = getRandomGroup();
+            }
+            index = getGroupStartIndex(currentGroup);
+        }
+
         LoadBox();
+
+        if (isAutoType)
+        {
+            onScreen = true;
+            onScreenTimer = entries[index].timeOnScreen*autoOnTimeMultiplier;
+        }
     }
 
+    //Returns a list of all unique group id's in the entry list
+    public List<int> getGroupList()
+    {
+        List<int> l = new List<int>();
+        foreach (entry e in entries)
+        {
+            if (!l.Contains(e.group)) l.Add(e.group);
+        }
+        return l;
+    }
+
+    //Returns a group randomly selected from all unique groups in the entries list
+    public int getRandomGroup()
+    {
+        List<int> groups = getGroupList();
+        var random = new System.Random();
+        int i = random.Next(groups.Count);
+
+        if (dontRepeatRandoms && groups.Count>1)
+        {
+            while (groups[i]==currentGroup) i=random.Next(groups.Count);
+        }
+
+        return groups[i];
+    }
+
+    //Returns the first index in entries that has the specified group number. Returns 0 if group is not found
+    private int getGroupStartIndex(int group)
+    {
+        for(int i = 0; i<entries.Count; i++)
+        {
+            if (entries[i].group == group) return i;
+        }
+        return 0;
+    }
+    //Returns the last index in entries that has the specified group number. Returns 0 if group is not found
+    private int getGroupEndIndex(int group)
+    {
+        for (int i = entries.Count-1; i >= 0; i--)
+        {
+            if (entries[i].group == group) return i;
+        }
+        return 0;
+    }
+
+    //Takes all settings into account and determines what the next entry index should be.
+    //Returns -1 if we've reached the end of the current dialog chain or group, and we don't need to loop.
     public int getNextIndex()
     {
-        if (index < entries.Count - 1)
+        int end = entries.Count - 1;
+        if (myType == type.AutoGroup || myType == type.AutoRandom || myType == type.Random || myType == type.Group) //These types use message groups
         {
-            if (entries[index].jumpTo == -1 && entries[index].answerBranch.Count == 0) return index+1;
-            else
-            {
-                if (entries[index].jumpTo != -1) return entries[index].jumpTo;
+            end = getGroupEndIndex(currentGroup);
+        }
 
-                if (entries[index].answerBranch.Count>0)
+        //First let's see if there is somewhere we need to jump to
+        if (entries[index].jumpTo != -1) return entries[index].jumpTo;
+
+        if (entries[index].answerBranch.Count > 0)
+        {
+            foreach (AnswerBranch a in entries[index].answerBranch)
+            {
+                if (a.answer == lastAnswer)
                 {
-                    foreach (AnswerBranch a in entries[index].answerBranch)
-                    { 
-                        if (a.answer == lastAnswer)
-                        {
-                            return a.index;
-                        }
-                    }
+                    return a.index;
                 }
             }
         }
+
+        //There are no jumpTo's or answer branches, so we need to increment to the next index instead
+        if (index < end)
+        {
+            return index + 1;
+        }
+        else
+        {
+            if (myType == type.AutoStraightshotLoop) return 0;
+            if (myType == type.AutoGroupLoop)
+            {
+                return getGroupStartIndex(currentGroup);
+            }
+        }
+
+        //Nowhere to go.
         return -1;
     }
 
-    public void Next(string answer = "")
+    public void Next(string answer = "NoneProvided")
     {
-        if (answer != "") lastAnswer = answer;
+        if (answer != "NoneProvided") lastAnswer = answer;
 
-        if (entries[index].callback != null)
-        {
-            entries[index].callback.Invoke();
-        }
+        if (dialogBox!=null) KillBox();
 
-        KillBox();
-        if (index < entries.Count-1)
+        int next = getNextIndex();
+        if (next != - 1)
         {
-            index = getNextIndex();
+            index = next;
+
+            //If we have to jump or branch off into a different group, then we want to change the current group to avoid errors
+            currentGroup = entries[index].group;
+
             LoadBox();
         }
         else
@@ -164,9 +294,16 @@ public class Dialog : MonoBehaviour
         dialogBox.inputType = entries[index].inputType;
     }
 
+    //Kill the current dialog box
     public void KillBox()
     {
+
+        if (entries[index].callback != null)
+        {
+            entries[index].callback.Invoke();
+        }
         dialogBox.Kill();
         Destroy(dialogBox);
+        dialogBox = null;
     }
 }
