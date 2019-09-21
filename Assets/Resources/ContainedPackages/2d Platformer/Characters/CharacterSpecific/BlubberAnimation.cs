@@ -28,6 +28,7 @@ public class BlubberAnimation : CharacterAnimation
         dressList.Add(new dress("eyesClimb", "Sprites/Blubber/eyesClimb", gameObject.transform));
         
         eyes = new multiDress(ref dressList, "eyesNormal", new string[] { "eyesNormal","eyesAngry","eyesBlink","eyesClimb" });
+
     }
     public override void UpdateCharacter()
     {

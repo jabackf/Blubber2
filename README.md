@@ -23,6 +23,4 @@ Dialog
 -Character emotions or actions while talking
 -Character change facing direction to point to the one talking
 -Case sensitivty for text entry?
--Auto text boxes don't fade out
 -Add pause and resume feature for auto dialog (for if character interupts)
--AutoGroup isn't working. It seems to be because Next() isn't being called. Instead, since group0 is only one message long and ran only by Initiate. This causes problems.

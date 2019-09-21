@@ -440,6 +440,8 @@ public class CharacterController2D : MonoBehaviour
             holding.SendMessage("flipSpriteX", !m_FacingRight);
         }
 
+        if (charAnim != null) charAnim.FlipX(!m_FacingRight);
+
         if (spriteFlipMethod == flipType.scale)
         {
             // Multiply the player's x local scale by -1.

@@ -1,0 +1,436 @@
+
+//and always call event_inherited at the end of this script.
+
+if (speakComponent!=noone){
+    speaker = speakComponent.actor.name; //This variable can be used in place of the header
+                                        //to reference the actor that the player is speaking to
+    actor_id=speakComponent.actor;
+}                                        
+else{
+    speaker = "";
+    actor_id=noone;
+}
+
+
+other_speaker = "Green Guy";
+
+if (index==0){
+    header = other_speaker;
+    text = "So, how's the wife and kids?";
+}
+
+if (index==1){
+    header=speaker;
+    text = "I've told you over and over again, I'm NOT married, nor do I have any kids."
+}
+
+if (index==2){
+    header=other_speaker;
+    box_time=140;
+    text = "Well tell them "+other_speaker+" says hello!"
+    wait_time=60;
+}
+
+if (index==3){
+    header=speaker;
+    wait_time=12;
+    box_time=170;
+    text = "So the other day I was cleaning out my garage, and I found a moldy banana.";
+}
+
+
+
+if (index==4){
+    header=other_speaker;
+    box_time=210;
+    text = "No way! Dude, I just found a moldy banana under my bed the other day. What a crazy coincidence! I haven't even bought bananas for years!" ;   
+}
+
+if (index==5){
+    header=speaker;
+    box_time=170;
+    text = "I don't believe you. You're just saying you found a banana because I said that I found one!";
+}
+
+if (index==6){
+    header=other_speaker;
+    box_time=130;
+    text = "No, for real! It tasted horrible!";
+}
+
+if (index==7){
+    header=speaker;
+    text = "You ATE it?!";
+}
+
+if (index==8){
+    header=other_speaker;
+    text = "Well, I mean... I hate to see food go to waste";
+}
+
+if (index==9){
+    header=speaker;
+    wait_time=100;
+    text = "I think you should be more worried about your brain going to waste.";
+    
+}
+if (index==10){
+    header=other_speaker;
+    wait_time=14;
+    box_time=150;
+    text = "Man I'm tired. I was up late last night enjoying my new hobby!" ;   
+}
+
+if (index==11){
+    header=speaker;
+    text = "Oh, a new hobby huh? What is it?";
+}
+
+if (index==12){
+    header=other_speaker;
+    text = "Photo shopping human limbs onto pictures of birds.";
+}
+
+if (index==13){
+    header=speaker;
+    text = "Wow! That hobby sounds... interesting...";
+}
+
+if (index==14){
+    header=other_speaker;
+    text = "Yeah, let me show you some of my latest work...";
+}
+
+if (index==15){
+    header=other_speaker;
+    image = sprBirdWithArms;
+}
+if (index==16){
+    header=speaker;
+    addDress(speakComponent.actor.character,sprDressAngry,MIRROR);
+    text = "You didn't make that! You stole it from the Internet!";
+}
+
+if (index==17){
+    header=other_speaker;
+    text = "Uhhh, so do you have any hobbies?";
+    
+}
+if (index==18){
+    header=speaker;
+    removeDress(speakComponent.actor.character,sprDressAngry);
+    text = "Yes! Actually, I'm currently learning how to speak Chinese!" ;   
+}
+
+if (index==19){
+    header=other_speaker;
+    text = "Awesome! Let's hear it!";
+}
+
+if (index==20){
+    header=speaker;
+    image=sprChineseToothbrushNose;
+}
+
+if (index==21){
+    header=other_speaker;
+    text = "Whoah! I didn't understand any of that!";
+}
+
+if (index==22){
+    header=speaker;
+    wait_time=40;
+    text = "Good.";
+}
+
+if (index==23){
+    header=other_speaker;
+    wait_time=14;
+    text = "You know, I've always wanted to learn how to speak with sign language.";
+}
+if (index==24){
+    header=speaker;
+    box_time=130;
+    text = "But you don't have any hands!";
+}
+
+if (index==25){
+    header=other_speaker;
+    box_time=180;
+    text = "I don't need you squishing my dreams. Why do you always have to be such a negative nancy all of the time?";
+}
+
+if (index==26){
+    header=speaker;
+    addDress(speakComponent.actor.character,sprDressAngry,MIRROR);
+    text = "I am not a negative nancy!";
+    box_time=110;
+}
+
+if (index==27){
+    header=other_speaker;
+    text = "Yes you are! Your new name is Mr. Negative Nancy Pants!";
+}
+
+if (index==28){
+    header="Mr. Negative Nancy Pants";
+    temp=actor_id.name;
+    actor_id.name=header;
+    text = "IT IS NOT!";
+}
+if (index==29){
+    header=other_speaker;
+    text = "See. Told you so.";
+}
+
+if (index==30){
+
+    header=temp;
+    actor_id.name=header;
+    text = "You really push my buttons sometimes.";
+    wait_time =  70;
+}
+
+if (index==31){
+    header=other_speaker;
+    removeDress(speakComponent.actor.character,sprDressAngry);
+    text = "Speaking of buttons, guess what I did the other day!";
+    wait_time=15;
+}
+
+if (index==32){
+    header=speaker;
+    text = "Did you finally brush your teeth?";
+    box_time=80;
+}
+
+if (index==33){
+    header=other_speaker;
+    text = "No, I rode a real life unicorn!";
+    box_time=100;
+    wait_time=15;
+}
+if (index==34){
+    header=speaker;
+    box_time=110;
+    text = "What did that have to do with buttons?";
+    wait_time=10;
+}
+
+if (index==35){
+    header=other_speaker;
+    text = "Oh, I don't know.. But a UNICORN! A REAL ONE! Turns out unicorns like pizza too!";
+    box_time=200;
+}
+if (index==36){
+    header=speaker;
+    text = 'Well, then why did you say "speaking of buttons?"';
+    box_time=90;
+}
+if (index==37){
+    header=other_speaker;
+    text = "It had a horn and everything!";
+}
+if (index==38){
+    header=speaker;
+    text = "Wait...";
+    box_time=90;
+    wait_time=50;
+}
+if (index==39){
+    header=speaker;
+    text = "You just ate the last piece of pizza.";
+    box_time=100;
+    wait_time=20;
+}
+if (index==40){
+    header=other_speaker;
+    text = "Oh, did you want some?";
+    box_time=90;
+    wait_time=7;
+}
+if (index==41){
+    header=speaker;
+    addDress(speakComponent.actor.character,sprDressAngry,MIRROR);
+    text = "Uhh... Yeah, I kinda did.";
+    box_time=90;
+    wait_time=10;
+}
+if (index==42){
+    header=other_speaker;
+    text = "Well we can get more. They're free.";
+    box_time=115;
+    wait_time=10;
+}
+
+if (index==43){ 
+    header=speaker;
+    box_time=230;
+    wait_time=12;
+    text="I know they're free! But you seriously just sat there and ate an entire pizza, all by yourself, and didn't even offer me one slice!";
+}
+
+if (index==44){
+    header=other_speaker;
+    text = "... Oops?";
+    box_time=90;
+    wait_time=25;
+}
+if (index==45){
+    header=speaker;
+    text = "Jerk.";
+    box_time=80;
+    wait_time=22;
+}
+if (index==46){
+    header=other_speaker;
+    removeDress(speakComponent.actor.character,sprDressAngry);
+    text = "Let's just get another pizza.";
+    box_time=120;
+    wait_time=9;
+}
+if (index==47){
+    header=speaker;
+    text = "No, that won't work!";
+    box_time=90;
+    wait_time=10;
+}
+
+if (index==48){ 
+    header=other_speaker;
+    text="But they're FREE! All you gotta do is go get one!!";
+    wait_time=10;
+    box_time=110;
+}
+if (index==49){
+    header=speaker;
+    text = "You don't understand....";
+    box_time=100;
+    wait_time=30;
+}
+if (index==50){
+    header=speaker;
+    text = "I've seen this video game's source code. This conversation is a finite loop, and it's programmed to repeat every time the pizza is replenished.";
+    box_time=250;
+    wait_time=18;
+}
+if (index==51){
+    header=other_speaker;
+    text = "Oh no, that means...";
+    box_time=100;
+    wait_time=12;
+}
+
+if (index==52){ 
+    header=speaker;
+    box_time=250;
+    addDress(speakComponent.actor.character,sprDressAngry,MIRROR);
+    text="Our entire existence, the ONLY thing we were ever programmed to do, is sit here and eat pizza, in a continuous loop, forever.";
+}
+if (index==53){ 
+    header=speaker;
+    
+    text="AND YOU ATE IT.";
+    wait_time=9;
+    box_time=90;
+}
+if (index==54){ 
+    header=other_speaker;
+    text="But I...";
+    wait_time=3;
+    box_time=70;
+}
+if (index==55){ 
+    header=speaker;
+    wait_time=8;
+    box_time=230;
+    text="That means you're going to eat it again next time too, because that's what you're programmed to do.";
+}
+if (index==56){ 
+    wait_time=9;
+    box_time=70;
+    header=other_speaker;
+    text="I, uhh....";
+}
+if (index==57){ 
+    header=speaker;
+    wait_time=15;
+    box_time=250;
+    text="You've literally ate every single slice of pizza that I've ever had the opportunity to enjoy, and you will continue to do so for all of eternity.";
+}
+if (index==58){ 
+    header=other_speaker;
+    box_time=70;
+    wait_time=30;
+    text="....";
+}
+if (index==59){ 
+    header=speaker;
+    box_time=90;
+    wait_time=14;
+    text="You're such a jerk.";
+}
+if (index==60){ 
+    header=other_speaker;
+    text="I mean... it was some pretty good pizza.";
+    wait_time=30;
+}
+if (index==61){ 
+    header=speaker;
+    text="Well, any second now he's gonna bring us a new pizza...";
+    box_time=110;
+    wait_time=8
+}
+if (index==62){ 
+    header=speaker;
+    box_time=60;
+    text="... for you to eat ....";
+}
+if (index==63){ 
+    header=speaker;
+    box_time=140;
+    wait_time=80;
+    text=".. and everything we will ever know will start over again.";
+}
+if (index==64){ 
+    header=other_speaker;
+    wait_time=15;
+    box_time=120;
+    text="Hey ... I'm sorry... For the whole pizza thing...";
+}
+if (index==65){ 
+    header=speaker;
+    box_time=90;
+    wait_time=10;
+    text="WELL YOU SHOULD BE!";
+}
+if (index==66){ 
+    header=speaker;
+    box_time=90;
+    wait_time=23;
+    text="It was a whole stinkin pizza!";
+}
+if (index==67){ 
+    header=other_speaker;
+    box_time=130;
+    wait_time=10;
+    text="At least you got to see that awesome bird photoshop.";
+}
+if (index==68){ 
+    header=speaker;
+    removeDress(speakComponent.actor.character,sprDressAngry);
+    box_time=100;
+    wait_time=23;
+    text="That WAS pretty nice.";
+}
+if (index==69){ 
+    header=other_speaker;
+    box_time=110;
+    wait_time=100;
+    text="I never did get to tell my unicorn story.";
+}
+
+if (index==69){ 
+    index=-1;    
+}
+event_inherited();

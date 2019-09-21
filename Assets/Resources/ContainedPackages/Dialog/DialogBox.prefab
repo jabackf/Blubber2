@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1343072802687410315}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: ERROR
   text: This dialog box has not been assigned any text
+  useInput: 1
   dialogCanvasPrefab: {fileID: 2496172979223554600, guid: b5a99feb6ad6da349a5cfbf920534616,
     type: 3}
   followTop: {fileID: 0}
@@ -55,7 +56,7 @@ MonoBehaviour:
   imgResource: 
   imgSprite: {fileID: 0}
   getTextInput: 0
-  textInputNumbersOnly: 0
+  inputType: 3
   inputFieldPrefab: {fileID: 4006614611733881831, guid: c4e8b2c0b86c09c4293e24ac230aaa4b,
     type: 3}
   maxWidth: 150

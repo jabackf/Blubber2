@@ -9,7 +9,7 @@ public class DialogBox : MonoBehaviour
 {
     public string title = "Mr. Sign";
     public string text = "Hello! I'm Mr. Sign. I'm the best sign in the world.";
-    public bool useInput = true;    //Set to true to accept user input for controlling dialog menu, progress, input, ect.
+    public bool isAuto = false;    //Set to false to accept user input for controlling dialog menu, progress, input, ect.
     public GameObject dialogCanvasPrefab;
     private UITextTypewriter textTyper;
     private GameObject dBox;
@@ -45,7 +45,7 @@ public class DialogBox : MonoBehaviour
     private const float tailBufferX = 20; //How close the tail is allowed to get to the edges of the screen.
 
     private float fadeInAlpha = 0;
-    private float fadeInSpeed = 3;
+    private float fadeInSpeed = 4;
     private bool fadeOut = false;
 
     private bool transition = false;
@@ -66,21 +66,19 @@ public class DialogBox : MonoBehaviour
 
     public Dialog dialogParent;
 
-    
-
     void Awake()
     {
         canvas = Instantiate(dialogCanvasPrefab);
         canvasGroup = canvas.GetComponent<CanvasGroup>() as CanvasGroup;
         canvas.SetActive(false); //We don't want to enable the canvas until after the firt OnGui event completes. This prevents some glitchy looking artifacts.
+        dBox = canvas.transform.Find("dBox").gameObject;
+        bg = dBox.transform.Find("bg").gameObject;
+        bgRect = bg.GetComponent<RectTransform>() as RectTransform;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        dBox = canvas.transform.Find("dBox").gameObject;
-        bg = dBox.transform.Find("bg").gameObject;
-        bgRect = bg.GetComponent<RectTransform>() as RectTransform;
         tail = dBox.transform.Find("tail").gameObject;
         tailRect = tail.GetComponent<RectTransform>() as RectTransform;
         txtTitle = bg.transform.Find("txtTitle").gameObject.GetComponent<Text>();
@@ -218,28 +216,31 @@ public class DialogBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (menuGo != null)
+        if (!isAuto)
         {
-            if (Input.GetButtonDown("MenuUp") && !transition && useInput)
+            if (menuGo != null)
             {
-                selectedIndex -= 1;
-                if (selectedIndex < 0) selectedIndex = answers.Count - 1;
+                if (Input.GetButtonDown("MenuUp") && !transition)
+                {
+                    selectedIndex -= 1;
+                    if (selectedIndex < 0) selectedIndex = answers.Count - 1;
+                }
+                if (Input.GetButtonDown("MenuDown") && !transition)
+                {
+                    selectedIndex += 1;
+                    if (selectedIndex > answers.Count - 1) selectedIndex = 0;
+                }
+                if (Input.GetButtonDown("MenuSelect") && !transition)
+                {
+                    closeBox();
+                }
             }
-            if (Input.GetButtonDown("MenuDown") && !transition && useInput)
+            else
             {
-                selectedIndex += 1;
-                if (selectedIndex > answers.Count - 1) selectedIndex = 0;
-            }
-            if (Input.GetButtonDown("MenuSelect") && !transition && useInput)
-            {
-                closeBox();
-            }
-        }
-        else
-        {
-            if (Input.GetButtonDown("MenuSelect") && !transition && useInput)
-            {
-                closeBox();
+                if (Input.GetButtonDown("MenuSelect") && !transition)
+                {
+                    closeBox();
+                }
             }
         }
 
@@ -256,14 +257,21 @@ public class DialogBox : MonoBehaviour
             {
                 if (dialogParent != null)
                 {
-                    if (answers.Count > 1)
-                        dialogParent.Next(answers[selectedIndex]);
+                    if (!isAuto)
+                    {
+                        if (answers.Count > 1)
+                            dialogParent.Next(answers[selectedIndex]);
+                        else
+                        {
+                            if (getTextInput)
+                                dialogParent.Next(inputField.text);
+                            else
+                                dialogParent.Next();
+                        }
+                    }
                     else
                     {
-                        if (getTextInput)
-                            dialogParent.Next(inputField.text);
-                        else
-                            dialogParent.Next();
+                        dialogParent.KillBox();
                     }
                 }
             }

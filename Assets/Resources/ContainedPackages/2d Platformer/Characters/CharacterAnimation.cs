@@ -56,20 +56,25 @@ public class CharacterAnimation : MonoBehaviour
     public string climbingAnimatorFloat = "ClimbSpeed"; //Climbing AnimSpeed
     public string climbingAnimatorBool = "IsClimbing"; //Climbing
 
-
     //A single dress item
+    [System.Serializable]
     public class dress
     {
         public static int listSortingOrder = 0;
-
-        public string resourceName; // A resource path to a sprite.
         public string name;
-        public string layerName = "CharacterDress";
-        public SpriteRenderer renderer;
-        public int dressSortingOrder = 0;
-        public GameObject gameObject;
+        public string resourceName; // A resource path to a sprite.
+        public Vector2 offset;  //This helps in positioning the sprite
+        private string layerName = "CharacterDress";
+        private SpriteRenderer renderer;
+        private int dressSortingOrder = 0;
+        [HideInInspector] public GameObject gameObject;
 
         public dress(string name, string resourcePath, Transform parent, string layerName = "CharacterDress", int m_dressSortingOrder = -1)
+        {
+            Initiate(name, resourcePath, parent, layerName, m_dressSortingOrder);
+        }
+
+        public void Initiate(string name, string resourcePath, Transform parent, string layerName = "CharacterDress", int m_dressSortingOrder = -1)
         {
             if (m_dressSortingOrder == -1)
             {
@@ -78,18 +83,27 @@ public class CharacterAnimation : MonoBehaviour
             }
             this.name = name;
             this.gameObject = new GameObject();
-            this.gameObject.name = "dress_"+name;
+            this.gameObject.name = "dress_" + name;
             this.gameObject.transform.parent = parent;
-            this.gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
+            this.gameObject.transform.localPosition = new Vector3(this.offset.x, this.offset.y, 0f);
             this.gameObject.layer = LayerMask.NameToLayer(layerName);
             this.renderer = this.gameObject.AddComponent<SpriteRenderer>();
             this.renderer.sprite = Resources.Load(resourcePath, typeof(Sprite)) as Sprite;
             this.renderer.sortingLayerName = layerName;
             this.renderer.sortingOrder = m_dressSortingOrder;
         }
+
+        public void ShowHide(bool show)
+        {
+            this.renderer.enabled = show;
+        }
     }
 
-    public List<dress> dressList = new List<dress>();  //A list of all dress items attached to this character
+
+    [Space]
+    [Header("Dresses")]
+
+    [SerializeField] public List<dress> dressList = new List<dress>();  //A list of all dress items attached to this character
 
     //A multiDress is a dress item that can have multiple states for multiple sprites. A multiDress will have one state at a time.
     //For example, eyes might be added as a dress, and they can in multiple states (angry, sad, ect.)
@@ -119,7 +133,7 @@ public class CharacterAnimation : MonoBehaviour
                 {
                     if (d.name == s)
                     {
-                        d.renderer.enabled = s == this.state ? true : false;
+                        d.ShowHide( s == this.state ? true : false);
                     }
                 }
             }
@@ -130,6 +144,12 @@ public class CharacterAnimation : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        //Setup any dresses added in the inspector
+        foreach (dress d in dressList)
+        {
+            d.Initiate(d.name, d.resourceName, gameObject.transform);
+        }
+
         SetupCharacter();
     }
 
@@ -235,7 +255,24 @@ public class CharacterAnimation : MonoBehaviour
     public void dressShowHide(string name, bool show)
     {
         dress d = dressList.Find(dress => dress.name == name);
-        if (d != null) d.renderer.enabled = show;
+        if (d != null) d.ShowHide(show);
+    }
+
+    public void FlipX(bool flip)
+    {
+        //The character controller will automatically flip sprites of child objects if necessary.
+        //We do need to flip the offsets though.
+        foreach(dress d in dressList)
+        {
+            d.gameObject.transform.localPosition = new Vector3(flip ? d.offset.x * -1 : d.offset.x, d.offset.y, 0f);
+        }
+    }
+    public void FlipY(bool flip)
+    {
+        foreach (dress d in dressList)
+        {
+            d.gameObject.transform.localPosition = new Vector3(d.offset.x, flip ? d.offset.y * -1 : d.offset.y, 0f);
+        }
     }
 
 }

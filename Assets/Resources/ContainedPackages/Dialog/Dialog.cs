@@ -109,7 +109,7 @@ public class Dialog : MonoBehaviour
                 if (onScreenTimer > 0) onScreenTimer -= Time.deltaTime;
                 else
                 {
-                    if (dialogBox != null) KillBox();
+                    if (dialogBox != null) dialogBox.closeBox();
                     offScreenTimer = entries[index].timeOffScreen*autoOffTimeMultiplier;
                     onScreen = false;
                 }
@@ -206,7 +206,7 @@ public class Dialog : MonoBehaviour
     public int getNextIndex()
     {
         int end = entries.Count - 1;
-        if (myType == type.AutoGroup || myType == type.AutoRandom || myType == type.Random || myType == type.Group) //These types use message groups
+        if (myType == type.AutoGroup || myType == type.AutoRandom || myType == type.Random || myType == type.Group || myType == type.AutoGroupLoop) //These types use message groups
         {
             end = getGroupEndIndex(currentGroup);
         }
@@ -243,6 +243,7 @@ public class Dialog : MonoBehaviour
         return -1;
     }
 
+    //This function actually selects the next box and runs the LoadBox method
     public void Next(string answer = "NoneProvided")
     {
         if (answer != "NoneProvided") lastAnswer = answer;
@@ -269,6 +270,7 @@ public class Dialog : MonoBehaviour
         }
     }
 
+    //This function actually instantiates the box and passes the settings to it
     public void LoadBox()
     {
         dialogBoxObj = Instantiate(dialogBoxPrefab);
@@ -292,6 +294,8 @@ public class Dialog : MonoBehaviour
         dialogBox.answers = entries[index].answers;
         dialogBox.getTextInput = entries[index].getTextInput;
         dialogBox.inputType = entries[index].inputType;
+
+        if (isAutoType) dialogBox.isAuto = true;
     }
 
     //Kill the current dialog box
