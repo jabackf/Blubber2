@@ -351,6 +351,7 @@ public class CharacterController2D : MonoBehaviour
                 DialogRange d = actionObjectInRange.GetComponent<DialogRange>() as DialogRange;
                 if (d != null)
                 {
+                    m_Rigidbody2D.velocity = new Vector2(0f, 0f);
                     d.Initiate(CharacterName, gameObject, m_DialogTop, m_DialogBottom);
                     isTalking = true;
                     setActionObjectInRange(null);

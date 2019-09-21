@@ -5,10 +5,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+/*Special keywords:
+ * "[answer]" added to message text will replace the text in quotes with the last provided answer
+ * "default" specified as an answer in the answer branch will act as a default if none of the answers are provided
+ */
+
 public class Dialog : MonoBehaviour
 {
     public GameObject dialogBoxPrefab;
     public bool active = false;
+
+    private string topperString = ""; //This string will be tacked onto the beginning of the next initiated message, then cleared. Used, for example, by AnswerBranch.addToNextMessage
+    private string closerString = ""; //Like above, but added to the end of the message instead of the beginning.
 
     /*Types:
      * Straightshot plays whole dialog through to finish, using player input to initiate and progress through dialog boxes
@@ -22,7 +30,7 @@ public class Dialog : MonoBehaviour
      * 
      * NOTES: The auto types aren't intended to work with menus, answer branches, etc. Those features are built for boxes that require input
     */
-    
+
     public enum type {Straightshot, Group, Random, AutoRandom, AutoStraightshot, AutoStraightshotLoop, AutoGroup, AutoGroupLoop };
     public type myType = type.Straightshot;
 
@@ -45,7 +53,9 @@ public class Dialog : MonoBehaviour
     public struct AnswerBranch
     {
         public string answer;
-        public int index;
+        public int index; //The index to jump to if this.answer matches the user selected answer
+        public bool ignoreCase; //If true, it will ignore the case of the answer. Meaning, "stinkypants" will match "StInKyPaNtS"
+        public string addToNextMessage; //If not empty, this will be added to the beginning of the next message. For example, "You didn't enter anything! " can be added to the beginning of a message asking for input
     }
 
     [System.Serializable]
@@ -63,6 +73,8 @@ public class Dialog : MonoBehaviour
         public string Message = "";
         public string Title = "";
         public bool getTextInput = false;
+        public bool repeatIfEmpty = true; //Repeats this dialog if the answer is empty
+        public string repeatAddText = ""; //If repeatIfEmpty is true, and an empty answer is given, this string is tacked to the front of the next message. For example "You didn't enter anything! Try again. "
         public InputField.CharacterValidation inputType = InputField.CharacterValidation.Alphanumeric;
         public string imageResource = "";
         public List<string> answers = new List<string>();
@@ -87,6 +99,8 @@ public class Dialog : MonoBehaviour
     public void setAnswer(string answer) { this.lastAnswer = answer; }
     public string getNextText() { return entries[getNextIndex()].Message; }
     public void setNextText(string message) { entries[getNextIndex()].Message = message; }
+    public void addToNextMessageBeginning(string text) { this.topperString = text; }
+    public void addToNextMessageEnd(string text) { this.closerString = text; }
 
     // Start is called before the first frame update
     void Start()
@@ -218,8 +232,26 @@ public class Dialog : MonoBehaviour
         {
             foreach (AnswerBranch a in entries[index].answerBranch)
             {
-                if (a.answer == lastAnswer)
+                string answer = a.answer;
+                string lAnswer = lastAnswer;
+                if (a.ignoreCase)
                 {
+                    answer = answer.ToLower();
+                    lAnswer = lAnswer.ToLower();
+                }
+                if (answer == lAnswer)
+                {
+                    addToNextMessageBeginning(a.addToNextMessage);
+                    return a.index;
+                }
+            }
+
+            //Didn't find the correct answer. Let's check for a default.
+            foreach (AnswerBranch a in entries[index].answerBranch)
+            {
+                if (a.answer.ToLower() == "default")
+                {
+                    addToNextMessageBeginning(a.addToNextMessage);
                     return a.index;
                 }
             }
@@ -246,27 +278,43 @@ public class Dialog : MonoBehaviour
     //This function actually selects the next box and runs the LoadBox method
     public void Next(string answer = "NoneProvided")
     {
-        if (answer != "NoneProvided") lastAnswer = answer;
+        bool repeat = false;
+        if (answer != "NoneProvided")
+        {
+            lastAnswer = answer;
+            if (entries[index].repeatIfEmpty && String.IsNullOrWhiteSpace(lastAnswer))
+            {
+                addToNextMessageBeginning(entries[index].repeatAddText);
+                repeat = true;
+            }
+        }
 
         if (dialogBox!=null) KillBox();
 
-        int next = getNextIndex();
-        if (next != - 1)
+        if (!repeat)
         {
-            index = next;
+            int next = getNextIndex();
+            if (next != -1)
+            {
+                index = next;
 
-            //If we have to jump or branch off into a different group, then we want to change the current group to avoid errors
-            currentGroup = entries[index].group;
+                //If we have to jump or branch off into a different group, then we want to change the current group to avoid errors
+                currentGroup = entries[index].group;
 
-            LoadBox();
-        }
+                LoadBox();
+            }
+            else
+            {
+                active = false;
+                if (initiator != null)
+                {
+                    initiator.SendMessage("StopTalking");
+                }
+            }
+        } //End !repeat
         else
         {
-            active = false;
-            if (initiator != null)
-            {
-                initiator.SendMessage("StopTalking");
-            }
+            LoadBox(); //Repeat the message with new text appended
         }
     }
 
@@ -288,7 +336,8 @@ public class Dialog : MonoBehaviour
             dialogBox.title = entries[index].Title;
         }
 
-        dialogBox.text = entries[index].Message.Replace("[answer]", lastAnswer);
+        dialogBox.text = topperString +entries[index].Message.Replace("[answer]", lastAnswer)+closerString;
+        topperString = closerString = "";
         dialogBox.imgResource = entries[index].imageResource;
         dialogBox.dialogParent = this;
         dialogBox.answers = entries[index].answers;

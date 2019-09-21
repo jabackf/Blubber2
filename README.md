@@ -17,10 +17,6 @@
 -Stuff to add: Item spawner pipe, push buttons, drop platforms, dissappearing platforms, enemies, water, dialog system, inventory system, items with actions
 
 Dialog
--Reduce velocity to 0 when dialog initiated
--Maybe a default answer branch? IE, a place to go if none of the listed options are entered
--Maybe add a topperstring to the AnswerBranch class? This string gets added to the front of the message in the dialog box
 -Character emotions or actions while talking
 -Character change facing direction to point to the one talking
--Case sensitivty for text entry?
 -Add pause and resume feature for auto dialog (for if character interupts)

@@ -1365,6 +1365,8 @@ MonoBehaviour:
     Message: Here is a group 0 message
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -1385,6 +1387,8 @@ MonoBehaviour:
     Message: g1 m1
     Title: Mr Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -1405,6 +1409,8 @@ MonoBehaviour:
     Message: g1 m2
     Title: Mr Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -1425,6 +1431,8 @@ MonoBehaviour:
     Message: g1 m3
     Title: Mr Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4143,6 +4151,8 @@ MonoBehaviour:
       I'm here to test the new dialog system!
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4163,6 +4173,8 @@ MonoBehaviour:
     Message: Oh no...
     Title: 
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4183,6 +4195,8 @@ MonoBehaviour:
     Message: Oh YES!
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4204,6 +4218,8 @@ MonoBehaviour:
       following question. Do you like to eat boogers?
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers:
@@ -4213,10 +4229,16 @@ MonoBehaviour:
     answerBranch:
     - answer: Yes
       index: 4
+      ignoreCase: 0
+      addToNextMessage: 
     - answer: No
       index: 5
+      ignoreCase: 0
+      addToNextMessage: 'NO?! '
     - answer: Sometimes
       index: 6
+      ignoreCase: 0
+      addToNextMessage: 
   - callback:
       m_PersistentCalls:
         m_Calls: []
@@ -4233,6 +4255,8 @@ MonoBehaviour:
     Message: Aha! You answered [answer]! I knew it!
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4253,6 +4277,8 @@ MonoBehaviour:
     Message: Oh, so you're a liar. That's good to know. Moving on...
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4274,6 +4300,8 @@ MonoBehaviour:
       bet you're eating one right now!
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4296,6 +4324,8 @@ MonoBehaviour:
       I'm showing it to you anyway.
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4316,6 +4346,8 @@ MonoBehaviour:
     Message: 
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
     answers: []
@@ -4336,6 +4368,8 @@ MonoBehaviour:
     Message: That was BEAUTIFUL wasn't it?
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4356,6 +4390,8 @@ MonoBehaviour:
     Message: Now, let me ask you something. What's you're favorite thing ever?
     Title: Mr. Sign
     getTextInput: 1
+    repeatIfEmpty: 1
+    repeatAddText: 'YOU DIDN''T ANSWER ME! '
     inputType: 3
     imageResource: 
     answers: []
@@ -4376,6 +4412,8 @@ MonoBehaviour:
     Message: What a coincidence! I hate [answer]!
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 3
     imageResource: 
     answers: []
@@ -4407,6 +4445,8 @@ MonoBehaviour:
     Message: How old are you?
     Title: Mr. Sign
     getTextInput: 1
+    repeatIfEmpty: 1
+    repeatAddText: '<i>sigh</i> Look, it''s ok. Just tell me.... '
     inputType: 1
     imageResource: 
     answers: []
@@ -4427,6 +4467,8 @@ MonoBehaviour:
     Message: '[answer] years old? I see.'
     Title: Mr. Sign
     getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
     inputType: 0
     imageResource: 
     answers: []
