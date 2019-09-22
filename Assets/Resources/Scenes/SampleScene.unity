@@ -6590,8 +6590,8 @@ MonoBehaviour:
   dontRepeatRandoms: 0
   defaultOnScreenTime: 160
   defaultOffScreenTime: 12
-  autoOnTimeMultiplier: 0.01
-  autoOffTimeMultiplier: 0.01
+  autoOnTimeMultiplier: 0.05
+  autoOffTimeMultiplier: 0.05
   entries:
   - callback:
       m_PersistentCalls:
@@ -6721,8 +6721,8 @@ MonoBehaviour:
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     saidByInitiator: 0
-    sendMessageStart: 
-    sendMessageEnd: 
+    sendMessageStart: Angry
+    sendMessageEnd: Normal
     gameObject: {fileID: 140103501616841431}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}

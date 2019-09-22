@@ -7,6 +7,7 @@ using UnityEngine.Events;
 
 /*Special keywords:
  * "[answer]" added to message text will replace the text in quotes with the last provided answer
+ * "[title]" is replaced with the message box title (or character name)
  * "default" specified as an answer in the answer branch will act as a default if none of the answers are provided
  */
 
@@ -170,7 +171,7 @@ public class Dialog : MonoBehaviour
         if (isAutoType)
         {
             onScreen = true;
-            onScreenTimer = entries[index].timeOnScreen*autoOnTimeMultiplier;
+            onScreenTimer = entries[index].timeOnScreen > 0 ? entries[index].timeOnScreen * autoOnTimeMultiplier : defaultOnScreenTime * autoOnTimeMultiplier;
         }
     }
 
@@ -356,7 +357,7 @@ public class Dialog : MonoBehaviour
             dialogBox.title = entries[index].Title;
         }
 
-        dialogBox.text = topperString +entries[index].Message.Replace("[answer]", lastAnswer)+closerString;
+        dialogBox.text = topperString +entries[index].Message.Replace("[answer]", lastAnswer).Replace("[title]", dialogBox.title)+ closerString;
         topperString = closerString = "";
         dialogBox.imgResource = entries[index].imageResource;
         dialogBox.dialogParent = this;
