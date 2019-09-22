@@ -11,7 +11,7 @@ public class BlubberAnimation : CharacterAnimation
     float blinkTimerMax = 8f;
     float blinkTimer = 0f;
     float blinkCloseTime = 0.25f;
-
+    string emotion = "Normal";
 
     void Start()
     {
@@ -42,7 +42,7 @@ public class BlubberAnimation : CharacterAnimation
                 break;
 
             default:
-                eyes.changeState("eyesNormal");
+                eyes.changeState("eyes"+emotion);
                 break;
         }
 
@@ -61,5 +61,16 @@ public class BlubberAnimation : CharacterAnimation
         {
             eyes.changeState("eyesBlink");
         }
+    }
+
+    public void eyesAngry()
+    {
+        eyes.changeState("eyesAngry");
+        emotion = "Angry";
+    }
+    public void eyesNormal()
+    {
+        eyes.changeState("eyesNormal");
+        emotion = "Normal";
     }
 }

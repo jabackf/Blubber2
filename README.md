@@ -14,9 +14,8 @@
 
 -Maybe throw aim with the mouse?
 
--Stuff to add: Item spawner pipe, push buttons, drop platforms, dissappearing platforms, enemies, water, dialog system, inventory system, items with actions
+-Stuff to add: drop platforms, dissappearing platforms, enemies, water, inventory system, items with actions
 
 Dialog
--Character emotions or actions while talking
 -Character change facing direction to point to the one talking
 -Add pause and resume feature for auto dialog (for if character interupts)

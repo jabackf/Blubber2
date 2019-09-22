@@ -4,6 +4,7 @@ using UnityEngine.Events;
 public class CharacterController2D : MonoBehaviour
 {
     [SerializeField] public string CharacterName = "Blubber";                     //The name of this character, used for dialog and stuff
+    [SerializeField] public bool startFlipped = false;                          //If set to true, the character will start out flipped horizontally
 
     [Header("Movement")]
     [Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
@@ -56,6 +57,9 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Transform m_DialogTop;                             // The top position that the dialog box will point to
     [SerializeField] private Transform m_DialogBottom;                          // The bottom position that the dialot box will point to
 
+    public Transform getDialogTop() { return m_DialogTop;  }
+    public Transform getDialogBottom() { return m_DialogBottom; }
+
     private enum flipType { none, spriteRenderer, scale}
     [SerializeField] private flipType spriteFlipMethod = flipType.scale;  // The method used for flipping the sprite when the character turns around. NOTE: Sprite renderer will also flip sprites of child objects       
 
@@ -82,6 +86,7 @@ public class CharacterController2D : MonoBehaviour
     private bool isClimbing = false;
     private dropDownPlatform onDropPlatformScript = null;
     public bool isTalking=false;
+    private bool delayedStartRan = false;
 
     [Header("Events")]
 	[Space]
@@ -106,7 +111,17 @@ public class CharacterController2D : MonoBehaviour
 			OnCrouchEvent = new BoolEvent();
 
         charAnim = gameObject.GetComponent<CharacterAnimation>() as CharacterAnimation;
-	}
+    }
+
+    private void DelayedStart()
+    {
+        delayedStartRan = true;
+        if (startFlipped) Flip();
+    }
+    private void Update()
+    {
+        if (!delayedStartRan) DelayedStart();
+    }
 
 	private void FixedUpdate()
 	{

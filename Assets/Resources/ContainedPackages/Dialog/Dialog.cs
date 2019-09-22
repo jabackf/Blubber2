@@ -44,6 +44,8 @@ public class Dialog : MonoBehaviour
     private bool isAutoType = false;
     private float onScreenTimer;
     private float offScreenTimer;
+    public float defaultOnScreenTime = 8f;  //This is the value that each dialog boxes on/off screen time will default to if no other value is provided
+    public float defaultOffScreenTime = 1.4f;
     private bool onScreen = false; //used by auto types to know if dbox is on screen, or if we're waiting before showing the next one
     public float autoOnTimeMultiplier = 1; //This is multiplied to all onScreen times. A value greater than one, for example, will make all dialog entries show for longer
     public float autoOffTimeMultiplier = 1; //This is multiplied to all offScreen times. A value less than one, for example, will make dialogs stay off screen for a shorter period of time
@@ -63,13 +65,15 @@ public class Dialog : MonoBehaviour
     {
         public UnityEvent callback; //An optional callback for when the current dialog ends.
         public bool saidByInitiator = false; //If set to true, the initiator's info will be used for this box
+        public string sendMessageStart = ""; //If not empty, then this message is sent to the gameObject (or initiator, if gameObject is null) at the start of this box
+        public string sendMessageEnd = ""; //Same as above, but it sent at the end of the message
         public GameObject gameObject; 
         public Transform locationTop; //If both transforms are null and saidByInitiator is false, the dialog will appear in the center of the screen
         public Transform locationBottom;
         public int group = 0; //This can be used to cluster together messages in groups. For instance, if the conversation is RandomSingle, then a random group will be chosen and all messages in that group will be displayed in order
         public int jumpTo = -1;
-        public float timeOnScreen = 8f; //For auto types only. The amount of time the box will be displayed on screen
-        public float timeOffScreen = 1.4f; //For auto types only. The amount of time AFTER this box closes before the next box displays
+        public float timeOnScreen=-1; //For auto types only. The amount of time the box will be displayed on screen. 0 or less = the default time specified by defaultOnScreenTime
+        public float timeOffScreen=-1; //For auto types only. The amount of time AFTER this box closes before the next box displays
         public string Message = "";
         public string Title = "";
         public bool getTextInput = false;
@@ -124,7 +128,7 @@ public class Dialog : MonoBehaviour
                 else
                 {
                     if (dialogBox != null) dialogBox.closeBox();
-                    offScreenTimer = entries[index].timeOffScreen*autoOffTimeMultiplier;
+                    offScreenTimer = entries[index].timeOffScreen>0 ? entries[index].timeOffScreen*autoOffTimeMultiplier : defaultOffScreenTime*autoOffTimeMultiplier;
                     onScreen = false;
                 }
             }
@@ -135,7 +139,7 @@ public class Dialog : MonoBehaviour
                 {
                     Next();
                     onScreen = true;
-                    onScreenTimer = entries[index].timeOnScreen*autoOnTimeMultiplier;
+                    onScreenTimer = entries[index].timeOnScreen>0 ? entries[index].timeOnScreen*autoOnTimeMultiplier : defaultOnScreenTime*autoOnTimeMultiplier;
                 }
             }
         }
@@ -331,6 +335,22 @@ public class Dialog : MonoBehaviour
         }
         else
         {
+            //Try to pull character information, unless it was otherwise specified
+            if (entries[index].gameObject != null)
+            {
+                CharacterController2D cont = entries[index].gameObject.GetComponent<CharacterController2D>() as CharacterController2D;
+                if (cont != null)
+                {
+                    if (entries[index].Title == "") entries[index].Title = cont.CharacterName;
+                    if (entries[index].locationTop == null)
+                    {
+                        entries[index].locationTop = cont.getDialogTop();
+                        if (entries[index].locationBottom == null)
+                            entries[index].locationBottom = cont.getDialogBottom();
+                    }
+                }
+            }
+
             dialogBox.followTop = entries[index].locationTop;
             dialogBox.followBottom = entries[index].locationBottom;
             dialogBox.title = entries[index].Title;
@@ -345,6 +365,17 @@ public class Dialog : MonoBehaviour
         dialogBox.inputType = entries[index].inputType;
 
         if (isAutoType) dialogBox.isAuto = true;
+
+        if (entries[index].sendMessageStart != "")
+        {
+            if (entries[index].gameObject!=null)
+                entries[index].gameObject.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
+            else
+            {
+                if (initiator!=null) initiator.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
+            }
+        }
+            
     }
 
     //Kill the current dialog box
@@ -355,6 +386,17 @@ public class Dialog : MonoBehaviour
         {
             entries[index].callback.Invoke();
         }
+
+        if (entries[index].sendMessageEnd != "")
+        {
+            if (entries[index].gameObject != null)
+                entries[index].gameObject.SendMessage(entries[index].sendMessageEnd, null, SendMessageOptions.DontRequireReceiver);
+            else
+            {
+                if (initiator != null) initiator.SendMessage(entries[index].sendMessageEnd, null, SendMessageOptions.DontRequireReceiver);
+            }
+        }
+
         dialogBox.Kill();
         Destroy(dialogBox);
         dialogBox = null;
