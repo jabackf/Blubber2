@@ -369,11 +369,14 @@ public class Dialog : MonoBehaviour
 
         if (entries[index].sendMessageStart != "")
         {
-            if (entries[index].gameObject!=null)
+
+            if (entries[index].gameObject != null)
+            {
                 entries[index].gameObject.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
+            }
             else
             {
-                if (initiator!=null) initiator.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
+                if (initiator != null) initiator.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
             }
         }
             

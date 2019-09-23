@@ -63,12 +63,12 @@ public class BlubberAnimation : CharacterAnimation
         }
     }
 
-    public void eyesAngry()
+    public void Angry()
     {
         eyes.changeState("eyesAngry");
         emotion = "Angry";
     }
-    public void eyesNormal()
+    public void Normal()
     {
         eyes.changeState("eyesNormal");
         emotion = "Normal";

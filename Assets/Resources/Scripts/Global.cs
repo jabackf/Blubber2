@@ -9,9 +9,6 @@ public class Global : MonoBehaviour
 
     public static Global Instance { get; private set; }
 
-    [Header("Debug Options")]
-    [Space]
-    public bool showDebugLayer = false; //Toggles the debug layer on/off
 
     // Start is called before the first frame update
     private void Awake()
@@ -35,9 +32,6 @@ public class Global : MonoBehaviour
     //Called when a field in the editor is changed
     private void OnValidate()
     {
-        if (showDebugLayer)
-            Camera.main.cullingMask |= 1 << LayerMask.NameToLayer("Debug");
-        else
-            Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("Debug"));
+
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 
 public class CharacterController2D : MonoBehaviour
 {
@@ -86,7 +87,6 @@ public class CharacterController2D : MonoBehaviour
     private bool isClimbing = false;
     private dropDownPlatform onDropPlatformScript = null;
     public bool isTalking=false;
-    private bool delayedStartRan = false;
 
     [Header("Events")]
 	[Space]
@@ -111,16 +111,15 @@ public class CharacterController2D : MonoBehaviour
 			OnCrouchEvent = new BoolEvent();
 
         charAnim = gameObject.GetComponent<CharacterAnimation>() as CharacterAnimation;
+
+        StartCoroutine(DelayedStart());
     }
 
-    private void DelayedStart()
+    IEnumerator DelayedStart()
     {
-        delayedStartRan = true;
+        yield return new WaitForSeconds(0.01f);
+
         if (startFlipped) Flip();
-    }
-    private void Update()
-    {
-        if (!delayedStartRan) DelayedStart();
     }
 
 	private void FixedUpdate()

@@ -1278,7 +1278,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3895
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3065,7 +3065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fdb9c9661f4a8f4b8fdad44e99bd860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugLayer: 0
 --- !u!4 &1411719281
 Transform:
   m_ObjectHideFlags: 0
@@ -3565,8 +3564,8 @@ MonoBehaviour:
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     saidByInitiator: 1
-    sendMessageStart: eyesAngry
-    sendMessageEnd: eyesNormal
+    sendMessageStart: Angry
+    sendMessageEnd: Normal
     gameObject: {fileID: 0}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
@@ -6408,7 +6407,7 @@ GameObject:
   - component: {fileID: 2487212718854963180}
   - component: {fileID: 140103501528456795}
   - component: {fileID: 140103501528456797}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: GreenGuy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6563,7 +6562,7 @@ GameObject:
   - component: {fileID: 2487212718816469861}
   - component: {fileID: 140103501616841426}
   - component: {fileID: 140103501616841428}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: MrOrange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6590,8 +6589,8 @@ MonoBehaviour:
   dontRepeatRandoms: 0
   defaultOnScreenTime: 160
   defaultOffScreenTime: 12
-  autoOnTimeMultiplier: 0.05
-  autoOffTimeMultiplier: 0.05
+  autoOnTimeMultiplier: 0.035
+  autoOffTimeMultiplier: 0.035
   entries:
   - callback:
       m_PersistentCalls:
@@ -6623,8 +6622,8 @@ MonoBehaviour:
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     saidByInitiator: 0
-    sendMessageStart: 
-    sendMessageEnd: 
+    sendMessageStart: Angry
+    sendMessageEnd: Normal
     gameObject: {fileID: 140103501616841431}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
@@ -8311,7 +8310,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3004943861518330412}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: sideCheckL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8327,7 +8326,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3004943861555869349}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: sideCheckL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8344,7 +8343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2681852386205973810}
   - component: {fileID: 3709802479560941180}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: rangeColliderL
   m_TagString: RangeCollider
   m_Icon: {fileID: 0}
@@ -8361,7 +8360,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2681852386243928507}
   - component: {fileID: 3709802479489811189}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: rangeColliderL
   m_TagString: RangeCollider
   m_Icon: {fileID: 0}
@@ -8378,7 +8377,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3978075508715764620}
   - component: {fileID: 8036988583715273228}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: rangeColliderR
   m_TagString: RangeCollider
   m_Icon: {fileID: 0}
@@ -8395,7 +8394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3978075508794615557}
   - component: {fileID: 8036988583677699717}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: rangeColliderR
   m_TagString: RangeCollider
   m_Icon: {fileID: 0}
@@ -8480,7 +8479,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5456296111611072766}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ceilCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8496,7 +8495,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5456296111648083063}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ceilCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8679,7 +8678,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6416688394788688571}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: sideCheckR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8695,7 +8694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6416688394693054002}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: sideCheckR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9103,7 +9102,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5583954899985817528}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9119,7 +9118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5583954899906429745}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
