@@ -13,8 +13,11 @@ using UnityEngine.Events;
 
 public class Dialog : MonoBehaviour
 {
+    [Space]
+    [Header("Basic Settings")]
+
     public GameObject dialogBoxPrefab;
-    public bool active = false;
+    [HideInInspector] public bool active = false;
 
     private string topperString = ""; //This string will be tacked onto the beginning of the next initiated message, then cleared. Used, for example, by AnswerBranch.addToNextMessage
     private string closerString = ""; //Like above, but added to the end of the message instead of the beginning.
@@ -32,24 +35,43 @@ public class Dialog : MonoBehaviour
      * NOTES: The auto types aren't intended to work with menus, answer branches, etc. Those features are built for boxes that require input
     */
 
-    public enum type {Straightshot, Group, Random, AutoRandom, AutoStraightshot, AutoStraightshotLoop, AutoGroup, AutoGroupLoop };
+    public enum type { Straightshot, Group, Random, AutoRandom, AutoStraightshot, AutoStraightshotLoop, AutoGroup, AutoGroupLoop };
     public type myType = type.Straightshot;
+    public bool dontRepeatRandoms = false; //If true, then any random type will avoid showing the same message twice in a row.
+    public bool faceInitiator = true; //Requires characterController2D! If true, then character this dialog is attached to will face the initiator at start of any conversation with initiator. Character then turns back to original position at the end of conversation stream.
+    private bool originallyFacingRight = false; //Stores direction the character was originally facing before turning to initiator
+    private CharacterController2D characterController = null;
 
     private int currentGroup = 0;   //This stores the current group we're playing (only applies to types that use groups)
     public int startGroup = 0;      //This can be used in the inspector to set the currentGroup in the Start() function
     public void setCurrentGroup(int g) { currentGroup = g; }
     public int getCurrentGroup(int g) { return currentGroup; }
-    public bool dontRepeatRandoms = false; //If true, then any random type will avoid showing the same message twice in a row.
+
+    [Space]
+    [Header("Interuptions")]
+    //The following variables handle interupting. Interupting is designed to be used with auto conversations.
+    public Dialog interuptDialog = null;  //If this interuptDialog is playing out, it will be paused while this dialog is played. This variable holds the dialog that recieves the "interupt" and "resume" messages
+                                          //NOTE: An interupted dialog DOES NOT send callbacks when it ends. It DOES send start and end messages though.
+    public bool restartAfterInterupt = false; //If true, the interupted dialog will be restarted from the beginning when resumed. If false, it will pickup where it left off.
+    private bool activeBeforeInterupt = false; //Used to store rather the dialog was even playing when we interupted it.
+    public float waitTimeBeforeResume = 1.5f;   //Amount of time to wait before resuming
+    private bool resuming = false; //A flag to tell us if we are resuming an existing conversation or not. Used to repeat the current message.
+    public string resumeTopperString = "";   //If the conversation is interupted and resumed, this string will be added to message that we resume on. Example: "What was I saying again? Oh ya! " + last displayed message
+    public float resumeMessageAddTime = 2f; //This time is added to the onScreen timer. This is to account for the topper string.
+
+    [Space]
+    [Header("AutoTimers")]
 
     //The following timers are used for initiating / closing auto types
-    private bool isAutoType = false;
-    private float onScreenTimer;
-    private float offScreenTimer;
     public float defaultOnScreenTime = 8f;  //This is the value that each dialog boxes on/off screen time will default to if no other value is provided
     public float defaultOffScreenTime = 1.4f;
     private bool onScreen = false; //used by auto types to know if dbox is on screen, or if we're waiting before showing the next one
     public float autoOnTimeMultiplier = 1; //This is multiplied to all onScreen times. A value greater than one, for example, will make all dialog entries show for longer
     public float autoOffTimeMultiplier = 1; //This is multiplied to all offScreen times. A value less than one, for example, will make dialogs stay off screen for a shorter period of time
+    private bool isAutoType = false;
+    private float onScreenTimer;
+    private float offScreenTimer;
+    private float addToTimer = 0f;
 
     //This struct couples potential answers to dialog questions with entries indexes to jump to if that answer is provided.
     [System.Serializable]
@@ -64,19 +86,18 @@ public class Dialog : MonoBehaviour
     [System.Serializable]
     public class entry
     {
-        public UnityEvent callback; //An optional callback for when the current dialog ends.
+        public string Message = "";
+        public string Title = "";
         public bool saidByInitiator = false; //If set to true, the initiator's info will be used for this box
         public string sendMessageStart = ""; //If not empty, then this message is sent to the gameObject (or initiator, if gameObject is null) at the start of this box
         public string sendMessageEnd = ""; //Same as above, but it sent at the end of the message
-        public GameObject gameObject; 
+        public GameObject gameObject;
         public Transform locationTop; //If both transforms are null and saidByInitiator is false, the dialog will appear in the center of the screen
         public Transform locationBottom;
         public int group = 0; //This can be used to cluster together messages in groups. For instance, if the conversation is RandomSingle, then a random group will be chosen and all messages in that group will be displayed in order
         public int jumpTo = -1;
-        public float timeOnScreen=-1; //For auto types only. The amount of time the box will be displayed on screen. 0 or less = the default time specified by defaultOnScreenTime
-        public float timeOffScreen=-1; //For auto types only. The amount of time AFTER this box closes before the next box displays
-        public string Message = "";
-        public string Title = "";
+        public float timeOnScreen = -1; //For auto types only. The amount of time the box will be displayed on screen. 0 or less = the default time specified by defaultOnScreenTime
+        public float timeOffScreen = -1; //For auto types only. The amount of time AFTER this box closes before the next box displays
         public bool getTextInput = false;
         public bool repeatIfEmpty = true; //Repeats this dialog if the answer is empty
         public string repeatAddText = ""; //If repeatIfEmpty is true, and an empty answer is given, this string is tacked to the front of the next message. For example "You didn't enter anything! Try again. "
@@ -84,7 +105,11 @@ public class Dialog : MonoBehaviour
         public string imageResource = "";
         public List<string> answers = new List<string>();
         public List<AnswerBranch> answerBranch = new List<AnswerBranch>();  //This is a list of potential answers coupled with entries indexes to jump to if that answer is provided.
+        public UnityEvent callback; //An optional callback for when the current dialog ends.
     }
+
+    [Space]
+    [Header("Dialog chain")]
 
     [SerializeField] public List<entry> entries;
 
@@ -106,10 +131,12 @@ public class Dialog : MonoBehaviour
     public void setNextText(string message) { entries[getNextIndex()].Message = message; }
     public void addToNextMessageBeginning(string text) { this.topperString = text; }
     public void addToNextMessageEnd(string text) { this.closerString = text; }
+    public void addTime(float time) { addToTimer = time; }
 
     // Start is called before the first frame update
     void Start()
     {
+        characterController = gameObject.GetComponent<CharacterController2D>() as CharacterController2D;
         currentGroup = startGroup;
         if (myType == type.AutoGroup || myType == type.AutoGroupLoop || myType == type.AutoRandom || myType == type.AutoStraightshot || myType == type.AutoStraightshotLoop)
         {
@@ -129,7 +156,7 @@ public class Dialog : MonoBehaviour
                 else
                 {
                     if (dialogBox != null) dialogBox.closeBox();
-                    offScreenTimer = entries[index].timeOffScreen>0 ? entries[index].timeOffScreen*autoOffTimeMultiplier : defaultOffScreenTime*autoOffTimeMultiplier;
+                    offScreenTimer = entries[index].timeOffScreen > 0 ? entries[index].timeOffScreen * autoOffTimeMultiplier : defaultOffScreenTime * autoOffTimeMultiplier;
                     onScreen = false;
                 }
             }
@@ -140,22 +167,70 @@ public class Dialog : MonoBehaviour
                 {
                     Next();
                     onScreen = true;
-                    onScreenTimer = entries[index].timeOnScreen>0 ? entries[index].timeOnScreen*autoOnTimeMultiplier : defaultOnScreenTime*autoOnTimeMultiplier;
+                    onScreenTimer = entries[index].timeOnScreen > 0 ? (entries[index].timeOnScreen+addToTimer) * autoOnTimeMultiplier : (defaultOnScreenTime + addToTimer) * autoOnTimeMultiplier;
+                    addToTimer = 0f;
                 }
             }
         }
     }
 
-    //Initiates a dialog sequence
-    public void Initiate(string name="", GameObject go=null, Transform top=null, Transform bottom=null)
+    //Called when someone is interupting our conversation.
+    //Intended primarily for when NPCs are having an automatic conversation and the player interupts them 
+    public void interupt()
     {
+        activeBeforeInterupt = active;
+        active = false;
+        onScreen = false;
+        KillBox(false);
+    }
+
+    //Resumes an interupted dialog
+    public void resume()
+    {
+        if (activeBeforeInterupt)
+        {
+            topperString = resumeTopperString;
+            addTime(resumeMessageAddTime);
+
+            if (restartAfterInterupt)
+                Initiate(initiatorName, initiator, initiatorTop, initiatorBottom);
+            else
+            {
+                active = true;
+                onScreen = false;
+                onScreenTimer = 0;
+                resuming = true;
+                offScreenTimer = waitTimeBeforeResume * autoOffTimeMultiplier;
+
+            }
+        }
+    }
+
+    //Initiates a dialog sequence
+    public void Initiate(string name = "", GameObject go = null, Transform top = null, Transform bottom = null)
+    {
+        if (interuptDialog != null) interuptDialog.interupt();
+
         initiator = go;
         initiatorName = name;
         initiatorTop = top;
         initiatorBottom = bottom;
         active = true;
 
-        if (myType == type.AutoStraightshot|| myType == type.Straightshot|| myType == type.AutoStraightshotLoop) //Starting at 0
+        if (characterController != null && faceInitiator && initiator != null)
+        {
+            originallyFacingRight = characterController.isFacingRight();
+            if (initiator.transform.position.x < gameObject.transform.position.x && originallyFacingRight)
+            {
+                characterController.Flip();
+            }
+            if (initiator.transform.position.x > gameObject.transform.position.x && !originallyFacingRight)
+            {
+                characterController.Flip();
+            }
+        }
+
+        if (myType == type.AutoStraightshot || myType == type.Straightshot || myType == type.AutoStraightshotLoop) //Starting at 0
             index = 0;
         else //The type uses groups
         {
@@ -171,7 +246,7 @@ public class Dialog : MonoBehaviour
         if (isAutoType)
         {
             onScreen = true;
-            onScreenTimer = entries[index].timeOnScreen > 0 ? entries[index].timeOnScreen * autoOnTimeMultiplier : defaultOnScreenTime * autoOnTimeMultiplier;
+            onScreenTimer = entries[index].timeOnScreen > 0 ? (entries[index].timeOnScreen+addToTimer) * autoOnTimeMultiplier : (defaultOnScreenTime+addToTimer) * autoOnTimeMultiplier;
         }
     }
 
@@ -193,9 +268,9 @@ public class Dialog : MonoBehaviour
         var random = new System.Random();
         int i = random.Next(groups.Count);
 
-        if (dontRepeatRandoms && groups.Count>1)
+        if (dontRepeatRandoms && groups.Count > 1)
         {
-            while (groups[i]==currentGroup) i=random.Next(groups.Count);
+            while (groups[i] == currentGroup) i = random.Next(groups.Count);
         }
 
         return groups[i];
@@ -204,7 +279,7 @@ public class Dialog : MonoBehaviour
     //Returns the first index in entries that has the specified group number. Returns 0 if group is not found
     private int getGroupStartIndex(int group)
     {
-        for(int i = 0; i<entries.Count; i++)
+        for (int i = 0; i < entries.Count; i++)
         {
             if (entries[i].group == group) return i;
         }
@@ -213,7 +288,7 @@ public class Dialog : MonoBehaviour
     //Returns the last index in entries that has the specified group number. Returns 0 if group is not found
     private int getGroupEndIndex(int group)
     {
-        for (int i = entries.Count-1; i >= 0; i--)
+        for (int i = entries.Count - 1; i >= 0; i--)
         {
             if (entries[i].group == group) return i;
         }
@@ -283,6 +358,8 @@ public class Dialog : MonoBehaviour
     //This function actually selects the next box and runs the LoadBox method
     public void Next(string answer = "NoneProvided")
     {
+        if (!active) return;
+
         bool repeat = false;
         if (answer != "NoneProvided")
         {
@@ -294,7 +371,13 @@ public class Dialog : MonoBehaviour
             }
         }
 
-        if (dialogBox!=null) KillBox();
+        if (dialogBox != null) KillBox();
+
+        if (resuming) //Our conversation was interupted. Let's resume by repeating the last message.
+        {
+            repeat = true;
+            resuming = false;
+        }
 
         if (!repeat)
         {
@@ -310,11 +393,7 @@ public class Dialog : MonoBehaviour
             }
             else
             {
-                active = false;
-                if (initiator != null)
-                {
-                    initiator.SendMessage("StopTalking");
-                }
+                EndConversation();
             }
         } //End !repeat
         else
@@ -323,9 +402,29 @@ public class Dialog : MonoBehaviour
         }
     }
 
+    public void EndConversation()
+    {
+        active = false;
+        if (interuptDialog != null) interuptDialog.resume();
+        if (initiator != null)
+        {
+            initiator.SendMessage("StopTalking");
+        }
+
+        if (characterController!=null && initiator!=null && faceInitiator)
+        {
+            if (!characterController.isFacingRight() && originallyFacingRight)
+                characterController.Flip();
+            if (characterController.isFacingRight() && !originallyFacingRight)
+                characterController.Flip();
+        }
+    }
+
     //This function actually instantiates the box and passes the settings to it
     public void LoadBox()
     {
+        if (!active) return;
+
         dialogBoxObj = Instantiate(dialogBoxPrefab);
         dialogBox = dialogBoxObj.GetComponent<DialogBox>() as DialogBox;
         if (entries[index].saidByInitiator)
@@ -383,12 +482,16 @@ public class Dialog : MonoBehaviour
     }
 
     //Kill the current dialog box
-    public void KillBox()
+    public void KillBox(bool invokeCallBacks=true)
     {
+        if (dialogBox == null) return;
 
-        if (entries[index].callback != null)
+        if (invokeCallBacks)
         {
-            entries[index].callback.Invoke();
+            if (entries[index].callback != null)
+            {
+                entries[index].callback.Invoke();
+            }
         }
 
         if (entries[index].sendMessageEnd != "")

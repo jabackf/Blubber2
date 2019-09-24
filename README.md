@@ -16,6 +16,6 @@
 
 -Stuff to add: drop platforms, dissappearing platforms, enemies, water, inventory system, items with actions
 
-Dialog
--Character change facing direction to point to the one talking
--Add pause and resume feature for auto dialog (for if character interupts)
+-You can hit NPCs with objects and they slide!
+
+-Make a readme for the dialog system

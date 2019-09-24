@@ -445,7 +445,7 @@ public class CharacterController2D : MonoBehaviour
     {
         return actionObjectInRange;
     }
-    private void Flip()
+    public void Flip()
 	{
 		// Switch the way the player is labelled as facing.
 		m_FacingRight = !m_FacingRight;
@@ -487,6 +487,11 @@ public class CharacterController2D : MonoBehaviour
             m_rangeColliderR.enabled = m_FacingRight;
             m_rangeColliderL.enabled = !m_FacingRight;
         }
+    }
+
+    public bool isFacingRight()
+    {
+        return m_FacingRight;
     }
 
     //Called from pickupObject script when holding item is released (dropped, thrown, added to inventory, etc)
