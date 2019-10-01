@@ -9,6 +9,9 @@ public class Global : MonoBehaviour
 
     public static Global Instance { get; private set; }
 
+    public string startScene = "testing_100_100";
+    public MapSystem map;
+
 
     // Start is called before the first frame update
     private void Awake()
@@ -22,11 +25,16 @@ public class Global : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        map = new MapSystem();
+        
+
     }
 
     private void Start()
     {
         OnValidate(); //Implicitly call to setup game scene
+        map.goTo(startScene, MapSystem.transitions.none);
     }
 
     //Called when a field in the editor is changed

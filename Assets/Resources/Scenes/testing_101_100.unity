@@ -1,0 +1,5044 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!29 &1
+OcclusionCullingSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_OcclusionBakeSettings:
+    smallestOccluder: 5
+    smallestHole: 0.25
+    backfaceThreshold: 100
+  m_SceneGUID: 00000000000000000000000000000000
+  m_OcclusionCullingData: {fileID: 0}
+--- !u!104 &2
+RenderSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 9
+  m_Fog: 0
+  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_FogMode: 3
+  m_FogDensity: 0.01
+  m_LinearFogStart: 0
+  m_LinearFogEnd: 300
+  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
+  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientIntensity: 1
+  m_AmbientMode: 3
+  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SkyboxMaterial: {fileID: 0}
+  m_HaloStrength: 0.5
+  m_FlareStrength: 1
+  m_FlareFadeSpeed: 3
+  m_HaloTexture: {fileID: 0}
+  m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
+  m_DefaultReflectionMode: 0
+  m_DefaultReflectionResolution: 128
+  m_ReflectionBounces: 1
+  m_ReflectionIntensity: 1
+  m_CustomReflection: {fileID: 0}
+  m_Sun: {fileID: 0}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_UseRadianceAmbientProbe: 0
+--- !u!157 &3
+LightmapSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 11
+  m_GIWorkflowMode: 1
+  m_GISettings:
+    serializedVersion: 2
+    m_BounceScale: 1
+    m_IndirectOutputScale: 1
+    m_AlbedoBoost: 1
+    m_EnvironmentLightingMode: 0
+    m_EnableBakedLightmaps: 0
+    m_EnableRealtimeLightmaps: 0
+  m_LightmapEditorSettings:
+    serializedVersion: 12
+    m_Resolution: 2
+    m_BakeResolution: 40
+    m_AtlasSize: 1024
+    m_AO: 0
+    m_AOMaxDistance: 1
+    m_CompAOExponent: 1
+    m_CompAOExponentDirect: 0
+    m_ExtractAmbientOcclusion: 0
+    m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 1
+    m_TextureCompression: 1
+    m_FinalGather: 0
+    m_FinalGatherFiltering: 1
+    m_FinalGatherRayCount: 256
+    m_ReflectionCompression: 2
+    m_MixedBakeMode: 2
+    m_BakeBackend: 0
+    m_PVRSampling: 1
+    m_PVRDirectSampleCount: 32
+    m_PVRSampleCount: 500
+    m_PVRBounces: 2
+    m_PVREnvironmentSampleCount: 500
+    m_PVREnvironmentReferencePointCount: 2048
+    m_PVRFilteringMode: 2
+    m_PVRDenoiserTypeDirect: 0
+    m_PVRDenoiserTypeIndirect: 0
+    m_PVRDenoiserTypeAO: 0
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
+    m_PVREnvironmentMIS: 0
+    m_PVRCulling: 1
+    m_PVRFilteringGaussRadiusDirect: 1
+    m_PVRFilteringGaussRadiusIndirect: 5
+    m_PVRFilteringGaussRadiusAO: 2
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ExportTrainingData: 0
+    m_TrainingDataDestination: TrainingData
+  m_LightingDataAsset: {fileID: 0}
+  m_UseShadowmask: 1
+--- !u!196 &4
+NavMeshSettings:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_BuildSettings:
+    serializedVersion: 2
+    agentTypeID: 0
+    agentRadius: 0.5
+    agentHeight: 2
+    agentSlope: 45
+    agentClimb: 0.4
+    ledgeDropHeight: 0
+    maxJumpAcrossDistance: 0
+    minRegionArea: 2
+    manualCellSize: 0
+    cellSize: 0.16666667
+    manualTileSize: 0
+    tileSize: 256
+    accuratePlacement: 0
+    debug:
+      m_Flags: 0
+  m_NavMeshData: {fileID: 0}
+--- !u!1 &440377943
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 440377944}
+  m_Layer: 0
+  m_Name: dialogLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &440377944
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440377943}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.06, y: 1.22, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1543154690}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &519420028
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 519420032}
+  - component: {fileID: 519420031}
+  - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!81 &519420029
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f08a6f40d2ec4de981f811bfc829f87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TexturePixelsPerWorldUnit: 24
+--- !u!20 &519420031
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_projectionMatrixMode: 0
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 7
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 7991
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 0
+  m_HDR: 1
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 0
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &519420032
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &715233493
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 715233495}
+  - component: {fileID: 715233494}
+  m_Layer: 0
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &715233494
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715233493}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 1006801551
+  m_SortingLayer: -2
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: db79e8ac8f5f6f64a877f8347b99eb83, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 2
+  m_Size: {x: 40, y: 30}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &715233495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715233493}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.17707612, y: -0.33857507, z: -8.0625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1001714352 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5583954899186943733, guid: 52f8e2b24f27b914297658a81385bc12,
+    type: 3}
+  m_PrefabInstance: {fileID: 140103500771456283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1140417289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1140417292}
+  - component: {fileID: 1140417291}
+  - component: {fileID: 1140417290}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1140417290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140417289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &1140417291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140417289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &1140417292
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1140417289}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1194112659
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1194112661}
+  - component: {fileID: 1194112660}
+  m_Layer: 0
+  m_Name: Grid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!156049354 &1194112660
+Grid:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194112659}
+  m_Enabled: 1
+  m_CellSize: {x: 1, y: 1, z: 0}
+  m_CellGap: {x: 0, y: 0, z: 0}
+  m_CellLayout: 0
+  m_CellSwizzle: 0
+--- !u!4 &1194112661
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194112659}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1860008968}
+  - {fileID: 1840445277}
+  - {fileID: 1848374732}
+  - {fileID: 1543154690}
+  - {fileID: 140103500151675659}
+  - {fileID: 140103500105844610}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1226190453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1226190454}
+  - component: {fileID: 1226190455}
+  m_Layer: 0
+  m_Name: dialogRange
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1226190454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226190453}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.01, y: 0.15, z: 0}
+  m_LocalScale: {x: 1, y: 1.5875, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500105844610}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1226190455
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226190453}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
+--- !u!1 &1411719279
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1411719281}
+  - component: {fileID: 1411719280}
+  m_Layer: 0
+  m_Name: Global
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!114 &1411719280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411719279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fdb9c9661f4a8f4b8fdad44e99bd860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startScene: testing_100_100
+--- !u!4 &1411719281
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411719279}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.162698, y: -0.39292994, z: -33.045734}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1419440604 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5456296111386055994, guid: 52f8e2b24f27b914297658a81385bc12,
+    type: 3}
+  m_PrefabInstance: {fileID: 140103500771456283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1543154689
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1543154690}
+  - component: {fileID: 1543154692}
+  - component: {fileID: 1543154694}
+  - component: {fileID: 1543154691}
+  - component: {fileID: 1543154695}
+  - component: {fileID: 1543154693}
+  m_Layer: 0
+  m_Name: Sign1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1543154690
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543154689}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -7, y: -4.99, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 440377944}
+  m_Father: {fileID: 1194112661}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1543154691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543154689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 992ae2fe5f0c7bc4db76cb3a82e61c57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
+    type: 3}
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 1.4
+  dialog: {fileID: 1543154695}
+--- !u!212 &1543154692
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543154689}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: bd1f9c5fcad96c64eaee5dc37f6e9753, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.2916666, y: 1.4166666}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!61 &1543154693
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543154689}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.7083333}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 1.2916666, y: 1.4166666}
+    newSize: {x: 1.2916666, y: 1.4166666}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.2916666, y: 1.4166666}
+  m_EdgeRadius: 0
+--- !u!114 &1543154694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543154689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258b4facb2c6e9b42b02a51e2691123c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1543154695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1543154689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff0d4c1a4f5d304db1fef9a0e40ef00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBoxPrefab: {fileID: 1343072802687410315, guid: 25238196577895041a5d4a1ee4a009f8,
+    type: 3}
+  active: 0
+  myType: 0
+  dontRepeatRandoms: 0
+  faceInitiator: 1
+  startGroup: 0
+  interuptDialog: {fileID: 0}
+  restartAfterInterupt: 0
+  waitTimeBeforeResume: 1.5
+  resumeTopperString: 
+  resumeMessageAddTime: 2
+  defaultOnScreenTime: 8
+  defaultOffScreenTime: 1.4
+  autoOnTimeMultiplier: 1
+  autoOffTimeMultiplier: 1
+  entries:
+  - Message: Hello! My name is Mr. Sign. I'm the best sign in the world, because
+      I'm here to test the new dialog system!
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Oh no...
+    Title: 
+    saidByInitiator: 1
+    sendMessageStart: Angry
+    sendMessageEnd: Normal
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Oh YES!
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: First, let's test the question and answer system. Please answer the
+      following question. Do you like to eat boogers?
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers:
+    - Yes
+    - No
+    - Sometimes
+    answerBranch:
+    - answer: Yes
+      index: 4
+      ignoreCase: 0
+      addToNextMessage: 
+    - answer: No
+      index: 5
+      ignoreCase: 0
+      addToNextMessage: 'NO?! '
+    - answer: Sometimes
+      index: 6
+      ignoreCase: 0
+      addToNextMessage: 
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Aha! You answered [answer]! I knew it!
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: 7
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Oh, so you're a liar. That's good to know. Moving on...
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: 7
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Uh huh. "[answer]" you say? More like "All the time!" In fact, I'll
+      bet you're eating one right now!
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: 7
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Now, let's test the image system. I'm going to show you an amazing picture.
+      It's the greatest picture you've ever seen. Are you ready? Don't answer that.
+      I'm showing it to you anyway.
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: 
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: That was BEAUTIFUL wasn't it?
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Now, let me ask you something. What's you're favorite thing ever?
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 1
+    repeatIfEmpty: 1
+    repeatAddText: 'YOU DIDN''T ANSWER ME! '
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: What a coincidence! I hate [answer]!
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: How old are you?
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 1
+    repeatIfEmpty: 1
+    repeatAddText: '<i>sigh</i> Look, it''s ok. Just tell me.... '
+    inputType: 1
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1543154694}
+          m_MethodName: TestCallbackOne
+          m_Mode: 2
+          m_Arguments:
+            m_ObjectArgument: {fileID: 1543154695}
+            m_ObjectArgumentAssemblyTypeName: Dialog, Assembly-CSharp
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: '[answer] years old? I see.'
+    Title: Mr. Sign
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 440377944}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+--- !u!4 &1840445277 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+    type: 3}
+  m_PrefabInstance: {fileID: 140103500771456283}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1848374731
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1848374732}
+  - component: {fileID: 1848374736}
+  - component: {fileID: 1848374735}
+  - component: {fileID: 1848374734}
+  - component: {fileID: 1848374733}
+  m_Layer: 8
+  m_Name: sprPizza_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1848374732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848374731}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.5, y: -5.5, z: 0}
+  m_LocalScale: {x: 0.9, y: 0.7, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1194112661}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1848374733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848374731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  ActionIconPrefab: {fileID: 571698414639169121, guid: 0abbc03f1ae53f842a19f8b2d823fbba,
+    type: 3}
+  rangeColliderTag: RangeCollider
+  iconXOffset: 0
+  iconYOffset: 1
+  offset: {x: 0, y: 0.4}
+  disableCollider: 1
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 100
+  carryMass: 0.3
+  flipOnX: 1
+  flipOnY: 1
+  throwArc: {fileID: 0}
+  mCarryType: 1
+--- !u!61 &1848374734
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848374731}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 0d67b13648e001c4a9e13d75727b8b6d, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.043245196, y: 0.074221104}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.5, y: 0.8333333}
+    newSize: {x: 1.5, y: 0.8333333}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.2652409, y: 0.43071574}
+  m_EdgeRadius: 0
+--- !u!50 &1848374735
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848374731}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!212 &1848374736
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848374731}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 5881fdbcdf97ef84ca7478630c58156d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.5, y: 0.8333333}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &1860008967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1860008968}
+  - component: {fileID: 1860008970}
+  - component: {fileID: 1860008969}
+  - component: {fileID: 1860008971}
+  m_Layer: 8
+  m_Name: tsStaticPlatforms
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1860008968
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860008967}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1194112661}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!483693784 &1860008969
+TilemapRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860008967}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_ChunkSize: {x: 32, y: 32, z: 32}
+  m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
+  m_MaxChunkCount: 16
+  m_MaxFrameAge: 16
+  m_SortOrder: 0
+  m_Mode: 0
+  m_DetectChunkCullingBounds: 0
+  m_MaskInteraction: 0
+--- !u!1839735485 &1860008970
+Tilemap:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860008967}
+  m_Enabled: 1
+  m_Tiles:
+  - first: {x: -11, y: -7, z: 0}
+    second:
+      m_TileIndex: 4
+      m_TileSpriteIndex: 4
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -10, y: -7, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -9, y: -7, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -8, y: -7, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -7, y: -7, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -6, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -5, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -4, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -3, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -2, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -1, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 0, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 1, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 2, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 3, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 4, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 5, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 6, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 7, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 8, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 9, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 10, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 11, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 12, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 13, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 14, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 15, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: 16, y: -7, z: 0}
+    second:
+      m_TileIndex: 6
+      m_TileSpriteIndex: 6
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -23, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -22, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -21, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -20, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -19, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -18, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -17, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -16, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -15, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -14, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -13, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -12, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -11, y: -6, z: 0}
+    second:
+      m_TileIndex: 7
+      m_TileSpriteIndex: 7
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -10, y: -6, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -9, y: -6, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -8, y: -6, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  - first: {x: -7, y: -6, z: 0}
+    second:
+      m_TileIndex: 3
+      m_TileSpriteIndex: 3
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 2
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 1
+  m_AnimatedTiles: {}
+  m_TileAssetArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 8
+    m_Data: {fileID: 11400000, guid: 064902fbb68151047bb16401f6b8e4f6, type: 2}
+  - m_RefCount: 1
+    m_Data: {fileID: 11400000, guid: 16d400c7131cacd4599134367829c401, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 23
+    m_Data: {fileID: 11400000, guid: 172dbe42a50809a4997ae66bb8806705, type: 2}
+  - m_RefCount: 13
+    m_Data: {fileID: 11400000, guid: c1f145b417533d44ab81975cdec533d3, type: 2}
+  m_TileSpriteArray:
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 8
+    m_Data: {fileID: -8704974539834709905, guid: a85bcd98b316023418df24bc5a7616b3,
+      type: 3}
+  - m_RefCount: 1
+    m_Data: {fileID: -4835170737223761507, guid: a85bcd98b316023418df24bc5a7616b3,
+      type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
+  - m_RefCount: 23
+    m_Data: {fileID: -5561034661205883853, guid: a85bcd98b316023418df24bc5a7616b3,
+      type: 3}
+  - m_RefCount: 13
+    m_Data: {fileID: -2931127794516368477, guid: a85bcd98b316023418df24bc5a7616b3,
+      type: 3}
+  m_TileMatrixArray:
+  - m_RefCount: 45
+    m_Data:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+  m_TileColorArray:
+  - m_RefCount: 0
+    m_Data: {r: 0, g: 0, b: 0, a: 0}
+  - m_RefCount: 0
+    m_Data: {r: -7.606727e-24, g: -7.606727e-24, b: -7.606727e-24, a: -7.606727e-24}
+  - m_RefCount: 45
+    m_Data: {r: 1, g: 1, b: 1, a: 1}
+  m_AnimationFrameRate: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Origin: {x: -23, y: -8, z: 0}
+  m_Size: {x: 47, y: 13, z: 1}
+  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileOrientation: 0
+  m_TileOrientationMatrix:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+--- !u!19719996 &1860008971
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860008967}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0.00001
+--- !u!1 &2059842967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2059842968}
+  - component: {fileID: 2059842969}
+  m_Layer: 0
+  m_Name: dialogRange
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2059842968
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059842967}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.06, y: 0.17, z: 0}
+  m_LocalScale: {x: 1.4559, y: 1.4559, z: 1.4559}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &2059842969
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059842967}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
+--- !u!4 &140103500105844610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8, y: -6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5456296111611072766}
+  - {fileID: 5583954899906429745}
+  - {fileID: 3004943861518330412}
+  - {fileID: 6416688394788688571}
+  - {fileID: 2681852386243928507}
+  - {fileID: 3978075508794615557}
+  - {fileID: 1226190454}
+  m_Father: {fileID: 1194112661}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &140103500151675659
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11, y: -6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5456296111648083063}
+  - {fileID: 5583954899985817528}
+  - {fileID: 3004943861555869349}
+  - {fileID: 6416688394693054002}
+  - {fileID: 2681852386205973810}
+  - {fileID: 3978075508715764620}
+  - {fileID: 2059842968}
+  m_Father: {fileID: 1194112661}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &140103500771456283
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1194112661}
+    m_Modifications:
+    - target: {fileID: 140103500801170330, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_Name
+      value: Player (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500801170330, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500430803526, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 140103500801170335, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_DialogTop
+      value: 
+      objectReference: {fileID: 1419440604}
+    - target: {fileID: 140103500801170335, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_DialogBottom
+      value: 
+      objectReference: {fileID: 1001714352}
+    - target: {fileID: 6423075445709427443, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 939467651963942360, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 936482574467484246, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1066355426658823718, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2160042057603856995, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3044707407502454437, guid: 52f8e2b24f27b914297658a81385bc12,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 52f8e2b24f27b914297658a81385bc12, type: 3}
+--- !u!95 &140103501528456791
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c979e2e0243b6764e9333fa0b0f52b98, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &140103501528456795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 297514db87f77e345bdf18ab6bcbc1d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterName: Green Guy
+  startFlipped: 0
+  m_MovementSmoothing: 0.05
+  maxVelocity: 20
+  m_AirControl: 1
+  canUseDropDownPlatforms: 1
+  m_JumpVelocity: 10.5
+  canDoubleJump: 0
+  infiniteJump: 0
+  canCrouch: 0
+  m_CrouchSpeed: 0.36
+  m_CrouchDisableCollider: {fileID: 0}
+  canPush: 1
+  m_PushForce: 90
+  m_PushWait: 1
+  canPickup: 1
+  pickupWithJump: 0
+  m_pickupTop: {fileID: 5456296111611072766}
+  m_pickupL: {fileID: 3004943861518330412}
+  m_pickupR: {fileID: 6416688394788688571}
+  canClimb: 1
+  canCarryWhileClimbing: 1
+  climbWithJump: 1
+  m_WhatIsClimb:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_WhatIsGround:
+    serializedVersion: 2
+    m_Bits: 256
+  m_GroundCheck: {fileID: 5583954899906429745}
+  m_CeilingCheck: {fileID: 5456296111611072766}
+  m_SideCheckL: {fileID: 3004943861518330412}
+  m_SideCheckR: {fileID: 6416688394788688571}
+  m_rangeColliderL: {fileID: 3709802479489811189}
+  m_rangeColliderR: {fileID: 8036988583677699717}
+  m_DialogTop: {fileID: 5456296111611072766}
+  m_DialogBottom: {fileID: 5583954899906429745}
+  spriteFlipMethod: 1
+  isTalking: 0
+  OnLandEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: OnLanding
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnCrouchEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: OnCrouch
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: CharacterController2D+BoolEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &140103501528456797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62345e93238d81048950c1b78535167b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 140103501528456791}
+  controller: {fileID: 140103501528456795}
+  climbSpeedMultiplier: 10
+  speedMultiplier: 1.5
+  speed: 0
+  jump: 0
+  doubleJump: 0
+  crouch: 0
+  pushing: 0
+  pickingUp: 0
+  carryTop: 0
+  carryFront: 0
+  throwing: 0
+  climb: 0
+  isClimbing: 0
+  state: 0
+  doubleJumpDuration: 0.3
+  pickingUpDuration: 0.2
+  throwingDuration: 0.2
+  crouchAnimatorBool: 
+  jumpAnimatorBool: 
+  doubleJumpAnimatorBool: 
+  pushingAnimatorBool: 
+  speedAnimatorFloat: 
+  pickupAnimatorBool: 
+  throwingAnimatorBool: 
+  frontCarryAnimatorBool: 
+  topCarryAnimatorBool: 
+  climbingAnimatorFloat: 
+  climbingAnimatorBool: 
+  dressList: []
+--- !u!1 &140103501528456798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 140103500105844610}
+  - component: {fileID: 3062676972762856186}
+  - component: {fileID: 4415814582226080883}
+  - component: {fileID: 140103501528456791}
+  - component: {fileID: 8562145065870984893}
+  - component: {fileID: 8556278918881251482}
+  - component: {fileID: 2487212718854963180}
+  - component: {fileID: 140103501528456795}
+  - component: {fileID: 140103501528456797}
+  - component: {fileID: 140103501528456800}
+  - component: {fileID: 140103501528456799}
+  m_Layer: 0
+  m_Name: GreenGuy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &140103501528456799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff0d4c1a4f5d304db1fef9a0e40ef00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBoxPrefab: {fileID: 1343072802687410315, guid: 25238196577895041a5d4a1ee4a009f8,
+    type: 3}
+  active: 0
+  myType: 0
+  dontRepeatRandoms: 0
+  faceInitiator: 1
+  startGroup: 0
+  interuptDialog: {fileID: 140103501616841432}
+  restartAfterInterupt: 0
+  waitTimeBeforeResume: 2
+  resumeTopperString: 
+  resumeMessageAddTime: 2
+  defaultOnScreenTime: 8
+  defaultOffScreenTime: 1.4
+  autoOnTimeMultiplier: 1
+  autoOffTimeMultiplier: 1
+  entries:
+  - Message: Oh, hi! I'm eating pizza!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: ....
+    Title: 
+    saidByInitiator: 1
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+--- !u!114 &140103501528456800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 992ae2fe5f0c7bc4db76cb3a82e61c57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
+    type: 3}
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 1.4
+  dialog: {fileID: 140103501528456799}
+--- !u!114 &140103501616841426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 297514db87f77e345bdf18ab6bcbc1d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CharacterName: Mr. Orange
+  startFlipped: 1
+  m_MovementSmoothing: 0.05
+  maxVelocity: 20
+  m_AirControl: 1
+  canUseDropDownPlatforms: 1
+  m_JumpVelocity: 10.5
+  canDoubleJump: 0
+  infiniteJump: 0
+  canCrouch: 0
+  m_CrouchSpeed: 0.36
+  m_CrouchDisableCollider: {fileID: 0}
+  canPush: 1
+  m_PushForce: 90
+  m_PushWait: 1
+  canPickup: 1
+  pickupWithJump: 0
+  m_pickupTop: {fileID: 5456296111648083063}
+  m_pickupL: {fileID: 3004943861555869349}
+  m_pickupR: {fileID: 6416688394693054002}
+  canClimb: 1
+  canCarryWhileClimbing: 1
+  climbWithJump: 1
+  m_WhatIsClimb:
+    serializedVersion: 2
+    m_Bits: 2048
+  m_WhatIsGround:
+    serializedVersion: 2
+    m_Bits: 256
+  m_GroundCheck: {fileID: 5583954899985817528}
+  m_CeilingCheck: {fileID: 5456296111648083063}
+  m_SideCheckL: {fileID: 3004943861555869349}
+  m_SideCheckR: {fileID: 6416688394693054002}
+  m_rangeColliderL: {fileID: 3709802479560941180}
+  m_rangeColliderR: {fileID: 8036988583715273228}
+  m_DialogTop: {fileID: 5456296111648083063}
+  m_DialogBottom: {fileID: 5583954899985817528}
+  spriteFlipMethod: 1
+  isTalking: 0
+  OnLandEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: OnLanding
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnCrouchEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: OnCrouch
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: CharacterController2D+BoolEvent, Assembly-CSharp, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!114 &140103501616841428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62345e93238d81048950c1b78535167b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 140103501616841438}
+  controller: {fileID: 140103501616841426}
+  climbSpeedMultiplier: 10
+  speedMultiplier: 1.5
+  speed: 0
+  jump: 0
+  doubleJump: 0
+  crouch: 0
+  pushing: 0
+  pickingUp: 0
+  carryTop: 0
+  carryFront: 0
+  throwing: 0
+  climb: 0
+  isClimbing: 0
+  state: 0
+  doubleJumpDuration: 0.3
+  pickingUpDuration: 0.2
+  throwingDuration: 0.2
+  crouchAnimatorBool: 
+  jumpAnimatorBool: 
+  doubleJumpAnimatorBool: 
+  pushingAnimatorBool: 
+  speedAnimatorFloat: 
+  pickupAnimatorBool: 
+  throwingAnimatorBool: 
+  frontCarryAnimatorBool: 
+  topCarryAnimatorBool: 
+  climbingAnimatorFloat: 
+  climbingAnimatorBool: 
+  dressList:
+  - name: Mohawk
+    resourceName: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprDressHairMohawk_0
+    offset: {x: -0.13, y: 0.57}
+    gameObject: {fileID: 0}
+--- !u!1 &140103501616841431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 140103500151675659}
+  - component: {fileID: 140103501616841432}
+  - component: {fileID: 3062676972682421875}
+  - component: {fileID: 4415814582138702074}
+  - component: {fileID: 140103501616841438}
+  - component: {fileID: 8562145065816283700}
+  - component: {fileID: 8556278918810291219}
+  - component: {fileID: 2487212718816469861}
+  - component: {fileID: 140103501616841426}
+  - component: {fileID: 140103501616841428}
+  - component: {fileID: 140103501616841434}
+  - component: {fileID: 140103501616841433}
+  m_Layer: 0
+  m_Name: MrOrange
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &140103501616841432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff0d4c1a4f5d304db1fef9a0e40ef00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBoxPrefab: {fileID: 1343072802687410315, guid: 25238196577895041a5d4a1ee4a009f8,
+    type: 3}
+  active: 0
+  myType: 5
+  dontRepeatRandoms: 0
+  faceInitiator: 1
+  startGroup: 0
+  interuptDialog: {fileID: 0}
+  restartAfterInterupt: 0
+  waitTimeBeforeResume: 15
+  resumeTopperString: 'Now, what was I saying before I was so RUDELY interupted?
+    Oh ya! '
+  resumeMessageAddTime: 20
+  defaultOnScreenTime: 160
+  defaultOffScreenTime: 12
+  autoOnTimeMultiplier: 0.035
+  autoOffTimeMultiplier: 0.035
+  entries:
+  - Message: So, how's the wife and kids?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I've told you over and over again, I'm NOT married, nor do I have any
+      kids.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Angry
+    sendMessageEnd: Normal
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Well tell them [title] says hello!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 140
+    timeOffScreen: 60
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: So the other day I was cleaning out my garage, and I found a moldy banana.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 170
+    timeOffScreen: 12
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: No way! Dude, I just found a moldy banana under my bed the other day.
+      What a crazy coincidence! I haven't even bought bananas for years!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 210
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I don't believe you. You're just saying you found a banana because I
+      said that I found one!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Angry
+    sendMessageEnd: Normal
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 170
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: No, for real! It tasted horrible!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 130
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You ATE it?!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Well, I mean... I hate to see food go to waste
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I think you should be more worried about your brain going to waste.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 100
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Man I'm tired. I was up late last night enjoying my new hobby!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 150
+    timeOffScreen: 14
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Oh, a new hobby huh? What is it?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Photo shopping human limbs onto pictures of birds.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Wow! That hobby sounds... interesting...
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Yeah, let me show you some of my latest work...
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: 
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You didn't make that! You stole it from the Internet!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Angry
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Uhhh, so do you have any hobbies?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Yes! Actually, I'm currently learning how to speak Chinese!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Normal
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Awesome! Let's hear it!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: 
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprChineseToothbrushNose_0
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Whoah! I didn't understand any of that!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Good!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 40
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You know, I've always wanted to learn how to speak with sign language.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 14
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: But you don't have any hands!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 130
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I don't need you squishing my dreams. Why do you always have to be such
+      a negative nancy all of the time?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 180
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I am not a negative nancy!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Angry
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 110
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Yes you are! Your new name is Mr. Negative Nancy Pants!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: IT IS NOT!
+    Title: Mr. Negative Nancy Pants
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: See. Told you so.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You really push my buttons sometimes.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: Normal
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 70
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Speaking of buttons, guess what I did the other day!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 15
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Did you finally brush your teeth?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 80
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: No, I rode a real life unicorn!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 100
+    timeOffScreen: 15
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: What did that have to do with buttons?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 110
+    timeOffScreen: 10
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Oh, I don't know.. But a UNICORN! A REAL ONE! Turns out unicorns like
+      pizza too!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 200
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Well, then why did you say "speaking of buttons?"
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: It had a horn and everything!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Wait...
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 50
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You just ate the last piece of pizza.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 100
+    timeOffScreen: 20
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Oh, did you want some?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 7
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Uhh... Yeah, I kinda did.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Angry
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 10
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Well we can get more. They're free.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 115
+    timeOffScreen: 10
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I know they're free! But you seriously just sat there and ate an entire
+      pizza, all by yourself, and didn't even offer me one slice!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 230
+    timeOffScreen: 12
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: ... Oops?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 25
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Jerk.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: Normal
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 80
+    timeOffScreen: 22
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Let's just get another pizza.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 120
+    timeOffScreen: 9
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: No, that won't work!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 10
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: But they're FREE! All you gotta do is go get one!!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 110
+    timeOffScreen: 10
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You don't understand....
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 100
+    timeOffScreen: 30
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I've seen this video game's source code. This conversation is a finite
+      loop, and it's programmed to repeat every time the pizza is replenished.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 250
+    timeOffScreen: 18
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Oh no, that means...
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 100
+    timeOffScreen: 12
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Our entire existence, the ONLY thing we were ever programmed to do,
+      is sit here and eat pizza, in a continuous loop, forever.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Angry
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 250
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: AND YOU ATE THE WHOLE THING.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 9
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: But I...
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 70
+    timeOffScreen: 3
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: That means you're going to eat it again next time too, because that's
+      what you're programmed to do.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 230
+    timeOffScreen: 8
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I, uhh....
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 70
+    timeOffScreen: 9
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You've literally ate every single slice of pizza that I've ever had
+      the opportunity to enjoy, and you will continue to do so for all of eternity.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 250
+    timeOffScreen: 15
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: ....
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 70
+    timeOffScreen: 30
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: You're such a jerk.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 14
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I mean... it was some pretty good pizza.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 30
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Well, any second now he's gonna bring us a new pizza...
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 110
+    timeOffScreen: 8
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: ... for you to eat ....
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 60
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: .. and everything we will ever know will start over again.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 140
+    timeOffScreen: 80
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Hey ... I'm sorry... For the whole pizza thing...
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 120
+    timeOffScreen: 15
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: WELL YOU SHOULD BE!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 10
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: It was a whole stinkin pizza!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 90
+    timeOffScreen: 23
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: At least you got to see that awesome bird photoshop.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 130
+    timeOffScreen: 10
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: That WAS pretty nice.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Normal
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 100
+    timeOffScreen: 23
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I never did get to tell my unicorn story.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501528456798}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 110
+    timeOffScreen: 100
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+--- !u!114 &140103501616841433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ff0d4c1a4f5d304db1fef9a0e40ef00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogBoxPrefab: {fileID: 1343072802687410315, guid: 25238196577895041a5d4a1ee4a009f8,
+    type: 3}
+  active: 0
+  myType: 0
+  dontRepeatRandoms: 0
+  faceInitiator: 1
+  startGroup: 0
+  interuptDialog: {fileID: 140103501616841432}
+  restartAfterInterupt: 0
+  waitTimeBeforeResume: 2
+  resumeTopperString: 'Now, what was I saying? Oh right. '
+  resumeMessageAddTime: 2
+  defaultOnScreenTime: 8
+  defaultOffScreenTime: 1.4
+  autoOnTimeMultiplier: 1
+  autoOffTimeMultiplier: 1
+  entries:
+  - Message: How do you like my new hair style?
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers:
+    - It's horrible
+    - It stinks
+    - I don't like it at all.
+    - It looks like someone threw up on your head.
+    - I've picked better looking clumps of hair out of my bathtub drain
+    - Please, don't talk to me. Your hair is embarrasing me.
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: '[answer]'
+    Title: 
+    saidByInitiator: 1
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 0}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Thanks.
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 140103501616841431}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 12
+    timeOffScreen: 2
+    getTextInput: 0
+    repeatIfEmpty: 1
+    repeatAddText: 
+    inputType: 3
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+--- !u!114 &140103501616841434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 992ae2fe5f0c7bc4db76cb3a82e61c57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
+    type: 3}
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 1.4
+  dialog: {fileID: 140103501616841433}
+--- !u!95 &140103501616841438
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c979e2e0243b6764e9333fa0b0f52b98, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &936482574645383058
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3004943861518330412}
+  m_Layer: 0
+  m_Name: sideCheckL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &936482574742164251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3004943861555869349}
+  m_Layer: 0
+  m_Name: sideCheckL
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &939467652242615445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2681852386205973810}
+  - component: {fileID: 3709802479560941180}
+  m_Layer: 0
+  m_Name: rangeColliderL
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &939467652280709148
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2681852386243928507}
+  - component: {fileID: 3709802479489811189}
+  m_Layer: 0
+  m_Name: rangeColliderL
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1066355426937599851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3978075508715764620}
+  - component: {fileID: 8036988583715273228}
+  m_Layer: 0
+  m_Name: rangeColliderR
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1066355427008162786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3978075508794615557}
+  - component: {fileID: 8036988583677699717}
+  m_Layer: 0
+  m_Name: rangeColliderR
+  m_TagString: RangeCollider
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &2160042057783000999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5456296111611072766}
+  m_Layer: 0
+  m_Name: ceilCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &2160042057878627118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5456296111648083063}
+  m_Layer: 0
+  m_Name: ceilCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!50 &2487212718816469861
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 3
+  m_Material: {fileID: 0}
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!50 &2487212718854963180
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 3
+  m_Material: {fileID: 0}
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!4 &2681852386205973810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939467652242615445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.47, y: 0.3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2681852386243928507
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939467652280709148}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.45, y: 0.28, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500105844610}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &3004943861518330412
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936482574645383058}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.47, y: 0.41, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500105844610}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &3004943861555869349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936482574742164251}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.47, y: 0.41, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3044707407151344481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6416688394788688571}
+  m_Layer: 0
+  m_Name: sideCheckR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &3044707407240165352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6416688394693054002}
+  m_Layer: 0
+  m_Name: sideCheckR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &3062676972682421875
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 1767984677
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 2b62fa34bc96eea43b4f170425370c7a, type: 3}
+  m_Color: {r: 0.990566, g: 0.6813344, b: 0.3504361, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!212 &3062676972762856186
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 1767984677
+  m_SortingLayer: 2
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 2b62fa34bc96eea43b4f170425370c7a, type: 3}
+  m_Color: {r: 0.29803923, g: 0.9622642, b: 0.08006082, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!58 &3709802479489811189
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939467652280709148}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
+--- !u!58 &3709802479560941180
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 939467652242615445}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
+--- !u!4 &3978075508715764620
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066355426937599851}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.55, y: 0.28, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &3978075508794615557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066355427008162786}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.55, y: 0.28, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500105844610}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4415814582138702074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad98577b5babd8946b077f78fa477f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeDown: 0.25
+  timeUp: 0.06
+  springUp: 0
+  springDown: 0
+  squish: 1
+  goingUp: 0
+  targetTop: 1
+  targetBottom: 0.9
+  randomOffset: 1
+  squishXAxis: 1
+  squishYAxis: 1
+  squishZAxis: 0
+--- !u!114 &4415814582226080883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad98577b5babd8946b077f78fa477f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeDown: 0.25
+  timeUp: 0.06
+  springUp: 0
+  springDown: 0
+  squish: 1
+  goingUp: 0
+  targetTop: 1
+  targetBottom: 0.9
+  randomOffset: 1
+  squishXAxis: 1
+  squishYAxis: 1
+  squishZAxis: 0
+--- !u!4 &5456296111611072766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2160042057783000999}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500105844610}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &5456296111648083063
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2160042057878627118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &5583954899906429745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6423075446570997559}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500105844610}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &5583954899985817528
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6423075446525037502}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &6416688394693054002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3044707407240165352}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.4, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &6416688394788688571
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3044707407151344481}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.4, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500105844610}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6423075446525037502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5583954899985817528}
+  m_Layer: 0
+  m_Name: groundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &6423075446570997559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5583954899906429745}
+  m_Layer: 0
+  m_Name: groundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!58 &8036988583677699717
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066355427008162786}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
+--- !u!58 &8036988583715273228
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066355426937599851}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0374583, y: 0.22475201}
+  serializedVersion: 2
+  m_Radius: 0.28773344
+--- !u!58 &8556278918810291219
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 71a6c24e9845b1c4c8194d0fabbfdb6e, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.41389275}
+  serializedVersion: 2
+  m_Radius: 0.35296917
+--- !u!58 &8556278918881251482
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 71a6c24e9845b1c4c8194d0fabbfdb6e, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.41389275}
+  serializedVersion: 2
+  m_Radius: 0.35296917
+--- !u!61 &8562145065816283700
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501616841431}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 71a6c24e9845b1c4c8194d0fabbfdb6e, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.00849092, y: 0.61656904}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.64733005, y: 0.5670309}
+  m_EdgeRadius: 0
+--- !u!61 &8562145065870984893
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103501528456798}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 71a6c24e9845b1c4c8194d0fabbfdb6e, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.00849092, y: 0.61656904}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.64733005, y: 0.5670309}
+  m_EdgeRadius: 0
