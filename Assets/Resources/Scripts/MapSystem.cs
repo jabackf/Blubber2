@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class MapSystem 
 {
+    public Global global;
+
     [System.Serializable]
     public enum transitions
     {
@@ -17,30 +19,32 @@ public class MapSystem
 
     public string currentMap = "";
 
+    public const char splitter = '_';
+
     //map can either be a map name (in the format of mapname_xpos_ypos)
     //or one of the special keywords: left, right, up, down, current
     public void goTo(string map, transitions trans = transitions.DEFAULT)
     {
         if (trans!=transitions.DEFAULT) transition = trans;
-        string[] m = currentMap.Split('_');
+        string[] m = currentMap.Split(splitter);
         string transitionString = "";
 
         switch (map)
         {
             case "left":
-                transitionString = m[0] + "_" + (Int32.Parse(m[1]) - 1).ToString() + "_" + m[2];
+                transitionString = m[0] + splitter + (Int32.Parse(m[1]) - 1).ToString() + splitter  + m[2];
                 break;
 
             case "right":
-                transitionString = m[0] + "_" + (Int32.Parse(m[1]) + 1).ToString() + "_" + m[2];
+                transitionString = m[0] + splitter + (Int32.Parse(m[1]) + 1).ToString() + splitter + m[2];
                 break;
 
             case "up":
-                transitionString = m[0] + "_" + m[1] + "_" + (Int32.Parse(m[2]) + 1).ToString();
+                transitionString = m[0] + splitter + m[1] + splitter + (Int32.Parse(m[2]) + 1).ToString();
                 break;
 
             case "down":
-                transitionString = m[0] + "_" + m[1] + "_" + (Int32.Parse(m[2]) - 1).ToString();
+                transitionString = m[0] + splitter + m[1] + splitter + (Int32.Parse(m[2]) - 1).ToString();
                 break;
 
             case "current":
@@ -52,6 +56,7 @@ public class MapSystem
                 break;
         }
 
+        
         startTransition(transitionString);
     }
 
@@ -60,9 +65,23 @@ public class MapSystem
         switch (transition)
         {
             case transitions.none:
-                currentMap = map;
-                SceneManager.LoadScene(map, LoadSceneMode.Single);
+                sceneLoad(map);
                 break;
         }
+    }
+
+    //This is the function that actually loads the new scene
+    private void sceneLoad(string map)
+    {
+        global.sceneChange(map); //This function prepares the global object for a scene change by doing things like handling object persistence
+        currentMap = map;
+        SceneManager.LoadScene(map, LoadSceneMode.Single);
+    }
+
+    //Returns the name of the map (mapName portion of mapName_xpos_ypos). If empty string is passed, returns name of current map.
+    public string getMapName(string map= "")
+    {
+        string[] m = map.Split(splitter);
+        return m[0];
     }
 }
