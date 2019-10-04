@@ -21,18 +21,15 @@ public class MapSystem
 
     public const char splitter = '_';
 
-    //map can either be a map name (in the format of mapname_xpos_ypos)
-    //or one of the special keywords: left, right, up, down, current
-    public void goTo(string map, transitions trans = transitions.DEFAULT)
+    private string getNewMapString(string map)
     {
-        if (trans!=transitions.DEFAULT) transition = trans;
         string[] m = currentMap.Split(splitter);
         string transitionString = "";
 
         switch (map)
         {
             case "left":
-                transitionString = m[0] + splitter + (Int32.Parse(m[1]) - 1).ToString() + splitter  + m[2];
+                transitionString = m[0] + splitter + (Int32.Parse(m[1]) - 1).ToString() + splitter + m[2];
                 break;
 
             case "right":
@@ -56,8 +53,26 @@ public class MapSystem
                 break;
         }
 
-        
+        return transitionString;
+    }
+
+    //map can either be a map name (in the format of mapname_xpos_ypos)
+    //or one of the special keywords: left, right, up, down, current
+    public void goTo(string map, transitions trans = transitions.DEFAULT)
+    {
+        if (trans!=transitions.DEFAULT) transition = trans;
+        string transitionString = getNewMapString(map);
         startTransition(transitionString);
+    }
+
+    //Sends an object to the specified map
+    public void sendObject(GameObject go, string map, bool thisMapOnly, bool warpX, bool warpY, string warpTag)
+    {
+        string transitionString = getNewMapString(map);
+        global.unregisterPersistentObject(go);
+        global.registerPersistentObject(go, transitionString, thisMapOnly, warpX, warpY, warpTag);
+
+        if (global.map.currentMap != transitionString) go.SetActive(false);
     }
 
     private void startTransition(string map)
@@ -73,9 +88,9 @@ public class MapSystem
     //This is the function that actually loads the new scene
     private void sceneLoad(string map)
     {
-        global.sceneChange(map); //This function prepares the global object for a scene change by doing things like handling object persistence
         currentMap = map;
         SceneManager.LoadScene(map, LoadSceneMode.Single);
+        global.sceneChange(map); //This function prepares the global object for a scene change by doing things like handling object persistence
     }
 
     //Returns the name of the map (mapName portion of mapName_xpos_ypos). If empty string is passed, returns name of current map.

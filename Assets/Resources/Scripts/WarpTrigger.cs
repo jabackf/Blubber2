@@ -12,6 +12,10 @@ public class WarpTrigger : MonoBehaviour
     private Global global;
     private bool triggered = false; //Set to true when the warp function has been called
 
+    public bool warpX = false;
+    public bool warpY = false;
+    public string warpTag = "";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,9 +24,19 @@ public class WarpTrigger : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player" && callOnTriggerEnter && !triggered)
+       
+        if (callOnTriggerEnter && !triggered)
         {
-            Warp();
+            string otherTag = other.tag;
+
+            PersistentObject po = other.gameObject.GetComponent<PersistentObject>() as PersistentObject;
+            if (po!=null)   //It's persistent, so it can travel to the next room
+            {
+                global.map.sendObject(other.gameObject, goTo, po.thisMapOnly, warpX, warpY, warpTag);
+            }
+
+            if (otherTag == "Player")
+                Warp();
         }
     }
 

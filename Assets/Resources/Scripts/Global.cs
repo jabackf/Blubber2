@@ -19,14 +19,22 @@ public class Global : MonoBehaviour
         public string map = ""; //The map this persistent object is on.
         public bool thisMapOnly = false;    //Map strings have the format mapName_xpos_ypos. If thisMapOnly is set to true, the object's persistence ends when the mapName portion (excluding xpos_ypos) is changed. If false, the object will be persistent for the entire game.
 
-        public persistentObject(GameObject go, string map, bool thisMapOnly)
-        {
+        //Used for changing location
+        public bool warpX=false, warpY=false; //If true, the next time this object's map is loaded the object will switch to the other side of the screen
+        public string warpTag =""; //If not empty, the object will warp to this point the next time the map is loaded.
 
+        public persistentObject(GameObject go, string map, bool thisMapOnly, bool warpX=false, bool warpY=false, string warpTag="")
+        {
+            Debug.Log("Adding " + go.name);
             this.gameObject = go;
             this.map = map;
             this.thisMapOnly = thisMapOnly;
+            this.warpX = warpX;
+            this.warpY = warpY;
+            this.warpTag = warpTag;
 
             DontDestroyOnLoad(go);
+
         }
     }
 
@@ -63,7 +71,7 @@ public class Global : MonoBehaviour
 
     }
 
-    //This function prepares the global object for a scene change by doing things like handling object persistence. Called by the map system when a new scene is loaded.
+    //This function prepares the global object for a scene change by doing things like handling object persistence. Called by the map system immediately after a new map is loaded.
     public void sceneChange(string newMap)
     {
         string newMapName = map.getMapName(newMap);
@@ -72,7 +80,36 @@ public class Global : MonoBehaviour
         {
             persistentObject o = persistentObjects[i];
 
-            o.gameObject.SetActive(o.map == newMap ? true : false);
+            if (o.map == newMap)
+            {
+                o.gameObject.SetActive(true);
+                if (o.warpTag != "")
+                {
+                    //Find object with this tag and move there
+                    //o.gameObject.transform.position = o.warpPoint.position;
+                }
+                else
+                {
+                    Vector3 v = new Vector3(0f, 0f,0f);
+                    if (o.warpX)
+                    {
+                        if (o.gameObject.transform.position.x >= Screen.width) v -= new Vector3(Screen.width, 0f, 0f);
+                        else if (o.gameObject.transform.position.x <= 0) v += new Vector3(Screen.width, 0f, 0f);
+
+                    }
+                    if (o.warpY)
+                    {
+                        if (o.gameObject.transform.position.y >= Screen.height) v -= new Vector3(0f, Screen.height, 0f);
+                        else if (o.gameObject.transform.position.y <= 0) v += new Vector3(0f, Screen.height, 0f);
+                    }
+                    o.gameObject.transform.position += v;
+                }
+                o.warpX = false;
+                o.warpY = false;
+                o.warpTag = "";
+            }
+            else
+                o.gameObject.SetActive(false);
 
             if (o.thisMapOnly && (map.getMapName(o.map) != newMapName)) //We're on a different map now, and this object's persistence ends with a change in map
             {
@@ -83,13 +120,15 @@ public class Global : MonoBehaviour
     }
 
     //This function registers a new persistent object
-    public void registerPersistentObject(GameObject go, string mapName, bool thisMapOnly)
+    public void registerPersistentObject(GameObject go, string mapName, bool thisMapOnly, bool warpX=false, bool warpY=false, string warpTag="")
     {
-        persistentObjects.Add(new persistentObject(go, mapName, thisMapOnly));
+        if (!persistentObjects.Exists(x => x.gameObject == go))
+            persistentObjects.Add(new persistentObject(go, mapName, thisMapOnly));
     }
 
     public void unregisterPersistentObject(GameObject go)
     {
         persistentObjects.RemoveAll(x=>x.gameObject == go);
     }
+
 }
