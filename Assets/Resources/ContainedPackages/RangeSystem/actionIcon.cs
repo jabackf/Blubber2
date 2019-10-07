@@ -24,6 +24,7 @@ public class actionIcon : MonoBehaviour
             fade -= Time.deltaTime * 5;
 
         renderer.color = new Color(1f, 1f, 1f, fade);
+
     }
 
     public void setVisible(bool vis)

@@ -20,6 +20,8 @@ public class lineArrow : MonoBehaviour
     public float maxLength = 4f;
     public float minLength = 1.4f;
 
+    public bool isChild = true;    //Set this to true if the arrow is a child of the object it is "following"
+
     private GameObject arrowHeadGO;
     private LineRenderer lr; //Line renderer
 
@@ -42,6 +44,7 @@ public class lineArrow : MonoBehaviour
         arrowHeadGO = new GameObject();
         arrowHeadGO.name = gameObject.name+"_arrowHead";
         arrowHeadGO.transform.localPosition = new Vector3(0f, 0f, 0f);
+        arrowHeadGO.transform.parent = gameObject.transform.parent;
         SpriteRenderer renderer = arrowHeadGO.AddComponent<SpriteRenderer>();
         renderer.sprite = Resources.Load(spriteResource, typeof(Sprite)) as Sprite;
         renderer.sortingLayerName = sortingLayerName;
@@ -71,7 +74,8 @@ public class lineArrow : MonoBehaviour
 
     public void follow(Transform t)
     {
-        gameObject.transform.position = t.position;
+        if (!isChild) gameObject.transform.position = t.position;
+        
         if (lr.enabled)
         {
             calculate();

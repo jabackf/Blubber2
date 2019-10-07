@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 //Global singleton - Contains all global game management information
 
@@ -17,22 +18,25 @@ public class Global : MonoBehaviour
     {
         public GameObject gameObject;
         public string map = ""; //The map this persistent object is on.
-        public bool thisMapOnly = false;    //Map strings have the format mapName_xpos_ypos. If thisMapOnly is set to true, the object's persistence ends when the mapName portion (excluding xpos_ypos) is changed. If false, the object will be persistent for the entire game.
+        public bool thisMapSetOnly = false;    //Map strings have the format mapName_xpos_ypos. A map set is any set of maps that share the mapName portion of the string. If thisMapSetOnly is set to true, the object's persistence ends when the mapName portion (excluding xpos_ypos) is changed. If false, the object will be persistent for the entire game.
+        public float id;
 
         //Used for changing location
-        public bool warpX=false, warpY=false; //If true, the next time this object's map is loaded the object will switch to the other side of the screen
+        public bool wrapX = false, wrapY = false; //If true, the next time this object's map is loaded the object will switch to the other side of the screen
         public string warpTag =""; //If not empty, the object will warp to this point the next time the map is loaded.
 
-        public persistentObject(GameObject go, string map, bool thisMapOnly, bool warpX=false, bool warpY=false, string warpTag="")
+        public persistentObject(GameObject go, string map, bool thisMapOnly, float id, bool wrapX = false, bool wrapY = false, string warpTag="")
         {
             Debug.Log("Adding " + go.name);
             this.gameObject = go;
             this.map = map;
-            this.thisMapOnly = thisMapOnly;
-            this.warpX = warpX;
-            this.warpY = warpY;
+            this.thisMapSetOnly = thisMapOnly;
+            this.wrapX = wrapX;
+            this.wrapY = wrapY;
             this.warpTag = warpTag;
+            this.id = id; //A unique identifier for this object, generated based on the object's spawn position and spawn time.
 
+            go.transform.parent = null;
             DontDestroyOnLoad(go);
 
         }
@@ -85,33 +89,37 @@ public class Global : MonoBehaviour
                 o.gameObject.SetActive(true);
                 if (o.warpTag != "")
                 {
+                    
                     //Find object with this tag and move there
                     //o.gameObject.transform.position = o.warpPoint.position;
+                    //Maybe also add the option of multiple tags. IE, "tag1, tag2, tag3" ect. Check for collisions at each tag and take the first open spot
+                    //Or, maybe warp points that have rects can spaw objects randomly inside the rect
                 }
-                else
+                else if (o.wrapX || o.wrapY)
                 {
-                    Vector3 v = new Vector3(0f, 0f,0f);
-                    if (o.warpX)
-                    {
-                        if (o.gameObject.transform.position.x >= Screen.width) v -= new Vector3(Screen.width, 0f, 0f);
-                        else if (o.gameObject.transform.position.x <= 0) v += new Vector3(Screen.width, 0f, 0f);
+                    Vector3 vpos = Camera.main.WorldToScreenPoint(o.gameObject.transform.position);
 
-                    }
-                    if (o.warpY)
+                    if (o.wrapX)
                     {
-                        if (o.gameObject.transform.position.y >= Screen.height) v -= new Vector3(0f, Screen.height, 0f);
-                        else if (o.gameObject.transform.position.y <= 0) v += new Vector3(0f, Screen.height, 0f);
+                        Debug.Log(vpos.x + ", "+ o.gameObject.transform.position.x+", "+ Camera.main.pixelWidth+", "+Screen.width);
+                        if (vpos.x <= 0) vpos.x = Camera.main.pixelWidth;
+                        else if (vpos.x >= Camera.main.pixelWidth) vpos.x = 0;
                     }
-                    o.gameObject.transform.position += v;
+                    if (o.wrapY)
+                    {
+                        if (vpos.y <= 0) vpos.y = Camera.main.pixelHeight;
+                        else if (vpos.y >= Camera.main.pixelHeight) vpos.y = 0;
+                    }
+                    o.gameObject.transform.position = Camera.main.ScreenToWorldPoint(vpos);
                 }
-                o.warpX = false;
-                o.warpY = false;
+                o.wrapX = false;
+                o.wrapY = false;
                 o.warpTag = "";
             }
             else
                 o.gameObject.SetActive(false);
 
-            if (o.thisMapOnly && (map.getMapName(o.map) != newMapName)) //We're on a different map now, and this object's persistence ends with a change in map
+            if (o.thisMapSetOnly && (map.getMapName(o.map) != newMapName)) //We're on a different map now, and this object's persistence ends with a change in map
             {
                 Destroy(o.gameObject);
                 persistentObjects.RemoveAt(i);
@@ -119,16 +127,23 @@ public class Global : MonoBehaviour
         }
     }
 
-    //This function registers a new persistent object
-    public void registerPersistentObject(GameObject go, string mapName, bool thisMapOnly, bool warpX=false, bool warpY=false, string warpTag="")
+    //This function registers a new persistent object. Returns true on success, false if the object was not added because it has already been added.
+    public bool registerPersistentObject(GameObject go, string mapName, bool thisMapOnly, float id, bool wrapX=false, bool wrapY=false, string warpTag="")
     {
-        if (!persistentObjects.Exists(x => x.gameObject == go))
-            persistentObjects.Add(new persistentObject(go, mapName, thisMapOnly));
+        bool exists = persistentObjects.Any(x => (x.id == id && x.gameObject.name == go.name));
+        Debug.Log("Registering " + go.name + "... GO: "+go+", id: "+id+", Exists: " + exists);
+        if (!exists)
+        {
+            persistentObjects.Add(new persistentObject(go, mapName, thisMapOnly, id, wrapX, wrapY, warpTag));
+            return true;
+        }
+        else
+            return false;
     }
 
-    public void unregisterPersistentObject(GameObject go)
+    public void unregisterPersistentObject(GameObject go, float id)
     {
-        persistentObjects.RemoveAll(x=>x.gameObject == go);
+        persistentObjects.RemoveAll(x => (x.id == id && x.gameObject.name == go.name));
     }
 
 }

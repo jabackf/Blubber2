@@ -35,7 +35,10 @@ public class pickupObject : actionInRange
         initialMass = rb.mass;
 
         throwArcObj = new GameObject(gameObject.name + "_throwArc");
+        throwArcObj.transform.parent = gameObject.transform;
+        throwArcObj.transform.localPosition = new Vector3(0, 0, 0);
         throwArc = throwArcObj.AddComponent<lineArrow>() as lineArrow;
+        throwArc.isChild = true;
         throwArc.hide();
         
     }
@@ -112,7 +115,7 @@ public class pickupObject : actionInRange
             gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position+new Vector3(offset.x,offset.y,0), ref refVelocity, 0.1f);
             //rb.MovePosition(pos);
                 
-            throwArc.follow(gameObject.transform);
+            //throwArc.follow(gameObject.transform);
 
             if (releaseTimer>0)
             {

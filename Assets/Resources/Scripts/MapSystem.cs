@@ -66,11 +66,15 @@ public class MapSystem
     }
 
     //Sends an object to the specified map
-    public void sendObject(GameObject go, string map, bool thisMapOnly, bool warpX, bool warpY, string warpTag)
+    public void sendObject(GameObject go, string map, bool thisMapOnly, float id, bool wrapX, bool wrapY, string warpTag)
     {
+        Debug.Log(go.name + " was passed to sendObject");
         string transitionString = getNewMapString(map);
-        global.unregisterPersistentObject(go);
-        global.registerPersistentObject(go, transitionString, thisMapOnly, warpX, warpY, warpTag);
+        PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
+        Debug.Log(go.name + " Sendobject PO = " + po);
+        if (po != null) po.poSentToMap(map, wrapX, wrapY, warpTag);
+        global.unregisterPersistentObject(go,id);
+        global.registerPersistentObject(go, transitionString, thisMapOnly, id, wrapX, wrapY, warpTag);
 
         if (global.map.currentMap != transitionString) go.SetActive(false);
     }

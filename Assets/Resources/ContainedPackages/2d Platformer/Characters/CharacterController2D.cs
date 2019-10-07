@@ -189,7 +189,6 @@ public class CharacterController2D : MonoBehaviour
 
     public void Move(float move, bool crouch, bool jump, bool pickup=false, float climb=0, bool dropDown=false, bool dialog=false)
 	{
-
         bool justPickedUp = false;
 
         //Handle drop down platforms

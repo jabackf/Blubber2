@@ -20,18 +20,26 @@ public class actionInRange : MonoBehaviour
     private GameObject characterObject; //The characterObject that is currently in range, or null if nothing is in range
     private bool range = false; //Set to true when an object is in range
 
+    private Global global;
+
     // Start is called before the first frame update
     protected void Start()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>() as Global;
+
         ActionIcon = (GameObject)Instantiate(ActionIconPrefab);
-        ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
+        ActionIcon.transform.parent = gameObject.transform;
+        ActionIcon.transform.localPosition = new Vector3(iconXOffset, iconYOffset, 0f);
+        //ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
         iScript = ActionIcon.GetComponent(typeof(actionIcon)) as actionIcon;
     }
 
     // Update is called once per frame
     protected void Update()
     {
-        ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
+        if (ActionIcon!=null)
+            ActionIcon.transform.localPosition = new Vector3(iconXOffset, iconYOffset, 0f);
+            //ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -81,5 +89,10 @@ public class actionInRange : MonoBehaviour
         {
             characterObject.GetComponent<CharacterController2D>().setActionObjectInRange(gameObject);
         }
+    }
+
+    void OnDestroy()
+    {
+        //Destroy(ActionIcon);
     }
 }
