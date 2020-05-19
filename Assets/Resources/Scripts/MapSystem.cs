@@ -73,6 +73,7 @@ public class MapSystem
         PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
         Debug.Log(go.name + " Sendobject PO = " + po);
         if (po != null) po.poSentToMap(map, wrapX, wrapY, warpTag);
+        Debug.Log("About to call unreg/reg...");
         global.unregisterPersistentObject(go,id);
         global.registerPersistentObject(go, transitionString, thisMapOnly, id, wrapX, wrapY, warpTag);
 
@@ -92,6 +93,7 @@ public class MapSystem
     //This is the function that actually loads the new scene
     private void sceneLoad(string map)
     {
+        Debug.Log("sceneLoad was called");
         currentMap = map;
         SceneManager.LoadScene(map, LoadSceneMode.Single);
         global.sceneChange(map); //This function prepares the global object for a scene change by doing things like handling object persistence

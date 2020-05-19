@@ -49,6 +49,7 @@ public class WarpTrigger : MonoBehaviour
     //The function that changes the scene
     public void Warp()
     {
+        Debug.Log("WARP Called for Player");
         if (triggered) return;
         triggered = true;
         global.map.goTo(goTo, transType);

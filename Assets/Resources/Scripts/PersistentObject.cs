@@ -42,10 +42,18 @@ public class PersistentObject : MonoBehaviour
     public void poSentToMap(string map, bool wrapX, bool wrapY, string warpTag)
     {
         Debug.Log(gameObject.name + " poSentToMap Called");
-        foreach (GameObject go in relatedObjects)
+        if (relatedObjects != null)
         {
-            PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
-            global.map.sendObject(go, map, po.thisMapOnly, po.id, wrapX, wrapY, warpTag);
+            foreach (GameObject go in relatedObjects)
+            {
+                Debug.Log("poSentToMap from " + gameObject.name + " - cycling through related object: " + go.name);
+                PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
+                if (po != null)
+                {
+                    global.map.sendObject(go, map, po.thisMapOnly, po.id, wrapX, wrapY, warpTag);
+                }
+                else Debug.Log("PO script was not found!" + go.name);
+            }
         }
     }
 
