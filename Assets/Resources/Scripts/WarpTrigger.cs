@@ -12,9 +12,18 @@ public class WarpTrigger : MonoBehaviour
     private Global global;
     private bool triggered = false; //Set to true when the warp function has been called
 
-    public bool wrapX = false;
+    private GameObject collidingPlayer; //The player gameObject that triggered this warp trigger
+
+    //These following variables control the player's positioning as he enters the next scene
+    public string warpTag = ""; //This is a tag for a gameObject in the next scene. The character will warp to this tag if one is specified
+
+    public bool wrapX = false;  //If no warptag is specified, these are used for wrapping the character to the other side of the screen when changing scenes
     public bool wrapY = false;
-    public string warpTag = "";
+    public Vector2 wrapOffset = new Vector2(0, 0);
+
+    public bool jumpToRelativeX = false; //If not using wrap functions or warptag, you can use the jumpTo values to specify either an absolute position in the new room or a position relative to the previous position.
+    public bool jumpToRelativeY = false;  //Uncheck for absolute
+    public Vector2 jumpTo = new Vector2(0, 0);
 
     // Start is called before the first frame update
     void Start()
@@ -31,18 +40,12 @@ public class WarpTrigger : MonoBehaviour
 
             string otherTag = other.tag;
 
-            PersistentObject po = other.gameObject.GetComponent<PersistentObject>() as PersistentObject;
-            if (po!=null)   //It's persistent, so it can travel to the next room
-            {
-                if (!po.isRelated) //Make sure the object itself is persistent, and isn't only persistent because it was specified as being related to another persistent object. If it is related, then the object that specified it as related will take it when it goes to the map.
-                {
-                    Debug.Log(other.gameObject.name + " is about to be passed to sendObject");
-                    global.map.sendObject(other.gameObject, goTo, po.thisMapOnly, po.id, wrapX, wrapY, warpTag);
-                }
-            }
-
             if (otherTag == "Player")
+            {
+                collidingPlayer = other.gameObject;
                 Warp();
+                
+            }
         }
     }
 
@@ -52,6 +55,37 @@ public class WarpTrigger : MonoBehaviour
         Debug.Log("WARP Called for Player");
         if (triggered) return;
         triggered = true;
+
+        //Work out player's new position
+        if (warpTag != "") global.map.setWarpTag(warpTag);
+        else if (wrapX || wrapY)
+        {
+            Vector3 vpos = Camera.main.WorldToScreenPoint(collidingPlayer.gameObject.transform.position);
+
+            if (wrapX)
+            {
+                if (vpos.x <= 0) vpos.x = Camera.main.pixelWidth+wrapOffset.x;
+                else if (vpos.x >= Camera.main.pixelWidth) vpos.x = wrapOffset.x;
+            }
+            if (wrapY)
+            {
+                if (vpos.y <= 0) vpos.y = Camera.main.pixelHeight+wrapOffset.y;
+                else if (vpos.y >= Camera.main.pixelHeight) vpos.y = wrapOffset.y;
+            }
+            global.map.setPlayerPosition(Camera.main.ScreenToWorldPoint(vpos));
+        }
+        else
+        {
+            Vector2 pos = jumpTo;
+            if (jumpToRelativeX) pos.x += collidingPlayer.gameObject.transform.position.x;
+            if (jumpToRelativeY) pos.y += collidingPlayer.gameObject.transform.position.y;
+            global.map.setPlayerPosition(pos);
+        }
+
+        //Now call the function to intiate the scene change
         global.map.goTo(goTo, transType);
+
     }
+
+    
 }

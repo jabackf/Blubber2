@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,35 +57,54 @@ public class PersistentObject : MonoBehaviour
         }
     }
 
-    //Registers a related gameobject as persistent using the same settings as this gameobject. For example, this might be called for an action icon attached to this gameobject
+    //Registers a related gameobject as persistent using the same settings as this gameobject. For example, this might be called for an object being held by a character
     //If this object is destroyed or sent to another map, all related object will go too.
-    public void registerRelated(GameObject go)
+    public void registerRelated(PersistentObject po)
     {
-        if (unregistered) return;
-        Debug.Log(gameObject.name + " received a registerRelated request from "+go.name);
-        relatedObjects.Add(go);
-        go.AddComponent<PersistentObject>();
-        PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
-        po.thisMapOnly = thisMapOnly;
-        po.id = id;
-        po.isRelated = true;
-        Debug.Log("Register Related " + go.name);
-        
+        //if (unregistered && !po.isRelated) return;
+        //Debug.Log(gameObject.name + " received a registerRelated request from "+go.name);
+        Debug.Log("Adding1 "+po.gameObject.name);
+        relatedObjects.Add(po.gameObject);
+        po.relatedObjects.Add(gameObject);
+        Debug.Log("Added");
+        /*PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
+        if (po == null)
+        {
+            go.AddComponent<PersistentObject>();
+            po = go.GetComponent<PersistentObject>() as PersistentObject;
+        }*/
+    //po.thisMapOnly = thisMapOnly;
+    //po.id = id;
+   // po.isRelated = true;
+    //Debug.Log("Register Related " + go.name);
+/*
+    }
+
+    public void unregisterRelated(PersistentObject po)
+    {
+        //Debug.Log("UnRegistering Related.. " + go.name);
+        //po.isRelated = false;
+        relatedObjects.Remove(po.gameObject);
+        po.relatedObjects.Remove(gameObject);  
+        //Debug.Log("UnRegistered Related " + go.name);
     }
 
     void OnDestroy()
     {
-        foreach (GameObject go in relatedObjects)
+        if (relatedObjects != null)
         {
-            if (go != null)
+            foreach (GameObject go in relatedObjects)
             {
-                PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
-                if (po != null)
+                if (go != null)
                 {
-                    if (po.id == id)
+                    PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
+                    if (po != null)
                     {
-                        global.unregisterPersistentObject(go, po.id);
-                        Destroy(po);
+                        if (po.id == id)
+                        {
+                            global.unregisterPersistentObject(go, po.id);
+                            Destroy(po);
+                        }
                     }
                 }
             }
@@ -98,3 +117,4 @@ public class PersistentObject : MonoBehaviour
             global.unregisterPersistentObject(gameObject,id);
     }
 }
+*/

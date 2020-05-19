@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MapSystem 
+public class MapSystem
 {
     public Global global;
 
@@ -20,6 +20,9 @@ public class MapSystem
     public string currentMap = "";
 
     public const char splitter = '_';
+
+    private Vector2 CharacterJumpPos = new Vector2(0, 0);
+    private string warpTag = "";
 
     private string getNewMapString(string map)
     {
@@ -56,6 +59,18 @@ public class MapSystem
         return transitionString;
     }
 
+    //If a warptag is specified, the player will jump to the object with this tag on next scene load. The warpTag will then be cleared.
+    public void setWarpTag(string warpTag)
+    {
+        this.warpTag = warpTag;
+    }
+
+    //This function sets the new position for the character after the scene loads and if a warp tag isn't used
+    public void setPlayerPosition(Vector2 newPosition)
+    {
+        CharacterJumpPos = newPosition;
+    }
+
     //map can either be a map name (in the format of mapname_xpos_ypos)
     //or one of the special keywords: left, right, up, down, current
     public void goTo(string map, transitions trans = transitions.DEFAULT)
@@ -68,7 +83,7 @@ public class MapSystem
     //Sends an object to the specified map
     public void sendObject(GameObject go, string map, bool thisMapOnly, float id, bool wrapX, bool wrapY, string warpTag)
     {
-        Debug.Log(go.name + " was passed to sendObject");
+        /*Debug.Log(go.name + " was passed to sendObject");
         string transitionString = getNewMapString(map);
         PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
         Debug.Log(go.name + " Sendobject PO = " + po);
@@ -77,11 +92,13 @@ public class MapSystem
         global.unregisterPersistentObject(go,id);
         global.registerPersistentObject(go, transitionString, thisMapOnly, id, wrapX, wrapY, warpTag);
 
-        if (global.map.currentMap != transitionString) go.SetActive(false);
+        if (global.map.currentMap != transitionString) go.SetActive(false);*/
     }
 
     private void startTransition(string map)
     {
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null) player.SetActive(false);
         switch (transition)
         {
             case transitions.none:
@@ -96,7 +113,22 @@ public class MapSystem
         Debug.Log("sceneLoad was called");
         currentMap = map;
         SceneManager.LoadScene(map, LoadSceneMode.Single);
-        global.sceneChange(map); //This function prepares the global object for a scene change by doing things like handling object persistence
+
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            if (warpTag != "")
+            {
+                GameObject warpTo = GameObject.FindWithTag(warpTag);
+                player.transform.position = warpTo.transform.position;
+            }
+            else
+            {
+                player.transform.position = CharacterJumpPos;
+            }
+            player.SetActive(true);
+        }
+        this.warpTag = "";
     }
 
     //Returns the name of the map (mapName portion of mapName_xpos_ypos). If empty string is passed, returns name of current map.

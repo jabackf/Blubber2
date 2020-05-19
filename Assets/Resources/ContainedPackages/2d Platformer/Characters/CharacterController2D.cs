@@ -101,6 +101,14 @@ public class CharacterController2D : MonoBehaviour
 
     private void Awake()
 	{
+        //We want the character to be persistent, and we only want one player
+        DontDestroyOnLoad(gameObject);
+        if (GameObject.FindGameObjectsWithTag("Respawn").Length>1)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
         initialGravityScale = m_Rigidbody2D.gravityScale;
 

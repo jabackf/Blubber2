@@ -33,7 +33,6 @@ public class pickupObject : actionInRange
         base.Start();
         rb = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
         initialMass = rb.mass;
-
         throwArcObj = new GameObject(gameObject.name + "_throwArc");
         throwArcObj.transform.parent = gameObject.transform;
         throwArcObj.transform.localPosition = new Vector3(0, 0, 0);
@@ -80,6 +79,7 @@ public class pickupObject : actionInRange
         joint.anchor = new Vector2(carryTrans.position.x+offset.x, carryTrans.position.y+offset.y);
         joint.breakForce = this.breakForce;
         joint.breakTorque = this.breakTorque;
+
 
         if (disableCollider) //We're not using a collider for this item
             gameObject.GetComponent<Collider2D>().isTrigger = true; 
@@ -150,6 +150,7 @@ public class pickupObject : actionInRange
         Destroy(joint);
         this.setRangeActive(true);
         throwArc.hide();
+
         holder.SendMessage("pickupReleased");
         holder = null;
         rb.mass = initialMass;

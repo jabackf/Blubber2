@@ -13,7 +13,7 @@ public class Global : MonoBehaviour
     public string startScene = "testing_100_100";
     public MapSystem map;
 
-    [System.Serializable]
+    /*[System.Serializable]
     public class persistentObject
     {
         public GameObject gameObject;
@@ -36,13 +36,14 @@ public class Global : MonoBehaviour
             this.warpTag = warpTag;
             this.id = id; //A unique identifier for this object, generated based on the object's spawn position and spawn time.
 
+       
             go.transform.parent = null;
             DontDestroyOnLoad(go);
 
         }
     }
 
-    [SerializeField] public List<persistentObject> persistentObjects = new List<persistentObject>();
+    [SerializeField] public List<persistentObject> persistentObjects = new List<persistentObject>();*/
 
     // Start is called before the first frame update
     private void Awake()
@@ -75,7 +76,7 @@ public class Global : MonoBehaviour
 
     }
 
-    //This function prepares the global object for a scene change by doing things like handling object persistence. Called by the map system immediately after a new map is loaded.
+    /*//This function prepares the global object for a scene change by doing things like handling object persistence. Called by the map system immediately after a new map is loaded.
     public void sceneChange(string newMap)
     {
         string newMapName = map.getMapName(newMap);
@@ -144,6 +145,6 @@ public class Global : MonoBehaviour
     public void unregisterPersistentObject(GameObject go, float id)
     {
         persistentObjects.RemoveAll(x => (x.id == id && x.gameObject.name == go.name));
-    }
+    }*/
 
 }
