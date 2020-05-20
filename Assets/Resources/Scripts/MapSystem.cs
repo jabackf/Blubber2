@@ -21,6 +21,7 @@ public class MapSystem
 
     public const char splitter = '_';
 
+    public bool repositionCharacter = false; //If set to false, the character's position will not be touched when the next scene is loaded.
     private Vector2 CharacterJumpPos = new Vector2(0, 0);
     private string warpTag = "";
 
@@ -80,25 +81,10 @@ public class MapSystem
         startTransition(transitionString);
     }
 
-    //Sends an object to the specified map
-    public void sendObject(GameObject go, string map, bool thisMapOnly, float id, bool wrapX, bool wrapY, string warpTag)
-    {
-        /*Debug.Log(go.name + " was passed to sendObject");
-        string transitionString = getNewMapString(map);
-        PersistentObject po = go.GetComponent<PersistentObject>() as PersistentObject;
-        Debug.Log(go.name + " Sendobject PO = " + po);
-        if (po != null) po.poSentToMap(map, wrapX, wrapY, warpTag);
-        Debug.Log("About to call unreg/reg...");
-        global.unregisterPersistentObject(go,id);
-        global.registerPersistentObject(go, transitionString, thisMapOnly, id, wrapX, wrapY, warpTag);
-
-        if (global.map.currentMap != transitionString) go.SetActive(false);*/
-    }
-
     private void startTransition(string map)
     {
         GameObject player = GameObject.FindWithTag("Player");
-        if (player != null) player.SetActive(false);
+        //if (player != null) player.SetActive(false);
         switch (transition)
         {
             case transitions.none:
@@ -111,24 +97,38 @@ public class MapSystem
     private void sceneLoad(string map)
     {
         Debug.Log("sceneLoad was called");
-        currentMap = map;
-        SceneManager.LoadScene(map, LoadSceneMode.Single);
 
         GameObject player = GameObject.FindWithTag("Player");
-        if (player != null)
+        if (player != null) player.GetComponent<CharacterController2D>().sceneChangeStart(map);
+
+        currentMap = map;
+
+        SceneManager.LoadScene(map, LoadSceneMode.Single);
+
+        if (repositionCharacter)
         {
-            if (warpTag != "")
+            if (player != null)
             {
-                GameObject warpTo = GameObject.FindWithTag(warpTag);
-                player.transform.position = warpTo.transform.position;
+                if (warpTag != "")
+                {
+                    GameObject warpTo = GameObject.FindWithTag(warpTag);
+                    player.transform.position = warpTo.transform.position;
+                }
+                else
+                {
+                    player.transform.position = CharacterJumpPos;
+                }
+                //player.SetActive(true);
             }
-            else
-            {
-                player.transform.position = CharacterJumpPos;
-            }
-            player.SetActive(true);
         }
         this.warpTag = "";
+
+        if (player != null) player.GetComponent<CharacterController2D>().sceneChangeComplete();
+    }
+
+    public void setRepositionCharacter(bool reposition)
+    {
+        this.repositionCharacter = reposition;
     }
 
     //Returns the name of the map (mapName portion of mapName_xpos_ypos). If empty string is passed, returns name of current map.

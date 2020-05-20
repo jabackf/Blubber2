@@ -88,6 +88,7 @@ public class CharacterController2D : MonoBehaviour
     private dropDownPlatform onDropPlatformScript = null;
     public bool isTalking=false;
 
+
     [Header("Events")]
 	[Space]
 
@@ -99,6 +100,8 @@ public class CharacterController2D : MonoBehaviour
 	public BoolEvent OnCrouchEvent;
 	private bool m_wasCrouching = false;
 
+    private GameObject global;
+
     private void Awake()
 	{
         //We want the character to be persistent, and we only want one player
@@ -108,6 +111,8 @@ public class CharacterController2D : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        global = GameObject.FindWithTag("global");
 
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
         initialGravityScale = m_Rigidbody2D.gravityScale;
@@ -505,6 +510,35 @@ public class CharacterController2D : MonoBehaviour
     public void pickupReleased()
     {
         isHolding = false;
+    }
+
+    //Drops an object if one is carried
+    public void dropObject()
+    {
+        if (holdingSomething())
+        {
+            holding.releaseFromHolder();
+        }
+    }
+
+    //Called when the character (if it is a player) is about to warp to the next scene. Function is called immediately before new scene is loaded. Called by warpTrigger via send message
+    //map = name of map we are moving to.
+    public void sceneChangeStart(string map)
+    {
+        //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
+        if (holdingSomething())
+        {
+            holding.transform.parent = gameObject.transform;
+        }
+    }
+
+    //Called immedately after a new scene is loaded and the character is relocated
+    public void sceneChangeComplete()
+    {
+        if (holdingSomething())
+        {
+            holding.transform.parent = null;
+        }
     }
 
 }

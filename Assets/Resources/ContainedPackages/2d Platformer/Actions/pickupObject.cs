@@ -145,7 +145,7 @@ public class pickupObject : actionInRange
         rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle))*throwForce*throwArc.length);
     }
 
-    void releaseFromHolder()
+    public void releaseFromHolder()
     {
         Destroy(joint);
         this.setRangeActive(true);

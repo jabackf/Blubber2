@@ -14,12 +14,14 @@ public class WarpTrigger : MonoBehaviour
 
     private GameObject collidingPlayer; //The player gameObject that triggered this warp trigger
 
+    public bool takeCarriedObject = true; //If set to true, the player will take any objects it is carrying with it. If set to false, it will release the objects.
+
     //These following variables control the player's positioning as he enters the next scene
     public string warpTag = ""; //This is a tag for a gameObject in the next scene. The character will warp to this tag if one is specified
 
     public bool wrapX = false;  //If no warptag is specified, these are used for wrapping the character to the other side of the screen when changing scenes
     public bool wrapY = false;
-    public Vector2 wrapOffset = new Vector2(0, 0);
+    public Vector2 wrapOffset = new Vector2(-5, 0); //Added or subtracted from the wrap position. (added if wrapping to the left, subtracted if wrapping to the right)
 
     public bool jumpToRelativeX = false; //If not using wrap functions or warptag, you can use the jumpTo values to specify either an absolute position in the new room or a position relative to the previous position.
     public bool jumpToRelativeY = false;  //Uncheck for absolute
@@ -31,14 +33,14 @@ public class WarpTrigger : MonoBehaviour
         global = GameObject.FindWithTag("global").GetComponent<Global>() as Global;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionEnter2D(Collision2D other)
     {
        
         if (callOnTriggerEnter && !triggered)
         {
             if (global==null ) global = GameObject.FindWithTag("global").GetComponent<Global>() as Global;
 
-            string otherTag = other.tag;
+            string otherTag = other.gameObject.tag;
 
             if (otherTag == "Player")
             {
@@ -56,6 +58,8 @@ public class WarpTrigger : MonoBehaviour
         if (triggered) return;
         triggered = true;
 
+        global.map.setRepositionCharacter(true);
+
         //Work out player's new position
         if (warpTag != "") global.map.setWarpTag(warpTag);
         else if (wrapX || wrapY)
@@ -65,12 +69,12 @@ public class WarpTrigger : MonoBehaviour
             if (wrapX)
             {
                 if (vpos.x <= 0) vpos.x = Camera.main.pixelWidth+wrapOffset.x;
-                else if (vpos.x >= Camera.main.pixelWidth) vpos.x = wrapOffset.x;
+                else if (vpos.x >= Camera.main.pixelWidth) vpos.x = -wrapOffset.x;
             }
             if (wrapY)
             {
                 if (vpos.y <= 0) vpos.y = Camera.main.pixelHeight+wrapOffset.y;
-                else if (vpos.y >= Camera.main.pixelHeight) vpos.y = wrapOffset.y;
+                else if (vpos.y >= Camera.main.pixelHeight) vpos.y = -wrapOffset.y;
             }
             global.map.setPlayerPosition(Camera.main.ScreenToWorldPoint(vpos));
         }
@@ -80,6 +84,11 @@ public class WarpTrigger : MonoBehaviour
             if (jumpToRelativeX) pos.x += collidingPlayer.gameObject.transform.position.x;
             if (jumpToRelativeY) pos.y += collidingPlayer.gameObject.transform.position.y;
             global.map.setPlayerPosition(pos);
+        }
+
+        if (!takeCarriedObject)
+        {
+            collidingPlayer.GetComponent<CharacterController2D>().dropObject();
         }
 
         //Now call the function to intiate the scene change
