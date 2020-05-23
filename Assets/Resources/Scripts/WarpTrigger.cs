@@ -27,6 +27,8 @@ public class WarpTrigger : MonoBehaviour
     public bool jumpToRelativeY = false;  //Uncheck for absolute
     public Vector2 jumpTo = new Vector2(0, 0);
 
+    private float screenEdgeBuffer = 10f; //In order to wrap, the player must be outside of screenWidth-screenEdgeBuffer or 0+screenEdgeBuffer
+
     // Start is called before the first frame update
     void Start()
     {
@@ -92,19 +94,19 @@ public class WarpTrigger : MonoBehaviour
 			Debug.Log("Character world2screen: "+vpos+" camera pixelWidth: "+Camera.main.pixelWidth);
             if (wrapX)
             {
-                if (vpos.x <= 0) {
+                if (vpos.x <= screenEdgeBuffer) {
 					Debug.Log("Off the left side, move to right");
 					vpos.x = Camera.main.pixelWidth-wrapOffset.x;
 				}
-                else if (vpos.x >= Camera.main.pixelWidth) {
+                else if (vpos.x >= Camera.main.pixelWidth-screenEdgeBuffer) {
 					Debug.Log("Off the left side, move to right");
 					vpos.x = +wrapOffset.x;
 				}
             }
             if (wrapY)
             {
-                if (vpos.y <= 0) vpos.y = Camera.main.pixelHeight+wrapOffset.y;
-                else if (vpos.y >= Camera.main.pixelHeight) vpos.y = -wrapOffset.y;
+                if (vpos.y <= screenEdgeBuffer) vpos.y = Camera.main.pixelHeight+wrapOffset.y;
+                else if (vpos.y >= Camera.main.pixelHeight-screenEdgeBuffer) vpos.y = -wrapOffset.y;
             }
             global.map.setPlayerPosition(Camera.main.ScreenToWorldPoint(vpos));
         }
