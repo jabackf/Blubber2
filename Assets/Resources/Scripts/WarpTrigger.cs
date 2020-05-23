@@ -46,7 +46,25 @@ public class WarpTrigger : MonoBehaviour
             {
                 collidingPlayer = other.gameObject;
                 Warp();
-                
+               
+            }
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+
+        if (callOnTriggerEnter && !triggered)
+        {
+            if (global == null) global = GameObject.FindWithTag("global").GetComponent<Global>() as Global;
+
+            string otherTag = other.gameObject.tag;
+
+            if (otherTag == "Player")
+            {
+                collidingPlayer = other.gameObject;
+                Warp();
+
             }
         }
     }
@@ -56,6 +74,8 @@ public class WarpTrigger : MonoBehaviour
     {
         if (triggered) return;
         triggered = true;
+
+        collidingPlayer.GetComponent<CharacterController2D>().sceneChangeStart(goTo);
 
         if (!takeCarriedObject)
         {

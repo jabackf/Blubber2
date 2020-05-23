@@ -533,29 +533,34 @@ public class CharacterController2D : MonoBehaviour
         }
     }
 
-    //Called when the character (if it is a player) is about to warp to the next scene. Function is called immediately before new scene is loaded. Called by warpTrigger via send message
+    //Called when the character (if it is a player) is about to warp to the next scene. Function is when the player activates a warp trigger, before the character is repositioned and new map is loaded. Called by warpTrigger::Warp
     //map = name of map we are moving to.
     public void sceneChangeStart(string map)
     {
+        Debug.Log("CC2d::sceneChangeStart()");
         //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
         if (holdingSomething())
         {
             Debug.Log("CC2d::sceneChangeStart() (if holdingSomething) " + holding.gameObject.name);
-            holding.makeUndroppable(); //Sometimes, perhaps due to the repositioning of the character, an item gets accidentally dropped during scene change. Temporarily make it "undroppable"
-            holding.disablePhysics();
+            //holding.makeUndroppable(); //Sometimes, perhaps due to the repositioning of the character, an item gets accidentally dropped during scene change. Temporarily make it "undroppable"
+            //holding.disablePhysics();
+            //m_Rigidbody2D.isKinematic = true;
             holding.transform.parent = gameObject.transform;
+            //holding.gameObject.SetActive(false);
             global.map.removeFromDestroyLoadList(holding.gameObject); //If it was previously added to the destroy on scene change list then picked back up, we don't want to destroy it. We want to carry it to the next scene
         }
     }
 
-    //Called immedately after a new scene is loaded and the character is relocated
+    //Called immedately after a new scene is loaded and the character is relocated. Called by MapSystem::goto
     public void sceneChangeComplete()
     {
         if (holdingSomething())
         {
             Debug.Log("CC2d::sceneChangeComplete() (if holdingSomething) " + holding.gameObject.name);
-            holding.makeDroppable();
-            holding.enablePhysics();
+            //holding.makeDroppable();
+            //holding.enablePhysics();
+            //m_Rigidbody2D.isKinematic = false;
+            //holding.gameObject.SetActive(true);
             holding.transform.parent = null;
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }

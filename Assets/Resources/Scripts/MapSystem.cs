@@ -131,7 +131,6 @@ public class MapSystem
     private void sceneLoad(string map)
     {
         GameObject player = GameObject.FindWithTag("Player");
-        if (player != null) player.GetComponent<CharacterController2D>().sceneChangeStart(map);
 
         executeDestroyOnSceneChange();
 
