@@ -89,11 +89,17 @@ public class WarpTrigger : MonoBehaviour
         else if (wrapX || wrapY)
         {
             Vector3 vpos = Camera.main.WorldToScreenPoint(collidingPlayer.gameObject.transform.position);
-
+			Debug.Log("Character world2screen: "+vpos+" camera pixelWidth: "+Camera.main.pixelWidth);
             if (wrapX)
             {
-                if (vpos.x <= 0) vpos.x = Camera.main.pixelWidth-wrapOffset.x;
-                else if (vpos.x >= Camera.main.pixelWidth) vpos.x = +wrapOffset.x;
+                if (vpos.x <= 0) {
+					Debug.Log("Off the left side, move to right");
+					vpos.x = Camera.main.pixelWidth-wrapOffset.x;
+				}
+                else if (vpos.x >= Camera.main.pixelWidth) {
+					Debug.Log("Off the left side, move to right");
+					vpos.x = +wrapOffset.x;
+				}
             }
             if (wrapY)
             {

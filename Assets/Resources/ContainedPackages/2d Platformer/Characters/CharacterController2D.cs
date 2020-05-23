@@ -542,11 +542,7 @@ public class CharacterController2D : MonoBehaviour
         if (holdingSomething())
         {
             Debug.Log("CC2d::sceneChangeStart() (if holdingSomething) " + holding.gameObject.name);
-            //holding.makeUndroppable(); //Sometimes, perhaps due to the repositioning of the character, an item gets accidentally dropped during scene change. Temporarily make it "undroppable"
-            //holding.disablePhysics();
-            //m_Rigidbody2D.isKinematic = true;
             holding.transform.parent = gameObject.transform;
-            //holding.gameObject.SetActive(false);
             global.map.removeFromDestroyLoadList(holding.gameObject); //If it was previously added to the destroy on scene change list then picked back up, we don't want to destroy it. We want to carry it to the next scene
         }
     }
@@ -557,10 +553,6 @@ public class CharacterController2D : MonoBehaviour
         if (holdingSomething())
         {
             Debug.Log("CC2d::sceneChangeComplete() (if holdingSomething) " + holding.gameObject.name);
-            //holding.makeDroppable();
-            //holding.enablePhysics();
-            //m_Rigidbody2D.isKinematic = false;
-            //holding.gameObject.SetActive(true);
             holding.transform.parent = null;
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }

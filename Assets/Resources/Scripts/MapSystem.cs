@@ -71,6 +71,7 @@ public class MapSystem
     //This function sets the new position for the character after the scene loads and if a warp tag isn't used
     public void setPlayerPosition(Vector2 newPosition)
     {
+		Debug.Log("MapSystem::setPlayerPosition called pos= "+newPosition);
         CharacterJumpPos = newPosition;
     }
 
@@ -150,6 +151,7 @@ public class MapSystem
                 else
                 {
                     player.transform.position = CharacterJumpPos;
+					Debug.Log("Repositioning character "+CharacterJumpPos);
                 }
                 //player.SetActive(true);
             }
