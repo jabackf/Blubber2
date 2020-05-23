@@ -22,6 +22,7 @@ public class pickupObject : actionInRange
     bool flippedX=false;  //Tracks if the holding character is currently flipped horizontally
     float releaseTimer = 0; //Timer. When set, the object will be released after it hits zero. This fixes a bug with attempting to pickup an object when something, like a ceiling, is in the way
     float releaseWaitTime = 0.015f; //The default time that the timer above will be set to.
+    private bool undroppable = false; //Used to prevent the item from being dropped. Doesn't prevent an item from being thrown. This should be set using makeUndroppable!
 
     private Vector3 refVelocity = new Vector3(0,0,0);
 
@@ -105,6 +106,31 @@ public class pickupObject : actionInRange
         }
     }
 
+    //Makes the joint unbreakable (meaning you can't accidentally drop it. It can still be thrown)
+    public void makeUndroppable()
+    {
+        joint.breakForce = Mathf.Infinity;
+        joint.breakTorque = Mathf.Infinity;
+        undroppable = true;
+    }
+    //Undoes the previous function by reverting the break force/torque back to the most recently specified values
+    public void makeDroppable()
+    {
+        joint.breakForce = this.breakForce;
+        joint.breakTorque = this.breakTorque;
+        undroppable = false;
+    }
+
+    //This function will suspend the physics movements of the object
+    public void disablePhysics()
+    {
+        rb.isKinematic = true;  // Deactivated
+    }
+    public void enablePhysics()
+    {
+        rb.isKinematic = false;  // Activated
+    }
+
     void FixedUpdate()
     {
         if (holder != null)
@@ -133,6 +159,7 @@ public class pickupObject : actionInRange
     {
         if (broken == joint)
         {
+            Debug.Log("pickupObject::onJointBreak()");
             releaseFromHolder();
         }
     }
@@ -140,6 +167,7 @@ public class pickupObject : actionInRange
 
     public void throwItem()
     {
+        Debug.Log("pickupObject::throwItem()");
         releaseFromHolder();
         float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
         rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle))*throwForce*throwArc.length);
@@ -147,6 +175,7 @@ public class pickupObject : actionInRange
 
     public void releaseFromHolder()
     {
+        Debug.Log("pickupObject::releaseFromHolder()");
         Destroy(joint);
         this.setRangeActive(true);
         throwArc.hide();

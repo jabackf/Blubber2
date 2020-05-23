@@ -21,7 +21,7 @@ public class WarpTrigger : MonoBehaviour
 
     public bool wrapX = false;  //If no warptag is specified, these are used for wrapping the character to the other side of the screen when changing scenes
     public bool wrapY = false;
-    public Vector2 wrapOffset = new Vector2(-5, 0); //Added or subtracted from the wrap position. (added if wrapping to the left, subtracted if wrapping to the right)
+    public Vector2 wrapOffset = new Vector2(5, 0); //Added or subtracted from the wrap position. (added if wrapping right to left, subtracted if wrapping left to right)
 
     public bool jumpToRelativeX = false; //If not using wrap functions or warptag, you can use the jumpTo values to specify either an absolute position in the new room or a position relative to the previous position.
     public bool jumpToRelativeY = false;  //Uncheck for absolute
@@ -54,9 +54,13 @@ public class WarpTrigger : MonoBehaviour
     //The function that changes the scene
     public void Warp()
     {
-        Debug.Log("WARP Called for Player");
         if (triggered) return;
         triggered = true;
+
+        if (!takeCarriedObject)
+        {
+            collidingPlayer.GetComponent<CharacterController2D>().dropObject();
+        }
 
         global.map.setRepositionCharacter(true);
 
@@ -68,8 +72,8 @@ public class WarpTrigger : MonoBehaviour
 
             if (wrapX)
             {
-                if (vpos.x <= 0) vpos.x = Camera.main.pixelWidth+wrapOffset.x;
-                else if (vpos.x >= Camera.main.pixelWidth) vpos.x = -wrapOffset.x;
+                if (vpos.x <= 0) vpos.x = Camera.main.pixelWidth-wrapOffset.x;
+                else if (vpos.x >= Camera.main.pixelWidth) vpos.x = +wrapOffset.x;
             }
             if (wrapY)
             {
@@ -84,11 +88,6 @@ public class WarpTrigger : MonoBehaviour
             if (jumpToRelativeX) pos.x += collidingPlayer.gameObject.transform.position.x;
             if (jumpToRelativeY) pos.y += collidingPlayer.gameObject.transform.position.y;
             global.map.setPlayerPosition(pos);
-        }
-
-        if (!takeCarriedObject)
-        {
-            collidingPlayer.GetComponent<CharacterController2D>().dropObject();
         }
 
         //Now call the function to intiate the scene change

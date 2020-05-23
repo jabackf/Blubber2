@@ -100,19 +100,24 @@ public class CharacterController2D : MonoBehaviour
 	public BoolEvent OnCrouchEvent;
 	private bool m_wasCrouching = false;
 
-    private GameObject global;
+    private Global global;
+
+    private bool heldObjectChangedScenes = false;   //Set to true when an object is taken to a new scene. Used to mark the object for destruction at next scene load when it's dropped.
 
     private void Awake()
 	{
         //We want the character to be persistent, and we only want one player
-        DontDestroyOnLoad(gameObject);
-        if (GameObject.FindGameObjectsWithTag("Respawn").Length>1)
+        if (gameObject.tag == "Player")
         {
-            Destroy(gameObject);
-            return;
+            DontDestroyOnLoad(gameObject);
+            if (GameObject.FindGameObjectsWithTag("Player").Length > 1)
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
 
-        global = GameObject.FindWithTag("global");
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
 
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
         initialGravityScale = m_Rigidbody2D.gravityScale;
@@ -510,6 +515,12 @@ public class CharacterController2D : MonoBehaviour
     public void pickupReleased()
     {
         isHolding = false;
+        if (heldObjectChangedScenes)
+        {
+            Debug.Log("CC2d::pickupReleased() " +holding.gameObject.name);
+            global.map.destroyOnSceneChange(holding.gameObject);
+            heldObjectChangedScenes = false;
+        }
     }
 
     //Drops an object if one is carried
@@ -517,6 +528,7 @@ public class CharacterController2D : MonoBehaviour
     {
         if (holdingSomething())
         {
+            Debug.Log("CC2d::dropObject() (if holdingSomething) " + holding.gameObject.name);
             holding.releaseFromHolder();
         }
     }
@@ -528,7 +540,11 @@ public class CharacterController2D : MonoBehaviour
         //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
         if (holdingSomething())
         {
+            Debug.Log("CC2d::sceneChangeStart() (if holdingSomething) " + holding.gameObject.name);
+            holding.makeUndroppable(); //Sometimes, perhaps due to the repositioning of the character, an item gets accidentally dropped during scene change. Temporarily make it "undroppable"
+            holding.disablePhysics();
             holding.transform.parent = gameObject.transform;
+            global.map.removeFromDestroyLoadList(holding.gameObject); //If it was previously added to the destroy on scene change list then picked back up, we don't want to destroy it. We want to carry it to the next scene
         }
     }
 
@@ -537,7 +553,11 @@ public class CharacterController2D : MonoBehaviour
     {
         if (holdingSomething())
         {
+            Debug.Log("CC2d::sceneChangeComplete() (if holdingSomething) " + holding.gameObject.name);
+            holding.makeDroppable();
+            holding.enablePhysics();
             holding.transform.parent = null;
+            heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }
     }
 

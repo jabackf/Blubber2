@@ -25,6 +25,8 @@ public class MapSystem
     private Vector2 CharacterJumpPos = new Vector2(0, 0);
     private string warpTag = "";
 
+    public List<GameObject> destroyOnLoadList = new List<GameObject>(); //Stores a list of objects to destroy on scene change. See destroyOnSceneChange();
+
     private string getNewMapString(string map)
     {
         string[] m = currentMap.Split(splitter);
@@ -93,13 +95,45 @@ public class MapSystem
         }
     }
 
+    //This function adds to a list of objects that will be manually destroyed next time the scene is changed.
+    //One thing this is used for is to carry object across scenes. DontDestroyOnLoad is applied to the held object
+    //meaning if it's not manually destroyed on scene changes then it will persist in every scene. The object list is
+    //cleared after every scene load
+    public void destroyOnSceneChange(GameObject obj)
+    {
+        Debug.Log("MapSystem::destroyOnSceneChange() - adding " + obj.name+" to destroy load list");
+        destroyOnLoadList.Add(obj);
+    }
+
+    //This is the function that destroys the objects on destroyOnLoadList then clears the list. Typically called when scene changes
+    public void executeDestroyOnSceneChange()
+    {
+        if (destroyOnLoadList.Count>0)
+        {
+            Debug.Log("MapSystem::executeDestroyOnSceneChange() Destroying the following objects....");
+            foreach (GameObject obj in destroyOnLoadList)
+            {
+                Debug.Log("destroying " + obj.name );
+                if (obj) UnityEngine.Object.Destroy(obj);
+            }
+            destroyOnLoadList.Clear();
+        }
+    }
+
+    //Removes an object from  the destroyLoadList (if it is on there) without destroying it.
+    public void removeFromDestroyLoadList(GameObject obj)
+    {
+        Debug.Log("MapSystem::removeFromDestroyLoadList()");
+        destroyOnLoadList.Remove(obj);
+    }
+
     //This is the function that actually loads the new scene
     private void sceneLoad(string map)
     {
-        Debug.Log("sceneLoad was called");
-
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null) player.GetComponent<CharacterController2D>().sceneChangeStart(map);
+
+        executeDestroyOnSceneChange();
 
         currentMap = map;
 
