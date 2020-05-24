@@ -16,23 +16,25 @@ public class WarpTrigger : MonoBehaviour
 
     public bool takeCarriedObject = true; //If set to true, the player will take any objects it is carrying with it. If set to false, it will release the objects.
 
+    [Space]
+    [Header("Character Repositioning")]
+    public MapSystem.repositionTypes repositionType = MapSystem.repositionTypes.wrap;
+
     //These following variables control the player's positioning as he enters the next scene
     public string warpTag = ""; //This is a tag for a gameObject in the next scene. The character will warp to this tag if one is specified
 
-    public bool wrapX = false;  //If no warptag is specified, these are used for wrapping the character to the other side of the screen when changing scenes
-    public bool wrapY = false;
-    public Vector2 wrapOffset = new Vector2(5, 0); //Added or subtracted from the wrap position. (added if wrapping right to left, subtracted if wrapping left to right)
+    public Vector2 wrapOffset = new Vector2(1, 1); //Added or subtracted from the wrap position. (added if wrapping right to left, subtracted if wrapping left to right)
+    public Vector2 screenEdgeBuffer = new Vector2(2f, 2f); //In order to wrap, the player must be outside of screenWidth-screenEdgeBuffer or 0+screenEdgeBuffer
 
     public bool jumpToRelativeX = false; //If not using wrap functions or warptag, you can use the jumpTo values to specify either an absolute position in the new room or a position relative to the previous position.
     public bool jumpToRelativeY = false;  //Uncheck for absolute
     public Vector2 jumpTo = new Vector2(0, 0);
 
-    private float screenEdgeBuffer = 10f; //In order to wrap, the player must be outside of screenWidth-screenEdgeBuffer or 0+screenEdgeBuffer
-
     // Start is called before the first frame update
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>() as Global;
+        
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -84,38 +86,25 @@ public class WarpTrigger : MonoBehaviour
             collidingPlayer.GetComponent<CharacterController2D>().dropObject();
         }
 
-        global.map.setRepositionCharacter(true);
-
         //Work out player's new position
-        if (warpTag != "") global.map.setWarpTag(warpTag);
-        else if (wrapX || wrapY)
+        if (repositionType==MapSystem.repositionTypes.warpTag)
         {
-            Vector3 vpos = Camera.main.WorldToScreenPoint(collidingPlayer.gameObject.transform.position);
-			Debug.Log("Character world2screen: "+vpos+" camera pixelWidth: "+Camera.main.pixelWidth);
-            if (wrapX)
-            {
-                if (vpos.x <= screenEdgeBuffer) {
-					Debug.Log("Off the left side, move to right");
-					vpos.x = Camera.main.pixelWidth-wrapOffset.x;
-				}
-                else if (vpos.x >= Camera.main.pixelWidth-screenEdgeBuffer) {
-					Debug.Log("Off the left side, move to right");
-					vpos.x = +wrapOffset.x;
-				}
-            }
-            if (wrapY)
-            {
-                if (vpos.y <= screenEdgeBuffer) vpos.y = Camera.main.pixelHeight+wrapOffset.y;
-                else if (vpos.y >= Camera.main.pixelHeight-screenEdgeBuffer) vpos.y = -wrapOffset.y;
-            }
-            global.map.setPlayerPosition(Camera.main.ScreenToWorldPoint(vpos));
+            global.map.setWarpTag(warpTag);
+            global.map.setRepositionType(MapSystem.repositionTypes.warpTag);
         }
-        else
+        if (repositionType == MapSystem.repositionTypes.wrap)
+        {
+            global.map.setRepositionType(MapSystem.repositionTypes.wrap);
+            global.map.setWrapOffset(wrapOffset);
+            global.map.setWrapEdgeBuffer(screenEdgeBuffer);
+        }
+        if (repositionType == MapSystem.repositionTypes.characterJump)
         {
             Vector2 pos = jumpTo;
             if (jumpToRelativeX) pos.x += collidingPlayer.gameObject.transform.position.x;
             if (jumpToRelativeY) pos.y += collidingPlayer.gameObject.transform.position.y;
             global.map.setPlayerPosition(pos);
+            global.map.setRepositionType(MapSystem.repositionTypes.characterJump);
         }
 
         //Now call the function to intiate the scene change

@@ -21,9 +21,20 @@ public class MapSystem
 
     public const char splitter = '_';
 
-    public bool repositionCharacter = false; //If set to false, the character's position will not be touched when the next scene is loaded.
+    public enum repositionTypes
+    {
+        none,       //Do not move the character
+        wrap,       //Wrap if we're off the screen 
+        warpTag,    //Use the specified warpTag
+        characterJump   //Jump to the x,y location specified by CharacterJumpPos
+    }
+
+    repositionTypes repositionType = repositionTypes.none;
+
     private Vector2 CharacterJumpPos = new Vector2(0, 0);
     private string warpTag = "";
+    private Vector2 wrapOffset = new Vector2(0f,0f); //This offset is added or subtracted to the characters new position during wrapping. Added if wrapping right to left, subtracted if wrapping left to right, ect
+    private Vector2 wrapEdgeBuffer = new Vector2(0f, 0f); //This is a buffer used to shrink the edges of the screen when checking if a character is outside for wrapping. For example, the right side of the screen would be screenRight-wrapEdgeBuffer.x
 
     public List<GameObject> destroyOnLoadList = new List<GameObject>(); //Stores a list of objects to destroy on scene change. See destroyOnSceneChange();
 
@@ -63,6 +74,21 @@ public class MapSystem
     }
 
     //If a warptag is specified, the player will jump to the object with this tag on next scene load. The warpTag will then be cleared.
+    public void setRepositionType(repositionTypes type)
+    {
+        this.repositionType = type;
+    }
+
+    public void setWrapOffset(Vector2 off)
+    {
+        this.wrapOffset = off;
+    }
+    public void setWrapEdgeBuffer(Vector2 buff)
+    {
+        this.wrapEdgeBuffer = buff;
+    }
+
+    //If a warptag is specified, the player will jump to the object with this tag on next scene load. The warpTag will then be cleared.
     public void setWarpTag(string warpTag)
     {
         this.warpTag = warpTag;
@@ -71,7 +97,6 @@ public class MapSystem
     //This function sets the new position for the character after the scene loads and if a warp tag isn't used
     public void setPlayerPosition(Vector2 newPosition)
     {
-		Debug.Log("MapSystem::setPlayerPosition called pos= "+newPosition);
         CharacterJumpPos = newPosition;
     }
 
@@ -136,34 +161,41 @@ public class MapSystem
         executeDestroyOnSceneChange();
 
         currentMap = map;
+        string side = "";
+        sceneBoundary boundary;
 
+        //If we're wrapping, let's check if the player is off screen before we load the new scene
+        if (repositionType==repositionTypes.wrap)
+        {
+            boundary = GameObject.FindWithTag("sceneBoundary").GetComponent<sceneBoundary>() as sceneBoundary;
+            side = boundary.boundaryCheck(player, wrapEdgeBuffer.x, wrapEdgeBuffer.y);
+        }
+
+        ///LOAD THE NEW SCENE
         SceneManager.LoadScene(map, LoadSceneMode.Single);
 
-        if (repositionCharacter)
+        if (repositionType == repositionTypes.wrap)
         {
-            if (player != null)
-            {
-                if (warpTag != "")
-                {
-                    GameObject warpTo = GameObject.FindWithTag(warpTag);
-                    player.transform.position = warpTo.transform.position;
-                }
-                else
-                {
-                    player.transform.position = CharacterJumpPos;
-					Debug.Log("Repositioning character "+CharacterJumpPos);
-                }
-                //player.SetActive(true);
-            }
+
+            boundary = GameObject.FindWithTag("sceneBoundary").GetComponent<sceneBoundary>() as sceneBoundary;
+            Vector2 vpos = new Vector2(player.transform.position.x, player.transform.position.y);
+            if (side == "right") vpos.x = boundary.getLeftX() + wrapOffset.x;
+            if (side == "left") vpos.x = boundary.getRightX() - wrapOffset.x;
+            if (side == "top") vpos.y = boundary.getBottomY() + wrapOffset.y;
+            if (side == "bottom") vpos.y = boundary.getTopY() - wrapOffset.y;
+            player.transform.position = vpos;
         }
-        this.warpTag = "";
+        if (repositionType == repositionTypes.characterJump)
+        {
+            player.transform.position = CharacterJumpPos;
+        }
+        if (repositionType == repositionTypes.warpTag)
+        {
+            GameObject warpTo = GameObject.FindWithTag(warpTag);
+            player.transform.position = warpTo.transform.position;
+        }
 
         if (player != null) player.GetComponent<CharacterController2D>().sceneChangeComplete();
-    }
-
-    public void setRepositionCharacter(bool reposition)
-    {
-        this.repositionCharacter = reposition;
     }
 
     //Returns the name of the map (mapName portion of mapName_xpos_ypos). If empty string is passed, returns name of current map.

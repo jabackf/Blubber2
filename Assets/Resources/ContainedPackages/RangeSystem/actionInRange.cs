@@ -20,6 +20,8 @@ public class actionInRange : MonoBehaviour
     private GameObject characterObject; //The characterObject that is currently in range, or null if nothing is in range
     private bool range = false; //Set to true when an object is in range
 
+    private bool isChild = false; //If the action icon is a child to the object or not.
+
     private Global global;
 
     // Start is called before the first frame update
@@ -28,8 +30,20 @@ public class actionInRange : MonoBehaviour
         global = GameObject.FindWithTag("global").GetComponent<Global>() as Global;
 
         ActionIcon = (GameObject)Instantiate(ActionIconPrefab);
-        ActionIcon.transform.parent = gameObject.transform;
-        ActionIcon.transform.localPosition = new Vector3(iconXOffset, iconYOffset, 0f);
+
+        if (isChild)
+        {
+            ActionIcon.transform.parent = gameObject.transform;
+            //ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
+        }
+        else
+        {
+            ActionIcon.transform.parent = gameObject.transform.parent;
+            //ActionIcon.transform.localPosition = new Vector3(iconXOffset, iconYOffset, 0f);
+        }
+
+        //ActionIcon.transform.parent = gameObject.transform.parent;
+        //ActionIcon.transform.localPosition = new Vector3(iconXOffset, iconYOffset, 0f);
         //ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
         iScript = ActionIcon.GetComponent(typeof(actionIcon)) as actionIcon;
     }
@@ -37,9 +51,28 @@ public class actionInRange : MonoBehaviour
     // Update is called once per frame
     protected void Update()
     {
-        if (ActionIcon!=null)
-            ActionIcon.transform.localPosition = new Vector3(iconXOffset, iconYOffset, 0f);
-            //ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
+
+        if (ActionIcon != null)
+        {
+            if (isChild)
+                ActionIcon.transform.localPosition = new Vector3(iconXOffset, iconYOffset, 0f);
+            else
+                ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
+        }
+    }
+
+
+    //These functions make the action icon a child of the gameObject. This is mainly used to pack the icon with the gameobject for transfer to new scene.
+    //When the action icon IS a child, it adopt's the parent's scale and rotation
+    public void makeChild()
+    {
+        isChild = true;
+        ActionIcon.transform.parent = gameObject.transform;
+    }
+    public void unChild()
+    {
+        isChild = false;
+        ActionIcon.transform.parent = gameObject.transform.parent;
     }
 
     void OnTriggerEnter2D(Collider2D other)

@@ -29,7 +29,7 @@ public class Global : MonoBehaviour
         map = new MapSystem();
         map.global = this;
         map.currentMap = startScene;
-        map.setRepositionCharacter(false);
+        map.setRepositionType(MapSystem.repositionTypes.none);
     }
 
     private void Start()

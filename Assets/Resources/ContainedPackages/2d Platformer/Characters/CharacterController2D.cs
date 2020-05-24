@@ -543,6 +543,7 @@ public class CharacterController2D : MonoBehaviour
         {
             Debug.Log("CC2d::sceneChangeStart() (if holdingSomething) " + holding.gameObject.name);
             holding.transform.parent = gameObject.transform;
+            holding.SendMessage("makeChild", SendMessageOptions.DontRequireReceiver); //This packs up the action icon(s) into children from transport
             global.map.removeFromDestroyLoadList(holding.gameObject); //If it was previously added to the destroy on scene change list then picked back up, we don't want to destroy it. We want to carry it to the next scene
         }
     }
@@ -554,6 +555,7 @@ public class CharacterController2D : MonoBehaviour
         {
             Debug.Log("CC2d::sceneChangeComplete() (if holdingSomething) " + holding.gameObject.name);
             holding.transform.parent = null;
+            holding.SendMessage("unChild", SendMessageOptions.DontRequireReceiver); //This unchilds the action icons
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }
     }
