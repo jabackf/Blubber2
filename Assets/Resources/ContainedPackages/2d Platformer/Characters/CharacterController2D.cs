@@ -528,12 +528,11 @@ public class CharacterController2D : MonoBehaviour
     {
         if (holdingSomething())
         {
-            Debug.Log("CC2d::dropObject() (if holdingSomething) " + holding.gameObject.name);
             holding.releaseFromHolder();
         }
     }
 
-    //Called when the character (if it is a player) is about to warp to the next scene. Function is when the player activates a warp trigger, before the character is repositioned and new map is loaded. Called by warpTrigger::Warp
+    //Called when the character (if it is a player) is about to warp to the next scene. Function is when the player activates a warp trigger, before the character is repositioned and new map is loaded. Called by MapSystem::goto
     //map = name of map we are moving to.
     public void sceneChangeStart(string map)
     {
@@ -541,19 +540,18 @@ public class CharacterController2D : MonoBehaviour
         //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
         if (holdingSomething())
         {
-            Debug.Log("CC2d::sceneChangeStart() (if holdingSomething) " + holding.gameObject.name);
             holding.transform.parent = gameObject.transform;
             holding.SendMessage("makeChild", SendMessageOptions.DontRequireReceiver); //This packs up the action icon(s) into children from transport
             global.map.removeFromDestroyLoadList(holding.gameObject); //If it was previously added to the destroy on scene change list then picked back up, we don't want to destroy it. We want to carry it to the next scene
         }
     }
 
-    //Called immedately after a new scene is loaded and the character is relocated. Called by MapSystem::goto
+    //Called immedately after a new scene is loaded and the character is relocated. Called by MapSystem::SceneLoad
     public void sceneChangeComplete()
     {
         if (holdingSomething())
         {
-            Debug.Log("CC2d::sceneChangeComplete() (if holdingSomething) " + holding.gameObject.name);
+ 
             holding.transform.parent = null;
             holding.SendMessage("unChild", SendMessageOptions.DontRequireReceiver); //This unchilds the action icons
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped

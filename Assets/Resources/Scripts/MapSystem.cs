@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MapSystem
+//TODO Implement removeFromInstantiateLoadList and removeAllFromInstantiateLoadList
+//Maybe we can improve instantiate on load system by distinguishing between objects that load on any next scene, and objects that load on specific next scene
+
+public class MapSystem 
 {
     public Global global;
+
 
     [System.Serializable]
     public enum transitions
@@ -16,8 +20,13 @@ public class MapSystem
         fade
     }
     public transitions transition = transitions.none;
+	private int transitionStage = 0; //Used to track the stage of different transitions
+	private bool transitioning = false;
+	private GameObject transitionObject;
 
     public string currentMap = "";
+	
+	private string nextMap = ""; //When we begin a transition, this variable stores the name of the next map we are going to
 
     public const char splitter = '_';
 
@@ -37,6 +46,35 @@ public class MapSystem
     private Vector2 wrapEdgeBuffer = new Vector2(0f, 0f); //This is a buffer used to shrink the edges of the screen when checking if a character is outside for wrapping. For example, the right side of the screen would be screenRight-wrapEdgeBuffer.x
 
     public List<GameObject> destroyOnLoadList = new List<GameObject>(); //Stores a list of objects to destroy on scene change. See destroyOnSceneChange();
+
+	public class instantiateOnLoadObject
+	{
+		public GameObject go;
+		public string resource;
+		public bool loaded;
+		public float x,y;
+		public instantiateOnLoadObject(string resource, float x=0, float y=0)
+		{
+			this.loaded=false;
+			this.resource=resource;
+			this.x=x;
+			this.y=y;
+		}
+		
+		public void load()
+		{
+			this.go = UnityEngine.Object.Instantiate(Resources.Load(resource)) as GameObject;
+			go.transform.position = new Vector3(this.x,this.y,0f);
+			this.loaded=true;
+		}
+	}
+
+    public List<instantiateOnLoadObject> instantiateOnLoadList = new List<instantiateOnLoadObject>(); //Stores a list of objects to instantiate after the scene is fully loaded
+
+	public MapSystem()
+	{
+		SceneManager.sceneLoaded += onSceneLoaded;
+	}
 
     private string getNewMapString(string map)
     {
@@ -102,24 +140,60 @@ public class MapSystem
 
     //map can either be a map name (in the format of mapname_xpos_ypos)
     //or one of the special keywords: left, right, up, down, current
-    public void goTo(string map, transitions trans = transitions.DEFAULT)
+	//Returns true on success, false if scene change was rejected
+    public bool goTo(string map, transitions trans = transitions.DEFAULT)
     {
-        if (trans!=transitions.DEFAULT) transition = trans;
+		if (transitioning) return false;
+		
+		Debug.Log("goto called");
+		
+		if (trans!=transitions.DEFAULT) transition = trans;
         string transitionString = getNewMapString(map);
+		nextMap = transitionString;
+		
+		GameObject p = GameObject.FindWithTag("Player") as GameObject;
+		p.GetComponent<CharacterController2D>().sceneChangeStart(map);
+		
         startTransition(transitionString);
+		
+		return true;
+		
     }
 
     private void startTransition(string map)
     {
         GameObject player = GameObject.FindWithTag("Player");
         //if (player != null) player.SetActive(false);
+		transitioning=true;
+		
+		Debug.Log(transition);
         switch (transition)
         {
             case transitions.none:
                 sceneLoad(map);
+				transitioning=false;
                 break;
+			case transitions.fade:
+				transitionObject = UnityEngine.Object.Instantiate(Resources.Load("Prefabs/Effects/sceneFadeOut")) as GameObject;
+				transitionStage = 0;
+			break;
         }
     }
+	
+	//Called by the fade object when a fade in / out is complete
+	public void fadeComplete()
+	{
+		if (transitionStage==1)
+		{
+			transitioning=false;
+		}
+		else if (transitionStage==0)
+		{
+			sceneLoad(nextMap);
+			instantiateOnSceneLoaded("Prefabs/Effects/sceneFadeIn");
+			transitionStage = 1;
+		}
+	}
 
     //This function adds to a list of objects that will be manually destroyed next time the scene is changed.
     //One thing this is used for is to carry object across scenes. DontDestroyOnLoad is applied to the held object
@@ -139,7 +213,6 @@ public class MapSystem
             Debug.Log("MapSystem::executeDestroyOnSceneChange() Destroying the following objects....");
             foreach (GameObject obj in destroyOnLoadList)
             {
-                Debug.Log("destroying " + obj.name );
                 if (obj) UnityEngine.Object.Destroy(obj);
             }
             destroyOnLoadList.Clear();
@@ -149,8 +222,37 @@ public class MapSystem
     //Removes an object from  the destroyLoadList (if it is on there) without destroying it.
     public void removeFromDestroyLoadList(GameObject obj)
     {
-        Debug.Log("MapSystem::removeFromDestroyLoadList()");
         destroyOnLoadList.Remove(obj);
+    }
+	
+	
+    //This function adds the specified object to a list of objects that will be instantiated on the load of the next scene
+    public void instantiateOnSceneLoaded(string resource, float x=0, float y=0)
+    {
+        instantiateOnLoadList.Add(new instantiateOnLoadObject(resource, x, y));
+    }
+
+    //This is the function that destroys the objects on destroyOnLoadList then clears the list. Typically called when scene changes
+    public void onSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (instantiateOnLoadList.Count>0)
+        {
+            foreach (instantiateOnLoadObject obj in instantiateOnLoadList)
+            {
+                obj.load();
+            }
+            instantiateOnLoadList.Clear();
+        }
+    }
+
+    //Removes an object from  the instantiateLoadList (if it is on there) without destroying it.
+    public void removeFromInstantiateLoadList(string resource)
+    {
+        //instantiateOnLoadList.Remove(obj => obj.resource==resource);
+    }
+	public void removeAllFromInstantiateLoadList(string resource)
+    {
+        //instantiateOnLoadList.RemoveAll(obj => obj.resource==resource);
     }
 
     //This is the function that actually loads the new scene

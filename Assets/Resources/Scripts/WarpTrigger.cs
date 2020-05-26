@@ -34,7 +34,7 @@ public class WarpTrigger : MonoBehaviour
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>() as Global;
-        
+
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -79,12 +79,6 @@ public class WarpTrigger : MonoBehaviour
         if (triggered) return;
         triggered = true;
 
-        collidingPlayer.GetComponent<CharacterController2D>().sceneChangeStart(goTo);
-
-        if (!takeCarriedObject)
-        {
-            collidingPlayer.GetComponent<CharacterController2D>().dropObject();
-        }
 
         //Work out player's new position
         if (repositionType==MapSystem.repositionTypes.warpTag)
@@ -94,9 +88,11 @@ public class WarpTrigger : MonoBehaviour
         }
         if (repositionType == MapSystem.repositionTypes.wrap)
         {
+
             global.map.setRepositionType(MapSystem.repositionTypes.wrap);
             global.map.setWrapOffset(wrapOffset);
             global.map.setWrapEdgeBuffer(screenEdgeBuffer);
+
         }
         if (repositionType == MapSystem.repositionTypes.characterJump)
         {
@@ -107,8 +103,15 @@ public class WarpTrigger : MonoBehaviour
             global.map.setRepositionType(MapSystem.repositionTypes.characterJump);
         }
 
+        if (!takeCarriedObject)
+        {
+            collidingPlayer.GetComponent<CharacterController2D>().dropObject();
+        }
+
         //Now call the function to intiate the scene change
-        global.map.goTo(goTo, transType);
+        if (!global.map.goTo(goTo, transType)) triggered = false;
+		
+		
 
     }
 
