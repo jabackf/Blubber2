@@ -113,7 +113,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeOutUIImage: {fileID: 7056372622173687800}
-  fadeSpeed: 0.3
+  fadeSpeed: 0.2
+  notifyMapSystemOnComplete: 1
+  destroyOnComplete: 1
   OnFadeComplete:
     m_PersistentCalls:
       m_Calls: []

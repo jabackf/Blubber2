@@ -517,7 +517,6 @@ public class CharacterController2D : MonoBehaviour
         isHolding = false;
         if (heldObjectChangedScenes)
         {
-            Debug.Log("CC2d::pickupReleased() " +holding.gameObject.name);
             global.map.destroyOnSceneChange(holding.gameObject);
             heldObjectChangedScenes = false;
         }
@@ -536,12 +535,12 @@ public class CharacterController2D : MonoBehaviour
     //map = name of map we are moving to.
     public void sceneChangeStart(string map)
     {
-        Debug.Log("CC2d::sceneChangeStart()");
         //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
         if (holdingSomething())
         {
             holding.transform.parent = gameObject.transform;
             holding.SendMessage("makeChild", SendMessageOptions.DontRequireReceiver); //This packs up the action icon(s) into children from transport
+            holding.makeUndroppable();
             global.map.removeFromDestroyLoadList(holding.gameObject); //If it was previously added to the destroy on scene change list then picked back up, we don't want to destroy it. We want to carry it to the next scene
         }
     }
@@ -554,6 +553,7 @@ public class CharacterController2D : MonoBehaviour
  
             holding.transform.parent = null;
             holding.SendMessage("unChild", SendMessageOptions.DontRequireReceiver); //This unchilds the action icons
+            holding.makeDroppable();
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }
     }

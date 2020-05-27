@@ -51,21 +51,25 @@ public class MapSystem
 	{
 		public GameObject go;
 		public string resource;
-		public bool loaded;
 		public float x,y;
-		public instantiateOnLoadObject(string resource, float x=0, float y=0)
+        public string scene;    //If a scene name is provided, the object will be instantiated on that scene load. If no scene name is provided, the object will instantiate on whatever scene loads next.
+        public bool loaded;
+
+		public instantiateOnLoadObject(string resource, string scene="", float x=0, float y=0)
 		{
-			this.loaded=false;
+            this.loaded = false;
 			this.resource=resource;
+            this.scene = scene;
 			this.x=x;
 			this.y=y;
 		}
 		
-		public void load()
+		public GameObject load()
 		{
 			this.go = UnityEngine.Object.Instantiate(Resources.Load(resource)) as GameObject;
 			go.transform.position = new Vector3(this.x,this.y,0f);
-			this.loaded=true;
+            this.loaded = true;
+            return this.go;
 		}
 	}
 
@@ -201,7 +205,6 @@ public class MapSystem
     //cleared after every scene load
     public void destroyOnSceneChange(GameObject obj)
     {
-        Debug.Log("MapSystem::destroyOnSceneChange() - adding " + obj.name+" to destroy load list");
         destroyOnLoadList.Add(obj);
     }
 
@@ -210,7 +213,6 @@ public class MapSystem
     {
         if (destroyOnLoadList.Count>0)
         {
-            Debug.Log("MapSystem::executeDestroyOnSceneChange() Destroying the following objects....");
             foreach (GameObject obj in destroyOnLoadList)
             {
                 if (obj) UnityEngine.Object.Destroy(obj);
@@ -227,9 +229,9 @@ public class MapSystem
 	
 	
     //This function adds the specified object to a list of objects that will be instantiated on the load of the next scene
-    public void instantiateOnSceneLoaded(string resource, float x=0, float y=0)
+    public void instantiateOnSceneLoaded(string resource, string sceneName="", float x=0, float y=0)
     {
-        instantiateOnLoadList.Add(new instantiateOnLoadObject(resource, x, y));
+        instantiateOnLoadList.Add(new instantiateOnLoadObject(resource, sceneName, x, y));
     }
 
     //This is the function that destroys the objects on destroyOnLoadList then clears the list. Typically called when scene changes
@@ -239,20 +241,23 @@ public class MapSystem
         {
             foreach (instantiateOnLoadObject obj in instantiateOnLoadList)
             {
-                obj.load();
+                if (obj.scene == "" || scene.name == obj.scene)
+                {
+                    obj.load();
+                }
             }
-            instantiateOnLoadList.Clear();
+            instantiateOnLoadList.RemoveAll(obj => obj.loaded==true); //Remove all of the objects that were loaded
         }
     }
 
-    //Removes an object from  the instantiateLoadList (if it is on there) without destroying it.
-    public void removeFromInstantiateLoadList(string resource)
-    {
-        //instantiateOnLoadList.Remove(obj => obj.resource==resource);
-    }
+    //Removes any objects matching the specified resource from instantiateOnLoadList. Does not destroy instantiated objects!
 	public void removeAllFromInstantiateLoadList(string resource)
     {
-        //instantiateOnLoadList.RemoveAll(obj => obj.resource==resource);
+        instantiateOnLoadList.RemoveAll(obj => obj.resource==resource);
+    }
+    public void clearInstantiateLoadList()
+    {
+        instantiateOnLoadList.Clear();
     }
 
     //This is the function that actually loads the new scene
