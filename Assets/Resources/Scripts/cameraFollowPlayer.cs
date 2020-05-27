@@ -6,7 +6,7 @@ public class cameraFollowPlayer : MonoBehaviour
 {
     public string followTag = "Player"; //The tag of the object to follow
     public string sceneBoundaryTag = "sceneBoundary"; //OPTIONAL The tag of the sceneBoundary object to prevent the camera from moving outside of the scene boundaries
-    public float offset=5;
+    public float offset=2;
     private sceneBoundary boundary;
     private Vector3 playerPosition;
     public float offsetSmoothing=0.5f;
@@ -36,19 +36,21 @@ public class cameraFollowPlayer : MonoBehaviour
 
         playerPosition = new Vector3(playerPosition.x + (facingRight ? offset : -offset), playerPosition.y, -10);
 
+        //Actually move the camera
+        camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
 
-
-        if (boundary!=null)
+        //Correct for out of scene boundary
+        if (boundary != null)
         {
-            boundaryCorrection = new Vector3(0, 0, 0);
             if (cameraRight.position.x > boundary.getRightX()) boundaryCorrection.x = (cameraRight.position.x - boundary.getRightX());
             if (cameraLeft.position.x < boundary.getLeftX()) boundaryCorrection.x = -(boundary.getLeftX() - cameraLeft.position.x);
             if (cameraTop.position.y > boundary.getTopY()) boundaryCorrection.y = (cameraTop.position.y - boundary.getTopY());
             if (cameraBottom.position.y < boundary.getBottomY()) boundaryCorrection.y = -(boundary.getBottomY() - cameraBottom.position.y);
-            Debug.Log(boundaryCorrection);
-        }
+            if (boundaryCorrection.x != 0) camera.transform.position = new Vector3(camera.transform.position.x-boundaryCorrection.x, camera.transform.position.y, camera.transform.position.z);
+            if (boundaryCorrection.y != 0) camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y- boundaryCorrection.y, camera.transform.position.z);
 
-        camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition-boundaryCorrection, offsetSmoothing * Time.deltaTime);
+
+        }
 
         /*
         screenPos = camera.WorldToScreenPoint(playerT.position);
