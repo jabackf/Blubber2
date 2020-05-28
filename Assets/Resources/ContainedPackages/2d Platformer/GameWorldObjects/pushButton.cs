@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Experimental.Rendering.LWRP;
 
 public class pushButton : MonoBehaviour
 {
+    [Space]
+    [Header("Sprite & Behavior")]
     public Sprite buttonDown;
     public Sprite buttonUp;
     public float activeTimeWait = 1f; //Amount of time the button will stay active for. Set to -1 to wait indefinitely
@@ -14,6 +17,15 @@ public class pushButton : MonoBehaviour
     private SpriteRenderer renderer;
     private bool justDeactivated = false;
 
+    [Space]
+    [Header("Button Light")]
+    public Light2D light;
+    public bool lightOn = true;
+    public Color lightActiveColor = Color.green;
+    public Color lightInactiveColor = Color.red;
+
+    [Space]
+    [Header("Callback Events")]
     public UnityEvent OnActivateEvent;
     public UnityEvent OnDeactivateEvent;
 
@@ -21,6 +33,15 @@ public class pushButton : MonoBehaviour
     void Start()
     {
         renderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
+        if (light==null) light = GetComponent<Light2D>() as Light2D;
+        if (lightOn)
+        {
+            UpdateLight();
+        }
+        else
+        {
+            light.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -32,6 +53,18 @@ public class pushButton : MonoBehaviour
             if (activeTimer <= 0) Deactivate();
         }
         
+    }
+
+    void UpdateLight()
+    {
+        if (isActivated())
+        {
+            light.color = lightActiveColor;
+        }
+        else
+        {
+            light.color = lightInactiveColor;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -64,6 +97,8 @@ public class pushButton : MonoBehaviour
             if (activeTimeWait != -1) activeTimer = activeTimeWait;
             if (OnActivateEvent != null) OnActivateEvent.Invoke();
         }
+
+        UpdateLight();
     }
 
     public void Deactivate()
@@ -76,6 +111,8 @@ public class pushButton : MonoBehaviour
             if (activeTimeWait != -1) activeTimer = 0;
             if (OnDeactivateEvent != null) OnDeactivateEvent.Invoke();
         }
+
+        UpdateLight();
     }
 
     public bool isActivated()

@@ -230,7 +230,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -282,6 +282,7 @@ MonoBehaviour:
   goingUp: 0
   targetTop: 1
   targetBottom: 0.9
+  randomOffset: 1
   squishXAxis: 1
   squishYAxis: 1
   squishZAxis: 0
@@ -379,6 +380,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 297514db87f77e345bdf18ab6bcbc1d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CharacterName: Blubber
+  startFlipped: 0
   m_MovementSmoothing: 0.05
   maxVelocity: 20
   m_AirControl: 1
@@ -412,7 +415,10 @@ MonoBehaviour:
   m_SideCheckR: {fileID: 884179043116409459}
   m_rangeColliderL: {fileID: 884179042378803026}
   m_rangeColliderR: {fileID: 884179044323593167}
+  m_DialogTop: {fileID: 0}
+  m_DialogBottom: {fileID: 0}
   spriteFlipMethod: 1
+  isTalking: 0
   OnLandEvent:
     m_PersistentCalls:
       m_Calls:
@@ -472,6 +478,7 @@ MonoBehaviour:
   throwing: 0
   climb: 0
   isClimbing: 0
+  state: 0
   doubleJumpDuration: 0.3
   pickingUpDuration: 0.2
   throwingDuration: 0.2
@@ -486,7 +493,7 @@ MonoBehaviour:
   topCarryAnimatorBool: IsCarryingTop
   climbingAnimatorFloat: ClimbSpeed
   climbingAnimatorBool: IsClimbing
-  pushingDressName: 
+  dressList: []
 --- !u!114 &4464082432998527388
 MonoBehaviour:
   m_ObjectHideFlags: 0
