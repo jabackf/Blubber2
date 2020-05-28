@@ -49,13 +49,11 @@ public class fade : MonoBehaviour {
         float alpha = (fadeDirection == FadeDirection.Out)? 1 : 0;
         float fadeEndValue = (fadeDirection == FadeDirection.Out)? 0 : 1;
         if (fadeDirection == FadeDirection.Out) {
-			Debug.Log("Fade Direction = out, entering while");
             while (alpha >= fadeEndValue)
             {
                 SetColorImage (ref alpha, fadeDirection);
                 yield return null;
             }
-			Debug.Log("POST While...");
 			if (msCaller!=null && notifyMapSystemOnComplete)
 			{
 				msCaller.fadeComplete();
@@ -83,8 +81,6 @@ public class fade : MonoBehaviour {
 			if (destroyOnComplete) Destroy(gameObject);
         }
     }
-
-	public void OnDestroy() {Debug.Log("DESTRUCTION!");}
 
     #endregion
  

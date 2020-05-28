@@ -24,6 +24,12 @@ public class MapSystem
 	private bool transitioning = false;
 	private GameObject transitionObject;
 
+    private GameObject player; //Stores the player object
+    private string wrapSide = "none"; //Used to track the side we are wrapping from
+    private sceneBoundary boundary;
+
+    private Vector2 characterReposition;
+
     public string currentMap = "";
 	
 	private string nextMap = ""; //When we begin a transition, this variable stores the name of the next map we are going to
@@ -149,7 +155,6 @@ public class MapSystem
     {
 		if (transitioning) return false;
 		
-		Debug.Log("goto called");
 		
 		if (trans!=transitions.DEFAULT) transition = trans;
         string transitionString = getNewMapString(map);
@@ -170,7 +175,6 @@ public class MapSystem
         //if (player != null) player.SetActive(false);
 		transitioning=true;
 		
-		Debug.Log(transition);
         switch (transition)
         {
             case transitions.none:
@@ -234,9 +238,11 @@ public class MapSystem
         instantiateOnLoadList.Add(new instantiateOnLoadObject(resource, sceneName, x, y));
     }
 
-    //This is the function that destroys the objects on destroyOnLoadList then clears the list. Typically called when scene changes
+    //This callback is triggered when a scene has finished loading
     public void onSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        boundary = GameObject.FindWithTag("sceneBoundary").GetComponent<sceneBoundary>() as sceneBoundary;
+
         if (instantiateOnLoadList.Count>0)
         {
             foreach (instantiateOnLoadObject obj in instantiateOnLoadList)
@@ -247,6 +253,12 @@ public class MapSystem
                 }
             }
             instantiateOnLoadList.RemoveAll(obj => obj.loaded==true); //Remove all of the objects that were loaded
+        }
+
+        if (player != null)
+        {
+            repositionCharacterOnLoad();
+            player.GetComponent<CharacterController2D>().sceneChangeComplete();
         }
     }
 
@@ -263,46 +275,50 @@ public class MapSystem
     //This is the function that actually loads the new scene
     private void sceneLoad(string map)
     {
-        GameObject player = GameObject.FindWithTag("Player");
+        player = GameObject.FindWithTag("Player");
 
         executeDestroyOnSceneChange();
 
         currentMap = map;
-        string side = "";
-        sceneBoundary boundary;
+        
+        boundary = GameObject.FindWithTag("sceneBoundary").GetComponent<sceneBoundary>() as sceneBoundary;
+
+        characterReposition.x = player.transform.position.x;
+        characterReposition.y = player.transform.position.y;
+        wrapSide = "none";
 
         //If we're wrapping, let's check if the player is off screen before we load the new scene
         if (repositionType==repositionTypes.wrap)
         {
-            boundary = GameObject.FindWithTag("sceneBoundary").GetComponent<sceneBoundary>() as sceneBoundary;
-            side = boundary.boundaryCheck(player, wrapEdgeBuffer.x, wrapEdgeBuffer.y);
+            wrapSide = boundary.boundaryCheck(player, wrapEdgeBuffer.x, wrapEdgeBuffer.y);
         }
 
         ///LOAD THE NEW SCENE
         SceneManager.LoadScene(map, LoadSceneMode.Single);
+    }
 
+    //Repositions the character according to current class settings. 
+    public void repositionCharacterOnLoad()
+    {
         if (repositionType == repositionTypes.wrap)
         {
-
-            boundary = GameObject.FindWithTag("sceneBoundary").GetComponent<sceneBoundary>() as sceneBoundary;
-            Vector2 vpos = new Vector2(player.transform.position.x, player.transform.position.y);
-            if (side == "right") vpos.x = boundary.getLeftX() + wrapOffset.x;
-            if (side == "left") vpos.x = boundary.getRightX() - wrapOffset.x;
-            if (side == "top") vpos.y = boundary.getBottomY() + wrapOffset.y;
-            if (side == "bottom") vpos.y = boundary.getTopY() - wrapOffset.y;
-            player.transform.position = vpos;
+            if (wrapSide == "right") characterReposition.x = boundary.getLeftX() + wrapOffset.x;
+            if (wrapSide == "left") characterReposition.x = boundary.getRightX() - wrapOffset.x;
+            if (wrapSide == "top") characterReposition.y = boundary.getBottomY() + wrapOffset.y;
+            if (wrapSide == "bottom") characterReposition.y = boundary.getTopY() - wrapOffset.y;
         }
         if (repositionType == repositionTypes.characterJump)
         {
-            player.transform.position = CharacterJumpPos;
+            characterReposition = CharacterJumpPos;
         }
         if (repositionType == repositionTypes.warpTag)
         {
             GameObject warpTo = GameObject.FindWithTag(warpTag);
-            player.transform.position = warpTo.transform.position;
+            characterReposition.x = warpTo.transform.position.x;
+            characterReposition.y = warpTo.transform.position.y;
         }
 
-        if (player != null) player.GetComponent<CharacterController2D>().sceneChangeComplete();
+        player.transform.position = new Vector3(characterReposition.x, characterReposition.y, 0);
     }
 
     //Returns the name of the map (mapName portion of mapName_xpos_ypos). If empty string is passed, returns name of current map.

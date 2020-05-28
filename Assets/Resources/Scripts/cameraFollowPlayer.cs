@@ -25,10 +25,20 @@ public class cameraFollowPlayer : MonoBehaviour
         charCont = GameObject.FindWithTag(followTag).GetComponent<CharacterController2D>() as CharacterController2D;
         camera = gameObject.GetComponent<Camera>();
         boundary = GameObject.FindWithTag(sceneBoundaryTag).GetComponent<sceneBoundary>() as sceneBoundary;
+
+        //Snap the camera into place at the start
+        if (playerT)
+        {
+            camera.transform.position = new Vector3(playerT.position.x, playerT.position.y,-10);
+        }
+
     }
 
     void FixedUpdate()
     {
+        if (!playerT) playerT = GameObject.FindWithTag(followTag).GetComponent<Transform>() as Transform;
+        if (!playerT) return;
+
         playerPosition = new Vector3(playerT.position.x, playerT.position.y, playerT.position.z);
 
         bool facingRight = true;
@@ -49,23 +59,7 @@ public class cameraFollowPlayer : MonoBehaviour
             if (boundaryCorrection.x != 0) camera.transform.position = new Vector3(camera.transform.position.x-boundaryCorrection.x, camera.transform.position.y, camera.transform.position.z);
             if (boundaryCorrection.y != 0) camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y- boundaryCorrection.y, camera.transform.position.z);
 
-
         }
 
-        /*
-        screenPos = camera.WorldToScreenPoint(playerT.position);
-        
-        //In camera space, bottomLeft is 0,0, topRight is pixelWidth,pixelHeight
-        if (screenPos.x<hborder)
-        {
-            camera.transform.position -= new Vector3((hborder - screenPos.x),0,0);
-        }
-        else if (screenPos.x > camera.pixelWidth-hborder)
-        {
-            camera.transform.position += new Vector3(( screenPos.x-(camera.pixelWidth - hborder) ),0,0);
-        }
-        //if (screenPos.y < vborder)
-        //else if (screenPos.y > camera.pixelWidth - hborder)
-        */
     }
 }
