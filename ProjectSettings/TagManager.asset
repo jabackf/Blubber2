@@ -11,6 +11,7 @@ TagManager:
   - menu
   - global
   - sceneBoundary
+  - trigger
   layers:
   - Default
   - TransparentFX

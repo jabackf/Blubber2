@@ -8,6 +8,7 @@ public class pickupObject : actionInRange
     private FixedJoint2D joint; //This is the joint used to connect the object to the character
     private Transform carryTrans;  //The transform used for carrying objects
     public Vector2 offset = new Vector2(0, 0.4f);  //The offset for carrying objects on top
+    private Vector2 initialOffset;
     public bool disableCollider = true; //if true, the collider will be changed to a trigger when the object is carried.
     public float breakForce = 500;  //The amount of force needed to break the joint between the holding character this object
     public float breakTorque = 500;
@@ -15,6 +16,8 @@ public class pickupObject : actionInRange
     public float carryMass = 0.5f;  //This is the mass of the object while it's being carried
     public bool flipOnX = true;     //Flips with the character holding it if set to true
     public bool flipOnY = true;
+    public bool freezeRotationOnPickup = true; //If true, the object's ability to rotate on the Z axis will freeze when picked up. When dropped, it's ability to rotate will be reset to whatever it was previously
+    public bool resetRotationOnPickup = true; //If true, the object's Z rotation will be set to whatever it was at initialization when picked up
     private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
     private Rigidbody2D rb;
     public lineArrow throwArc;   //The reference to the lineArrow script
@@ -25,6 +28,8 @@ public class pickupObject : actionInRange
     private bool undroppable = false; //Used to prevent the item from being dropped. Doesn't prevent an item from being thrown. This should be set using makeUndroppable!
 
     private Vector3 refVelocity = new Vector3(0,0,0);
+    private bool initialRotationFreeze;
+    private float initialZRotation;
 
     public enum carryType { Top, Front};
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
@@ -40,7 +45,9 @@ public class pickupObject : actionInRange
         throwArc = throwArcObj.AddComponent<lineArrow>() as lineArrow;
         throwArc.isChild = true;
         throwArc.hide();
-        
+        initialOffset = offset;
+        initialRotationFreeze = rb.freezeRotation;
+        initialZRotation = gameObject.transform.eulerAngles.z;
     }
 
     //Use the throwing retical. Called by the holding object.
@@ -81,9 +88,16 @@ public class pickupObject : actionInRange
         joint.breakForce = this.breakForce;
         joint.breakTorque = this.breakTorque;
 
+        if (resetRotationOnPickup)
+            gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y,initialZRotation);
+        if (freezeRotationOnPickup)
+            rb.freezeRotation = true;
 
         if (disableCollider) //We're not using a collider for this item
-            gameObject.GetComponent<Collider2D>().isTrigger = true; 
+        {
+            gameObject.GetComponent<Collider2D>().isTrigger = true;
+
+        }
         else //We are using it. Better make sure there's nothing in the way of us picking it up, like a ceiling above the character
         {
             RaycastHit2D[] hit = new RaycastHit2D[10];
@@ -93,11 +107,11 @@ public class pickupObject : actionInRange
             int count = rb.Cast(dir, hit, dis);
             if (count > 0)
             {
-                for(int i=0; i<count; i++)
+                for (int i = 0; i < count; i++)
                 {
 
                     //Check to see if something is in the way, and drop it if so.
-                    if (hit[i].collider.attachedRigidbody==null && !hit[i].collider.isTrigger)
+                    if (hit[i].collider.attachedRigidbody == null && !hit[i].collider.isTrigger)
                     {
                         releaseTimer = releaseWaitTime;
                     }
@@ -175,7 +189,7 @@ public class pickupObject : actionInRange
 
     public void releaseFromHolder()
     {
-        Debug.Log("pickupObject::releaseFromHolder()");
+        if (freezeRotationOnPickup) rb.freezeRotation = initialRotationFreeze;
         Destroy(joint);
         this.setRangeActive(true);
         throwArc.hide();
@@ -202,7 +216,7 @@ public class pickupObject : actionInRange
     {
         if (flipOnX)
         {
-            offset.x = -offset.x;
+            offset.x = initialOffset.x * (flipX ? -1 : 1);
             gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
         }
 
@@ -217,7 +231,8 @@ public class pickupObject : actionInRange
     {
         if (flipOnY)
         {
-            offset.y= -offset.y;
+            offset.y = initialOffset.y * (flipY ? -1 : 1);
+            //offset.y= -offset.y;
             gameObject.GetComponent<SpriteRenderer>().flipY = flipY;
         }
     }
