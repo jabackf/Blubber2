@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class pickupObject : actionInRange
 {
@@ -33,6 +34,15 @@ public class pickupObject : actionInRange
 
     public enum carryType { Top, Front};
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
+
+    [Space]
+    [Header("Item Use Action")]
+    public bool hasAction = false;
+    public string actionSendMessage = "";
+    public GameObject actionMessageReceiver;
+
+    [SerializeField]
+    public UnityEvent ActionCallback;
 
     void Start()
     {
@@ -69,6 +79,16 @@ public class pickupObject : actionInRange
 
             throwArc.setAngle(throwArc.angle += (flippedX ? v : -v));
             throwArc.setLength(throwArc.length+h);
+        }
+    }
+
+    public void useItemAction()
+    {
+        if (!hasAction) return;
+        if (ActionCallback!=null) ActionCallback.Invoke();
+        if (actionMessageReceiver != null && actionSendMessage != "")
+        {
+            actionMessageReceiver.SendMessage(actionSendMessage);
         }
     }
 

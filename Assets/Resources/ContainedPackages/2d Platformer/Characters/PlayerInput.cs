@@ -22,10 +22,12 @@ public class PlayerInput : MonoBehaviour
     bool pickup = false;
     bool dialog = false;    //Dialog button pressed
     bool dropDown = false; //The action for dropping through platforms that have the dropDownPlatform script
+    bool useItemAction = false; //If we're holding an object with an action, then this flag is triggered when we push the UseItemAction button
     float climb = 0;
     public float climbSpeed = 5f;
     bool holdingAction = false;
     private bool isThrowing = false; //Set to true if we're throwing an object (changing the throw angle and velocity).
+    
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,10 @@ public class PlayerInput : MonoBehaviour
 
         if (!isThrowing) //Not in aiming mode
         {
+            if (Input.GetButtonDown("UseItemAction"))
+            {
+                useItemAction = true;
+            }
 
             if (Input.GetButtonDown("Jump"))
             {
@@ -120,7 +126,10 @@ public class PlayerInput : MonoBehaviour
         if (!controller.isTalking) //In dialog mode
         {
             if (!isThrowing)
+            {
                 controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb * Time.fixedDeltaTime, dropDown, dialog);
+                if (useItemAction) controller.useItemAction();
+            }
             else
             {
                 controller.Aim(aimForceMove * Time.fixedDeltaTime, aimAngleMove * Time.fixedDeltaTime, throwRelease, holdingAction);
@@ -134,6 +143,7 @@ public class PlayerInput : MonoBehaviour
         throwRelease = false;
         dropDown = false;
         dialog = false;
+        useItemAction = false;
     }
 
     public void OnLanding()

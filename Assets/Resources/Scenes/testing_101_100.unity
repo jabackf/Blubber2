@@ -4526,6 +4526,7 @@ GameObject:
   - component: {fileID: 1629155490}
   - component: {fileID: 1629155489}
   - component: {fileID: 1629155488}
+  - component: {fileID: 1629155492}
   m_Layer: 0
   m_Name: sprGuitar
   m_TagString: Untagged
@@ -4541,9 +4542,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629155486}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.74, y: -5.34, z: 0}
+  m_LocalPosition: {x: -2.5, y: -5.5, z: 0}
   m_LocalScale: {x: 0.9, y: 0.7, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1689816935}
   m_Father: {fileID: 1194112661}
   m_RootOrder: 33
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4577,6 +4579,25 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 1
+  hasAction: 1
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1629155492}
+        m_MethodName: toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!61 &1629155489
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4674,6 +4695,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1629155492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629155486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7b16cbf7a0293940989ee24060a4531, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  on: 0
+  particles: {fileID: 1689816934}
+--- !u!198 &1689816934 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 7820691628198194201}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1689816935 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 7820691628198194201}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1711267578
 GameObject:
   m_ObjectHideFlags: 0
@@ -5147,6 +5194,14 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 1
+  hasAction: 0
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!61 &1848374734
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9673,7 +9728,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1629155487}
     m_Modifications:
     - target: {fileID: 1673131174046895705, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
@@ -9683,17 +9738,17 @@ PrefabInstance:
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.8088446
+      value: -0.29
       objectReference: {fileID: 0}
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.9174645
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -25.529297
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
@@ -9703,12 +9758,12 @@ PrefabInstance:
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
@@ -9718,7 +9773,7 @@ PrefabInstance:
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
@@ -9734,6 +9789,56 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1111112
+      objectReference: {fileID: 0}
+    - target: {fileID: 3589921868361948807, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4285716
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: useUnscaledTime
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: VelocityModule.orbitalZ.scalar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: VelocityModule.inWorldSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: VelocityModule.z.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: UVModule.frameOverTime.minMaxState
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1283374381022634517, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: UVModule.startFrame.minMaxState
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65c4b0a18f018da4eb4e9e1931c481a6, type: 3}

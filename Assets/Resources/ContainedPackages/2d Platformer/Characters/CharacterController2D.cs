@@ -193,6 +193,13 @@ public class CharacterController2D : MonoBehaviour
 
     }
 
+    public void useItemAction()
+    {
+        if (!isHolding || !canPickup || holding == null) return;
+
+        holding.useItemAction();
+    }
+
     //Use the throwing retical
     //Arguments = Horizontal movement, vertical movement, release and throw, use the object's action
     public void Aim(float h, float v, bool release, bool action)
