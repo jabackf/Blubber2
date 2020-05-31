@@ -1293,8 +1293,8 @@ MonoBehaviour:
   climbingAnimatorBool: 
   dressList:
   - name: Bow
-    resourceName: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprDressBow_0.png
-    offset: {x: -0.13, y: 0.57}
+    resourceName: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprDressBow_0
+    offset: {x: -0.2, y: 0.92}
     gameObject: {fileID: 0}
   particlesLoveResource: Prefabs/Effects/psHeartParticles
 --- !u!114 &639161564

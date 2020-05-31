@@ -94,10 +94,10 @@ public class BlubberAnimation : CharacterAnimation
         if (particleResource=="none")
         {
             if (particles != null) Destroy(particles);
+            particlesEmotion = "";
         }
         else if (particlesEmotion != emotion)
         {
-            Debug.Log("loading particle system");
             if (particles != null) Destroy(particles);
             particlesEmotion = emotion;
             particles = (GameObject)Instantiate(Resources.Load(particleResource));
