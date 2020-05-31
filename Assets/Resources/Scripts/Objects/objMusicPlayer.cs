@@ -9,7 +9,7 @@ public class objMusicPlayer : MonoBehaviour
     public ParticleSystem particles;
 
     //Have a list for audio clips, either cycle through them auto or stop after each one.
-    //Play them randomly or in order.
+    //Play them randomly or in order. Optionally turn down main music
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +26,12 @@ public class objMusicPlayer : MonoBehaviour
     public void toggle()
     {
         on = !on;
+        setParticlesEnabled();
+    }
+
+    public void toggle(bool on)
+    {
+        this.on = on;
         setParticlesEnabled();
     }
 

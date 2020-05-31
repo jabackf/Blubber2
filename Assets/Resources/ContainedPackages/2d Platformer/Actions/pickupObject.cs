@@ -42,7 +42,13 @@ public class pickupObject : actionInRange
     public GameObject actionMessageReceiver;
 
     [SerializeField]
-    public UnityEvent ActionCallback;
+    public UnityEvent ActionCallback;  //Called when the object gets a keypress signal from the use object input
+
+    [SerializeField]
+    public UnityEvent OnPickupCallback;  //Called when the object is picked up
+
+    [SerializeField]
+    public UnityEvent OnReleaseCallback;  //Called when the object is dropped or thrown
 
     void Start()
     {
@@ -138,6 +144,8 @@ public class pickupObject : actionInRange
                 }
             }
         }
+
+        if (OnPickupCallback != null) OnPickupCallback.Invoke();
     }
 
     //Makes the joint unbreakable (meaning you can't accidentally drop it. It can still be thrown)
@@ -193,7 +201,6 @@ public class pickupObject : actionInRange
     {
         if (broken == joint)
         {
-            Debug.Log("pickupObject::onJointBreak()");
             releaseFromHolder();
         }
     }
@@ -201,7 +208,6 @@ public class pickupObject : actionInRange
 
     public void throwItem()
     {
-        Debug.Log("pickupObject::throwItem()");
         releaseFromHolder();
         float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
         rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle))*throwForce*throwArc.length);
@@ -219,6 +225,8 @@ public class pickupObject : actionInRange
         rb.mass = initialMass;
         if (disableCollider)
             gameObject.GetComponent<Collider2D>().isTrigger = false;
+
+        if (OnReleaseCallback != null) OnReleaseCallback.Invoke();
     }
 
     public void changeTransform(Transform newT)
