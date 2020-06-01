@@ -1293,10 +1293,11 @@ MonoBehaviour:
   climbingAnimatorBool: 
   dressList:
   - name: Bow
-    resourceName: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprDressBow_0
+    resourceName: sprDressBow_0
     offset: {x: -0.2, y: 0.92}
+    inDressDirectory: 1
     gameObject: {fileID: 0}
-  particlesLoveResource: Prefabs/Effects/psHeartParticles
+  particlesLoveResource: psHeartParticles
 --- !u!114 &639161564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4093,6 +4094,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6145378233625631958, guid: 57ac04339e38e7b43b6d02301abf1a30,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerSpawn
+      objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4147,11 +4153,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6145378233625631958, guid: 57ac04339e38e7b43b6d02301abf1a30,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerSpawn
       objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633576, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
@@ -4448,6 +4449,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScene: testing_101_100
+  dirResourceRoot: Assets/Resources/
+  dirAnimations: Animations/
+  dirBackgrounds: BackgroundsAndTiles/
+  dirFonts: Fonts/
+  dirMaterials: Materials/
+  dirPhysicsMaterials: PhysicsMaterials/
+  dirPrefabs: PrefabsAndScripts/
+  dirRenderer: Renderer/
+  dirScenes: Scenes/
+  dirSprites: Sprites/
+  dirParticleSystems: PrefabsAndScripts/Effects/
+  dirBlubberSprites: Sprites/Characters/Blubber/
+  dirCharacterDress: Sprites/Dress/
+  dirDialogSystem: PrefabsAndScripts/Dialog/
+  dirRangeIconSystem: PrefabsAndScripts/RangeIconSystem/
 --- !u!4 &1411719281
 Transform:
   m_ObjectHideFlags: 0
@@ -4469,6 +4485,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5670465454136827815, guid: 6a1486edaf52eeb46962db0b6666f1b2,
+        type: 3}
+      propertyPath: m_Name
+      value: RedBall
+      objectReference: {fileID: 0}
     - target: {fileID: 1203834790958050006, guid: 6a1486edaf52eeb46962db0b6666f1b2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4523,11 +4544,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5670465454136827815, guid: 6a1486edaf52eeb46962db0b6666f1b2,
-        type: 3}
-      propertyPath: m_Name
-      value: RedBall
       objectReference: {fileID: 0}
     - target: {fileID: 1939151754161273087, guid: 6a1486edaf52eeb46962db0b6666f1b2,
         type: 3}
@@ -7651,7 +7667,7 @@ MonoBehaviour:
   climbingAnimatorFloat: 
   climbingAnimatorBool: 
   dressList: []
-  particlesLoveResource: Prefabs/Effects/psHeartParticles.prefab
+  particlesLoveResource: psHeartParticles
 --- !u!1 &140103501528456798
 GameObject:
   m_ObjectHideFlags: 0
@@ -7901,10 +7917,11 @@ MonoBehaviour:
   climbingAnimatorBool: 
   dressList:
   - name: Mohawk
-    resourceName: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprDressHairMohawk_0
+    resourceName: sprDressHairMohawk_0
     offset: {x: -0.13, y: 0.57}
+    inDressDirectory: 1
     gameObject: {fileID: 0}
-  particlesLoveResource: Prefabs/Effects/psHeartParticles.prefab
+  particlesLoveResource: psHeartParticles
 --- !u!1 &140103501616841431
 GameObject:
   m_ObjectHideFlags: 0
