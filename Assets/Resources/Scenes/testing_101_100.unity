@@ -1217,7 +1217,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639161559}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -6, z: 0}
+  m_LocalPosition: {x: -3, y: -6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 608589185}
@@ -1297,7 +1297,10 @@ MonoBehaviour:
     offset: {x: -0.2, y: 0.92}
     inDressDirectory: 1
     gameObject: {fileID: 0}
-  particlesLoveResource: psHeartParticles
+  particlesLovePrefab: {fileID: 1343902013502930873, guid: 3540d062a76f0224a99c91f485eadc95,
+    type: 3}
+  eiExclamationPoint: {fileID: 5449508022863895304, guid: 3bc1859d1f0052f429149980583ba307,
+    type: 3}
 --- !u!114 &639161564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1590,7 +1593,7 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Message: ...Uhhhh... BYE!
+  - Message: ...Uhhhh... Why are you looking at me like that?
     Title: 
     saidByInitiator: 1
     sendMessageStart: Angry
@@ -1614,7 +1617,151 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Message: Bye! I'll talk to you later!
+  - Message: I'm testing out the character emotion system!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: Normal
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Here is squint!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: Relaxed
+    sendMessageEnd: 
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 140
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: And now, we have surprise!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: Surprise
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 500
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I'm testing out the character emotion system!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: Normal
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I'm testing out the character emotion system!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: Normal
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I'm testing out the character emotion system!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: Normal
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: 
     Title: 
     saidByInitiator: 0
     sendMessageStart: 
@@ -4094,11 +4241,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6145378233625631958, guid: 57ac04339e38e7b43b6d02301abf1a30,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerSpawn
-      objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4153,6 +4295,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145378233625631958, guid: 57ac04339e38e7b43b6d02301abf1a30,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerSpawn
       objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633576, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
@@ -4459,6 +4606,7 @@ MonoBehaviour:
   dirRenderer: Renderer/
   dirScenes: Scenes/
   dirSprites: Sprites/
+  dirIcons: Sprites/Icons/
   dirParticleSystems: PrefabsAndScripts/Effects/
   dirBlubberSprites: Sprites/Characters/Blubber/
   dirCharacterDress: Sprites/Dress/
@@ -4485,11 +4633,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5670465454136827815, guid: 6a1486edaf52eeb46962db0b6666f1b2,
-        type: 3}
-      propertyPath: m_Name
-      value: RedBall
-      objectReference: {fileID: 0}
     - target: {fileID: 1203834790958050006, guid: 6a1486edaf52eeb46962db0b6666f1b2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4544,6 +4687,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5670465454136827815, guid: 6a1486edaf52eeb46962db0b6666f1b2,
+        type: 3}
+      propertyPath: m_Name
+      value: RedBall
       objectReference: {fileID: 0}
     - target: {fileID: 1939151754161273087, guid: 6a1486edaf52eeb46962db0b6666f1b2,
         type: 3}
@@ -5274,7 +5422,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629155486}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.5, y: -5.5, z: 0}
+  m_LocalPosition: {x: 15, y: -5, z: 0}
   m_LocalScale: {x: 0.9, y: 0.7, z: 1}
   m_Children:
   - {fileID: 1689816935}
@@ -7667,7 +7815,8 @@ MonoBehaviour:
   climbingAnimatorFloat: 
   climbingAnimatorBool: 
   dressList: []
-  particlesLoveResource: psHeartParticles
+  particlesLovePrefab: {fileID: 0}
+  eiExclamationPoint: {fileID: 0}
 --- !u!1 &140103501528456798
 GameObject:
   m_ObjectHideFlags: 0
@@ -7921,7 +8070,8 @@ MonoBehaviour:
     offset: {x: -0.13, y: 0.57}
     inDressDirectory: 1
     gameObject: {fileID: 0}
-  particlesLoveResource: psHeartParticles
+  particlesLovePrefab: {fileID: 0}
+  eiExclamationPoint: {fileID: 0}
 --- !u!1 &140103501616841431
 GameObject:
   m_ObjectHideFlags: 0
