@@ -16,7 +16,7 @@ public class BlubberAnimation : CharacterAnimation
      *+ Squint
      * Excited (fast jumping up and down, closed eyes)
      *+ Angry
-     * cuteEyes
+     *+ cuteEyes
      *+ bugEyes
      *+ smallEyes
      * eyesClosed
@@ -74,8 +74,9 @@ public class BlubberAnimation : CharacterAnimation
         dressList.Add(new dress("eyesLove", global.dirBlubberSprites + "eyesLove", gameObject.transform, false));
         dressList.Add(new dress("eyesSmall", global.dirBlubberSprites + "eyesSmall", gameObject.transform, false));
         dressList.Add(new dress("eyesBug", global.dirBlubberSprites + "eyesBug", gameObject.transform, false));
+        dressList.Add(new dress("eyesCute", global.dirBlubberSprites + "eyesCute", gameObject.transform, false));
 
-        eyes = new multiDress(ref dressList, "eyesNormal", new string[] { "eyesNormal","eyesAngry","eyesBlink","eyesClimb", "eyesHalf", "eyesLove", "eyesSmall", "eyesBug" });
+        eyes = new multiDress(ref dressList, "eyesNormal", new string[] { "eyesNormal","eyesAngry","eyesBlink","eyesClimb", "eyesHalf", "eyesLove", "eyesSmall", "eyesBug", "eyesCute" });
 
     }
     public override void UpdateCharacter()
@@ -183,5 +184,10 @@ public class BlubberAnimation : CharacterAnimation
     {
         eyes.changeState("eyesBug");
         currentEyes = "Bug";
+    }
+    public void cuteEyes()
+    {
+        eyes.changeState("eyesCute");
+        currentEyes = "Cute";
     }
 }

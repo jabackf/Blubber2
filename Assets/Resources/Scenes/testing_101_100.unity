@@ -1644,15 +1644,15 @@ MonoBehaviour:
   - Message: Here is squint!
     Title: 
     saidByInitiator: 0
-    sendMessageStart: Relaxed
-    sendMessageEnd: 
+    sendMessageStart: 
+    sendMessageEnd: Squint
     gameObject: {fileID: 639161559}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
     jumpTo: -1
     timeOnScreen: 0
-    timeOffScreen: 140
+    timeOffScreen: 1.5
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -1668,7 +1668,7 @@ MonoBehaviour:
   - Message: And now, we have surprise!
     Title: 
     saidByInitiator: 0
-    sendMessageStart: 
+    sendMessageStart: Normal
     sendMessageEnd: Surprise
     gameObject: {fileID: 639161559}
     locationTop: {fileID: 0}
@@ -1676,7 +1676,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 0
-    timeOffScreen: 500
+    timeOffScreen: 1.8
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -1689,18 +1689,18 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Message: I'm testing out the character emotion system!
+  - Message: How about ANGRY?!
     Title: 
     saidByInitiator: 0
-    sendMessageStart: 
-    sendMessageEnd: Normal
+    sendMessageStart: Normal
+    sendMessageEnd: Angry
     gameObject: {fileID: 639161559}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
     jumpTo: -1
     timeOnScreen: 0
-    timeOffScreen: 0
+    timeOffScreen: 1
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -1713,18 +1713,18 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Message: I'm testing out the character emotion system!
+  - Message: Small eyes!
     Title: 
     saidByInitiator: 0
-    sendMessageStart: 
-    sendMessageEnd: Normal
+    sendMessageStart: Normal
+    sendMessageEnd: smallEyes
     gameObject: {fileID: 639161559}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
     jumpTo: -1
     timeOnScreen: 0
-    timeOffScreen: 0
+    timeOffScreen: 1.5
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -1737,18 +1737,18 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Message: I'm testing out the character emotion system!
+  - Message: CUTE EYES!
     Title: 
     saidByInitiator: 0
-    sendMessageStart: 
-    sendMessageEnd: Normal
+    sendMessageStart: Normal
+    sendMessageEnd: cuteEyes
     gameObject: {fileID: 639161559}
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
     jumpTo: -1
     timeOnScreen: 0
-    timeOffScreen: 0
+    timeOffScreen: 1.5
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -7883,7 +7883,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -7907,7 +7907,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -9859,7 +9859,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -9889,7 +9889,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -9913,7 +9913,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 

@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -441,8 +441,28 @@ MonoBehaviour:
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  hasAction: 0
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &51947413
 GameObject:
   m_ObjectHideFlags: 0
@@ -1583,8 +1603,28 @@ MonoBehaviour:
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  hasAction: 0
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &461519964
 GameObject:
   m_ObjectHideFlags: 0
@@ -3781,8 +3821,28 @@ MonoBehaviour:
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  hasAction: 0
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1194112659
 GameObject:
   m_ObjectHideFlags: 0
@@ -4350,6 +4410,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScene: testing_100_100
+  dirResourceRoot: Assets/Resources/
+  dirAnimations: Animations/
+  dirBackgrounds: BackgroundsAndTiles/
+  dirFonts: Fonts/
+  dirMaterials: Materials/
+  dirPhysicsMaterials: PhysicsMaterials/
+  dirPrefabs: PrefabsAndScripts/
+  dirRenderer: Renderer/
+  dirScenes: Scenes/
+  dirSprites: Sprites/
+  dirIcons: Sprites/Icons/
+  dirParticleSystems: PrefabsAndScripts/Effects/
+  dirBlubberSprites: Sprites/Characters/Blubber/
+  dirCharacterDress: Sprites/Dress/
+  dirDialogSystem: PrefabsAndScripts/Dialog/
+  dirRangeIconSystem: PrefabsAndScripts/RangeIconSystem/
 --- !u!4 &1411719281
 Transform:
   m_ObjectHideFlags: 0
@@ -4534,8 +4610,28 @@ MonoBehaviour:
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  hasAction: 0
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!61 &1446116004
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4817,8 +4913,28 @@ MonoBehaviour:
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  hasAction: 0
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1538511488
 GameObject:
   m_ObjectHideFlags: 0
@@ -5153,7 +5269,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5177,7 +5293,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5201,7 +5317,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5226,7 +5342,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5265,7 +5381,7 @@ MonoBehaviour:
     group: 0
     jumpTo: 7
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5289,7 +5405,7 @@ MonoBehaviour:
     group: 0
     jumpTo: 7
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5314,7 +5430,7 @@ MonoBehaviour:
     group: 0
     jumpTo: 7
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5340,7 +5456,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5364,7 +5480,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5388,7 +5504,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5412,7 +5528,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 1
     repeatIfEmpty: 1
     repeatAddText: 'YOU DIDN''T ANSWER ME! '
@@ -5436,7 +5552,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -5460,7 +5576,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 1
     repeatIfEmpty: 1
     repeatAddText: '<i>sigh</i> Look, it''s ok. Just tell me.... '
@@ -5495,7 +5611,7 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 12
-    timeOffScreen: 2
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 1
     repeatAddText: 
@@ -6419,8 +6535,28 @@ MonoBehaviour:
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  hasAction: 0
+  actionSendMessage: 
+  actionMessageReceiver: {fileID: 0}
+  ActionCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &1796379625
 GameObject:
   m_ObjectHideFlags: 0
