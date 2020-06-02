@@ -72,6 +72,7 @@ public class Dialog : MonoBehaviour
     private float onScreenTimer;
     private float offScreenTimer;
     private float addToTimer = 0f;
+	private string nextBoxOptions = "";
 
     //This struct couples potential answers to dialog questions with entries indexes to jump to if that answer is provided.
     [System.Serializable]
@@ -97,7 +98,7 @@ public class Dialog : MonoBehaviour
         public int group = 0; //This can be used to cluster together messages in groups. For instance, if the conversation is RandomSingle, then a random group will be chosen and all messages in that group will be displayed in order
         public int jumpTo = -1;
         public float timeOnScreen = -1; //For auto types only. The amount of time the box will be displayed on screen. 0 or less = the default time specified by defaultOnScreenTime
-        public float timeOffScreen = -1; //For auto types only. The amount of time AFTER this box closes before the next box displays
+        public float timeOffScreen = -1; //The amount of time AFTER this box closes before the next box displays
         public bool getTextInput = false;
         public bool repeatIfEmpty = true; //Repeats this dialog if the answer is empty
         public string repeatAddText = ""; //If repeatIfEmpty is true, and an empty answer is given, this string is tacked to the front of the next message. For example "You didn't enter anything! Try again. "
@@ -172,6 +173,20 @@ public class Dialog : MonoBehaviour
                 }
             }
         }
+		else
+		{
+			if (!onScreen)
+			{
+                if (offScreenTimer > 0) offScreenTimer -= Time.deltaTime;
+                else
+                {
+                    Next(nextBoxOptions);
+                    onScreen = true;
+					offScreenTimer = entries[index].timeOffScreen;
+
+                }
+            }
+		}
     }
 
     //Called when someone is interupting our conversation.
@@ -243,9 +258,9 @@ public class Dialog : MonoBehaviour
 
         LoadBox();
 
+		onScreen = true;
         if (isAutoType)
         {
-            onScreen = true;
             onScreenTimer = entries[index].timeOnScreen > 0 ? (entries[index].timeOnScreen+addToTimer) * autoOnTimeMultiplier : (defaultOnScreenTime+addToTimer) * autoOnTimeMultiplier;
         }
     }
@@ -508,4 +523,16 @@ public class Dialog : MonoBehaviour
         Destroy(dialogBox);
         dialogBox = null;
     }
+	
+	//This will set a string that is passed to the Next function next time it runs. Used to pass answers after offScreenTimer is complete. (only for dialogs that require user input to progress)
+	public void setNextBoxOptions(string options)
+	{
+		nextBoxOptions = options;
+	}
+	
+	public void setOnScreen(bool val)
+	{
+		onScreen= val;
+	}
+	
 }

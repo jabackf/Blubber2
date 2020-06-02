@@ -259,7 +259,7 @@ public class DialogBox : MonoBehaviour
                 {
                     if (!isAuto)
                     {
-                        if (answers.Count > 1)
+                        /*if (answers.Count > 1)
                             dialogParent.Next(answers[selectedIndex]);
                         else
                         {
@@ -267,7 +267,19 @@ public class DialogBox : MonoBehaviour
                                 dialogParent.Next(inputField.text);
                             else
                                 dialogParent.Next();
+                        }*/
+						
+						if (answers.Count > 1)
+                            dialogParent.setNextBoxOptions(answers[selectedIndex]);
+                        else
+                        {
+                            if (getTextInput)
+                                dialogParent.setNextBoxOptions(inputField.text);
+                            else
+                                dialogParent.setNextBoxOptions("NoneProvided");
                         }
+						dialogParent.setOnScreen(false);
+						dialogParent.KillBox();
                     }
                     else
                     {
