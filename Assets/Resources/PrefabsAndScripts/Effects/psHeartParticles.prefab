@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1279673396969096596}
   - component: {fileID: 1091392709125515848}
   - component: {fileID: 8223792170119519325}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: psHeartParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1343902013502930873}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 7.91, y: -3.09, z: -29.851562}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

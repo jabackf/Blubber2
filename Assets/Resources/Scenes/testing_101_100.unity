@@ -1299,6 +1299,8 @@ MonoBehaviour:
     gameObject: {fileID: 0}
   particlesLovePrefab: {fileID: 1343902013502930873, guid: 3540d062a76f0224a99c91f485eadc95,
     type: 3}
+  particlesTearsPrefab: {fileID: 3099225133798276787, guid: f36f23d7b0618b5409fddc0bc7458100,
+    type: 3}
   eiExclamationPoint: {fileID: 5449508022863895304, guid: 3bc1859d1f0052f429149980583ba307,
     type: 3}
 --- !u!114 &639161564
@@ -1761,10 +1763,34 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Message: 
+  - Message: I can also cry!
     Title: 
     saidByInitiator: 0
-    sendMessageStart: 
+    sendMessageStart: Normal
+    sendMessageEnd: Cry
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 1.8
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Front
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: facePlayer
     sendMessageEnd: Normal
     gameObject: {fileID: 639161559}
     locationTop: {fileID: 0}
@@ -1772,7 +1798,55 @@ MonoBehaviour:
     group: 0
     jumpTo: -1
     timeOnScreen: 0
-    timeOffScreen: 0
+    timeOffScreen: 1
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Back!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: faceBackground
+    sendMessageEnd: Normal
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 1
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: BlackEye!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: blackEye
+    sendMessageEnd: 
+    gameObject: {fileID: 639161559}
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 1.7
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -7816,6 +7890,7 @@ MonoBehaviour:
   climbingAnimatorBool: 
   dressList: []
   particlesLovePrefab: {fileID: 0}
+  particlesTearsPrefab: {fileID: 0}
   eiExclamationPoint: {fileID: 0}
 --- !u!1 &140103501528456798
 GameObject:
@@ -8071,6 +8146,7 @@ MonoBehaviour:
     inDressDirectory: 1
     gameObject: {fileID: 0}
   particlesLovePrefab: {fileID: 0}
+  particlesTearsPrefab: {fileID: 0}
   eiExclamationPoint: {fileID: 0}
 --- !u!1 &140103501616841431
 GameObject:

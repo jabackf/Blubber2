@@ -10,10 +10,11 @@ public class BlubberAnimation : CharacterAnimation
      *+ Normal
      *+ Love
      *+ Surprise (exclamation mark)
-     * Cry
+     *+ Cry
      * Sad
      * Concern (single teardrop, anime style)
      *+ Squint
+     *+Blackeye
      * Excited (fast jumping up and down, closed eyes)
      *+ Angry
      *+ cuteEyes
@@ -21,9 +22,11 @@ public class BlubberAnimation : CharacterAnimation
      *+ smallEyes
      * eyesClosed
      * 
+     * 
      * Other:
      * 
-     * facePlayer
+     *+ faceBackground
+     *+ facePlayer
      * 
      */
 
@@ -47,6 +50,7 @@ public class BlubberAnimation : CharacterAnimation
     private GameObject particles;
 
     public GameObject particlesLovePrefab;
+    public GameObject particlesTearsPrefab;
 
 
     //Emote icons are icons that can appear near the character to display emotions such as an exclamation point or tear drop
@@ -70,13 +74,15 @@ public class BlubberAnimation : CharacterAnimation
         dressList.Add(new dress("eyesAngry", global.dirBlubberSprites + "eyesAngry", gameObject.transform, false));
         dressList.Add(new dress("eyesBlink", global.dirBlubberSprites + "eyesBlink", gameObject.transform, false));
         dressList.Add(new dress("eyesClimb", global.dirBlubberSprites + "eyesClimb", gameObject.transform, false));
-        dressList.Add(new dress("eyesHalf", global.dirBlubberSprites + "eyesHalf", gameObject.transform, false));
+        dressList.Add(new dress("eyesHalf", global.dirBlubberSprites + "eyesSquint", gameObject.transform, false));
         dressList.Add(new dress("eyesLove", global.dirBlubberSprites + "eyesLove", gameObject.transform, false));
         dressList.Add(new dress("eyesSmall", global.dirBlubberSprites + "eyesSmall", gameObject.transform, false));
         dressList.Add(new dress("eyesBug", global.dirBlubberSprites + "eyesBug", gameObject.transform, false));
         dressList.Add(new dress("eyesCute", global.dirBlubberSprites + "eyesCute", gameObject.transform, false));
+        dressList.Add(new dress("eyesBlack", global.dirBlubberSprites + "eyesBlack", gameObject.transform, false));
+        dressList.Add(new dress("eyesFront", global.dirBlubberSprites + "eyesFront", gameObject.transform, false));
 
-        eyes = new multiDress(ref dressList, "eyesNormal", new string[] { "eyesNormal","eyesAngry","eyesBlink","eyesClimb", "eyesHalf", "eyesLove", "eyesSmall", "eyesBug", "eyesCute" });
+        eyes = new multiDress(ref dressList, "eyesNormal", new string[] { "eyesNormal","eyesAngry","eyesBlink","eyesClimb", "eyesHalf", "eyesLove", "eyesSmall", "eyesBug", "eyesCute", "eyesBlack", "eyesFront" });
 
     }
     public override void UpdateCharacter()
@@ -189,5 +195,37 @@ public class BlubberAnimation : CharacterAnimation
     {
         eyes.changeState("eyesCute");
         currentEyes = "Cute";
+    }
+    public void Cry()
+    {
+        eyes.changeState("eyesBlink");
+        currentEyes = "Blink";
+        currentEmotion = "Cry";
+        setParticles(particlesTearsPrefab);
+        setEmoteIcon(null);
+    }
+    public void blackEye()
+    {
+        eyes.changeState("eyesBlack");
+        currentEyes = "Black";
+        currentEmotion = "Pain";
+        setParticles(null);
+        setEmoteIcon(null);
+    }
+    public void faceBackground()
+    {
+        eyes.changeState("eyesClimb");
+        currentEyes = "Climb";
+        currentEmotion = "Normal";
+        setParticles(null);
+        setEmoteIcon(null);
+    }
+    public void facePlayer()
+    {
+        eyes.changeState("eyesFront");
+        currentEyes = "Front";
+        currentEmotion = "Normal";
+        setParticles(null);
+        setEmoteIcon(null);
     }
 }
