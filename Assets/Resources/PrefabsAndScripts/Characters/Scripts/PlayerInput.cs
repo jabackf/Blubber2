@@ -62,8 +62,7 @@ public class PlayerInput : MonoBehaviour
 
             if (Input.GetButtonDown("Jump"))
             {
-                if (jump != true)
-                    jump = true;
+                 jump = true;
             }
 
             if (Input.GetButtonDown("Dialog"))

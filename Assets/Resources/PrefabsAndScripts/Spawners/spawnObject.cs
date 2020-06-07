@@ -41,4 +41,5 @@ public class spawnObject : MonoBehaviour
             Instantiate(objectList[index], gameObject.transform.position, gameObject.transform.rotation);
         }
     }
+
 }

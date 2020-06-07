@@ -250,6 +250,8 @@ MonoBehaviour:
   m_rangeColliderR: {fileID: 8036988582916006721}
   m_DialogTop: {fileID: 5456296111386055994}
   m_DialogBottom: {fileID: 5583954899186943733}
+  deathParticles: {fileID: 1794340304444153981, guid: 680ba1e13b7f7cf4d89e9d57ef6bea01,
+    type: 3}
   spriteFlipMethod: 1
   isTalking: 0
   OnLandEvent:
@@ -344,7 +346,9 @@ MonoBehaviour:
   climbingAnimatorFloat: 
   climbingAnimatorBool: 
   dressList: []
-  particlesLoveResource: psHeartParticles
+  particlesLovePrefab: {fileID: 0}
+  particlesTearsPrefab: {fileID: 0}
+  eiExclamationPoint: {fileID: 0}
 --- !u!1 &936482574467484246
 GameObject:
   m_ObjectHideFlags: 0

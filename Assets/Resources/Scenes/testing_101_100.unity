@@ -1202,7 +1202,8 @@ GameObject:
   - component: {fileID: 639161564}
   - component: {fileID: 639161563}
   - component: {fileID: 639161562}
-  m_Layer: 0
+  - component: {fileID: 639161561}
+  m_Layer: 12
   m_Name: Pinky
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1230,6 +1231,31 @@ Transform:
   m_Father: {fileID: 1194112661}
   m_RootOrder: 34
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &639161561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639161559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e151823be596f3d40a24af4d9afd9986, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: {fileID: 639161564}
+  horizontalMove: 0
+  aimAngleSpeed: 200
+  aimForceSpeed: 50
+  jump: 0
+  crouch: 0
+  pickup: 0
+  dialog: 0
+  dropDown: 0
+  useItemAction: 0
+  climb: 0
+  climbSpeed: 5
+  holdingAction: 0
 --- !u!114 &639161562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1321,7 +1347,7 @@ MonoBehaviour:
   maxVelocity: 20
   m_AirControl: 1
   canUseDropDownPlatforms: 1
-  m_JumpVelocity: 10.5
+  m_JumpVelocity: 8
   canDoubleJump: 0
   infiniteJump: 0
   canCrouch: 0
@@ -1352,6 +1378,7 @@ MonoBehaviour:
   m_rangeColliderR: {fileID: 1015134370}
   m_DialogTop: {fileID: 608589185}
   m_DialogBottom: {fileID: 235187553}
+  deathParticles: {fileID: 0}
   spriteFlipMethod: 1
   isTalking: 0
   OnLandEvent:
@@ -1394,7 +1421,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639161559}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -1457,7 +1484,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639161559}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: c979e2e0243b6764e9333fa0b0f52b98, type: 2}
   m_CullingMode: 0
@@ -1577,6 +1604,8 @@ MonoBehaviour:
     sendMessageStart: Love
     sendMessageEnd: 
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1601,6 +1630,8 @@ MonoBehaviour:
     sendMessageStart: Angry
     sendMessageEnd: Normal
     gameObject: {fileID: 0}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1625,6 +1656,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: Normal
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1649,6 +1682,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: Squint
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1673,6 +1708,8 @@ MonoBehaviour:
     sendMessageStart: Normal
     sendMessageEnd: Surprise
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1697,6 +1734,8 @@ MonoBehaviour:
     sendMessageStart: Normal
     sendMessageEnd: Angry
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1721,6 +1760,8 @@ MonoBehaviour:
     sendMessageStart: Normal
     sendMessageEnd: smallEyes
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1745,6 +1786,8 @@ MonoBehaviour:
     sendMessageStart: Normal
     sendMessageEnd: cuteEyes
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1769,6 +1812,8 @@ MonoBehaviour:
     sendMessageStart: Normal
     sendMessageEnd: Cry
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1793,6 +1838,8 @@ MonoBehaviour:
     sendMessageStart: facePlayer
     sendMessageEnd: Normal
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1817,6 +1864,8 @@ MonoBehaviour:
     sendMessageStart: faceBackground
     sendMessageEnd: Normal
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -1835,18 +1884,98 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-  - Message: BlackEye!
+  - Message: BLACK EYE!
     Title: 
     saidByInitiator: 0
     sendMessageStart: blackEye
-    sendMessageEnd: 
+    sendMessageEnd: Normal
     gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
     jumpTo: -1
     timeOnScreen: 0
-    timeOffScreen: 1.7
+    timeOffScreen: 1
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I can even jump up and down in excitement!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: jumpingOn
+    sendMessageEnd: jumpingOff
+    gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: I can also play animations. Here I am pacing back and forth!
+    Title: 
+    saidByInitiator: 0
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 639161559}
+    startAnimation: fastPacing
+    endAnimation: default
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0.8
+    getTextInput: 0
+    repeatIfEmpty: 0
+    repeatAddText: 
+    inputType: 0
+    imageResource: 
+    answers: []
+    answerBranch: []
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+  - Message: Ok then... BYE!
+    Title: 
+    saidByInitiator: 1
+    sendMessageStart: 
+    sendMessageEnd: 
+    gameObject: {fileID: 639161559}
+    startAnimation: 
+    endAnimation: 
+    locationTop: {fileID: 0}
+    locationBottom: {fileID: 0}
+    group: 0
+    jumpTo: -1
+    timeOnScreen: 0
+    timeOffScreen: 0
     getTextInput: 0
     repeatIfEmpty: 0
     repeatAddText: 
@@ -2990,6 +3119,87 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &855379641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 855379642}
+  - component: {fileID: 855379643}
+  m_Layer: 0
+  m_Name: destination
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &855379642
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855379641}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.02, y: -0.97, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1421899523}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &855379643
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855379641}
+  m_Enabled: 0
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: e03aa8f3a1f3abf4794d8d6317c9c16a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &861429274
 GameObject:
   m_ObjectHideFlags: 0
@@ -4028,6 +4238,7 @@ Transform:
   - {fileID: 2011892487}
   - {fileID: 1629155487}
   - {fileID: 639161560}
+  - {fileID: 1421899523}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4375,6 +4586,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerSpawn
       objectReference: {fileID: 0}
+    - target: {fileID: 6145378233625631958, guid: 57ac04339e38e7b43b6d02301abf1a30,
+        type: 3}
+      propertyPath: m_TagString
+      value: playerSpawn
+      objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633576, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -4700,6 +4916,135 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1421899522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1421899523}
+  - component: {fileID: 1421899525}
+  - component: {fileID: 1421899524}
+  - component: {fileID: 1421899526}
+  m_Layer: 0
+  m_Name: spikeup
+  m_TagString: killPlayer
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1421899523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421899522}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.49, y: -5.51, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 855379642}
+  m_Father: {fileID: 1194112661}
+  m_RootOrder: 35
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1421899524
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421899522}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: e03aa8f3a1f3abf4794d8d6317c9c16a, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &1421899525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421899522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a9cd75c93f2794c8fddecbec2ca702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destination: {fileID: 855379642}
+  stopTime: 1.5
+  stopped: 1
+  startAtDestination: 0
+  moveSpeed: 3.7
+--- !u!60 &1421899526
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421899522}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 0.4}
+      - {x: -0.47, y: -0.5}
+      - {x: 0.4, y: -0.5}
 --- !u!1001 &1450785949
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5149,6 +5494,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 0}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 440377944}
     locationBottom: {fileID: 0}
     group: 0
@@ -6353,8 +6700,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1590694485
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -7812,6 +8159,7 @@ MonoBehaviour:
   m_rangeColliderR: {fileID: 8036988583677699717}
   m_DialogTop: {fileID: 5456296111611072766}
   m_DialogBottom: {fileID: 5583954899906429745}
+  deathParticles: {fileID: 0}
   spriteFlipMethod: 1
   isTalking: 0
   OnLandEvent:
@@ -7953,6 +8301,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -7977,6 +8327,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 0}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8063,6 +8415,7 @@ MonoBehaviour:
   m_rangeColliderR: {fileID: 8036988583715273228}
   m_DialogTop: {fileID: 5456296111648083063}
   m_DialogBottom: {fileID: 5583954899985817528}
+  deathParticles: {fileID: 0}
   spriteFlipMethod: 1
   isTalking: 0
   OnLandEvent:
@@ -8211,6 +8564,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8236,6 +8591,8 @@ MonoBehaviour:
     sendMessageStart: Angry
     sendMessageEnd: Normal
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8260,6 +8617,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8284,6 +8643,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8309,6 +8670,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8334,6 +8697,8 @@ MonoBehaviour:
     sendMessageStart: Angry
     sendMessageEnd: Normal
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8358,6 +8723,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8382,6 +8749,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8406,6 +8775,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8430,6 +8801,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8454,6 +8827,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8478,6 +8853,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8502,6 +8879,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8526,6 +8905,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8550,6 +8931,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8574,6 +8957,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8598,6 +8983,8 @@ MonoBehaviour:
     sendMessageStart: Angry
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8622,6 +9009,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8646,6 +9035,8 @@ MonoBehaviour:
     sendMessageStart: Normal
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8670,6 +9061,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8694,6 +9087,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8718,6 +9113,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8742,6 +9139,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8766,6 +9165,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8790,6 +9191,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8815,6 +9218,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8839,6 +9244,8 @@ MonoBehaviour:
     sendMessageStart: Angry
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8863,6 +9270,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8887,6 +9296,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8911,6 +9322,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8935,6 +9348,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: Normal
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8959,6 +9374,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -8983,6 +9400,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9007,6 +9426,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9031,6 +9452,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9056,6 +9479,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9080,6 +9505,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9104,6 +9531,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9128,6 +9557,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9152,6 +9583,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9176,6 +9609,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9200,6 +9635,8 @@ MonoBehaviour:
     sendMessageStart: Angry
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9224,6 +9661,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9249,6 +9688,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9273,6 +9714,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9297,6 +9740,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: Normal
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9321,6 +9766,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9345,6 +9792,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9369,6 +9818,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9393,6 +9844,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9418,6 +9871,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9442,6 +9897,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9467,6 +9924,8 @@ MonoBehaviour:
     sendMessageStart: Angry
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9491,6 +9950,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9515,6 +9976,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9540,6 +10003,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9564,6 +10029,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9589,6 +10056,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9613,6 +10082,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9637,6 +10108,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9661,6 +10134,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9685,6 +10160,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9709,6 +10186,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9733,6 +10212,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9757,6 +10238,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9781,6 +10264,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9805,6 +10290,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9829,6 +10316,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9853,6 +10342,8 @@ MonoBehaviour:
     sendMessageStart: Normal
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9877,6 +10368,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501528456798}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9930,6 +10423,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9960,6 +10455,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 0}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0
@@ -9984,6 +10481,8 @@ MonoBehaviour:
     sendMessageStart: 
     sendMessageEnd: 
     gameObject: {fileID: 140103501616841431}
+    startAnimation: 
+    endAnimation: 
     locationTop: {fileID: 0}
     locationBottom: {fileID: 0}
     group: 0

@@ -12,6 +12,8 @@ TagManager:
   - global
   - sceneBoundary
   - trigger
+  - killPlayer
+  - playerSpawn
   layers:
   - Default
   - TransparentFX

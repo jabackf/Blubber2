@@ -1,19 +1,22 @@
 fileFormatVersion: 2
-guid: 0e1862e0696dcb541a6b11d0f22f7db9
+guid: 0f8e4f428053b45448db503c6d58f0b0
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1203332162443041406
-    second: musicnotes_0
+      213: -42834578508891925
+    second: star_particles_0
   - first:
-      213: -6302856141895075735
-    second: musicnotes_1
+      213: -5348338264701679098
+    second: star_particles_1
   - first:
-      213: 1118947045750933177
-    second: musicnotes_2
+      213: -3445819241947458645
+    second: star_particles_2
   - first:
-      213: 3501515134903939817
-    second: musicnotes_3
+      213: -8854183875890187605
+    second: star_particles_3
+  - first:
+      213: 2882454214609505167
+    second: star_particles_4
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -59,7 +62,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 24
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -110,85 +113,106 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: musicnotes_0
+      name: star_particles_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 20
+        width: 7
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7d7834b999bb6b479f1713bef5dd8a3
-      internalID: -1203332162443041406
+      spriteID: 239d36bfe054dcd4d8035713fe60c939
+      internalID: -42834578508891925
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: musicnotes_1
+      name: star_particles_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 7
         y: 0
-        width: 16
-        height: 20
+        width: 7
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df8f26f2b571f0d4a83ca1b2665e75c6
-      internalID: -6302856141895075735
+      spriteID: 333be0e097ba57a41b473624909d6bd7
+      internalID: -5348338264701679098
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: musicnotes_2
+      name: star_particles_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 14
         y: 0
-        width: 16
-        height: 20
+        width: 7
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47e76928fcbdadf409108caa8b310a45
-      internalID: 1118947045750933177
+      spriteID: 7eb834b31bec48e4690ff4db9aa7995a
+      internalID: -3445819241947458645
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: musicnotes_3
+      name: star_particles_3
       rect:
         serializedVersion: 2
-        x: 49
+        x: 21
         y: 0
-        width: 15
-        height: 20
+        width: 7
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a8f4979c2694fe64f8ccdd2d727d697b
-      internalID: 3501515134903939817
+      spriteID: faff4810ad3aef54c8e6f556467e1d22
+      internalID: -8854183875890187605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: star_particles_4
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 0
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7f35bd8fa2163d42adaffd9928c5e1c
+      internalID: 2882454214609505167
       vertices: []
       indices: 
       edges: []

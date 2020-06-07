@@ -57,6 +57,8 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Collider2D m_rangeColliderR;                       // A position marking where to check for ceilings
     [SerializeField] private Transform m_DialogTop;                             // The top position that the dialog box will point to
     [SerializeField] private Transform m_DialogBottom;                          // The bottom position that the dialot box will point to
+    [SerializeField] public GameObject deathParticles;                          //A particle system object that is spawned when the character dies
+
 
     public Transform getDialogTop() { return m_DialogTop;  }
     public Transform getDialogBottom() { return m_DialogBottom; }
@@ -426,6 +428,33 @@ public class CharacterController2D : MonoBehaviour
             }
 		}
     }
+
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "killPlayer" && gameObject.tag == "Player")
+        {
+            playerDie();
+        }
+    }
+
+    public void playerDie()
+    {
+
+        if (deathParticles)
+        {
+            GameObject ps = Instantiate(deathParticles, gameObject.transform.position, Quaternion.identity);
+            var main = ps.GetComponent<ParticleSystem>().main;
+            main.startColor = gameObject.GetComponent<SpriteRenderer>().color;
+        }
+        PlayerSpawn spawn = GameObject.FindWithTag("playerSpawn").GetComponent<PlayerSpawn>() as PlayerSpawn;
+        if (spawn)
+        {
+            spawn.respawn();
+        }
+
+        Destroy(gameObject);
+    }
+
     public void StopTalking()
     {
         isTalking = false;

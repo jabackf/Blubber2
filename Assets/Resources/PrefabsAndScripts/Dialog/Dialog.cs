@@ -93,6 +93,8 @@ public class Dialog : MonoBehaviour
         public string sendMessageStart = ""; //If not empty, then this message is sent to the gameObject (or initiator, if gameObject is null) at the start of this box
         public string sendMessageEnd = ""; //Same as above, but it sent at the end of the message
         public GameObject gameObject;
+        public string startAnimation; //Animation to play when the box first opens. Applies to the speaker or the specified gameObject if not null
+        public string endAnimation;  //Animation to play when the box closes
         public Transform locationTop; //If both transforms are null and saidByInitiator is false, the dialog will appear in the center of the screen
         public Transform locationBottom;
         public int group = 0; //This can be used to cluster together messages in groups. For instance, if the conversation is RandomSingle, then a random group will be chosen and all messages in that group will be displayed in order
@@ -493,7 +495,19 @@ public class Dialog : MonoBehaviour
                 if (initiator != null) initiator.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
             }
         }
-            
+        if (entries[index].startAnimation != "")
+        {
+
+            if (entries[index].gameObject != null)
+            {
+                entries[index].gameObject.GetComponent<Animator>().Play(entries[index].startAnimation);
+            }
+            else
+            {
+                if (initiator != null) initiator.GetComponent<Animator>().Play(entries[index].startAnimation);
+            }
+        }
+
     }
 
     //Kill the current dialog box
@@ -516,6 +530,19 @@ public class Dialog : MonoBehaviour
             else
             {
                 if (initiator != null) initiator.SendMessage(entries[index].sendMessageEnd, null, SendMessageOptions.DontRequireReceiver);
+            }
+        }
+
+        if (entries[index].endAnimation != "")
+        {
+
+            if (entries[index].gameObject != null)
+            {
+                entries[index].gameObject.GetComponent<Animator>().Play(entries[index].endAnimation);
+            }
+            else
+            {
+                if (initiator != null) initiator.GetComponent<Animator>().Play(entries[index].endAnimation);
             }
         }
 

@@ -11,22 +11,20 @@ public class BlubberAnimation : CharacterAnimation
      *+ Love
      *+ Surprise (exclamation mark)
      *+ Cry
-     * Sad
-     * Concern (single teardrop, anime style)
      *+ Squint
-     *+Blackeye
-     * Excited (fast jumping up and down, closed eyes)
      *+ Angry
      *+ cuteEyes
      *+ bugEyes
      *+ smallEyes
-     * eyesClosed
-     * 
+     *+ closedEyes
+     *+ blackEye
      * 
      * Other:
      * 
      *+ faceBackground
      *+ facePlayer
+     *+ jumpingOn  (repeatedly jumps)
+     *+ jumpingOff
      * 
      */
 
@@ -38,6 +36,9 @@ public class BlubberAnimation : CharacterAnimation
 
     multiDress eyes;
 
+    BlubberInputInterface bii;
+
+    bool jumping = false; //Set to true and the character will jump repeatedly, provided it has a BlubberInputInterface
     bool blink = false;
     float blinkTimerMin = 4f;
     float blinkTimerMax = 8f;
@@ -63,6 +64,7 @@ public class BlubberAnimation : CharacterAnimation
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>();
+        bii = gameObject.GetComponent<BlubberInputInterface>() as BlubberInputInterface;
         base.Start();
     }
 
@@ -116,6 +118,9 @@ public class BlubberAnimation : CharacterAnimation
         {
             eyes.changeState("eyesBlink");
         }
+
+        if (bii != null && jumping)
+            bii.jump = true;
     }
 
     //Sets the particles to specified prefab. Pass null for no particles
@@ -186,6 +191,11 @@ public class BlubberAnimation : CharacterAnimation
         eyes.changeState("eyesSmall");
         currentEyes = "Small";
     }
+    public void closedEyes()
+    {
+        eyes.changeState("eyesBlink");
+        currentEyes = "Blink";
+    }
     public void bugEyes()
     {
         eyes.changeState("eyesBug");
@@ -227,5 +237,14 @@ public class BlubberAnimation : CharacterAnimation
         currentEmotion = "Normal";
         setParticles(null);
         setEmoteIcon(null);
+    }
+
+    public void jumpingOn()
+    {
+        jumping = true;
+    }
+    public void jumpingOff()
+    {
+        jumping = false;
     }
 }
