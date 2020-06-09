@@ -417,6 +417,7 @@ MonoBehaviour:
   m_rangeColliderR: {fileID: 884179044323593167}
   m_DialogTop: {fileID: 0}
   m_DialogBottom: {fileID: 0}
+  deathParticles: {fileID: 0}
   spriteFlipMethod: 1
   isTalking: 0
   OnLandEvent:

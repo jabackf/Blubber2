@@ -7,11 +7,14 @@ public class spawnObject : MonoBehaviour
     public float spawnTimeWait = 10f; //The amount of time to wait before spawning. Use -1 for no timer.
     private float spawnTimer = 0;
 
+    Global global;
+
     [SerializeField] public List<GameObject> objectList = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
         if (spawnTimeWait != -1) spawnTimer = spawnTimeWait;
     }
 
@@ -38,7 +41,8 @@ public class spawnObject : MonoBehaviour
         if (objectList.Count != 0)
         {
             if (index == -1) index = UnityEngine.Random.Range(0, objectList.Count);
-            Instantiate(objectList[index], gameObject.transform.position, gameObject.transform.rotation);
+            GameObject go = Instantiate(objectList[index], gameObject.transform.position, gameObject.transform.rotation);
+            global.map.settings.objectCreated(go);
         }
     }
 

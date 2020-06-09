@@ -439,7 +439,7 @@ public class CharacterController2D : MonoBehaviour
 
     public void playerDie()
     {
-
+        dropObject();
         if (deathParticles)
         {
             GameObject ps = Instantiate(deathParticles, gameObject.transform.position, Quaternion.identity);

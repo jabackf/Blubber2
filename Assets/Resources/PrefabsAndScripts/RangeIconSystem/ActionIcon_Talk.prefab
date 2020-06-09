@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2974339983681813185}
   m_Layer: 0
   m_Name: ActionIcon_Talk
-  m_TagString: Untagged
+  m_TagString: ActionIcon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

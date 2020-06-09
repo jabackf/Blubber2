@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ using UnityEngine;
 
 public class backAndForthMovement : MonoBehaviour
 {
+    public Transform start;     //If not specified, the object's initial position will be used
     public Transform destination;
     public float stopTime = 1.5f;
     public bool stopped = true;
@@ -16,11 +18,25 @@ public class backAndForthMovement : MonoBehaviour
     private bool goingHome = false;
     private float timer = 0;
     private Vector3 target;
+    public bool flipSpriteX = false;
+    public bool flipSpriteY = false;
+    public bool startFlipped = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        initialPosition = gameObject.transform.position;
+        if (!start)
+        {
+            GameObject goStart = new GameObject("start");
+            goStart.transform.position = gameObject.transform.position;
+            start = goStart.transform;
+        }
+
+        //Let's unparent these guys, because if we use something like scale to flip the sprite then we don't want the start and end points to change.
+        destination.transform.parent = null;
+        start.transform.parent = null;
+
         timer = stopTime;
         if (startAtDestination)
         {
@@ -28,6 +44,7 @@ public class backAndForthMovement : MonoBehaviour
             goingHome = true;
         }
         target = (goingHome ? initialPosition : destination.position);
+        if (startFlipped) gameObject.transform.localScale *= new Vector2(flipSpriteX ? -1 : 1, flipSpriteY ? -1 : 1);
     }
 
     // Update is called once per frame
@@ -39,20 +56,24 @@ public class backAndForthMovement : MonoBehaviour
             if (timer <= 0)
             {
                 stopped = false;
+                
             }
         }
         else
         {
             gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, target, moveSpeed*Time.deltaTime);
 
-            if (gameObject.transform.position==target)
+            if ( Math.Abs(gameObject.transform.position.x-target.x)<0.01 && Math.Abs(gameObject.transform.position.y - target.y) < 0.01)
             {
                 gameObject.transform.position = target;
                 stopped = true;
                 goingHome = !goingHome;
                 timer = stopTime;
-                target = (goingHome ? initialPosition : destination.position);
+                target = (goingHome ? start.position : destination.position);
+                gameObject.transform.localScale *= new Vector2(flipSpriteX ? -1 : 1, flipSpriteY ? -1 : 1);
             }
         }
     }
+
+
 }

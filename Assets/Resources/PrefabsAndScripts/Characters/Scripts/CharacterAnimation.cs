@@ -89,6 +89,7 @@ public class CharacterAnimation : MonoBehaviour
             this.name = name;
             this.gameObject = new GameObject();
             this.gameObject.name = "dress_" + name;
+            this.gameObject.tag = "CharacterDress";
             this.gameObject.transform.parent = parent;
             this.gameObject.transform.localPosition = new Vector3(this.offset.x, this.offset.y, 0f);
             this.gameObject.layer = LayerMask.NameToLayer(layerName);

@@ -14,6 +14,11 @@ TagManager:
   - trigger
   - killPlayer
   - playerSpawn
+  - SceneSettings
+  - ParicleEffects
+  - ActionIcon
+  - IgnoreDropShadow
+  - CharacterDress
   layers:
   - Default
   - TransparentFX
@@ -29,7 +34,7 @@ TagManager:
   - Climb
   - IgnorePlayerCollision
   - Debug
-  - 
+  - Background1
   - 
   - 
   - 
@@ -50,6 +55,9 @@ TagManager:
   m_SortingLayers:
   - name: Background
     uniqueID: 1006801551
+    locked: 0
+  - name: DropShadow
+    uniqueID: 2297248403
     locked: 0
   - name: ObjectsBehindDefault
     uniqueID: 671181451

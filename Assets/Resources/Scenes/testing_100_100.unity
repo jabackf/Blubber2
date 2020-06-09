@@ -2448,7 +2448,7 @@ GameObject:
   - component: {fileID: 700889753}
   m_Layer: 8
   m_Name: ConveyorTop
-  m_TagString: Untagged
+  m_TagString: IgnoreDropShadow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2630,7 +2630,7 @@ GameObject:
   m_Component:
   - component: {fileID: 715233495}
   - component: {fileID: 715233494}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2674,7 +2674,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1006801551
-  m_SortingLayer: -2
+  m_SortingLayer: -3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: db79e8ac8f5f6f64a877f8347b99eb83, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2695,7 +2695,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715233493}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.17707612, y: -0.33857507, z: -8.0625}
+  m_LocalPosition: {x: 0.17707612, y: -0.33857507, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3900,6 +3900,62 @@ Transform:
   - {fileID: 1301745736}
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1205530861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1205530863}
+  - component: {fileID: 1205530862}
+  m_Layer: 0
+  m_Name: SceneSettings
+  m_TagString: SceneSettings
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1205530862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205530861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa01c0fb68268c44480eb66071840974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bottomMessage: 
+  dsEnabled: 1
+  dsLayers:
+    serializedVersion: 2
+    m_Bits: 7937
+  dsIgnoreTags:
+  - IgnoreDropShadow
+  - ParticleEffects
+  - ActionIcon
+  - CharacterDress
+  dsOffset: {x: -0.35, y: -0.25}
+  dsMaterial: {fileID: 2100000, guid: b2c1535a0bf646b44866c3afed8546d0, type: 2}
+  dsSortingLayerName: DropShadow
+--- !u!4 &1205530863
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205530861}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.55, y: -0.48, z: -10}
+  m_LocalScale: {x: 1.625, y: 1.375, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1301745735
 GameObject:
@@ -8350,7 +8406,7 @@ GameObject:
   - component: {fileID: 2051888724}
   m_Layer: 8
   m_Name: ConveyorBottom
-  m_TagString: Untagged
+  m_TagString: IgnoreDropShadow
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9114,6 +9170,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_projectionMatrixMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
+        type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 24375
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237106, guid: 2893a7d494550224f822cf843e996621,
         type: 3}

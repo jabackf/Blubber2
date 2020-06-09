@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class MapSystem 
 {
     public Global global;
-
+    public sceneSettings settings; //This stores the sceneSettings script for the current scene
 
     [System.Serializable]
     public enum transitions
@@ -84,7 +84,8 @@ public class MapSystem
 	public MapSystem()
 	{
 		SceneManager.sceneLoaded += onSceneLoaded;
-	}
+        settings = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
+    }
 
     private string getNewMapString(string map)
     {
@@ -250,6 +251,7 @@ public class MapSystem
                 if (obj.scene == "" || scene.name == obj.scene)
                 {
                     obj.load();
+                    settings.objectCreated(obj.go); //Notify the sceneSettings object
                 }
             }
             instantiateOnLoadList.RemoveAll(obj => obj.loaded==true); //Remove all of the objects that were loaded
@@ -260,6 +262,8 @@ public class MapSystem
             repositionCharacterOnLoad();
             player.GetComponent<CharacterController2D>().sceneChangeComplete();
         }
+
+        settings = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
     }
 
     //Removes any objects matching the specified resource from instantiateOnLoadList. Does not destroy instantiated objects!

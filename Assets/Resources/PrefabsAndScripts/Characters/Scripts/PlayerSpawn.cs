@@ -17,11 +17,13 @@ public class PlayerSpawn : MonoBehaviour
     private SpriteRenderer renderer;
     private float timer = -1;
 
+    Global global;
+
     void Start()
     {
         renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
         renderer.enabled = false;
-
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
         Spawn();
 
     }
@@ -46,7 +48,7 @@ public class PlayerSpawn : MonoBehaviour
     {
         if (GameObject.FindWithTag(playerTag) == null)
         {
-            Instantiate(playerPrefab, gameObject.transform.position, gameObject.transform.rotation);
+            global.map.settings.objectCreated(Instantiate(playerPrefab, gameObject.transform.position, gameObject.transform.rotation));
             if (spawnParticles) Instantiate(spawnParticles, gameObject.transform.position, Quaternion.identity);
         }
     }
