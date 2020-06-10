@@ -36,29 +36,39 @@ public class cameraFollowPlayer : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!playerT) playerT = GameObject.FindWithTag(followTag).GetComponent<Transform>() as Transform;
-        if (!playerT) return;
-
-        playerPosition = new Vector3(playerT.position.x, playerT.position.y, playerT.position.z);
-
-        bool facingRight = true;
-        if (charCont != null) facingRight = charCont.isFacingRight();
-
-        playerPosition = new Vector3(playerPosition.x + (facingRight ? offset : -offset), playerPosition.y, -10);
-
-        //Actually move the camera
-        camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
-
-        //Correct for out of scene boundary
-        if (boundary != null)
+        bool playerExists = true;
+        if (!playerT)
         {
-            if (cameraRight.position.x > boundary.getRightX()) boundaryCorrection.x = (cameraRight.position.x - boundary.getRightX());
-            if (cameraLeft.position.x < boundary.getLeftX()) boundaryCorrection.x = -(boundary.getLeftX() - cameraLeft.position.x);
-            if (cameraTop.position.y > boundary.getTopY()) boundaryCorrection.y = (cameraTop.position.y - boundary.getTopY());
-            if (cameraBottom.position.y < boundary.getBottomY()) boundaryCorrection.y = -(boundary.getBottomY() - cameraBottom.position.y);
-            if (boundaryCorrection.x != 0) camera.transform.position = new Vector3(camera.transform.position.x-boundaryCorrection.x, camera.transform.position.y, camera.transform.position.z);
-            if (boundaryCorrection.y != 0) camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y- boundaryCorrection.y, camera.transform.position.z);
+            GameObject player = GameObject.FindWithTag(followTag);
+            if (!player)
+                playerExists = false;
+            else
+                playerT = player.GetComponent<Transform>() as Transform;
+        }
 
+        if (playerExists)
+        {
+            playerPosition = new Vector3(playerT.position.x, playerT.position.y, playerT.position.z);
+
+            bool facingRight = true;
+            if (charCont != null) facingRight = charCont.isFacingRight();
+
+            playerPosition = new Vector3(playerPosition.x + (facingRight ? offset : -offset), playerPosition.y, -10);
+
+            //Actually move the camera
+            camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
+
+            //Correct for out of scene boundary
+            if (boundary != null)
+            {
+                if (cameraRight.position.x > boundary.getRightX()) boundaryCorrection.x = (cameraRight.position.x - boundary.getRightX());
+                if (cameraLeft.position.x < boundary.getLeftX()) boundaryCorrection.x = -(boundary.getLeftX() - cameraLeft.position.x);
+                if (cameraTop.position.y > boundary.getTopY()) boundaryCorrection.y = (cameraTop.position.y - boundary.getTopY());
+                if (cameraBottom.position.y < boundary.getBottomY()) boundaryCorrection.y = -(boundary.getBottomY() - cameraBottom.position.y);
+                if (boundaryCorrection.x != 0) camera.transform.position = new Vector3(camera.transform.position.x - boundaryCorrection.x, camera.transform.position.y, camera.transform.position.z);
+                if (boundaryCorrection.y != 0) camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y - boundaryCorrection.y, camera.transform.position.z);
+
+            }
         }
 
     }
