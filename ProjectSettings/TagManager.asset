@@ -19,6 +19,7 @@ TagManager:
   - ActionIcon
   - IgnoreDropShadow
   - CharacterDress
+  - Water
   layers:
   - Default
   - TransparentFX
@@ -76,6 +77,9 @@ TagManager:
     locked: 0
   - name: ObjectInFronofCharacter
     uniqueID: 1319655185
+    locked: 0
+  - name: Water
+    uniqueID: 3518673283
     locked: 0
   - name: ActionIcons
     uniqueID: 3083013769
