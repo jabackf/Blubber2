@@ -22,7 +22,7 @@ public class DialogBox : MonoBehaviour
     public bool stayOnScreen = true; //If set to true, the script will adjust the dialog box to try to keep it on screen.
 
     private Image image;  //An image to display in the text box
-    public string imgResource=""; //A resource location for an image to display in the box. Leave blank for none.
+    public string imgResource = ""; //A resource location for an image to display in the box. Leave blank for none.
     public Sprite imgSprite = null;
     private RectTransform imgRect;
     private LayoutElement imgElement;
@@ -50,6 +50,9 @@ public class DialogBox : MonoBehaviour
 
     private bool transition = false;
 
+    private cameraFollowPlayer playerCam;
+
+
     [Space]
     [Header("Menu")]
 
@@ -74,6 +77,8 @@ public class DialogBox : MonoBehaviour
         dBox = canvas.transform.Find("dBox").gameObject;
         bg = dBox.transform.Find("bg").gameObject;
         bgRect = bg.GetComponent<RectTransform>() as RectTransform;
+
+        playerCam = Camera.main.GetComponent<cameraFollowPlayer>() as cameraFollowPlayer;
     }
 
     // Start is called before the first frame update
@@ -202,7 +207,7 @@ public class DialogBox : MonoBehaviour
                 output += aStringBuilder.ToString();
             }
 
-            return output+text;
+            return output + text;
         }
     }
 
@@ -245,9 +250,9 @@ public class DialogBox : MonoBehaviour
         }
 
         //Handle fading in and out, and other transition stuff
-        if (fadeOut==false && fadeInAlpha < 1)
+        if (fadeOut == false && fadeInAlpha < 1)
         {
-            fadeInAlpha += fadeInSpeed*Time.deltaTime;
+            fadeInAlpha += fadeInSpeed * Time.deltaTime;
         }
         if (fadeInAlpha > 1) fadeInAlpha = 1;
         if (fadeOut)
@@ -259,17 +264,8 @@ public class DialogBox : MonoBehaviour
                 {
                     if (!isAuto)
                     {
-                        /*if (answers.Count > 1)
-                            dialogParent.Next(answers[selectedIndex]);
-                        else
-                        {
-                            if (getTextInput)
-                                dialogParent.Next(inputField.text);
-                            else
-                                dialogParent.Next();
-                        }*/
-						
-						if (answers.Count > 1)
+
+                        if (answers.Count > 1)
                             dialogParent.setNextBoxOptions(answers[selectedIndex]);
                         else
                         {
@@ -278,8 +274,8 @@ public class DialogBox : MonoBehaviour
                             else
                                 dialogParent.setNextBoxOptions("NoneProvided");
                         }
-						dialogParent.setOnScreen(false);
-						dialogParent.KillBox();
+                        dialogParent.setOnScreen(false);
+                        dialogParent.KillBox();
                     }
                     else
                     {
@@ -295,7 +291,7 @@ public class DialogBox : MonoBehaviour
             doneTyping = textTyper.done;
         }
 
-        if ( fadeOut || fadeInAlpha < 1 || !doneTyping )
+        if (fadeOut || fadeInAlpha < 1 || !doneTyping)
         {
             transition = true;
         }
@@ -321,7 +317,7 @@ public class DialogBox : MonoBehaviour
 
         if (followTop != null)
         {
-            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x, dbOffset.y, 0) );
+            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x, dbOffset.y, 0));
             pos.y += halfH;
             tailY = pos.y - halfH - (tailHalfH);
         }
@@ -337,8 +333,16 @@ public class DialogBox : MonoBehaviour
         }
 
         tailX = pos.x;
-        if (tailX < tailBufferX) tailX = tailBufferX;
-        if (tailX > (Screen.width - tailBufferX)) tailX = Screen.width - tailBufferX;
+
+        if (tailX < tailBufferX && stayOnScreen)
+        {
+            tailX = tailBufferX;
+        }
+        if (tailX > (Screen.width - tailBufferX) && stayOnScreen)
+        {
+            tailX = Screen.width - tailBufferX;
+        }
+        
 
         if (stayOnScreen)
         {
@@ -359,6 +363,10 @@ public class DialogBox : MonoBehaviour
             tail.transform.position = new Vector3(tailX, tailY, 0f);
         }
 
+        if (playerCam != null)
+        {
+
+        }
 
         dBox.transform.position = pos;
 
@@ -371,7 +379,7 @@ public class DialogBox : MonoBehaviour
 
             float halfW = menuRect.rect.width / 2;
             float halfH = menuRect.rect.height / 2;
-            selectCursor.transform.position = new Vector3(menuGo.transform.position.x-halfW+cursorOffset.x, menuGo.transform.position.y+cursorOffset.y + halfH - (selectedIndex * selectItemHeight));
+            selectCursor.transform.position = new Vector3(menuGo.transform.position.x - halfW + cursorOffset.x, menuGo.transform.position.y + cursorOffset.y + halfH - (selectedIndex * selectItemHeight));
         }
     }
 
@@ -387,4 +395,6 @@ public class DialogBox : MonoBehaviour
 
         canvas.SetActive(true);
     }
+
+        
 }

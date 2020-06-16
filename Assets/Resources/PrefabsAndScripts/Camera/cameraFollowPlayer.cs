@@ -34,6 +34,24 @@ public class cameraFollowPlayer : MonoBehaviour
 
     }
 
+    //Checks a transform to determine if it is in the camera's view
+    public bool insideView (Transform t, float bufferX=0f, float bufferY=0f)
+    {
+        float x=t.position.x, y=t.position.y;
+        if (x >= cameraLeft.position.x + bufferX && x <= cameraRight.position.x - bufferX && y >= cameraBottom.position.y + bufferY && y <= cameraTop.position.y - bufferY)
+            return true;
+        else
+            return false;
+    }
+    public bool insideView(Vector2 t, float bufferX = 0f, float bufferY = 0f)
+    {
+        float x = t.x, y = t.y;
+        if (x >= cameraLeft.position.x + bufferX && x <= cameraRight.position.x - bufferX && y >= cameraBottom.position.y + bufferY && y <= cameraTop.position.y - bufferY)
+            return true;
+        else
+            return false;
+    }
+
     void FixedUpdate()
     {
         bool playerExists = true;

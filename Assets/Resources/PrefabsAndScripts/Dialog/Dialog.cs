@@ -35,8 +35,14 @@ public class Dialog : MonoBehaviour
      * NOTES: The auto types aren't intended to work with menus, answer branches, etc. Those features are built for boxes that require input
     */
 
+    public enum offScreenBehaviors { pause, restart, continueOffScreen, continueOnEdge };     //AUTO ONLY - If the conversation is playing automatically, then these are the actions to take when the speaking objects are full offscreen
+                                                                                    //pause = pause stream until it re-enters screen, restart = stop stream and restart when it re-enters stream, continueOffScreen = keep playing conversation and allow it to go off screen (basically just set dbox.stayOnScreen to false), continueOnEdge = show stream on the edge of screen (basically doing nothing in code and leaving default settings)
+
     public enum type { Straightshot, Group, Random, AutoRandom, AutoStraightshot, AutoStraightshotLoop, AutoGroup, AutoGroupLoop };
+    public bool outOfView = false;
     public type myType = type.Straightshot;
+    public offScreenBehaviors offScreenBehavior = offScreenBehaviors.pause; //See offScreenBehaviors enum
+    public Transform conversationCenterPoint; //This is the "center point" if the conversation, used primarily for determining if the character are on screen. If null, the center point will be assumed to be the gameObject.transform that this script is attached to
     public bool dontRepeatRandoms = false; //If true, then any random type will avoid showing the same message twice in a row.
     public bool faceInitiator = true; //Requires characterController2D! If true, then character this dialog is attached to will face the initiator at start of any conversation with initiator. Character then turns back to original position at the end of conversation stream.
     private bool originallyFacingRight = false; //Stores direction the character was originally facing before turning to initiator
@@ -46,6 +52,8 @@ public class Dialog : MonoBehaviour
     public int startGroup = 0;      //This can be used in the inspector to set the currentGroup in the Start() function
     public void setCurrentGroup(int g) { currentGroup = g; }
     public int getCurrentGroup(int g) { return currentGroup; }
+
+    private cameraFollowPlayer view;
 
     [Space]
     [Header("Interuptions")]
@@ -139,6 +147,9 @@ public class Dialog : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        view = Camera.main.GetComponent<cameraFollowPlayer>() as cameraFollowPlayer;
+        if (conversationCenterPoint == null) conversationCenterPoint = gameObject.transform;
+
         characterController = gameObject.GetComponent<CharacterController2D>() as CharacterController2D;
         currentGroup = startGroup;
         if (myType == type.AutoGroup || myType == type.AutoGroupLoop || myType == type.AutoRandom || myType == type.AutoStraightshot || myType == type.AutoStraightshotLoop)
@@ -148,30 +159,78 @@ public class Dialog : MonoBehaviour
         }
     }
 
+    bool inView()
+    {
+        if (view == null) return true; //If there is no script to make the camera follow the player, then assume we are in view
+        else
+            return view.insideView(conversationCenterPoint);
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (isAutoType)
         {
-            if (onScreen)
+            if (inView() || offScreenBehavior==offScreenBehaviors.continueOffScreen || offScreenBehavior == offScreenBehaviors.continueOnEdge) //Conversation is within camera view OR we don't care rather it is in view or not
             {
-                if (onScreenTimer > 0) onScreenTimer -= Time.deltaTime;
-                else
+                if (outOfView) //We were outside of camera view, but we just re-entered and this is the first cycle that we've detected it
                 {
-                    if (dialogBox != null) dialogBox.closeBox();
-                    offScreenTimer = entries[index].timeOffScreen > 0 ? entries[index].timeOffScreen * autoOffTimeMultiplier : defaultOffScreenTime * autoOffTimeMultiplier;
-                    onScreen = false;
+                    outOfView = false;
+                    switch (offScreenBehavior)
+                    {
+                        case offScreenBehaviors.pause:
+                            resume(false);
+                            break;
+                        case offScreenBehaviors.restart:
+                            resume(false, true);
+                            break;
+                        case offScreenBehaviors.continueOffScreen:
+
+                            break;
+                    }
+                }
+
+                if (onScreen) //We're not between dialog boxes
+                {
+                    if (onScreenTimer > 0) onScreenTimer -= Time.deltaTime;
+                    else
+                    {
+                        if (dialogBox != null) dialogBox.closeBox();
+                        offScreenTimer = entries[index].timeOffScreen > 0 ? entries[index].timeOffScreen * autoOffTimeMultiplier : defaultOffScreenTime * autoOffTimeMultiplier;
+                        onScreen = false;
+                    }
+                }
+                else //Not currently on the screen
+                {
+                    if (offScreenTimer > 0) offScreenTimer -= Time.deltaTime;
+                    else
+                    {
+                        Next();
+                        onScreen = true;
+                        onScreenTimer = entries[index].timeOnScreen > 0 ? (entries[index].timeOnScreen + addToTimer) * autoOnTimeMultiplier : (defaultOnScreenTime + addToTimer) * autoOnTimeMultiplier;
+                        addToTimer = 0f;
+                    }
                 }
             }
-            else //Not currently on the screen
+            else
             {
-                if (offScreenTimer > 0) offScreenTimer -= Time.deltaTime;
-                else
+                
+                if (outOfView == false) //We just went out of view and this is the first cycle that we have detected it
                 {
-                    Next();
-                    onScreen = true;
-                    onScreenTimer = entries[index].timeOnScreen > 0 ? (entries[index].timeOnScreen+addToTimer) * autoOnTimeMultiplier : (defaultOnScreenTime + addToTimer) * autoOnTimeMultiplier;
-                    addToTimer = 0f;
+                    outOfView = true;
+
+                    switch (offScreenBehavior)
+                    {
+                        case offScreenBehaviors.pause:
+                            interupt();
+                        break;
+                        case offScreenBehaviors.restart:
+                            interupt();
+                        break;
+                        case offScreenBehaviors.continueOffScreen:
+
+                        break;
+                    }
                 }
             }
         }
@@ -202,14 +261,14 @@ public class Dialog : MonoBehaviour
     }
 
     //Resumes an interupted dialog
-    public void resume()
+    public void resume(bool attachInteruptString = true, bool restart=false)
     {
         if (activeBeforeInterupt)
         {
-            topperString = resumeTopperString;
+            topperString = (attachInteruptString ? resumeTopperString : "");
             addTime(resumeMessageAddTime);
 
-            if (restartAfterInterupt)
+            if (restartAfterInterupt || restart)
                 Initiate(initiatorName, initiator, initiatorTop, initiatorBottom);
             else
             {
@@ -481,7 +540,11 @@ public class Dialog : MonoBehaviour
         dialogBox.getTextInput = entries[index].getTextInput;
         dialogBox.inputType = entries[index].inputType;
 
-        if (isAutoType) dialogBox.isAuto = true;
+        if (isAutoType)
+        {
+            dialogBox.isAuto = true;
+            if (offScreenBehavior == offScreenBehaviors.continueOffScreen) dialogBox.stayOnScreen = false;
+        }
 
         if (entries[index].sendMessageStart != "")
         {
@@ -507,7 +570,6 @@ public class Dialog : MonoBehaviour
                 if (initiator != null) initiator.GetComponent<Animator>().Play(entries[index].startAnimation);
             }
         }
-
     }
 
     //Kill the current dialog box

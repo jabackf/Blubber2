@@ -27,6 +27,6 @@ public class bobUpAndDown : MonoBehaviour
     {
         // Float up/down with a Sin()
         //tempPos = transform.position;// posOffset;
-        if (on) transform.position += new Vector3(0,Mathf.Sin(Time.fixedTime * Mathf.PI * frequency) * amplitude *0.05f,0);
+        if (on) transform.position += new Vector3(0,Mathf.Sin(Mathf.PI * frequency *Time.time ) * amplitude *5f * Time.deltaTime, 0);
     }
 }

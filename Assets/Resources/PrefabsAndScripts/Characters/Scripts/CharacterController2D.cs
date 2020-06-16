@@ -12,12 +12,18 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private float maxVelocity = -1;                              // The maximum velocity that the character is limited to. -1 = none.
     [SerializeField] private bool m_AirControl = true;                          // Whether or not a player can steer while jumping;
     [SerializeField] private bool canUseDropDownPlatforms = true;              // Whether or not a player can steer while jumping;
+    [SerializeField] private bool inWater = false;              
+    [SerializeField] private float waterMultiplier = 0.7f;                   //This value is multiplied to move speed when the player is in water
+
 
     [Space]
     [Header("Jumping")]
     [SerializeField] private float m_JumpVelocity = 10.5f;                       // Amount of velocity added when the player jumps. 
     [SerializeField] private bool canDoubleJump = false;                        // Whether or not the player can jump a second time
     [SerializeField] private bool infiniteJump = false;                         // Jump whenever you want!
+    [SerializeField] private bool infiniteWaterJump = true;                    //Jump anytime, if in water
+    [SerializeField] private float m_WaterJumpMultiplier = 0.6f;                    //Multiplied to jump force if in water
+    [SerializeField] private float m_MaxJumpVelocity = 12f;                    //Infinite jump or water jump can be exploited to lead to high speeds. This clamps the speed after jumping.
 
     [Space]
     [Header("Crouching")]
@@ -193,7 +199,7 @@ public class CharacterController2D : MonoBehaviour
         {
             platformPreviousPosition = new Vector2(currentPlatform.transform.position.x, currentPlatform.transform.position.y);
         }
-
+        
     }
 
     public void useItemAction()
@@ -265,58 +271,59 @@ public class CharacterController2D : MonoBehaviour
         }
         if (charAnim != null) charAnim.isClimbing = isClimbing;
 
+
         //only control the player if grounded or airControl is turned on
         if (m_Grounded || m_AirControl)
-		{
+        {
 
-			// If crouching
-			if (crouch && canCrouch && (!isClimbing || !canClimb))
-			{
-				if (!m_wasCrouching)
-				{
-					m_wasCrouching = true;
-					OnCrouchEvent.Invoke(true);
+            // If crouching
+            if (crouch && canCrouch && (!isClimbing || !canClimb))
+            {
+                if (!m_wasCrouching)
+                {
+                    m_wasCrouching = true;
+                    OnCrouchEvent.Invoke(true);
                 }
 
-				// Reduce the speed by the crouchSpeed multiplier
-				move *= m_CrouchSpeed;
+                // Reduce the speed by the crouchSpeed multiplier
+                move *= m_CrouchSpeed;
 
                 if (charAnim != null) charAnim.crouch = true;
 
                 // Disable one of the colliders when crouching
                 if (m_CrouchDisableCollider != null)
-					m_CrouchDisableCollider.enabled = false;
-			} else
-			{
-				// Enable the collider when not crouching
-				if (m_CrouchDisableCollider != null)
-					m_CrouchDisableCollider.enabled = true;
+                    m_CrouchDisableCollider.enabled = false;
+            } else
+            {
+                // Enable the collider when not crouching
+                if (m_CrouchDisableCollider != null)
+                    m_CrouchDisableCollider.enabled = true;
 
-				if (m_wasCrouching)
-				{
-					m_wasCrouching = false;
-					OnCrouchEvent.Invoke(false);
+                if (m_wasCrouching)
+                {
+                    m_wasCrouching = false;
+                    OnCrouchEvent.Invoke(false);
                     if (charAnim != null) charAnim.crouch = false;
                 }
-			}
+            }
 
 
             if (charAnim != null) charAnim.pushing = false;
             //Start pushing logic
-            if (move==0)
+            if (move == 0)
             {
                 pushTimer = -1;
                 isPushing = false;
                 timerComplete = false;
             }
-            if (m_Grounded && (move>0 || move<0) && canPush && (!isClimbing || !canClimb) ) //If we're in a situation where we can potentially push
+            if (m_Grounded && (move > 0 || move < 0) && canPush && (!isClimbing || !canClimb)) //If we're in a situation where we can potentially push
             {
                 bool pushingLeft = false;
                 bool pushingRight = false;
                 Collider2D leftCol = Physics2D.OverlapCircle(m_SideCheckL.position, k_SideRadius, m_WhatIsGround);
                 Collider2D rightCol = Physics2D.OverlapCircle(m_SideCheckR.position, k_SideRadius, m_WhatIsGround);
-                if (leftCol!=null && move < 0) pushingLeft = true;
-                if (rightCol!=null && move > 0) pushingRight = true;
+                if (leftCol != null && move < 0) pushingLeft = true;
+                if (rightCol != null && move > 0) pushingRight = true;
 
                 if (pushingLeft || pushingRight)
                 {
@@ -332,12 +339,12 @@ public class CharacterController2D : MonoBehaviour
                         isPushing = true;
                         if (pushingLeft)
                         {
-                            if (leftCol.attachedRigidbody!=null)
+                            if (leftCol.attachedRigidbody != null)
                                 leftCol.attachedRigidbody.AddForceAtPosition(new Vector2(-m_PushForce, 0f), new Vector2(m_SideCheckL.position.x, m_SideCheckL.position.y));
                         }
                         if (pushingRight)
                         {
-                            if (rightCol.attachedRigidbody!=null)
+                            if (rightCol.attachedRigidbody != null)
                                 rightCol.attachedRigidbody.AddForceAtPosition(new Vector2(m_PushForce, 0f), new Vector2(m_SideCheckR.position.x, m_SideCheckR.position.y));
                         }
                     }
@@ -350,11 +357,17 @@ public class CharacterController2D : MonoBehaviour
                 }
             }
 
-			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+            // Move the character by finding the target velocity
+            Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
 
-			// And then smoothing it out and applying it to the character
-			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+            // And then smoothing it out and applying it to the character
+            m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+            
+            if (inWater)
+            {
+                m_Rigidbody2D.velocity *= new Vector3(waterMultiplier, 1, 1);
+            }
+
 
             if (charAnim != null) charAnim.speed = Mathf.Abs(move);
 
@@ -413,7 +426,7 @@ public class CharacterController2D : MonoBehaviour
         // If the player should jump...
         if (jump && (!justPickedUp||!pickupWithJump||!canPickup) && (!isClimbing||!climbWithJump||!canClimb) )
 		{
-            if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded)
+            if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded || (inWater&&infiniteWaterJump))
             {
                 // Add a vertical force to the player.
                 m_Grounded = false;
@@ -424,9 +437,13 @@ public class CharacterController2D : MonoBehaviour
                     if (numJumps > 1) charAnim.doubleJump = true;
                 }
                 //m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-                m_Rigidbody2D.velocity += (new Vector2(0f, m_JumpVelocity));
+                m_Rigidbody2D.velocity += (new Vector2(0f, m_JumpVelocity * (inWater ? m_WaterJumpMultiplier : 1)));
+
+                //Sometimes infinite jump or water jump can be exploited to lead to high speeds. This clamps the velocity down.
+                if (m_Rigidbody2D.velocity.y > m_MaxJumpVelocity) m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_MaxJumpVelocity);
             }
 		}
+        inWater = false;
     }
 
     public void OnCollisionEnter2D(Collision2D other)
@@ -434,6 +451,14 @@ public class CharacterController2D : MonoBehaviour
         if (other.gameObject.tag == "killPlayer" && gameObject.tag == "Player")
         {
             playerDie();
+        }
+    }
+
+    public void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.tag == "Water")
+        {
+            inWater = true;
         }
     }
 
@@ -593,6 +618,11 @@ public class CharacterController2D : MonoBehaviour
             holding.makeDroppable();
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }
+    }
+
+   public bool isGrounded()
+    {
+        return m_Grounded;
     }
 
 }

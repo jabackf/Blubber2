@@ -79,6 +79,13 @@ public class actionInRange : MonoBehaviour
     {
         if (other.gameObject.tag == "RangeCollider" && rangeActive)
         {
+            /*CharacterController2D cont = other.gameObject.transform.parent.GetComponent<CharacterController2D>() as CharacterController2D;
+            if (cont != null)
+            {
+                if (cont.isGrounded())
+                    setInRange(true, other.gameObject.transform.parent.gameObject);
+            }
+            else*/
             setInRange(true, other.gameObject.transform.parent.gameObject);
         }
     }
