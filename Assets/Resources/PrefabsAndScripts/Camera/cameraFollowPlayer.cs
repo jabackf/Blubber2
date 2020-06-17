@@ -15,8 +15,8 @@ public class cameraFollowPlayer : MonoBehaviour
     private CharacterController2D charCont;
     private Vector3 boundaryCorrection = new Vector3(0, 0, 0); //Applied to the camera to prevent it from going off scene boundary
 
-    //These transform points define the edges of the camera in world space
-    public Transform cameraLeft, cameraRight, cameraTop, cameraBottom;
+    private Vector2 worldCameraBottomLeft, worldCameraTopRight;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,13 +32,14 @@ public class cameraFollowPlayer : MonoBehaviour
             camera.transform.position = new Vector3(playerT.position.x, playerT.position.y,-10);
         }
 
+        updateEdgeCoordinates();
     }
 
-    //Checks a transform to determine if it is in the camera's view
+    //Checks a transform to determine if it's x and y are in the camera's view
     public bool insideView (Transform t, float bufferX=0f, float bufferY=0f)
     {
         float x=t.position.x, y=t.position.y;
-        if (x >= cameraLeft.position.x + bufferX && x <= cameraRight.position.x - bufferX && y >= cameraBottom.position.y + bufferY && y <= cameraTop.position.y - bufferY)
+        if (x >= (worldCameraBottomLeft.x + bufferX) && x <= (worldCameraTopRight.x - bufferX) && y >= (worldCameraBottomLeft.y + bufferY) && y <= (worldCameraTopRight.y - bufferY))
             return true;
         else
             return false;
@@ -46,14 +47,39 @@ public class cameraFollowPlayer : MonoBehaviour
     public bool insideView(Vector2 t, float bufferX = 0f, float bufferY = 0f)
     {
         float x = t.x, y = t.y;
-        if (x >= cameraLeft.position.x + bufferX && x <= cameraRight.position.x - bufferX && y >= cameraBottom.position.y + bufferY && y <= cameraTop.position.y - bufferY)
+        if (x >= worldCameraBottomLeft.x + bufferX && x <= worldCameraTopRight.x - bufferX && y >= worldCameraBottomLeft.y + bufferY && y <= worldCameraTopRight.y - bufferY)
             return true;
         else
             return false;
     }
 
-    void FixedUpdate()
+    public float getLeftViewX()
     {
+        return worldCameraBottomLeft.x;
+    }
+    public float getRightViewX()
+    {
+        return worldCameraTopRight.x;
+    }
+    public float getTopViewY()
+    {
+        return worldCameraTopRight.y;
+    }
+    public float getBottomViewY()
+    {
+        return worldCameraBottomLeft.y;
+    }
+
+    void updateEdgeCoordinates()
+    {
+        //Update the camera edge coordinates
+        worldCameraTopRight = (Vector2)Camera.main.ViewportToWorldPoint(new Vector3(1, 1, 0));
+        worldCameraBottomLeft = (Vector2)Camera.main.ViewportToWorldPoint(new Vector3(0, 0, 0));
+    }
+
+    void LateUpdate()
+    {
+
         bool playerExists = true;
         if (!playerT)
         {
@@ -76,16 +102,17 @@ public class cameraFollowPlayer : MonoBehaviour
             //Actually move the camera
             camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
 
+            updateEdgeCoordinates();
+
             //Correct for out of scene boundary
             if (boundary != null)
             {
-                if (cameraRight.position.x > boundary.getRightX()) boundaryCorrection.x = (cameraRight.position.x - boundary.getRightX());
-                if (cameraLeft.position.x < boundary.getLeftX()) boundaryCorrection.x = -(boundary.getLeftX() - cameraLeft.position.x);
-                if (cameraTop.position.y > boundary.getTopY()) boundaryCorrection.y = (cameraTop.position.y - boundary.getTopY());
-                if (cameraBottom.position.y < boundary.getBottomY()) boundaryCorrection.y = -(boundary.getBottomY() - cameraBottom.position.y);
-                if (boundaryCorrection.x != 0) camera.transform.position = new Vector3(camera.transform.position.x - boundaryCorrection.x, camera.transform.position.y, camera.transform.position.z);
-                if (boundaryCorrection.y != 0) camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y - boundaryCorrection.y, camera.transform.position.z);
-
+                if (worldCameraTopRight.x > boundary.getRightX()) boundaryCorrection.x = (worldCameraTopRight.x - boundary.getRightX());
+                if (worldCameraBottomLeft.x < boundary.getLeftX()) boundaryCorrection.x = -(boundary.getLeftX() - worldCameraBottomLeft.x);
+                if (worldCameraTopRight.y > boundary.getTopY()) boundaryCorrection.y = (worldCameraTopRight.y - boundary.getTopY());
+                if (worldCameraBottomLeft.y < boundary.getBottomY()) boundaryCorrection.y = -(boundary.getBottomY() - worldCameraBottomLeft.y);
+                camera.transform.position -= boundaryCorrection;
+                updateEdgeCoordinates();
             }
         }
 

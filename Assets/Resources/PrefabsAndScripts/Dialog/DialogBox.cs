@@ -21,8 +21,8 @@ public class DialogBox : MonoBehaviour
     public Vector2 dbOffset = new Vector2(0f, .5f);
     public bool stayOnScreen = true; //If set to true, the script will adjust the dialog box to try to keep it on screen.
 
-    private Image image;  //An image to display in the text box
-    public string imgResource = ""; //A resource location for an image to display in the box. Leave blank for none.
+    private Image image;  //An image to display in the text box. 
+    public string imgResource = ""; //A resource location for an image to display in the box. Leave blank for none. This image is presumed to be stored in the dirImages directory defined in the global object, and the directory specified by dirImage is the root directory for this string.
     public Sprite imgSprite = null;
     private RectTransform imgRect;
     private LayoutElement imgElement;
@@ -48,9 +48,12 @@ public class DialogBox : MonoBehaviour
     private float fadeInSpeed = 4;
     private bool fadeOut = false;
 
+    private Vector2 screenEdgeBuffer = new Vector2(1f, 1f);
+
     private bool transition = false;
 
     private cameraFollowPlayer playerCam;
+    private Global global;
 
 
     [Space]
@@ -79,6 +82,8 @@ public class DialogBox : MonoBehaviour
         bgRect = bg.GetComponent<RectTransform>() as RectTransform;
 
         playerCam = Camera.main.GetComponent<cameraFollowPlayer>() as cameraFollowPlayer;
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
+
     }
 
     // Start is called before the first frame update
@@ -149,9 +154,9 @@ public class DialogBox : MonoBehaviour
         selectCursor.transform.parent = dBox.transform;
     }
 
-    public void LoadImage(string resource)
+    public void LoadImage(string resource="")
     {
-        imgResource = resource;
+        imgResource = global.dirImages+resource;
         if (resource != "")
         {
             imgSprite = Resources.Load<Sprite>(imgResource) as Sprite;
@@ -213,9 +218,9 @@ public class DialogBox : MonoBehaviour
 
     void OnValidate()
     {
-        LoadImage(imgResource);
-        txtTitle.text = title;
-        txtMessage.text = breakLine(text, lineBreakWidth);
+        //LoadImage(imgResource);
+        //txtTitle.text = title;
+        //txtMessage.text = breakLine(text, lineBreakWidth);
     }
 
     // Update is called once per frame
@@ -313,6 +318,16 @@ public class DialogBox : MonoBehaviour
         float tailY = 0;
         bool tailFlip = false;
 
+        float leftViewEdge = 0f+screenEdgeBuffer.x, rightViewEdge = Screen.width-screenEdgeBuffer.x, topViewEdge = Screen.height-screenEdgeBuffer.y, bottomViewEdge = 0f+screenEdgeBuffer.y ;
+
+        if (playerCam != null)
+        {
+            leftViewEdge = Camera.main.WorldToScreenPoint(new Vector3(playerCam.getLeftViewX(),0f,0f)).x;
+            rightViewEdge = Camera.main.WorldToScreenPoint(new Vector3(playerCam.getRightViewX(), 0f, 0f)).x;
+            topViewEdge = Camera.main.WorldToScreenPoint(new Vector3(0f,playerCam.getTopViewY(), 0f)).y;
+            bottomViewEdge = Camera.main.WorldToScreenPoint(new Vector3(0f, playerCam.getBottomViewY(), 0f)).y;
+        }
+
         Vector3 pos = new Vector3(0f, 0f, 0f);
 
         if (followTop != null)
@@ -323,7 +338,7 @@ public class DialogBox : MonoBehaviour
         }
 
         //Move the box under the character if it would fit better on the screen, or if we've only specified a bottom transform
-        if (followBottom != null && (pos.y > (Screen.height - halfH) || followTop == null))
+        if (followBottom != null && (pos.y > (topViewEdge - halfH) || followTop == null))
         {
             pos = Camera.main.WorldToScreenPoint(new Vector3(followBottom.position.x + dbOffset.x, followBottom.position.y - dbOffset.y, 0));
             pos.y -= halfH;
@@ -336,24 +351,24 @@ public class DialogBox : MonoBehaviour
 
         if (tailX < tailBufferX && stayOnScreen)
         {
-            tailX = tailBufferX;
+            tailX = leftViewEdge + tailBufferX;
         }
-        if (tailX > (Screen.width - tailBufferX) && stayOnScreen)
+        if (tailX > (rightViewEdge - tailBufferX) && stayOnScreen)
         {
-            tailX = Screen.width - tailBufferX;
+            tailX = rightViewEdge - tailBufferX;
         }
         
 
         if (stayOnScreen)
         {
-            if (pos.x < halfW) pos.x = halfW;
-            if (pos.x > (Screen.width - halfW)) pos.x = (Screen.width - halfW);
+            if (pos.x < leftViewEdge+halfW) pos.x = leftViewEdge + halfW+screenEdgeBuffer.x;
+            if (pos.x > (rightViewEdge - halfW)) pos.x = (rightViewEdge - halfW)-screenEdgeBuffer.x;
         }
 
         //If no transform is provided, just put the box in the middle of the screen
         if (followTop == null && followBottom == null)
         {
-            pos = new Vector3((Screen.width / 2), (Screen.height / 2), 0f);
+            pos = new Vector3((rightViewEdge / 2), (topViewEdge / 2), 0f);
             tail.SetActive(false);
         }
         else

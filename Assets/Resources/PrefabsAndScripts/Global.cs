@@ -27,7 +27,8 @@ public class Global : MonoBehaviour
 	[HideInInspector] public string dirRenderer = "Renderer/";
 	[HideInInspector] public string dirScenes = "Scenes/";
 	[HideInInspector] public string dirSprites = "Sprites/";
-	[HideInInspector] public string dirIcons = "Sprites/Icons/";
+    [HideInInspector] public string dirImages = "Sprites/Images/";
+    [HideInInspector] public string dirIcons = "Sprites/Icons/";
 	[HideInInspector] public string dirParticleSystems = "PrefabsAndScripts/Effects/";
 	[HideInInspector] public string dirBlubberSprites = "Sprites/Characters/Blubber/";
 	[HideInInspector] public string dirCharacterDress = "Sprites/Dress/";

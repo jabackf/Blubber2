@@ -246,21 +246,18 @@ namespace ilhamhe {
 
 		private void OnTriggerEnter2D(Collider2D col) {
 			Rigidbody2D rb = col.GetComponent<Rigidbody2D>();
-			Splash(col, rb.velocity.y * collisionVelocityFactor);
+			if (rb!=null) Splash(col, rb.velocity.y);
 		}
 
 		public void Splash (Collider2D col, float force) {
 
             if (!canSplash) return;
 
-            //We don't want to create a splash unless we're moving quickly enough to do so. 
-            Rigidbody2D other_rb = col.GetComponent<Rigidbody2D>() as Rigidbody2D;
-            if (other_rb!=null)
-            {
-                if (other_rb.velocity.y > -splashVelocityThreshold && other_rb.velocity.y < splashVelocityThreshold) return;
-            }
+            //Don't splash unless we've hit hard enough
+            if (force > -splashVelocityThreshold && force < splashVelocityThreshold) return;
 
-			timer = 3f;
+            force *= collisionVelocityFactor;
+            timer = 3f;
 			float radius = col.bounds.max.x - col.bounds.min.x;
 			Vector2 center = new Vector2(col.bounds.center.x, bound.top) ;
 			// instantiate splash particle

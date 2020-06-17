@@ -7360,6 +7360,7 @@ MonoBehaviour:
   dirRenderer: Renderer/
   dirScenes: Scenes/
   dirSprites: Sprites/
+  dirImages: Sprites/Images/
   dirIcons: Sprites/Icons/
   dirParticleSystems: PrefabsAndScripts/Effects/
   dirBlubberSprites: Sprites/Characters/Blubber/
@@ -9654,12 +9655,12 @@ PrefabInstance:
     - target: {fileID: 6112353307453871694, guid: ba96baff048d0244c83a3aae1393a1dc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.33
+      value: 5.6
       objectReference: {fileID: 0}
     - target: {fileID: 6112353307453871694, guid: ba96baff048d0244c83a3aae1393a1dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.06
+      value: 11.9
       objectReference: {fileID: 0}
     - target: {fileID: 6112353306471557269, guid: ba96baff048d0244c83a3aae1393a1dc,
         type: 3}
@@ -9669,7 +9670,7 @@ PrefabInstance:
     - target: {fileID: 6112353306471557269, guid: ba96baff048d0244c83a3aae1393a1dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.51
+      value: -9.513
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba96baff048d0244c83a3aae1393a1dc, type: 3}
@@ -11308,10 +11309,30 @@ PrefabInstance:
       propertyPath: m_NormalizedViewPortRect.height
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
+        type: 3}
+      propertyPath: m_NormalizedViewPortRect.x
+      value: 0.00029188395
+      objectReference: {fileID: 0}
+    - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
+        type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 0.99941623
+      objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237106, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7437196725704828854, guid: 2893a7d494550224f822cf843e996621,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.68
+      objectReference: {fileID: 0}
+    - target: {fileID: 7437196725704828854, guid: 2893a7d494550224f822cf843e996621,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.48
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2893a7d494550224f822cf843e996621, type: 3}
@@ -12915,7 +12936,7 @@ MonoBehaviour:
     repeatIfEmpty: 0
     repeatAddText: 
     inputType: 0
-    imageResource: Sprites/UnsortedSprites/RippedFromGMXPrototype/sprBirdWithArms_0
+    imageResource: sprBirdWithArms_0
     answers: []
     answerBranch: []
     callback:
