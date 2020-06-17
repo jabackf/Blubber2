@@ -15,6 +15,7 @@ public class DialogBox : MonoBehaviour
     private GameObject dBox;
     private GameObject canvas;
     private CanvasGroup canvasGroup;
+    private Canvas canvasComponent;
     public Transform followTop;  //The top point of the character/sign/whatever that the dbox should point to. Leave this variable and the bottom variable null to show the dialog in the center.
     public Transform followBottom; //The bottom part (used mainly if the character/sign/whatever is near the top of the screen, or used exclusively if no topFollow is provided)
     public int lineBreakWidth = 60; //This max number of characters a string can have before a linebreak is used. The linebreak will replace the nearest space behind this number.
@@ -42,7 +43,7 @@ public class DialogBox : MonoBehaviour
     private Text txtMessage;
     private RectTransform bgRect;
     private RectTransform tailRect;
-    private const float tailBufferX = 20; //How close the tail is allowed to get to the edges of the screen.
+    private const float tailBufferX = 10; //How close the tail is allowed to get to the edges of the screen.
 
     private float fadeInAlpha = 0;
     private float fadeInSpeed = 4;
@@ -76,6 +77,7 @@ public class DialogBox : MonoBehaviour
     {
         canvas = Instantiate(dialogCanvasPrefab);
         canvasGroup = canvas.GetComponent<CanvasGroup>() as CanvasGroup;
+        canvasComponent = canvas.GetComponent<Canvas>() as Canvas;
         canvas.SetActive(false); //We don't want to enable the canvas until after the firt OnGui event completes. This prevents some glitchy looking artifacts.
         dBox = canvas.transform.Find("dBox").gameObject;
         bg = dBox.transform.Find("bg").gameObject;
@@ -310,15 +312,15 @@ public class DialogBox : MonoBehaviour
     void UpdatePosition()
     {
 
-        float halfW = bgRect.rect.width / 2;
-        float halfH = bgRect.rect.height / 2;
-        float tailHalfW = tailRect.rect.width / 2;
-        float tailHalfH = tailRect.rect.height / 2;
+        float halfW = (bgRect.rect.width / 2) * canvasComponent.scaleFactor;
+        float halfH = (bgRect.rect.height / 2) * canvasComponent.scaleFactor;
+        float tailHalfW = (tailRect.rect.width / 2) * canvasComponent.scaleFactor;
+        float tailHalfH = (tailRect.rect.height / 2) * canvasComponent.scaleFactor;
         float tailX = 0;
         float tailY = 0;
         bool tailFlip = false;
 
-        float leftViewEdge = 0f+screenEdgeBuffer.x, rightViewEdge = Screen.width-screenEdgeBuffer.x, topViewEdge = Screen.height-screenEdgeBuffer.y, bottomViewEdge = 0f+screenEdgeBuffer.y ;
+        float leftViewEdge = 0f+screenEdgeBuffer.x, rightViewEdge = Screen.width-screenEdgeBuffer.x, topViewEdge = Screen.height, bottomViewEdge = 0f;
 
         if (playerCam != null)
         {
@@ -332,7 +334,7 @@ public class DialogBox : MonoBehaviour
 
         if (followTop != null)
         {
-            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x, dbOffset.y, 0));
+            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x * canvasComponent.scaleFactor, dbOffset.y * canvasComponent.scaleFactor, 0));
             pos.y += halfH;
             tailY = pos.y - halfH - (tailHalfH);
         }
@@ -340,7 +342,7 @@ public class DialogBox : MonoBehaviour
         //Move the box under the character if it would fit better on the screen, or if we've only specified a bottom transform
         if (followBottom != null && (pos.y > (topViewEdge - halfH) || followTop == null))
         {
-            pos = Camera.main.WorldToScreenPoint(new Vector3(followBottom.position.x + dbOffset.x, followBottom.position.y - dbOffset.y, 0));
+            pos = Camera.main.WorldToScreenPoint(new Vector3(followBottom.position.x + dbOffset.x * canvasComponent.scaleFactor, followBottom.position.y - dbOffset.y * canvasComponent.scaleFactor, 0));
             pos.y -= halfH;
 
             tailY = pos.y + halfH + (tailHalfH);
@@ -348,15 +350,6 @@ public class DialogBox : MonoBehaviour
         }
 
         tailX = pos.x;
-
-        if (tailX < tailBufferX && stayOnScreen)
-        {
-            tailX = leftViewEdge + tailBufferX;
-        }
-        if (tailX > (rightViewEdge - tailBufferX) && stayOnScreen)
-        {
-            tailX = rightViewEdge - tailBufferX;
-        }
         
 
         if (stayOnScreen)
@@ -378,9 +371,15 @@ public class DialogBox : MonoBehaviour
             tail.transform.position = new Vector3(tailX, tailY, 0f);
         }
 
-        if (playerCam != null)
+        if (tailX < tailBufferX && stayOnScreen)
         {
-
+            //tailX = leftViewEdge + tailBufferX;
+            tail.SetActive(false);
+        }
+        if (tailX > (rightViewEdge - tailBufferX) && stayOnScreen)
+        {
+            //tailX = rightViewEdge - tailBufferX;
+            tail.SetActive(false);
         }
 
         dBox.transform.position = pos;

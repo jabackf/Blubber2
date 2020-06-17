@@ -43,6 +43,7 @@ public class Dialog : MonoBehaviour
     public type myType = type.Straightshot;
     public offScreenBehaviors offScreenBehavior = offScreenBehaviors.pause; //See offScreenBehaviors enum
     public Transform conversationCenterPoint; //This is the "center point" if the conversation, used primarily for determining if the character are on screen. If null, the center point will be assumed to be the gameObject.transform that this script is attached to
+    public Vector2 outsideCameraBuffer = new Vector2(-2f, -2f); //This is the buffer that is applied to view edges when detecting if conversation is off screen. For instance, a coversation will be off the left side of the screen when conversationCenterPoint.x < screenLeftEdge+outsideCameraBuffer.x. Negative values mean the object needs to be further outside of the camera view.
     public bool dontRepeatRandoms = false; //If true, then any random type will avoid showing the same message twice in a row.
     public bool faceInitiator = true; //Requires characterController2D! If true, then character this dialog is attached to will face the initiator at start of any conversation with initiator. Character then turns back to original position at the end of conversation stream.
     private bool originallyFacingRight = false; //Stores direction the character was originally facing before turning to initiator
@@ -163,7 +164,7 @@ public class Dialog : MonoBehaviour
     {
         if (view == null) return true; //If there is no script to make the camera follow the player, then assume we are in view
         else
-            return view.insideView(conversationCenterPoint);
+            return view.insideView(conversationCenterPoint, outsideCameraBuffer.x, outsideCameraBuffer.y);
     }
 
     // Update is called once per frame

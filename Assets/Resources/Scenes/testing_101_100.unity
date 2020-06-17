@@ -2815,6 +2815,7 @@ MonoBehaviour:
   myType: 0
   offScreenBehavior: 0
   conversationCenterPoint: {fileID: 0}
+  outsideCameraBuffer: {x: -1, y: -1}
   dontRepeatRandoms: 0
   faceInitiator: 1
   startGroup: 0
@@ -8247,6 +8248,7 @@ MonoBehaviour:
   myType: 0
   offScreenBehavior: 0
   conversationCenterPoint: {fileID: 0}
+  outsideCameraBuffer: {x: -1, y: -1}
   dontRepeatRandoms: 0
   faceInitiator: 1
   startGroup: 0
@@ -8286,6 +8288,36 @@ MonoBehaviour:
         m_Calls: []
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
+--- !u!1 &1556955771
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1556955772}
+  m_Layer: 0
+  m_Name: conversationCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1556955772
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556955771}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.5, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 140103500151675659}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1616068436
 GameObject:
   m_ObjectHideFlags: 0
@@ -11302,22 +11334,22 @@ PrefabInstance:
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0
+      value: 0.00050729513
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.9989854
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0.00029188395
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.99941623
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237106, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
@@ -12039,6 +12071,7 @@ Transform:
   - {fileID: 2681852386205973810}
   - {fileID: 3978075508715764620}
   - {fileID: 2059842968}
+  - {fileID: 1556955772}
   m_Father: {fileID: 1194112661}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12241,6 +12274,7 @@ MonoBehaviour:
   myType: 0
   offScreenBehavior: 0
   conversationCenterPoint: {fileID: 0}
+  outsideCameraBuffer: {x: -1, y: -1}
   dontRepeatRandoms: 0
   faceInitiator: 1
   startGroup: 0
@@ -12510,7 +12544,8 @@ MonoBehaviour:
   outOfView: 0
   myType: 5
   offScreenBehavior: 0
-  conversationCenterPoint: {fileID: 0}
+  conversationCenterPoint: {fileID: 1556955772}
+  outsideCameraBuffer: {x: -2, y: -2}
   dontRepeatRandoms: 0
   faceInitiator: 1
   startGroup: 0
@@ -14374,6 +14409,7 @@ MonoBehaviour:
   myType: 0
   offScreenBehavior: 0
   conversationCenterPoint: {fileID: 0}
+  outsideCameraBuffer: {x: -1, y: -1}
   dontRepeatRandoms: 0
   faceInitiator: 1
   startGroup: 0
