@@ -17,12 +17,20 @@ public class PlayerInput : MonoBehaviour
     public float runSpeed = 35f;
     public float aimAngleSpeed = 200f; //Speed for aiming the angle of the throwing retical
     public float aimForceSpeed = 50f; //Speed for aiming the angle of the throwing retical
+
+    float aimActionAngleMove = 200f;    //Used in aiming the action retical (angle)
+    float aimActionForceMove = 15f;    //Used in aiming the action retical (force)
+    public float aimActionAngleSpeed = 200f; //Speed for aiming the angle of the action retical
+    public float aimActionForceSpeed = 50f; //Speed for aiming the angle of the action retical
+
     bool jump = false;
     bool crouch = false;
     bool pickup = false;
     bool dialog = false;    //Dialog button pressed
     bool dropDown = false; //The action for dropping through platforms that have the dropDownPlatform script
-    bool useItemAction = false; //If we're holding an object with an action, then this flag is triggered when we push the UseItemAction button
+    bool useItemActionPressed = false; //If we're holding an object with an action, then this flag is triggered when we press the UseItemAction button
+    bool useItemActionHeld = false;
+    bool useItemActionReleased = false;
     float climb = 0;
     public float climbSpeed = 5f;
     bool holdingAction = false;
@@ -57,12 +65,40 @@ public class PlayerInput : MonoBehaviour
         {
             if (Input.GetButtonDown("UseItemAction"))
             {
-                useItemAction = true;
+                useItemActionPressed = true;
+            }
+            if (Input.GetButton("UseItemAction"))
+            {
+                useItemActionHeld = true;
+
+                //Since we're not in throwing mode and we have the action button pressed, these controls are used for action aim instead
+                if (!Input.GetButton("throwAimHorizontal"))
+                {   //Changing the angle
+                    aimActionAngleMove = Input.GetAxisRaw("throwAimVertical") * aimActionAngleSpeed;
+                    aimActionForceMove = 0;
+                }
+                else
+                {   //Changing the force
+                    aimActionForceMove = Input.GetAxisRaw("throwAimVertical") * aimActionForceSpeed;
+                    aimActionAngleMove = 0;
+                }
+            }
+            if (Input.GetButtonUp("UseItemAction"))
+            {
+                useItemActionReleased = true;
             }
 
             if (Input.GetButtonDown("Jump"))
             {
-                 jump = true;
+                jump = true;
+
+                //If we're using the actionAim system, then don't jump. This bit of code assumes jump is the same as action aim controls.
+                if (controller.holdingSomething() && controller.getHolding()!=null)
+                {
+                    if (Input.GetButton("UseItemAction") && controller.getHolding().hasActionAim)
+                        jump = false;
+                }
+                    
             }
 
             if (Input.GetButtonDown("Dialog"))
@@ -79,6 +115,7 @@ public class PlayerInput : MonoBehaviour
             {
                 climb = Input.GetAxisRaw("Climb") * climbSpeed;
             }
+
 
             if (controller.crouchEnabled())
             {
@@ -127,7 +164,7 @@ public class PlayerInput : MonoBehaviour
             if (!isThrowing)
             {
                 controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb * Time.fixedDeltaTime, dropDown, dialog);
-                if (useItemAction) controller.useItemAction();
+                if (useItemActionPressed || useItemActionHeld || useItemActionReleased) controller.useItemAction(useItemActionPressed,useItemActionHeld,useItemActionReleased, aimActionForceMove * Time.fixedDeltaTime, aimActionAngleMove * Time.fixedDeltaTime);
             }
             else
             {
@@ -142,7 +179,9 @@ public class PlayerInput : MonoBehaviour
         throwRelease = false;
         dropDown = false;
         dialog = false;
-        useItemAction = false;
+        useItemActionPressed = false;
+        useItemActionHeld = false;
+        useItemActionReleased = false;
     }
 
     public void OnLanding()

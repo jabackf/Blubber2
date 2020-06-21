@@ -202,11 +202,11 @@ public class CharacterController2D : MonoBehaviour
         
     }
 
-    public void useItemAction()
+    public void useItemAction(bool pressed, bool held, bool released, float horizontal=0, float vertical=0)
     {
         if (!isHolding || !canPickup || holding == null) return;
 
-        holding.useItemAction();
+        holding.useItemAction(pressed, held, released, horizontal, vertical);
     }
 
     //Use the throwing retical
@@ -508,6 +508,12 @@ public class CharacterController2D : MonoBehaviour
     {
         return isHolding;
     }
+
+    public pickupObject getHolding()
+    {
+        return holding;
+    }
+
     public bool pushEnabled()
     {
         return canPush;
@@ -603,6 +609,7 @@ public class CharacterController2D : MonoBehaviour
             holding.transform.parent = gameObject.transform;
             holding.SendMessage("makeChild", SendMessageOptions.DontRequireReceiver); //This packs up the action icon(s) into children from transport
             holding.makeUndroppable();
+            holding.hideArrows();
             global.map.removeFromDestroyLoadList(holding.gameObject); //If it was previously added to the destroy on scene change list then picked back up, we don't want to destroy it. We want to carry it to the next scene
         }
     }
@@ -616,6 +623,7 @@ public class CharacterController2D : MonoBehaviour
             holding.transform.parent = null;
             holding.SendMessage("unChild", SendMessageOptions.DontRequireReceiver); //This unchilds the action icons
             holding.makeDroppable();
+            holding.hideArrows();
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }
     }

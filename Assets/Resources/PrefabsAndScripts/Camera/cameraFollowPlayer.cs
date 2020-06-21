@@ -107,6 +107,7 @@ public class cameraFollowPlayer : MonoBehaviour
             //Correct for out of scene boundary
             if (boundary != null)
             {
+                boundaryCorrection = new Vector3(0f, 0f, 0f);
                 if (worldCameraTopRight.x > boundary.getRightX()) boundaryCorrection.x = (worldCameraTopRight.x - boundary.getRightX());
                 if (worldCameraBottomLeft.x < boundary.getLeftX()) boundaryCorrection.x = -(boundary.getLeftX() - worldCameraBottomLeft.x);
                 if (worldCameraTopRight.y > boundary.getTopY()) boundaryCorrection.y = (worldCameraTopRight.y - boundary.getTopY());

@@ -38,11 +38,21 @@ public class pickupObject : actionInRange
     [Space]
     [Header("Item Use Action")]
     public bool hasAction = false;
-    public string actionSendMessage = "";
-    public GameObject actionMessageReceiver;
+    public bool hasActionAim=false;     //If set to true, an aiming reticle will be displayed when the useAction button is held
+    public bool rotateWithAim = true;   //If set to true and hasActionAim is true, then the gameObject will be rotated with the aim reticle
+    private GameObject actionAimObj;
+    public lineArrow actionAimArc;
+    public string actionPressedSendMessage = "";
+    public GameObject actionPressedMessageReceiver;
+    public string actionHeldSendMessage = "";
+    public GameObject actionHeldMessageReceiver;
+    public string actionReleasedSendMessage = "";
+    public GameObject actionReleasedMessageReceiver;
 
     [SerializeField]
-    public UnityEvent ActionCallback;  //Called when the object gets a keypress signal from the use object input
+    public UnityEvent ActionPressedCallback;  //Called when the object gets a keypress signal from the use object input
+    public UnityEvent ActionHeldCallback;
+    public UnityEvent ActionReleasedCallback;
 
     [SerializeField]
     public UnityEvent OnPickupCallback;  //Called when the object is picked up
@@ -55,21 +65,63 @@ public class pickupObject : actionInRange
         base.Start();
         rb = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
         initialMass = rb.mass;
-        throwArcObj = new GameObject(gameObject.name + "_throwArc");
-        throwArcObj.transform.parent = gameObject.transform;
-        throwArcObj.transform.localPosition = new Vector3(0, 0, 0);
-        throwArc = throwArcObj.AddComponent<lineArrow>() as lineArrow;
-        throwArc.isChild = true;
-        throwArc.hide();
+        createThrowArrow();
+
+        if (hasAction && hasActionAim)
+        {
+            createActionArrow();
+        }
+
         initialOffset = offset;
         initialRotationFreeze = rb.freezeRotation;
         initialZRotation = gameObject.transform.eulerAngles.z;
+    }
+
+    //Since the throw and action arrows are not child objects, these next three functions check if they exist and create them. We'll call checkForArrow anytime we know that we need one of the arrows, in case we've changed scenes and lost our arrow objects
+    private void createThrowArrow()
+    {
+        throwArcObj = new GameObject(gameObject.name + "_throwArc");
+        throwArcObj.transform.localPosition = new Vector3(0, 0, 0);
+        throwArc = throwArcObj.AddComponent<lineArrow>() as lineArrow;
+        throwArc.follow(gameObject.transform);
+        throwArc.hide();
+    }
+    private void createActionArrow()
+    {
+        actionAimObj = new GameObject(gameObject.name + "_actionAimObj");
+        actionAimObj.transform.localPosition = new Vector3(0, 0, 0);
+        actionAimArc = actionAimObj.AddComponent<lineArrow>() as lineArrow;
+        actionAimArc.follow(gameObject.transform);
+        actionAimArc.reticleMode = true;
+        actionAimArc.setAngle(0);
+        actionAimArc.hide();
+    }
+
+    private void checkForArrows()
+    {
+        if (throwArcObj == null) createThrowArrow();
+        if (actionAimObj == null && hasAction && hasActionAim) createActionArrow();
+    }
+
+    //This function hides our throw and action aim arrows
+    public void hideArrows()
+    {
+        checkForArrows();
+        throwArc.hide();
+        if (hasAction && hasActionAim) actionAimArc.hide();
     }
 
     //Use the throwing retical. Called by the holding object.
     //Arguments = Horizontal movement, vertical movement, release and throw, use the object's action
     public void Aim(float h, float v, bool release, bool action)
     {
+        checkForArrows();
+
+        if (hasAction && hasActionAim)
+        {
+            if (actionAimArc!=null) actionAimArc.hide();
+        }
+
         if (!throwArc.isShowing())
         {
             throwArc.show();
@@ -88,13 +140,67 @@ public class pickupObject : actionInRange
         }
     }
 
-    public void useItemAction()
+    //This function controls the actionAim arrow
+    public void actionAim(float h, float v)
+    {
+        checkForArrows();
+
+        if (!hasAction || !hasActionAim) return;
+
+        //Throw arc will take priority. If the user tries to throw while holding the action button down, we cancel the action aiming
+        if (throwArc.isShowing())
+        {
+            actionAimArc.hide();
+            return;
+        }
+        else
+        {
+            if (!actionAimArc.isShowing())
+            {
+                actionAimArc.show();
+                actionAimArc.setAngle(flippedX ? actionAimArc.angle : actionAimArc.angle );
+                actionAimArc.setMinMax(flippedX ? 0 : 90, flippedX ? 90 : 180);
+            }
+
+            actionAimArc.setAngle(actionAimArc.angle += (flippedX ? v : -v));
+            actionAimArc.setLength(actionAimArc.length + h);
+
+            if (rotateWithAim) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle+180);
+        }
+    }
+
+    //First three variables indicate the state of the action button (pressed, held, released). Last two variables are for aiming the useAction reticle (if there is one)
+    public void useItemAction(bool pressed, bool held, bool released, float horizontal=0f, float vertical=0f)
     {
         if (!hasAction) return;
-        if (ActionCallback!=null) ActionCallback.Invoke();
-        if (actionMessageReceiver != null && actionSendMessage != "")
+
+        if (pressed)
         {
-            actionMessageReceiver.SendMessage(actionSendMessage);
+            if (ActionPressedCallback != null) ActionPressedCallback.Invoke();
+            if (actionPressedMessageReceiver != null && actionPressedSendMessage != "")
+            {
+                actionPressedMessageReceiver.SendMessage(actionPressedSendMessage);
+            }
+        }
+        else if (released)
+        {
+            if (ActionReleasedCallback != null) ActionReleasedCallback.Invoke();
+            if (actionReleasedMessageReceiver != null && actionReleasedSendMessage != "")
+            {
+                actionReleasedMessageReceiver.SendMessage(actionReleasedSendMessage);
+            }
+
+            if (hasActionAim) actionAimArc.hide();
+        }
+        else if (held)
+        {
+            if (ActionHeldCallback != null) ActionHeldCallback.Invoke();
+            if (actionHeldMessageReceiver != null && actionHeldSendMessage != "")
+            {
+                actionHeldMessageReceiver.SendMessage(actionHeldSendMessage);
+            }
+
+            if (hasActionAim) actionAim(horizontal, vertical);
         }
     }
 
@@ -215,10 +321,13 @@ public class pickupObject : actionInRange
 
     public void releaseFromHolder()
     {
+        checkForArrows();
+
         if (freezeRotationOnPickup) rb.freezeRotation = initialRotationFreeze;
         Destroy(joint);
         this.setRangeActive(true);
         throwArc.hide();
+        if (hasActionAim && hasAction) actionAimArc.hide();
 
         holder.SendMessage("pickupReleased");
         holder = null;
@@ -251,9 +360,19 @@ public class pickupObject : actionInRange
         flippedX = !flipX ;
 
         //We still want to change the throw arc to the direction we're facing, even if we're not flipping the sprite.
-        if (!flippedX) throwArc.setMinMax(90, 180);
-        else throwArc.setMinMax(0, 90);
+        checkForArrows();
+        if (!flippedX)
+        {
+            throwArc.setMinMax(90, 180);
+            if (hasActionAim) actionAimArc.setMinMax(90, 180);
+        }
+        else
+        {
+            throwArc.setMinMax(0, 90);
+            if (hasActionAim) actionAimArc.setMinMax(0, 90);
+        }
         throwArc.setAngle( (180-throwArc.angle) );
+        if (hasActionAim) actionAimArc.setAngle((180 - actionAimArc.angle));
     }
     public void flipSpriteY(bool flipY)
     {

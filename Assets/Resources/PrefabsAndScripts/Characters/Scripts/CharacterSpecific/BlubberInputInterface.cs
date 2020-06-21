@@ -17,13 +17,20 @@ public class BlubberInputInterface : MonoBehaviour
     bool throwRelease = false;
     public float aimAngleSpeed = 200f; //Speed for aiming the angle of the throwing retical
     public float aimForceSpeed = 50f; //Speed for aiming the angle of the throwing retical
+
+    float aimActionAngleMove = 200f;    //Used in aiming the action retical (angle)
+    float aimActionForceMove = 15f;    //Used in aiming the action retical (force)
+    public float aimActionAngleSpeed = 200f; //Speed for aiming the angle of the action retical
+    public float aimActionForceSpeed = 50f; //Speed for aiming the angle of the action retical
+
     public bool jump = false;
     public bool crouch = false;
     public bool pickup = false;
     public bool dialog = false;    //Dialog button pressed
     public bool dropDown = false; //The action for dropping through platforms that have the dropDownPlatform script
-    public bool useItemAction = false; //If we're holding an object with an action, then this flag is triggered when we push the UseItemAction button
-    public float climb = 0;
+    bool useItemActionPressed = false; //If we're holding an object with an action, then this flag is triggered when we press the UseItemAction button
+    bool useItemActionHeld = false;
+    bool useItemActionReleased = false; public float climb = 0;
     public float climbSpeed = 5f;
     public bool holdingAction = false;
     private bool isThrowing = false; //Set to true if we're throwing an object (changing the throw angle and velocity).
@@ -50,7 +57,7 @@ public class BlubberInputInterface : MonoBehaviour
             if (!isThrowing)
             {
                 controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb * Time.fixedDeltaTime, dropDown, dialog);
-                if (useItemAction) controller.useItemAction();
+                if (useItemActionPressed || useItemActionHeld || useItemActionReleased) controller.useItemAction(useItemActionPressed, useItemActionHeld, useItemActionReleased, aimActionForceMove * Time.fixedDeltaTime, aimActionAngleMove * Time.fixedDeltaTime);
             }
             else
             {
@@ -74,7 +81,9 @@ public class BlubberInputInterface : MonoBehaviour
         throwRelease = false;
         dropDown = false;
         dialog = false;
-        useItemAction = false;
+        useItemActionPressed = false;
+        useItemActionHeld = false;
+        useItemActionReleased = false;
     }
 
     public void OnLanding()
