@@ -3900,8 +3900,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 715233495}
-  - component: {fileID: 715233494}
   - component: {fileID: 715233496}
+  - component: {fileID: 715233494}
   m_Layer: 14
   m_Name: Background
   m_TagString: Untagged
@@ -6712,7 +6712,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0843513, y: -0.10102391}
+  m_Offset: {x: -0.0843513, y: -0.053486943}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -6723,7 +6723,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.80001736, y: 1.1729522}
+  m_Size: {x: 0.80001736, y: 1.0778782}
   m_EdgeRadius: 0.1
 --- !u!212 &1289128601
 SpriteRenderer:

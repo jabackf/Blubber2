@@ -623,7 +623,7 @@ public class CharacterController2D : MonoBehaviour
             holding.transform.parent = null;
             holding.SendMessage("unChild", SendMessageOptions.DontRequireReceiver); //This unchilds the action icons
             holding.makeDroppable();
-            holding.hideArrows();
+            holding.changedScenes();
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
         }
     }

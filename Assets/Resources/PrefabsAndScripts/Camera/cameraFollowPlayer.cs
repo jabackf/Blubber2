@@ -6,10 +6,10 @@ public class cameraFollowPlayer : MonoBehaviour
 {
     public string followTag = "Player"; //The tag of the object to follow
     public string sceneBoundaryTag = "sceneBoundary"; //OPTIONAL The tag of the sceneBoundary object to prevent the camera from moving outside of the scene boundaries
-    public float offset=2;
+    public float offset = 2;
     private sceneBoundary boundary;
     private Vector3 playerPosition;
-    public float offsetSmoothing=0.5f;
+    public float offsetSmoothing = 0.5f;
     private Transform playerT;
     private Camera camera;  //The camera, assumed to be attached to the same object as this script
     private CharacterController2D charCont;
@@ -17,22 +17,40 @@ public class cameraFollowPlayer : MonoBehaviour
 
     private Vector2 worldCameraBottomLeft, worldCameraTopRight;
 
+    private Vector3 cameraPreviousPosition;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        playerT = GameObject.FindWithTag(followTag).GetComponent<Transform>() as Transform;
-        charCont = GameObject.FindWithTag(followTag).GetComponent<CharacterController2D>() as CharacterController2D;
+        cameraPreviousPosition = gameObject.transform.position;
+        Initialize();
+    }
+
+    bool Initialize()
+    {
+        GameObject player = GameObject.FindWithTag(followTag);
         camera = gameObject.GetComponent<Camera>();
         boundary = GameObject.FindWithTag(sceneBoundaryTag).GetComponent<sceneBoundary>() as sceneBoundary;
+        if (!player) return false;
+        playerT = player.GetComponent<Transform>() as Transform;
+        charCont = GameObject.FindWithTag(followTag).GetComponent<CharacterController2D>() as CharacterController2D;
 
         //Snap the camera into place at the start
         if (playerT)
         {
-            camera.transform.position = new Vector3(playerT.position.x, playerT.position.y,-10);
+            camera.transform.position = new Vector3(playerT.position.x, playerT.position.y, -10);
         }
 
         updateEdgeCoordinates();
+
+        return true;
+    }
+
+    //This returns the position of the camera immediately before the last update
+    public Vector3 getPreviousPosition()
+    {
+        return cameraPreviousPosition;
     }
 
     //Checks a transform to determine if it's x and y are in the camera's view
@@ -83,15 +101,13 @@ public class cameraFollowPlayer : MonoBehaviour
         bool playerExists = true;
         if (!playerT)
         {
-            GameObject player = GameObject.FindWithTag(followTag);
-            if (!player)
-                playerExists = false;
-            else
-                playerT = player.GetComponent<Transform>() as Transform;
+            playerExists = Initialize();
         }
 
         if (playerExists)
         {
+            cameraPreviousPosition = camera.transform.position;
+
             playerPosition = new Vector3(playerT.position.x, playerT.position.y, playerT.position.z);
 
             bool facingRight = true;

@@ -23,22 +23,22 @@ public class pickupObject : actionInRange
     private Rigidbody2D rb;
     public lineArrow throwArc;   //The reference to the lineArrow script
     private GameObject throwArcObj;    //The reference to the object containing the lineArrow script
-    bool flippedX=false;  //Tracks if the holding character is currently flipped horizontally
+    bool flippedX = false;  //Tracks if the holding character is currently flipped horizontally
     float releaseTimer = 0; //Timer. When set, the object will be released after it hits zero. This fixes a bug with attempting to pickup an object when something, like a ceiling, is in the way
     float releaseWaitTime = 0.015f; //The default time that the timer above will be set to.
     private bool undroppable = false; //Used to prevent the item from being dropped. Doesn't prevent an item from being thrown. This should be set using makeUndroppable!
 
-    private Vector3 refVelocity = new Vector3(0,0,0);
+    private Vector3 refVelocity = new Vector3(0, 0, 0);
     private bool initialRotationFreeze;
     private float initialZRotation;
 
-    public enum carryType { Top, Front};
+    public enum carryType { Top, Front };
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
 
     [Space]
     [Header("Item Use Action")]
     public bool hasAction = false;
-    public bool hasActionAim=false;     //If set to true, an aiming reticle will be displayed when the useAction button is held
+    public bool hasActionAim = false;     //If set to true, an aiming reticle will be displayed when the useAction button is held
     public bool rotateWithAim = true;   //If set to true and hasActionAim is true, then the gameObject will be rotated with the aim reticle
     private GameObject actionAimObj;
     public lineArrow actionAimArc;
@@ -59,6 +59,12 @@ public class pickupObject : actionInRange
 
     [SerializeField]
     public UnityEvent OnReleaseCallback;  //Called when the object is dropped or thrown
+
+
+    //This is set to some number greater than one upon picking an item up. It then counts down and hits zero a couple frames after picking it up.
+    //This was added as a hacky fix for a glitch I was having with the action aim arrows not pointing the proper direction after first picking them up.
+    //It's a bad fix, but I don't care! It works!
+    private float justPickedUp = 0f;
 
     void Start()
     {
@@ -119,7 +125,7 @@ public class pickupObject : actionInRange
 
         if (hasAction && hasActionAim)
         {
-            if (actionAimArc!=null) actionAimArc.hide();
+            if (actionAimArc != null) actionAimArc.hide();
         }
 
         if (!throwArc.isShowing())
@@ -136,7 +142,7 @@ public class pickupObject : actionInRange
         {
 
             throwArc.setAngle(throwArc.angle += (flippedX ? v : -v));
-            throwArc.setLength(throwArc.length+h);
+            throwArc.setLength(throwArc.length + h);
         }
     }
 
@@ -158,19 +164,19 @@ public class pickupObject : actionInRange
             if (!actionAimArc.isShowing())
             {
                 actionAimArc.show();
-                actionAimArc.setAngle(flippedX ? actionAimArc.angle : actionAimArc.angle );
+                //actionAimArc.setAngle(flippedX ? actionAimArc.angle : actionAimArc.angle );
                 actionAimArc.setMinMax(flippedX ? 0 : 90, flippedX ? 90 : 180);
             }
 
             actionAimArc.setAngle(actionAimArc.angle += (flippedX ? v : -v));
             actionAimArc.setLength(actionAimArc.length + h);
 
-            if (rotateWithAim) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle+180);
+            if (rotateWithAim) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle + 180);
         }
     }
 
     //First three variables indicate the state of the action button (pressed, held, released). Last two variables are for aiming the useAction reticle (if there is one)
-    public void useItemAction(bool pressed, bool held, bool released, float horizontal=0f, float vertical=0f)
+    public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0f, float vertical = 0f)
     {
         if (!hasAction) return;
 
@@ -181,6 +187,8 @@ public class pickupObject : actionInRange
             {
                 actionPressedMessageReceiver.SendMessage(actionPressedSendMessage);
             }
+
+
         }
         else if (released)
         {
@@ -207,6 +215,8 @@ public class pickupObject : actionInRange
 
     public void pickMeUp(GameObject character, Transform top, Transform front)
     {
+        justPickedUp = 2;
+
         this.setRangeActive(false);
         rb.mass = carryMass;
         holder = character;
@@ -216,12 +226,13 @@ public class pickupObject : actionInRange
             carryTrans = front;
         joint = gameObject.AddComponent<FixedJoint2D>() as FixedJoint2D;
         joint.connectedBody = holder.GetComponent<Rigidbody2D>() as Rigidbody2D;
-        joint.anchor = new Vector2(carryTrans.position.x+offset.x, carryTrans.position.y+offset.y);
+        joint.anchor = new Vector2(carryTrans.position.x + offset.x, carryTrans.position.y + offset.y);
         joint.breakForce = this.breakForce;
         joint.breakTorque = this.breakTorque;
 
+
         if (resetRotationOnPickup)
-            gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y,initialZRotation);
+            gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, initialZRotation);
         if (freezeRotationOnPickup)
             rb.freezeRotation = true;
 
@@ -251,7 +262,14 @@ public class pickupObject : actionInRange
             }
         }
 
+        checkForArrows();
+        if (hasActionAim && hasAction)
+        {
+            actionAimArc.setAngle(flippedX ? 180 : 0);
+        }
+
         if (OnPickupCallback != null) OnPickupCallback.Invoke();
+
     }
 
     //Makes the joint unbreakable (meaning you can't accidentally drop it. It can still be thrown)
@@ -269,6 +287,16 @@ public class pickupObject : actionInRange
         undroppable = false;
     }
 
+    //Called if a holder takes the item to another scene. Called after the new scene finishes loading.
+    public void changedScenes()
+    {
+        hideArrows();
+        if (hasAction && hasActionAim)
+        {
+            actionAimArc.setAngle(flippedX ? 0 : 180);
+        }
+    }
+
     //This function will suspend the physics movements of the object
     public void disablePhysics()
     {
@@ -281,19 +309,15 @@ public class pickupObject : actionInRange
 
     void FixedUpdate()
     {
+        if (justPickedUp > 0) justPickedUp -= 1;
+
         if (holder != null)
         {
-            //var pos = rb.position;
-            //pos += new Vector2(carryTrans.position.x, carryTrans.position.y) + new Vector2(offset.x,offset.y);
-            //pos = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
-            gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position+new Vector3(offset.x,offset.y,0), ref refVelocity, 0.1f);
-            //rb.MovePosition(pos);
-                
-            //throwArc.follow(gameObject.transform);
+            gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
 
-            if (releaseTimer>0)
+            if (releaseTimer > 0)
             {
-                releaseTimer-=Time.fixedDeltaTime;
+                releaseTimer -= Time.fixedDeltaTime;
                 if (releaseTimer <= 0)
                 {
                     releaseFromHolder();
@@ -302,6 +326,7 @@ public class pickupObject : actionInRange
             }
         }
     }
+
 
     void OnJointBreak2D(Joint2D broken)
     {
@@ -327,7 +352,11 @@ public class pickupObject : actionInRange
         Destroy(joint);
         this.setRangeActive(true);
         throwArc.hide();
-        if (hasActionAim && hasAction) actionAimArc.hide();
+        if (hasActionAim && hasAction)
+        {
+            actionAimArc.setAngle(0);
+            actionAimArc.hide();
+        }
 
         holder.SendMessage("pickupReleased");
         holder = null;
@@ -372,7 +401,14 @@ public class pickupObject : actionInRange
             if (hasActionAim) actionAimArc.setMinMax(0, 90);
         }
         throwArc.setAngle( (180-throwArc.angle) );
-        if (hasActionAim) actionAimArc.setAngle((180 - actionAimArc.angle));
+
+        if (hasAction && hasActionAim)
+        {
+             if (justPickedUp==0) actionAimArc.setAngle(180 - actionAimArc.angle);
+             else actionAimArc.setAngle(flippedX ? 0 : 180);
+        }
+
+        if (rotateWithAim && hasActionAim && hasAction) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle + 180);
     }
     public void flipSpriteY(bool flipY)
     {

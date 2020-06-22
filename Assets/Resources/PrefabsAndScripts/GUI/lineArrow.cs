@@ -121,6 +121,7 @@ public class lineArrow : MonoBehaviour
 
     public void setAngle(float newAngle)
     {
+
         this.angle = newAngle;
         if (restrainRotation)
         {
@@ -136,6 +137,12 @@ public class lineArrow : MonoBehaviour
         {
             calculate();
         }
+    }
+
+    public bool outsideRange(float angle)
+    {
+        if (angle > maxAngle || angle < minAngle) return true;
+        else return false;
     }
 
     public void setLength(float newLength)
