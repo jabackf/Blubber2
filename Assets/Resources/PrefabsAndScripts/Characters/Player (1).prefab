@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2b62fa34bc96eea43b4f170425370c7a, type: 3}
-  m_Color: {r: 0.1971567, g: 0.114142045, b: 0.8962264, a: 1}
+  m_Color: {r: 0.29411766, g: 0.35686275, b: 0.67058825, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -219,9 +219,14 @@ MonoBehaviour:
   maxVelocity: 20
   m_AirControl: 1
   canUseDropDownPlatforms: 1
+  inWater: 0
+  waterMultiplier: 0.7
   m_JumpVelocity: 10.5
   canDoubleJump: 0
   infiniteJump: 0
+  infiniteWaterJump: 1
+  m_WaterJumpMultiplier: 0.6
+  m_MaxJumpVelocity: 12
   canCrouch: 0
   m_CrouchSpeed: 0.36
   m_CrouchDisableCollider: {fileID: 0}
@@ -302,6 +307,8 @@ MonoBehaviour:
   runSpeed: 35
   aimAngleSpeed: 200
   aimForceSpeed: 15
+  aimActionAngleSpeed: 200
+  aimActionForceSpeed: 50
   climbSpeed: 5
 --- !u!114 &140103500801170329
 MonoBehaviour:

@@ -26,6 +26,7 @@ public class updateDropShadow : MonoBehaviour
             renderer.enabled = objSpriteRenderer.enabled;
             renderer.flipX = objSpriteRenderer.flipX;
             renderer.flipY = objSpriteRenderer.flipY;
+            renderer.sprite = objSpriteRenderer.sprite;
 
             //update the position and rotation of the sprite's shadow with moving sprite
             gameObject.transform.localPosition = obj.transform.localPosition + (Vector3)offset;

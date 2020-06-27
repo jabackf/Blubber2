@@ -101,7 +101,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
@@ -147,5 +147,42 @@ MonoBehaviour:
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  hasAction: 0
+  hasActionAim: 0
+  rotateWithAim: 1
+  actionAimArc: {fileID: 0}
+  actionPressedSendMessage: 
+  actionPressedMessageReceiver: {fileID: 0}
+  actionHeldSendMessage: 
+  actionHeldMessageReceiver: {fileID: 0}
+  actionReleasedSendMessage: 
+  actionReleasedMessageReceiver: {fileID: 0}
+  ActionPressedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ActionHeldCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ActionReleasedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null

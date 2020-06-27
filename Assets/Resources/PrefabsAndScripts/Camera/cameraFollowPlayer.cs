@@ -115,9 +115,7 @@ public class cameraFollowPlayer : MonoBehaviour
 
             playerPosition = new Vector3(playerPosition.x + (facingRight ? offset : -offset), playerPosition.y, -10);
 
-            //Actually move the camera
             camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
-
             updateEdgeCoordinates();
 
             //Correct for out of scene boundary
@@ -125,13 +123,15 @@ public class cameraFollowPlayer : MonoBehaviour
             {
                 boundaryCorrection = new Vector3(0f, 0f, 0f);
                 if (worldCameraTopRight.x > boundary.getRightX()) boundaryCorrection.x = (worldCameraTopRight.x - boundary.getRightX());
-                if (worldCameraBottomLeft.x < boundary.getLeftX()) boundaryCorrection.x = -(boundary.getLeftX() - worldCameraBottomLeft.x);
-                if (worldCameraTopRight.y > boundary.getTopY()) boundaryCorrection.y = (worldCameraTopRight.y - boundary.getTopY());
+                if (worldCameraBottomLeft.x < boundary.getLeftX() ) boundaryCorrection.x = -(boundary.getLeftX()  - worldCameraBottomLeft.x);
+                if (worldCameraTopRight.y > boundary.getTopY()) boundaryCorrection.y = (worldCameraTopRight.y- boundary.getTopY());
                 if (worldCameraBottomLeft.y < boundary.getBottomY()) boundaryCorrection.y = -(boundary.getBottomY() - worldCameraBottomLeft.y);
+
                 camera.transform.position -= boundaryCorrection;
+
+                //camera.transform.position = Vector3.Lerp(camera.transform.position, camera.transform.position -= boundaryCorrection, 0.1f);
                 updateEdgeCoordinates();
             }
         }
-
     }
 }
