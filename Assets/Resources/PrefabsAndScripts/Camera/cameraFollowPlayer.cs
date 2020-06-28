@@ -15,16 +15,25 @@ public class cameraFollowPlayer : MonoBehaviour
     private CharacterController2D charCont;
     private Vector3 boundaryCorrection = new Vector3(0, 0, 0); //Applied to the camera to prevent it from going off scene boundary
 
+    public bool clamp = true; //If set to true, the camera will clamp to the scene boundary. Requires scene boundary object! If none exists, setting this to true does nothing!
+
+
     private Vector2 worldCameraBottomLeft, worldCameraTopRight;
+    private Vector3 cameraPreviousPosition, clampMin, clampMax;
 
-    private Vector3 cameraPreviousPosition;
+    //Camera dimensions in world units! Calculated in the calculateDimensions() function
+    private float width, height, halfWidth, halfHeight;
 
+    private bool firstUpdate = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        cameraPreviousPosition = gameObject.transform.position;
         Initialize();
+        cameraPreviousPosition = gameObject.transform.position;
+
+        //We're not getting the proper clamp positions when we call this in start. I think it's because our pixel perfect camera script is causing us to calulcate the wrong screen dimensions. This is my cheap and easy way of fixing it.
+        Invoke("calculateClampPosition", 0.05f);
     }
 
     bool Initialize()
@@ -36,15 +45,52 @@ public class cameraFollowPlayer : MonoBehaviour
         playerT = player.GetComponent<Transform>() as Transform;
         charCont = GameObject.FindWithTag(followTag).GetComponent<CharacterController2D>() as CharacterController2D;
 
-        //Snap the camera into place at the start
-        if (playerT)
-        {
-            camera.transform.position = new Vector3(playerT.position.x, playerT.position.y, -10);
-        }
+        snapIntoPosition();
+
+        //Determine clamping position for camera based on scene boundary
+        calculateClampPosition();
 
         updateEdgeCoordinates();
 
         return true;
+    }
+
+    void calculateDimensions()
+    {
+        //Calculate some junk that might be useful
+        height = camera.orthographicSize * 2.0f;
+        width = height * camera.aspect;
+        halfHeight = camera.orthographicSize;
+        halfWidth = camera.aspect * halfHeight;
+    }
+
+    //This function immediately snaps the camera into place. It does not clamp!
+    void snapIntoPosition()
+    {
+        if (playerT)
+        {
+            camera.transform.position = new Vector3(playerT.position.x, playerT.position.y, -10);
+        }
+    }
+
+    //This function calculates the clamping position of the camera based on the scene boundaries
+    void calculateClampPosition()
+    {
+        calculateDimensions();
+
+        if (boundary)
+        {
+           
+
+            clampMin = new Vector3(boundary.getLeftX() + halfWidth,
+                                   boundary.getBottomY() + halfHeight, -10f);
+            clampMax = new Vector3(boundary.getRightX() - halfWidth,
+                       boundary.getTopY() - halfHeight, -10f);
+
+            //Snap the camera into the boundary
+            camera.transform.position = new Vector3(Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x), Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y), -10f);
+        }
+        
     }
 
     //This returns the position of the camera immediately before the last update
@@ -108,30 +154,32 @@ public class cameraFollowPlayer : MonoBehaviour
         {
             cameraPreviousPosition = camera.transform.position;
 
-            playerPosition = new Vector3(playerT.position.x, playerT.position.y, playerT.position.z);
+            playerPosition = new Vector3(playerT.position.x, playerT.position.y, -10f);
+
 
             bool facingRight = true;
             if (charCont != null) facingRight = charCont.isFacingRight();
 
-            playerPosition = new Vector3(playerPosition.x + (facingRight ? offset : -offset), playerPosition.y, -10);
+            playerPosition = new Vector3(playerPosition.x + (facingRight ? offset : -offset), playerPosition.y, -10f);
 
-            camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
-            updateEdgeCoordinates();
+            float smoothing = offsetSmoothing * Time.deltaTime;
 
-            //Correct for out of scene boundary
-            if (boundary != null)
+            //To clamp or not to clamp!
+            if (boundary != null && clamp==true)
             {
-                boundaryCorrection = new Vector3(0f, 0f, 0f);
-                if (worldCameraTopRight.x > boundary.getRightX()) boundaryCorrection.x = (worldCameraTopRight.x - boundary.getRightX());
-                if (worldCameraBottomLeft.x < boundary.getLeftX() ) boundaryCorrection.x = -(boundary.getLeftX()  - worldCameraBottomLeft.x);
-                if (worldCameraTopRight.y > boundary.getTopY()) boundaryCorrection.y = (worldCameraTopRight.y- boundary.getTopY());
-                if (worldCameraBottomLeft.y < boundary.getBottomY()) boundaryCorrection.y = -(boundary.getBottomY() - worldCameraBottomLeft.y);
+                //Actually move the camera
+                camera.transform.position = Vector3.Lerp(camera.transform.position, 
+                    new Vector3(Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x), Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y), -10f),
+                    offsetSmoothing * Time.deltaTime);
 
-                camera.transform.position -= boundaryCorrection;
-
-                //camera.transform.position = Vector3.Lerp(camera.transform.position, camera.transform.position -= boundaryCorrection, 0.1f);
-                updateEdgeCoordinates();
             }
+            else
+            {
+                //Actually move the camera
+                camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
+            }
+
+            updateEdgeCoordinates();
         }
     }
 }

@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7437196726464237107}
   - component: {fileID: 7437196726464237260}
   - component: {fileID: 7437196726464237262}
-  - component: {fileID: 7437196726464237106}
   - component: {fileID: 7437196726464237261}
   - component: {fileID: 755854288}
+  - component: {fileID: 7437196726464237106}
   - component: {fileID: 556307839}
   m_Layer: 0
   m_Name: Main Camera
@@ -87,22 +87,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7437196726464237263}
   m_Enabled: 1
---- !u!114 &7437196726464237106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7437196726464237263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6a002d12dbd77a4fa278b7228ef2c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  followTag: Player
-  sceneBoundaryTag: sceneBoundary
-  offset: 2
-  offsetSmoothing: 1.8
 --- !u!114 &7437196726464237261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +115,23 @@ MonoBehaviour:
   targetWidth: 1280
   targetHeight: 720
   type: 0
+--- !u!114 &7437196726464237106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7437196726464237263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6a002d12dbd77a4fa278b7228ef2c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followTag: Player
+  sceneBoundaryTag: sceneBoundary
+  offset: 2
+  offsetSmoothing: 1.8
+  clamp: 1
 --- !u!114 &556307839
 MonoBehaviour:
   m_ObjectHideFlags: 0
