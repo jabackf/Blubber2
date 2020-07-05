@@ -21,11 +21,15 @@ public class BlubberAnimation : CharacterAnimation
      * 
      * Other:
      * 
-     *+ faceBackground
-     *+ facePlayer
+     *+ Front  (face player) (in CharacterAnimation)
+     *+ Back  (face background) (in CharacterAnimation)
+     *+ Side  (face left or right as defined by the flip settings in CharacterController2D) (in CharacterAnimation)
      *+ jumpingOn  (repeatedly jumps)
      *+ jumpingOff
-     * 
+     *+ jumpingToggle
+     *+ CircleOn (spin in a circle by calling front,side,back,side...) (in CharacterAnimation)
+     *+ CircleOff  (in CharacterAnimation)
+     *+ circleToggle  (in CharacterAnimation)
      */
 
 
@@ -39,6 +43,9 @@ public class BlubberAnimation : CharacterAnimation
     BlubberInputInterface bii;
 
     bool jumping = false; //Set to true and the character will jump repeatedly, provided it has a BlubberInputInterface
+
+
+
     bool blink = false;
     float blinkTimerMin = 4f;
     float blinkTimerMax = 8f;
@@ -59,32 +66,30 @@ public class BlubberAnimation : CharacterAnimation
 
     public GameObject eiExclamationPoint;
 
-
-
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>();
         bii = gameObject.GetComponent<BlubberInputInterface>() as BlubberInputInterface;
         base.Start();
+
     }
 
     public override void SetupCharacter()
     {
         blinkTimer = UnityEngine.Random.Range(blinkTimerMin, blinkTimerMax);
 
-        dressList.Add(new dress("eyesNormal", global.dirBlubberSprites + "Eyes", gameObject.transform, false));
-        dressList.Add(new dress("eyesAngry", global.dirBlubberSprites + "eyesAngry", gameObject.transform, false));
-        dressList.Add(new dress("eyesBlink", global.dirBlubberSprites + "eyesBlink", gameObject.transform, false));
-        dressList.Add(new dress("eyesClimb", global.dirBlubberSprites + "eyesClimb", gameObject.transform, false));
-        dressList.Add(new dress("eyesHalf", global.dirBlubberSprites + "eyesSquint", gameObject.transform, false));
-        dressList.Add(new dress("eyesLove", global.dirBlubberSprites + "eyesLove", gameObject.transform, false));
-        dressList.Add(new dress("eyesSmall", global.dirBlubberSprites + "eyesSmall", gameObject.transform, false));
-        dressList.Add(new dress("eyesBug", global.dirBlubberSprites + "eyesBug", gameObject.transform, false));
-        dressList.Add(new dress("eyesCute", global.dirBlubberSprites + "eyesCute", gameObject.transform, false));
-        dressList.Add(new dress("eyesBlack", global.dirBlubberSprites + "eyesBlack", gameObject.transform, false));
-        dressList.Add(new dress("eyesFront", global.dirBlubberSprites + "eyesFront", gameObject.transform, false));
+        string eyeDir = global.dirBlubberSprites + "Eyes/";
+        dressList.Add(new dress("eyesNormal", eyeDir + "EyesNormal", gameObject.transform, false));
+        dressList.Add(new dress("eyesAngry", eyeDir + "eyesAngry", gameObject.transform, false));
+        dressList.Add(new dress("eyesBlink", eyeDir + "eyesBlink", gameObject.transform, false));
+        dressList.Add(new dress("eyesSquint", eyeDir + "eyesSquint", gameObject.transform, false));
+        dressList.Add(new dress("eyesLove", eyeDir + "eyesLove", gameObject.transform, false));
+        dressList.Add(new dress("eyesSmall", eyeDir + "eyesSmall", gameObject.transform, false));
+        dressList.Add(new dress("eyesBug", eyeDir + "eyesBug", gameObject.transform, false));
+        dressList.Add(new dress("eyesCute", eyeDir + "eyesCute", gameObject.transform, false));
+        dressList.Add(new dress("eyesBlack", eyeDir + "eyesBlack", gameObject.transform, false));
 
-        eyes = new multiDress(ref dressList, "eyesNormal", new string[] { "eyesNormal","eyesAngry","eyesBlink","eyesClimb", "eyesHalf", "eyesLove", "eyesSmall", "eyesBug", "eyesCute", "eyesBlack", "eyesFront" });
+        eyes = new multiDress(ref dressList, "eyesNormal", new string[] { "eyesNormal","eyesAngry","eyesBlink", "eyesSquint", "eyesLove", "eyesSmall", "eyesBug", "eyesCute", "eyesBlack" });
 
     }
     public override void UpdateCharacter()
@@ -93,9 +98,6 @@ public class BlubberAnimation : CharacterAnimation
         {
             case states.pushing:
                 eyes.changeState("eyesAngry");
-                break;
-            case states.climbing:
-                eyes.changeState("eyesClimb");
                 break;
 
             default:
@@ -174,8 +176,8 @@ public class BlubberAnimation : CharacterAnimation
     }
     public void Squint()
     {
-        eyes.changeState("eyesHalf");
-        currentEyes = "Half";
+        eyes.changeState("eyesSquint");
+        currentEyes = "Squint";
         currentEmotion = "Squint";
         setEmoteIcon(null);
     }
@@ -222,22 +224,6 @@ public class BlubberAnimation : CharacterAnimation
         setParticles(null);
         setEmoteIcon(null);
     }
-    public void faceBackground()
-    {
-        eyes.changeState("eyesClimb");
-        currentEyes = "Climb";
-        currentEmotion = "Normal";
-        setParticles(null);
-        setEmoteIcon(null);
-    }
-    public void facePlayer()
-    {
-        eyes.changeState("eyesFront");
-        currentEyes = "Front";
-        currentEmotion = "Normal";
-        setParticles(null);
-        setEmoteIcon(null);
-    }
 
     public void jumpingOn()
     {
@@ -247,4 +233,9 @@ public class BlubberAnimation : CharacterAnimation
     {
         jumping = false;
     }
+    public void jumpingToggle()
+    {
+        jumping = !jumping;
+    }
+
 }

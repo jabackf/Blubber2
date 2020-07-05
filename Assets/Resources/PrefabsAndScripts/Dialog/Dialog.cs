@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+[System.Serializable] public class completeCallback : UnityEvent<string> { } //See list definition of onCompletedCallback
+
 /*Special keywords:
  * "[answer]" added to message text will replace the text in quotes with the last provided answer
  * "[title]" is replaced with the message box title (or character name)
@@ -56,6 +58,9 @@ public class Dialog : MonoBehaviour
 
     private cameraFollowPlayer view;
 
+    [SerializeField]
+    public completeCallback[] onCompleteCallbacks;  //A list of callbacks sent when the dialog completes. Sends (string) as a parameter, with the string being the last provided answer
+
     [Space]
     [Header("Interuptions")]
     //The following variables handle interupting. Interupting is designed to be used with auto conversations.
@@ -91,6 +96,14 @@ public class Dialog : MonoBehaviour
         public int index; //The index to jump to if this.answer matches the user selected answer
         public bool ignoreCase; //If true, it will ignore the case of the answer. Meaning, "stinkypants" will match "StInKyPaNtS"
         public string addToNextMessage; //If not empty, this will be added to the beginning of the next message. For example, "You didn't enter anything! " can be added to the beginning of a message asking for input
+
+        public AnswerBranch(string answer, int jumpto, bool ignoreCase=false, string addToNext="")
+        {
+            this.answer = answer;
+            this.index = jumpto;
+            this.ignoreCase = ignoreCase;
+            this.addToNextMessage = addToNext;
+        }
     }
 
     [System.Serializable]
@@ -99,7 +112,7 @@ public class Dialog : MonoBehaviour
         public string Message = "";
         public string Title = "";
         public bool saidByInitiator = false; //If set to true, the initiator's info will be used for this box
-        public string sendMessageStart = ""; //If not empty, then this message is sent to the gameObject (or initiator, if gameObject is null) at the start of this box
+        public string sendMessageStart = ""; //If not empty, then this message is sent to the gameObject (or initiator, if gameObject is null) at the start of this box. You can send multiple messages by separating messages with pipe (e.g. Angry|CircleOn)
         public string sendMessageEnd = ""; //Same as above, but it sent at the end of the message
         public GameObject gameObject;
         public string startAnimation; //Animation to play when the box first opens. Applies to the speaker or the specified gameObject if not null
@@ -251,6 +264,16 @@ public class Dialog : MonoBehaviour
 		}
     }
 
+    //This method can be called to remotely add to the list of answers of the specified dialog index.
+    //For example, a dresser might call injectAnswerBranch for each item of clothing. This allows the dresser script to control all of the options presented.
+    //You would then use the onCompleteCallback to send the selected answer back to the dresser script
+    public void injectAnswerBranch(int injectIndex, int jumptoIndex, string answer, string addToNextMessage="", bool ignoreCase=true)
+    {
+        entries[injectIndex].answers.Add(answer);
+        entries[injectIndex].answerBranch.Add(new AnswerBranch(answer, jumptoIndex, ignoreCase, addToNextMessage));
+        
+    }
+
     //Called when someone is interupting our conversation.
     //Intended primarily for when NPCs are having an automatic conversation and the player interupts them 
     public void interupt()
@@ -294,17 +317,25 @@ public class Dialog : MonoBehaviour
         initiatorBottom = bottom;
         active = true;
 
-        if (characterController != null && faceInitiator && initiator != null)
+        if (characterController != null && initiator != null)
         {
-            originallyFacingRight = characterController.isFacingRight();
-            if (initiator.transform.position.x < gameObject.transform.position.x && originallyFacingRight)
+            if (faceInitiator)
             {
-                characterController.Flip();
+                originallyFacingRight = characterController.isFacingRight();
+                if (initiator.transform.position.x < gameObject.transform.position.x && originallyFacingRight)
+                {
+                    characterController.Flip();
+                }
+                if (initiator.transform.position.x > gameObject.transform.position.x && !originallyFacingRight)
+                {
+                    characterController.Flip();
+                }
             }
-            if (initiator.transform.position.x > gameObject.transform.position.x && !originallyFacingRight)
-            {
-                characterController.Flip();
-            }
+        }
+
+        if (initiator != null && !isAutoType)
+        {
+            initiator.SendMessage("StartTalking", SendMessageOptions.DontRequireReceiver);
         }
 
         if (myType == type.AutoStraightshot || myType == type.Straightshot || myType == type.AutoStraightshotLoop) //Starting at 0
@@ -488,12 +519,17 @@ public class Dialog : MonoBehaviour
             initiator.SendMessage("StopTalking");
         }
 
-        if (characterController!=null && initiator!=null && faceInitiator)
+        if (characterController != null && initiator != null && faceInitiator)
         {
             if (!characterController.isFacingRight() && originallyFacingRight)
                 characterController.Flip();
             if (characterController.isFacingRight() && !originallyFacingRight)
                 characterController.Flip();
+        }
+
+        foreach (completeCallback c in onCompleteCallbacks)
+        {
+            c.Invoke(lastAnswer);
         }
     }
 
@@ -549,14 +585,22 @@ public class Dialog : MonoBehaviour
 
         if (entries[index].sendMessageStart != "")
         {
+            string[] msgs = entries[index].sendMessageStart.Split('|');
 
             if (entries[index].gameObject != null)
             {
-                entries[index].gameObject.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
+                foreach (var msg in msgs)
+                {
+                    entries[index].gameObject.SendMessage(msg, null, SendMessageOptions.DontRequireReceiver);
+                }
             }
             else
             {
-                if (initiator != null) initiator.SendMessage(entries[index].sendMessageStart, null, SendMessageOptions.DontRequireReceiver);
+                foreach (var msg in msgs)
+                {
+                    if (initiator != null) initiator.SendMessage(msg, null, SendMessageOptions.DontRequireReceiver);
+
+                }
             }
         }
         if (entries[index].startAnimation != "")
@@ -588,11 +632,22 @@ public class Dialog : MonoBehaviour
 
         if (entries[index].sendMessageEnd != "")
         {
+            string[] msgs = entries[index].sendMessageEnd.Split('|');
+
             if (entries[index].gameObject != null)
-                entries[index].gameObject.SendMessage(entries[index].sendMessageEnd, null, SendMessageOptions.DontRequireReceiver);
+            {
+                foreach (var msg in msgs)
+                {
+                    entries[index].gameObject.SendMessage(msg, null, SendMessageOptions.DontRequireReceiver);
+                }
+            }
             else
             {
-                if (initiator != null) initiator.SendMessage(entries[index].sendMessageEnd, null, SendMessageOptions.DontRequireReceiver);
+                foreach (var msg in msgs)
+                {
+                    if (initiator != null) initiator.SendMessage(msg, null, SendMessageOptions.DontRequireReceiver);
+
+                }
             }
         }
 

@@ -410,6 +410,19 @@ public class CharacterController2D : MonoBehaviour
                     isTalking = true;
                     setActionObjectInRange(null);
                 }
+
+            }
+
+            //Code for other range triggers (RangeTriggerEvent)
+            if (pickup && !isHolding && m_Grounded && actionObjectInRange != null && (!isClimbing || !canClimb)) //We're in range of something, so we'll check to see if it has a RangeTriggerEvent. Pickup is used to check if the action key (pickup key) was pressed
+            {
+                RangeTriggerEvent d = actionObjectInRange.GetComponent<RangeTriggerEvent>() as RangeTriggerEvent;
+                if (d != null)
+                {
+                    m_Rigidbody2D.velocity = new Vector2(0f, 0f);
+                    d.Activate(CharacterName, gameObject);
+                    setActionObjectInRange(null);
+                }
             }
 
         } //END if Grounded || Air Control
@@ -484,6 +497,10 @@ public class CharacterController2D : MonoBehaviour
     {
         isTalking = false;
     }
+    public void StartTalking()
+    {
+        isTalking = true;
+    }
     public void setIsOnConveyor(bool val)
     {
         isOnConveyor = val;
@@ -530,6 +547,16 @@ public class CharacterController2D : MonoBehaviour
     {
         return actionObjectInRange;
     }
+
+    public void FaceLeft()
+    {
+        if (m_FacingRight) Flip();
+    }
+    public void FaceRight()
+    {
+        if (!m_FacingRight) Flip();
+    }
+
     public void Flip()
 	{
 		// Switch the way the player is labelled as facing.

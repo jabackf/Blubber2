@@ -28,12 +28,19 @@ public class pickupObject : actionInRange
     float releaseWaitTime = 0.015f; //The default time that the timer above will be set to.
     private bool undroppable = false; //Used to prevent the item from being dropped. Doesn't prevent an item from being thrown. This should be set using makeUndroppable!
 
+    private SpriteRenderer renderer;
+
     private Vector3 refVelocity = new Vector3(0, 0, 0);
     private bool initialRotationFreeze;
     private float initialZRotation;
 
-    public enum carryType { Top, Front };
+    public enum carryType { Top, Front, exactPlayerPosition };
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
+
+    [Space]
+    [Header("Character Facing Direction")]
+    public bool hasFacingDirections = false;
+    public Sprite sideSprite, frontSprite, backSprite;
 
     [Space]
     [Header("Item Use Action")]
@@ -70,6 +77,7 @@ public class pickupObject : actionInRange
     {
         base.Start();
         rb = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
+        renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
         initialMass = rb.mass;
         createThrowArrow();
 
@@ -224,6 +232,8 @@ public class pickupObject : actionInRange
             carryTrans = top;
         if (mCarryType == carryType.Front)
             carryTrans = front;
+        if (mCarryType == carryType.exactPlayerPosition)
+            carryTrans = character.transform;
         joint = gameObject.AddComponent<FixedJoint2D>() as FixedJoint2D;
         joint.connectedBody = holder.GetComponent<Rigidbody2D>() as Rigidbody2D;
         joint.anchor = new Vector2(carryTrans.position.x + offset.x, carryTrans.position.y + offset.y);
@@ -417,6 +427,18 @@ public class pickupObject : actionInRange
             offset.y = initialOffset.y * (flipY ? -1 : 1);
             //offset.y= -offset.y;
             gameObject.GetComponent<SpriteRenderer>().flipY = flipY;
+        }
+    }
+
+    //Sets the facing direction of the object. 0=side, 1=front, 2=back. Called by the character controller that is currently holding it
+    public void setFacingDirection(int dir)
+    {
+        if (hasFacingDirections)
+        {
+            if (renderer == null) renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
+            if (dir == 0 && sideSprite != null) renderer.sprite = sideSprite;
+            if (dir == 1 && frontSprite != null) renderer.sprite = frontSprite;
+            if (dir == 2 && backSprite != null) renderer.sprite = backSprite;
         }
     }
 }
