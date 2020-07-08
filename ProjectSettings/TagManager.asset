@@ -20,6 +20,7 @@ TagManager:
   - IgnoreDropShadow
   - CharacterDress
   - Water
+  - dropShadow
   layers:
   - Default
   - TransparentFX
@@ -37,7 +38,7 @@ TagManager:
   - Debug
   - Background1
   - PostProcessing
-  - 
+  - DisableAllCollision
   - 
   - 
   - 

@@ -34,6 +34,9 @@ public class pickupObject : actionInRange
     private bool initialRotationFreeze;
     private float initialZRotation;
 
+    private Transform parentPrevious = null; //Stores the previous parent for exactPlayerPosition. This is because exactPlayerPosition actually parents the object to the holder instead of creating a joint and following
+
+    //Top = carry with the character's top transform. Front = carry with the player's front transform. exactPlayerPosition = parent the object to the player and follow his position exactly, don't use a joint, don't smoothDamp, kinematic physics while held.
     public enum carryType { Top, Front, exactPlayerPosition };
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
 
@@ -233,12 +236,22 @@ public class pickupObject : actionInRange
         if (mCarryType == carryType.Front)
             carryTrans = front;
         if (mCarryType == carryType.exactPlayerPosition)
-            carryTrans = character.transform;
-        joint = gameObject.AddComponent<FixedJoint2D>() as FixedJoint2D;
-        joint.connectedBody = holder.GetComponent<Rigidbody2D>() as Rigidbody2D;
-        joint.anchor = new Vector2(carryTrans.position.x + offset.x, carryTrans.position.y + offset.y);
-        joint.breakForce = this.breakForce;
-        joint.breakTorque = this.breakTorque;
+        {
+            parentPrevious = gameObject.transform.parent;
+            gameObject.transform.parent = character.transform;
+            gameObject.transform.localPosition = new Vector3(offset.x, offset.y, 0);
+            carryTrans = null;
+            joint = null;
+            disablePhysics();
+        }
+        else
+        {
+            joint = gameObject.AddComponent<FixedJoint2D>() as FixedJoint2D;
+            joint.connectedBody = holder.GetComponent<Rigidbody2D>() as Rigidbody2D;
+            joint.anchor = new Vector2(carryTrans.position.x + offset.x, carryTrans.position.y + offset.y);
+            joint.breakForce = this.breakForce;
+            joint.breakTorque = this.breakTorque;
+        }
 
 
         if (resetRotationOnPickup)
@@ -285,16 +298,22 @@ public class pickupObject : actionInRange
     //Makes the joint unbreakable (meaning you can't accidentally drop it. It can still be thrown)
     public void makeUndroppable()
     {
-        joint.breakForce = Mathf.Infinity;
-        joint.breakTorque = Mathf.Infinity;
-        undroppable = true;
+        if (joint)
+        {
+            joint.breakForce = Mathf.Infinity;
+            joint.breakTorque = Mathf.Infinity;
+            undroppable = true;
+        }
     }
     //Undoes the previous function by reverting the break force/torque back to the most recently specified values
     public void makeDroppable()
     {
-        joint.breakForce = this.breakForce;
-        joint.breakTorque = this.breakTorque;
-        undroppable = false;
+        if (joint)
+        {
+            joint.breakForce = this.breakForce;
+            joint.breakTorque = this.breakTorque;
+            undroppable = false;
+        }
     }
 
     //Called if a holder takes the item to another scene. Called after the new scene finishes loading.
@@ -323,7 +342,12 @@ public class pickupObject : actionInRange
 
         if (holder != null)
         {
-            gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
+            if (mCarryType == carryType.exactPlayerPosition)
+            {
+                gameObject.transform.localPosition = new Vector3(offset.x, offset.y, 0);
+            }
+            else
+                gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
 
             if (releaseTimer > 0)
             {
@@ -356,7 +380,13 @@ public class pickupObject : actionInRange
 
     public void releaseFromHolder()
     {
-        checkForArrows();
+        if (mCarryType == carryType.exactPlayerPosition)
+        {
+            enablePhysics();
+            gameObject.transform.parent = parentPrevious;
+        }
+
+         checkForArrows();
 
         if (freezeRotationOnPickup) rb.freezeRotation = initialRotationFreeze;
         Destroy(joint);

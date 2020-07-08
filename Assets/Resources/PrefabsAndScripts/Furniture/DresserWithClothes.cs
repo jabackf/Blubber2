@@ -10,6 +10,8 @@ public class DresserWithClothes : OpenClose
     public Transform dialogTop, dialogBottom;
     public string noneString = "None";
 
+    private sceneSettings sceneSettingsGO;
+
     public DressObject[] dressList;
 
     private GameObject characterGo; //Stores the most recent character to have activated the dress selection dialog
@@ -27,6 +29,7 @@ public class DresserWithClothes : OpenClose
     void Start()
     {
         base.Start();
+        sceneSettingsGO = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
     }
 
     // Update is called once per frame
@@ -71,6 +74,7 @@ public class DresserWithClothes : OpenClose
             SpriteRenderer dressRenderer = newDress.GetComponent<SpriteRenderer>() as SpriteRenderer;
             dressRenderer.enabled = true;
             characterGo.SendMessage("addDressObject", newDress, SendMessageOptions.DontRequireReceiver);
+            if (sceneSettingsGO!=null) sceneSettingsGO.objectCreated(newDress);
         }
 
         base.Close("", characterGo);

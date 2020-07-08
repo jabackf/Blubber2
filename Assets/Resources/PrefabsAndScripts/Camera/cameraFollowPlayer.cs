@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class cameraFollowPlayer : MonoBehaviour
 {
@@ -15,7 +16,9 @@ public class cameraFollowPlayer : MonoBehaviour
     private CharacterController2D charCont;
     private Vector3 boundaryCorrection = new Vector3(0, 0, 0); //Applied to the camera to prevent it from going off scene boundary
 
-    public bool clamp = true; //If set to true, the camera will clamp to the scene boundary. Requires scene boundary object! If none exists, setting this to true does nothing!
+    public Canvas blankScreen; //This can be used to make the entire view go blank. See blankOn() and blankOff()
+
+    public bool clampX = true, clampY=true; //If set to true, the camera will clamp to the scene boundary. Requires scene boundary object! If none exists, setting this to true does nothing!
 
 
     private Vector2 worldCameraBottomLeft, worldCameraTopRight;
@@ -24,35 +27,61 @@ public class cameraFollowPlayer : MonoBehaviour
     //Camera dimensions in world units! Calculated in the calculateDimensions() function
     private float width, height, halfWidth, halfHeight;
 
-    private bool firstUpdate = true;
-
-    // Start is called before the first frame update
     void Start()
     {
-        Initialize();
         cameraPreviousPosition = gameObject.transform.position;
-
-        //We're not getting the proper clamp positions when we call this in start. I think it's because our pixel perfect camera script is causing us to calulcate the wrong screen dimensions. This is my cheap and easy way of fixing it.
-        Invoke("calculateClampPosition", 0.05f);
     }
+
 
     bool Initialize()
     {
-        GameObject player = GameObject.FindWithTag(followTag);
-        camera = gameObject.GetComponent<Camera>();
-        boundary = GameObject.FindWithTag(sceneBoundaryTag).GetComponent<sceneBoundary>() as sceneBoundary;
-        if (!player) return false;
-        playerT = player.GetComponent<Transform>() as Transform;
-        charCont = GameObject.FindWithTag(followTag).GetComponent<CharacterController2D>() as CharacterController2D;
+        getVariables();
 
         snapIntoPosition();
+
+        updateEdgeCoordinates();
 
         //Determine clamping position for camera based on scene boundary
         calculateClampPosition();
 
-        updateEdgeCoordinates();
+        if (playerT==null)
+            return false;
+        else
+            return true;
+    }
 
-        return true;
+    public void getVariables()
+    {
+        GameObject player = GameObject.FindWithTag(followTag);
+        camera = gameObject.GetComponent<Camera>() as Camera;
+        boundary = GameObject.FindWithTag(sceneBoundaryTag).GetComponent<sceneBoundary>() as sceneBoundary;
+       
+        if (player)
+        {
+            playerT = player.GetComponent<Transform>() as Transform;
+            charCont = player.GetComponent<CharacterController2D>() as CharacterController2D;
+        }
+        else
+        {
+            //Player doesn't exist.
+            playerT = null;
+        }
+
+    }
+
+    public void blankOn()
+    {
+        Debug.Log("ON");
+        if (blankScreen != null) blankScreen.gameObject.SetActive(true);
+    }
+    public void blankOff()
+    {
+        Debug.Log("OFF");
+        if (blankScreen != null) blankScreen.gameObject.SetActive(false);
+    }
+    public void blankToggle()
+    {
+        if (blankScreen != null) blankScreen.gameObject.SetActive(!blankScreen.gameObject.activeSelf);
     }
 
     void calculateDimensions()
@@ -78,9 +107,10 @@ public class cameraFollowPlayer : MonoBehaviour
     {
         calculateDimensions();
 
-        if (boundary)
+        if (boundary && playerT!=null)
         {
-           
+
+            playerPosition = new Vector3(playerT.position.x, playerT.position.y, -10f);
 
             clampMin = new Vector3(boundary.getLeftX() + halfWidth,
                                    boundary.getBottomY() + halfHeight, -10f);
@@ -88,7 +118,7 @@ public class cameraFollowPlayer : MonoBehaviour
                        boundary.getTopY() - halfHeight, -10f);
 
             //Snap the camera into the boundary
-            camera.transform.position = new Vector3(Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x), Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y), -10f);
+            camera.transform.position = new Vector3( (clampX ? Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x) : camera.transform.position.x), (clampY ? Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y) : camera.transform.position.y), -10f);
         }
         
     }
@@ -145,7 +175,7 @@ public class cameraFollowPlayer : MonoBehaviour
     {
 
         bool playerExists = true;
-        if (!playerT)
+        if (playerT==null)
         {
             playerExists = Initialize();
         }
@@ -165,12 +195,13 @@ public class cameraFollowPlayer : MonoBehaviour
             float smoothing = offsetSmoothing * Time.deltaTime;
 
             //To clamp or not to clamp!
-            if (boundary != null && clamp==true)
+            if (boundary != null && (clampX==true||clampY==true) )
             {
                 //Actually move the camera
                 camera.transform.position = Vector3.Lerp(camera.transform.position, 
-                    new Vector3(Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x), Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y), -10f),
-                    offsetSmoothing * Time.deltaTime);
+                    new Vector3( (clampX ? Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x) : playerPosition.x), 
+                    (clampY ? Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y) : playerPosition.y), 
+                    -10f), offsetSmoothing * Time.deltaTime);
 
             }
             else

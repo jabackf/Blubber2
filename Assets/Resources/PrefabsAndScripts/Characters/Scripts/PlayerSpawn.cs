@@ -7,6 +7,10 @@ using UnityEngine;
 public class PlayerSpawn : MonoBehaviour
 {
 
+    //NOTE: This object was initially used to respawn the player after death. The respawn action was changed to occur in the characterController. 
+    //The respawn code wasn't removed from this script. This object still has the ability to respawn the player, but this isn't where it actually happens in game
+    //Instead, this object is used to spawn the player if the player does not exist (i.e. he didn't come from another room via dontdestroyonload)
+
     public GameObject playerPrefab;
     public string playerTag = "Player";
 

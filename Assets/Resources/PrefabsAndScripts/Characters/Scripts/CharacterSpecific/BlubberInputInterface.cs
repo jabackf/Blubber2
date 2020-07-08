@@ -52,7 +52,7 @@ public class BlubberInputInterface : MonoBehaviour
     {
         if (jumpCounter > 0) jump = false; //Used to make sure we don't get the jump signal repeatedly for several frames.
 
-        if (!controller.isTalking) //In dialog mode
+        if (!controller.isTalking && !controller.isCharacterDead()) //Not in dialog mode, not dead
         {
             if (!isThrowing)
             {

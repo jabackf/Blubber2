@@ -12,6 +12,7 @@ public class CharacterAnimation : MonoBehaviour
 
     public Animator animator;
     public CharacterController2D controller;
+    public SpriteRenderer renderer;
     public float climbSpeedMultiplier = 10f; //Speed multiplier for climb animation
     public float speedMultiplier = 1.5f; //Use to adjust the speed of the animation.
 
@@ -27,7 +28,7 @@ public class CharacterAnimation : MonoBehaviour
     [HideInInspector] public bool throwing = false; //Set to true after an object is thrown. Set by the character controller, unset by this charAnim script
     [HideInInspector] public float climb = 0; //Set to true for the duration of the climb by the character controller.
     [HideInInspector] public bool isClimbing = false;
-    
+    [HideInInspector] public bool isDead = false;
 
 
 
@@ -52,6 +53,10 @@ public class CharacterAnimation : MonoBehaviour
     public float circleTimer = 0.3f; //Controls the amount of time between frames in the circle
     public float circleDirection = 1; //zero for left, one for right
     private int circleFrame; //Used for tracking the from of the circle we are on (0=front, 1=right, 2=back, 3=left)
+
+    //These two variables are used to track sprite states for turnOnChildSprites() and turnOffChildSprites()
+    private SpriteRenderer[] spritesTurnedOff;
+    private bool[] spritesTurnedOffEnabled;
 
     [Space]
     [Header("Animator Parameters")]
@@ -210,6 +215,8 @@ public class CharacterAnimation : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer ;
+
         //Setup any dresses added in the inspector
         foreach (dress d in dressList)
         {
@@ -348,6 +355,55 @@ public class CharacterAnimation : MonoBehaviour
         if (d != null) d.ShowHide(show);
     }
 
+    //These functions hide all child sprites (OFF), or put them back in the original state (before being turned off) (ON)
+    /*public List<SpriteRenderer> getAllSpriteRenderers()
+    {
+        List<SpriteRenderer> result = new List<SpriteRenderer>();
+        foreach (Transform child in gameObject.transform)
+        {
+            
+            SpriteRenderer sr = child.gameObject.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                result.Add(sr);
+            }
+        }
+        return result;
+    }*/
+    public void turnOffChildSprites()
+    {
+        spritesTurnedOff =  gameObject.transform.GetComponentsInChildren<SpriteRenderer>();
+        spritesTurnedOffEnabled = new bool[spritesTurnedOff.Length];
+        for (int i = 0; i < spritesTurnedOff.Length; i++)
+        {
+            spritesTurnedOffEnabled[i] = spritesTurnedOff[i].enabled;
+            spritesTurnedOff[i].enabled = false;
+        }
+    }
+    public void turnOnChildSprites()
+    {
+        for (int i = 0; i < spritesTurnedOff.Length; i++)
+        {
+            spritesTurnedOff[i].enabled = spritesTurnedOffEnabled[i];
+        }
+    }
+
+
+    //Called by the character controller when the character dies. This handles all of the hiding and unhiding of sprites
+    public void characterDied()
+    {
+        isDead = true;
+        turnOffChildSprites();
+        renderer.enabled = false;
+    }
+    //Called by the character controller when the character respawns. This handles all of the hiding and unhiding of sprites
+    public void characterRespawned()
+    {
+        isDead = false;
+        turnOnChildSprites();
+        renderer.enabled = true;
+    }
+
     public void FlipX(bool flip)
     {
         //The character controller will automatically flip sprites of child objects if necessary.
@@ -399,7 +455,7 @@ public class CharacterAnimation : MonoBehaviour
         setDressFacing(0);
         if (controller.holdingSomething())
         {
-            controller.getHolding().setFacingDirection(3);
+            controller.getHolding().setFacingDirection(0);
         }
     }
 

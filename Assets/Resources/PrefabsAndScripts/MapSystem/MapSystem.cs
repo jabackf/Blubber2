@@ -151,11 +151,13 @@ public class MapSystem
 
     //map can either be a map name (in the format of mapname_xpos_ypos)
     //or one of the special keywords: left, right, up, down, current
+    //Reload = rather to reload the scene if the specified map is the map that is already loaded
 	//Returns true on success, false if scene change was rejected
-    public bool goTo(string map, transitions trans = transitions.DEFAULT)
+    public bool goTo(string map, transitions trans = transitions.DEFAULT, bool reload=true)
     {
 		if (transitioning) return false;
-		
+
+        if (reload == false && currentMap == map) return false; 
 		
 		if (trans!=transitions.DEFAULT) transition = trans;
         string transitionString = getNewMapString(map);

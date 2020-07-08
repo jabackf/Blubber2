@@ -94,35 +94,38 @@ public class BlubberAnimation : CharacterAnimation
     }
     public override void UpdateCharacter()
     {
-        switch (state)
+        if (!isDead)
         {
-            case states.pushing:
-                eyes.changeState("eyesAngry");
-                break;
+            switch (state)
+            {
+                case states.pushing:
+                    eyes.changeState("eyesAngry");
+                    break;
 
-            default:
-                eyes.changeState("eyes" + currentEyes);
-                break;
-        }
+                default:
+                    eyes.changeState("eyes" + currentEyes);
+                    break;
+            }
 
-        //Blinking
-        if (blinkTimer <= 0)
-        {
-            blink = !blink;
-            blinkTimer = blink ? blinkCloseTime : UnityEngine.Random.Range(blinkTimerMin, blinkTimerMax);
-        }
-        else
-        {
-            blinkTimer -= Time.deltaTime;
-        }
+            //Blinking
+            if (blinkTimer <= 0)
+            {
+                blink = !blink;
+                blinkTimer = blink ? blinkCloseTime : UnityEngine.Random.Range(blinkTimerMin, blinkTimerMax);
+            }
+            else
+            {
+                blinkTimer -= Time.deltaTime;
+            }
 
-        if (blink && state != states.climbing)
-        {
-            eyes.changeState("eyesBlink");
-        }
+            if (blink && state != states.climbing)
+            {
+                eyes.changeState("eyesBlink");
+            }
 
-        if (bii != null && jumping)
-            bii.jump = true;
+            if (bii != null && jumping)
+                bii.jump = true;
+        }
     }
 
     //Sets the particles to specified prefab. Pass null for no particles

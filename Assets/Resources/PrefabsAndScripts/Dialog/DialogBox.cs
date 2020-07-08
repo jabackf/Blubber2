@@ -391,9 +391,9 @@ public class DialogBox : MonoBehaviour
         if (menuGo != null)
         {
 
-            float halfW = menuRect.rect.width / 2;
-            float halfH = menuRect.rect.height / 2;
-            selectCursor.transform.position = new Vector3(menuGo.transform.position.x - halfW + cursorOffset.x, menuGo.transform.position.y + cursorOffset.y + halfH - (selectedIndex * selectItemHeight));
+            float halfW = (menuRect.rect.width / 2) * canvasComponent.scaleFactor;
+            float halfH = (menuRect.rect.height / 2) * canvasComponent.scaleFactor;
+            selectCursor.transform.position = new Vector3(menuGo.transform.position.x - halfW + (cursorOffset.x * canvasComponent.scaleFactor), menuGo.transform.position.y + (cursorOffset.y * canvasComponent.scaleFactor) + halfH - (selectedIndex * selectItemHeight * canvasComponent.scaleFactor));
         }
     }
 

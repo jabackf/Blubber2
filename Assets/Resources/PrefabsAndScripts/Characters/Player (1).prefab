@@ -255,10 +255,19 @@ MonoBehaviour:
   m_rangeColliderR: {fileID: 8036988582916006721}
   m_DialogTop: {fileID: 5456296111386055994}
   m_DialogBottom: {fileID: 5583954899186943733}
-  deathParticles: {fileID: 1794340304444153981, guid: 680ba1e13b7f7cf4d89e9d57ef6bea01,
-    type: 3}
   spriteFlipMethod: 1
   isTalking: 0
+  canDie: 1
+  respawn: 1
+  killTags:
+  - killPlayer
+  deathParticles: {fileID: 1794340304444153981, guid: 680ba1e13b7f7cf4d89e9d57ef6bea01,
+    type: 3}
+  spawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
+    type: 3}
+  respawnOverride: {fileID: 0}
+  respawnTime: 0.5
+  respawnLerpSpeed: 4
   OnLandEvent:
     m_PersistentCalls:
       m_Calls:
@@ -324,6 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 140103500801170323}
   controller: {fileID: 140103500801170335}
+  renderer: {fileID: 0}
   climbSpeedMultiplier: 10
   speedMultiplier: 1.5
   speed: 0
@@ -337,10 +347,15 @@ MonoBehaviour:
   throwing: 0
   climb: 0
   isClimbing: 0
+  isDead: 0
   state: 0
   doubleJumpDuration: 0.3
   pickingUpDuration: 0.2
   throwingDuration: 0.2
+  facing: 0
+  circle: 0
+  circleTimer: 0.3
+  circleDirection: 1
   crouchAnimatorBool: 
   jumpAnimatorBool: 
   doubleJumpAnimatorBool: 
@@ -353,9 +368,12 @@ MonoBehaviour:
   climbingAnimatorFloat: 
   climbingAnimatorBool: 
   dressList: []
-  particlesLovePrefab: {fileID: 0}
-  particlesTearsPrefab: {fileID: 0}
-  eiExclamationPoint: {fileID: 0}
+  particlesLovePrefab: {fileID: 1343902013502930873, guid: 3540d062a76f0224a99c91f485eadc95,
+    type: 3}
+  particlesTearsPrefab: {fileID: 3099225133798276787, guid: f36f23d7b0618b5409fddc0bc7458100,
+    type: 3}
+  eiExclamationPoint: {fileID: 5449508022863895304, guid: 3bc1859d1f0052f429149980583ba307,
+    type: 3}
 --- !u!1 &936482574467484246
 GameObject:
   m_ObjectHideFlags: 0

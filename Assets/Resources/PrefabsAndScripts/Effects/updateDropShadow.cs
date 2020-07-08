@@ -18,20 +18,30 @@ public class updateDropShadow : MonoBehaviour
         renderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
     }
 
+
     void LateUpdate()
     {
-        if (!obj || !renderer) Destroy(gameObject);
+        if (!obj)
+        {
+            Destroy(gameObject);
+        }
         else
         {
+            if (!renderer) renderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
+
             renderer.enabled = objSpriteRenderer.enabled;
             renderer.flipX = objSpriteRenderer.flipX;
             renderer.flipY = objSpriteRenderer.flipY;
             renderer.sprite = objSpriteRenderer.sprite;
 
             //update the position and rotation of the sprite's shadow with moving sprite
-            gameObject.transform.localPosition = obj.transform.localPosition + (Vector3)offset;
-            gameObject.transform.localRotation = obj.transform.localRotation;
-            gameObject.transform.localScale = obj.transform.localScale;
+
+            //gameObject.transform.localPosition = obj.transform.localPosition + (Vector3)offset;
+            //gameObject.transform.localRotation = obj.transform.localRotation;
+
+            gameObject.transform.localScale = obj.transform.lossyScale;
+            gameObject.transform.position = obj.transform.position + (Vector3)offset;
+            gameObject.transform.rotation = obj.transform.rotation;
         }
     }
 

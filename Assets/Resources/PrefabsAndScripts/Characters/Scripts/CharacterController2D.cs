@@ -63,7 +63,6 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Collider2D m_rangeColliderR;                       // A position marking where to check for ceilings
     [SerializeField] private Transform m_DialogTop;                             // The top position that the dialog box will point to
     [SerializeField] private Transform m_DialogBottom;                          // The bottom position that the dialot box will point to
-    [SerializeField] public GameObject deathParticles;                          //A particle system object that is spawned when the character dies
 
 
     public Transform getDialogTop() { return m_DialogTop;  }
@@ -95,7 +94,23 @@ public class CharacterController2D : MonoBehaviour
     private bool isClimbing = false;
     private dropDownPlatform onDropPlatformScript = null;
     public bool isTalking=false;
+    private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
 
+    [Space]
+    [Header("Death")]
+    [SerializeField] private bool canDie = true;                                 //If true, objects with the specified tag will kill this character
+    [SerializeField] private bool respawn = true;                                //If set to true, the character will respawn after death.
+    [SerializeField] private string[] killTags = new string[] { "killPlayer" };   //A list of tags. If the character collides with an object that has this tag and canDie is true, the character will die
+    [SerializeField] private GameObject deathParticles;                          //A particle system object that is spawned when the character dies
+    [SerializeField] private GameObject spawnParticles;
+    [SerializeField] private Transform respawnOverride = null;                     //If a transform is specified, the character will always respawn here. If null, the best respawn point will be determined
+    [SerializeField] private float respawnTime = 0.5f;                            //The amount of time after death before the character is lerped back to his respawn point
+    private Vector3 respawnPosition;                                             //Used for tracking the respawn position. This will either be the position at scene start, position of checkpoint, or respawnOverride
+    private bool isDead = false;                                                 //Set to true when the character is in the dead state
+    private float respawnTimer = 0f;                                              //This is the timer that is set for respawning
+    private bool kinematicStateBeforeDeath=false;                               //Used to store and reset rb.isKinematic to it's normal state after death and respawn
+    private int layerBeforeDeath;                                           //When you die, you are temporarily moved to the disableAllCollision layer. This is used to store the initial layer so you can be moved back at respawn
+    [SerializeField] private float respawnLerpSpeed = 3f;                 //Speed used for lerping the character back to the respawn point. Enter -1 for instant jump
 
     [Header("Events")]
 	[Space]
@@ -138,6 +153,8 @@ public class CharacterController2D : MonoBehaviour
 
         charAnim = gameObject.GetComponent<CharacterAnimation>() as CharacterAnimation;
 
+        respawnPosition = gameObject.transform.position;
+
         StartCoroutine(DelayedStart());
 		
     }
@@ -151,59 +168,83 @@ public class CharacterController2D : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-        if (maxVelocity != -1)
+        if (isDead)
         {
-            m_Rigidbody2D.velocity = Vector2.ClampMagnitude(m_Rigidbody2D.velocity, maxVelocity);
-        }
-
-        bool wasGrounded = m_Grounded;
-		m_Grounded = false;
-        previousPlatform = currentPlatform;
-        currentPlatform = null;
-        onDropPlatformScript = null;
-
-		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
-		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
-		Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
-		for (int i = 0; i < colliders.Length; i++)
-		{
-            //Get the dropDown platform if we're on it
-            onDropPlatformScript = colliders[i].gameObject.GetComponent<dropDownPlatform>() as dropDownPlatform;
-
-            if (colliders[i].gameObject != gameObject)
-			{
-				m_Grounded = true;
-                currentPlatform = colliders[i].gameObject;
-
-                if (!wasGrounded && m_Rigidbody2D.velocity.y<0)
+            if (respawn)
+            {
+                if (respawnTimer > 0)
                 {
-                    OnLandEvent.Invoke();
-                    if (charAnim != null)
-                    {
-                        charAnim.jump = false;
-                        charAnim.doubleJump = false;
-                    }
-                    numJumps = 0;
+                    respawnTimer -= Time.deltaTime;
                 }
-			}
-		}
+                else
+                {
+                    respawnTimer = 0;
 
+                    if (respawnLerpSpeed == -1) gameObject.transform.position = respawnPosition;
+                    else gameObject.transform.position = Vector3.Lerp(transform.position, respawnPosition, Time.deltaTime * respawnLerpSpeed);
 
-        if (currentPlatform == previousPlatform && currentPlatform!=null) //Still on the same platform. Add any platform motion to the character.
-        {
-            gameObject.transform.Translate(currentPlatform.transform.position.x - platformPreviousPosition.x, currentPlatform.transform.position.y - platformPreviousPosition.y, 0);
+                    if (Vector3.Distance(gameObject.transform.position, respawnPosition)<0.1f)
+                        respawnCharacter();
+                }
+            }
         }
-
-
-        if (currentPlatform != null)
+        else
         {
-            platformPreviousPosition = new Vector2(currentPlatform.transform.position.x, currentPlatform.transform.position.y);
+            if (maxVelocity != -1)
+            {
+                m_Rigidbody2D.velocity = Vector2.ClampMagnitude(m_Rigidbody2D.velocity, maxVelocity);
+            }
+
+            bool wasGrounded = m_Grounded;
+            m_Grounded = false;
+            previousPlatform = currentPlatform;
+            currentPlatform = null;
+            onDropPlatformScript = null;
+
+            // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+            // This can be done using layers instead but Sample Assets will not overwrite your project settings.
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                //Get the dropDown platform if we're on it
+                onDropPlatformScript = colliders[i].gameObject.GetComponent<dropDownPlatform>() as dropDownPlatform;
+
+                if (colliders[i].gameObject != gameObject)
+                {
+                    m_Grounded = true;
+                    currentPlatform = colliders[i].gameObject;
+
+                    if (!wasGrounded && m_Rigidbody2D.velocity.y < 0)
+                    {
+                        OnLandEvent.Invoke();
+                        if (charAnim != null)
+                        {
+                            charAnim.jump = false;
+                            charAnim.doubleJump = false;
+                        }
+                        numJumps = 0;
+                    }
+                }
+            }
+
+
+            if (currentPlatform == previousPlatform && currentPlatform != null) //Still on the same platform. Add any platform motion to the character.
+            {
+                gameObject.transform.Translate(currentPlatform.transform.position.x - platformPreviousPosition.x, currentPlatform.transform.position.y - platformPreviousPosition.y, 0);
+            }
+
+
+            if (currentPlatform != null)
+            {
+                platformPreviousPosition = new Vector2(currentPlatform.transform.position.x, currentPlatform.transform.position.y);
+            }
         }
-        
     }
 
     public void useItemAction(bool pressed, bool held, bool released, float horizontal=0, float vertical=0)
     {
+        if (isDead) return;
+
         if (!isHolding || !canPickup || holding == null) return;
 
         holding.useItemAction(pressed, held, released, horizontal, vertical);
@@ -213,6 +254,8 @@ public class CharacterController2D : MonoBehaviour
     //Arguments = Horizontal movement, vertical movement, release and throw, use the object's action
     public void Aim(float h, float v, bool release, bool action)
     {
+        if (isDead) return;
+
         if (!isHolding || !canPickup || holding==null) return;
 
         holding.Aim(h, v, release, action);
@@ -223,6 +266,8 @@ public class CharacterController2D : MonoBehaviour
 
     public void Move(float move, bool crouch, bool jump, bool pickup=false, float climb=0, bool dropDown=false, bool dialog=false)
 	{
+        if (isDead) return;
+
         bool justPickedUp = false;
 
         //Handle drop down platforms
@@ -461,9 +506,15 @@ public class CharacterController2D : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.tag == "killPlayer" && gameObject.tag == "Player")
+        if (canDie && !isCharacterDead())
         {
-            playerDie();
+            bool deathTag = false;
+            foreach(string s in killTags)
+            {
+                if (s == other.gameObject.tag) deathTag = true;
+            }
+
+            if (deathTag) die();
         }
     }
 
@@ -473,9 +524,13 @@ public class CharacterController2D : MonoBehaviour
         {
             inWater = true;
         }
+        if (other.tag == "Checkpoint" && gameObject.tag=="Player")
+        {
+            if (respawnOverride != null) respawnPosition = other.transform.position;
+        }
     }
 
-    public void playerDie()
+    public void die()
     {
         dropObject();
         if (deathParticles)
@@ -484,13 +539,43 @@ public class CharacterController2D : MonoBehaviour
             var main = ps.GetComponent<ParticleSystem>().main;
             main.startColor = gameObject.GetComponent<SpriteRenderer>().color;
         }
-        PlayerSpawn spawn = GameObject.FindWithTag("playerSpawn").GetComponent<PlayerSpawn>() as PlayerSpawn;
-        if (spawn)
+
+        if (respawn)
         {
-            spawn.respawn();
+            if (respawnOverride) respawnPosition = respawnOverride.position;
+
+            respawnTimer = respawnTime;
         }
 
-        Destroy(gameObject);
+        isDead = true;
+
+        layerBeforeDeath = gameObject.layer;
+        gameObject.layer = LayerMask.NameToLayer("DisableAllCollision");
+        kinematicStateBeforeDeath = m_Rigidbody2D.isKinematic;
+        m_Rigidbody2D.isKinematic = true;
+        m_Rigidbody2D.Sleep();
+        m_Rigidbody2D.velocity = new Vector3(0f, 0f, 0f);
+
+        if (charAnim == null) charAnim = gameObject.GetComponent<CharacterAnimation>();
+        charAnim.characterDied();
+    }
+
+    public void respawnCharacter()
+    {
+        if (!respawn || !isDead) return;
+        gameObject.transform.position = respawnPosition;
+        isDead = false;
+        m_Rigidbody2D.WakeUp();
+        m_Rigidbody2D.isKinematic = kinematicStateBeforeDeath;
+        gameObject.layer = layerBeforeDeath;
+        if (spawnParticles) Instantiate(spawnParticles, gameObject.transform.position, Quaternion.identity);
+        if (charAnim == null) charAnim = gameObject.GetComponent<CharacterAnimation>();
+        charAnim.characterRespawned();
+    }
+
+    public bool isCharacterDead()
+    {
+        return isDead;
     }
 
     public void StopTalking()
@@ -633,6 +718,7 @@ public class CharacterController2D : MonoBehaviour
         //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
         if (holdingSomething())
         {
+            holdingParentPrevious = holding.transform.parent;
             holding.transform.parent = gameObject.transform;
             holding.SendMessage("makeChild", SendMessageOptions.DontRequireReceiver); //This packs up the action icon(s) into children from transport
             holding.makeUndroppable();
@@ -646,12 +732,21 @@ public class CharacterController2D : MonoBehaviour
     {
         if (holdingSomething())
         {
- 
-            holding.transform.parent = null;
+
+            holding.transform.parent = holdingParentPrevious;
             holding.SendMessage("unChild", SendMessageOptions.DontRequireReceiver); //This unchilds the action icons
             holding.makeDroppable();
             holding.changedScenes();
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
+        }
+
+        //If this character just entered a new scene, then we can't use the old respond position for the previous scene
+        if (canDie && respawn)
+        {
+            if (gameObject.scene.buildIndex == -1) //This is basically if (dontdestroyonload is activated)
+            {
+                respawnPosition = gameObject.transform.position;
+            }
         }
     }
 

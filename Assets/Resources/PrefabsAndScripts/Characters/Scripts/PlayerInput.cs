@@ -159,7 +159,7 @@ public class PlayerInput : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!controller.isTalking) //In dialog mode
+        if (!controller.isTalking && !controller.isCharacterDead()) //Not in dialog mode, not dead
         {
             if (!isThrowing)
             {

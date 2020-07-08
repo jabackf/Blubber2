@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 //The scene settings class contains various settings for every scene.
 //The map system keeps a reference to the current scene settings, and can be accessed through global.map.settings
@@ -27,7 +28,12 @@ public class sceneSettings : MonoBehaviour
     public string dsSortingLayerName = "DropShadow";
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
+    {
+        SceneManager.sceneLoaded += ssSceneLoaded;
+    }
+
+    void ssSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         //Start attaching drop shadows to stuff
         if (dsEnabled)
@@ -39,6 +45,17 @@ public class sceneSettings : MonoBehaviour
                 GameObject g = (GameObject)o;
                 addDropShadow(g);
             }
+        }
+        SceneManager.sceneLoaded -= ssSceneLoaded;
+    }
+
+    void destroyAllDropShadows()
+    {
+        GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("dropShadow");
+
+        for (var i = 0; i < gameObjects.Length; i++)
+        {
+            Destroy(gameObjects[i]);
         }
     }
 
@@ -90,6 +107,7 @@ public class sceneSettings : MonoBehaviour
     public void addDropShadowSprite(GameObject g, SpriteRenderer spriteRenderer)
     {
         GameObject shadowGameobject = new GameObject("Shadow_" + g.name);
+        shadowGameobject.tag = "dropShadow";
         SpriteRenderer shadowSpriteRenderer = shadowGameobject.AddComponent<SpriteRenderer>();
         shadowSpriteRenderer.sprite = spriteRenderer.sprite;
         shadowSpriteRenderer.material = dsMaterial;

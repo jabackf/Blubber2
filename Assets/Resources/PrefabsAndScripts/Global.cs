@@ -58,7 +58,7 @@ public class Global : MonoBehaviour
     private void Start()
     {
         OnValidate(); //Implicitly call to setup game scene
-        map.goTo(startScene, MapSystem.transitions.none);
+        map.goTo(startScene, MapSystem.transitions.none, false);
     }
 
     //Called when a field in the editor is changed
