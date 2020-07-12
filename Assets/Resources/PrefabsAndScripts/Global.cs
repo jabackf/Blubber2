@@ -18,13 +18,15 @@ public class Global : MonoBehaviour
     [Header("Directories")]
 	//We want these directory variables to be the same for the whole project, meaning the same for all global objects. HideInspector helps ensure that the script is the only place we are defining these strings.
 	[HideInInspector] public string dirResourceRoot = "Assets/Resources/";
+
 	[HideInInspector] public string dirAnimations = "Animations/";
 	[HideInInspector] public string dirBackgrounds = "BackgroundsAndTiles/";
 	[HideInInspector] public string dirFonts = "Fonts/";
 	[HideInInspector] public string dirMaterials = "Materials/";
 	[HideInInspector] public string dirPhysicsMaterials = "PhysicsMaterials/";
 	[HideInInspector] public string dirPrefabs = "PrefabsAndScripts/";
-	[HideInInspector] public string dirRenderer = "Renderer/";
+    [HideInInspector] public string dirSpawners = "PrefabsAndScripts/Spawners/";
+    [HideInInspector] public string dirRenderer = "Renderer/";
 	[HideInInspector] public string dirScenes = "Scenes/";
 	[HideInInspector] public string dirSprites = "Sprites/";
     [HideInInspector] public string dirImages = "Sprites/Images/";

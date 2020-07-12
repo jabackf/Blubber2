@@ -45,6 +45,18 @@ public class sceneBoundary : MonoBehaviour
         return "none";
     }
 
+    public bool outOfBounds(Transform obj, float bufferX = 0f, float bufferY = 0f)
+    {
+        if (!obj) return false;
+        float xpos = obj.position.x;
+        float ypos = obj.position.y;
+        if (xpos > getRightX() - bufferX) return true;
+        else if (xpos < getLeftX() + bufferX) return true;
+        else if (ypos > getTopY() - bufferY) return true;
+        else if (ypos < getBottomY() + bufferY) return true;
+        return false;
+    }
+
     //Returns the leftmost side of the screen
     public float getLeftX()
     {

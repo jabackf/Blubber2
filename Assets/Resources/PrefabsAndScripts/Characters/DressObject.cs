@@ -29,8 +29,8 @@ public class DressObject : MonoBehaviour
     public void setFacingDirection(int dir)
     {
         if (renderer == null) renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
-        if (dir == 0) renderer.sprite = spriteSide;
-        if (dir == 1) renderer.sprite = spriteFront;
-        if (dir == 2) renderer.sprite = spriteBack;
+        if (dir == 0 && spriteSide!=null) renderer.sprite = spriteSide;
+        if (dir == 1 && spriteFront != null) renderer.sprite = spriteFront;
+        if (dir == 2 && spriteBack != null) renderer.sprite = spriteBack;
     }
 }
