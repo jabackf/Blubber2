@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5318071439051603286}
   - component: {fileID: 192027970074458189}
   - component: {fileID: 489994091}
+  - component: {fileID: 44958962}
   m_Layer: 8
   m_Name: WoodBox
   m_TagString: Untagged
@@ -29,8 +30,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3651731028718573460}
-  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -9.625, y: 9.73371, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -229,3 +230,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneBoundaryTag: sceneBoundary
   buffer: {x: -1, y: -1}
+--- !u!114 &44958962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651731028718573460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2351dff4b6e044746a3c84792c570b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
+    type: 3}
+  prefabRef: {fileID: 11400000, guid: 323a63de5af6486498cbc3ffd27598be, type: 2}
+  time: 1
+  spawnAtStartTransform: 1
+  respawnTransform: {fileID: 0}

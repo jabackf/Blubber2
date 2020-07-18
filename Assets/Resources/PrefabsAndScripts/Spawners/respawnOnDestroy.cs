@@ -5,7 +5,6 @@ using UnityEngine;
 public class respawnOnDestroy : MonoBehaviour
 {
     public GameObject spawnParticles;
-    public prefabReference prefabRef;
     private GameObject spawnPrefab;
     public float time = 1f;
 
@@ -18,15 +17,15 @@ public class respawnOnDestroy : MonoBehaviour
     private float timer = 0;
     private Global global;
 
-    void Awake()
-    {
-        spawnPrefab = prefabRef.prefab;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (gameObject.activeSelf)
+        {
+            spawnPrefab = Instantiate(gameObject);
+            spawnPrefab.SetActive(false);
+        }
+
         global = GameObject.FindWithTag("global").GetComponent<Global>();
         if (spawnAtStartTransform)
         {
@@ -39,6 +38,15 @@ public class respawnOnDestroy : MonoBehaviour
             spawnPosition = respawnTransform.position;
            //spawnScale = respawnTransform.lossyScale;
             spawnRotation = respawnTransform.rotation;
+        }
+    }
+
+    public void onEnabled()
+    {
+        if (!spawnPrefab)
+        {
+            spawnPrefab = Instantiate(gameObject);
+            spawnPrefab.SetActive(false);
         }
     }
 

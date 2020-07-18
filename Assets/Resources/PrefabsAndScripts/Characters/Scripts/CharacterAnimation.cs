@@ -355,21 +355,6 @@ public class CharacterAnimation : MonoBehaviour
         if (d != null) d.ShowHide(show);
     }
 
-    //These functions hide all child sprites (OFF), or put them back in the original state (before being turned off) (ON)
-    /*public List<SpriteRenderer> getAllSpriteRenderers()
-    {
-        List<SpriteRenderer> result = new List<SpriteRenderer>();
-        foreach (Transform child in gameObject.transform)
-        {
-            
-            SpriteRenderer sr = child.gameObject.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                result.Add(sr);
-            }
-        }
-        return result;
-    }*/
     public void turnOffChildSprites()
     {
         spritesTurnedOff =  gameObject.transform.GetComponentsInChildren<SpriteRenderer>();
@@ -457,6 +442,15 @@ public class CharacterAnimation : MonoBehaviour
         {
             controller.getHolding().setFacingDirection(0);
         }
+    }
+
+    //Returns our facing direction as an int. 0=side, 1=front, 2=back. Return -1 on error or no facing direction.
+    public int getFacingDirection()
+    {
+        if (facing == facingDirections.side) return 0;
+        if (facing == facingDirections.front) return 1;
+        if (facing == facingDirections.back) return 2;
+        return -1;
     }
 
     //This function looks at what direction we are currectly assigned to (front, back, side) and calls the appropriate function to make us face in that direction

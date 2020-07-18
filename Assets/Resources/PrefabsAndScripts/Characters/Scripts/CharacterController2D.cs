@@ -642,6 +642,13 @@ public class CharacterController2D : MonoBehaviour
         if (!m_FacingRight) Flip();
     }
 
+    //Returns an int that represents the direction the character is facing. 0=side, 1=front, 2=back. This info is pulled from the characterAnimation script which handles this data. 
+    //This does NOT return m_FacingRight. Left and right are different from facing direction (front,back,side), so use isFacingRight() for that.
+    public int getFacingDirection()
+    {
+        return charAnim.getFacingDirection();
+    }
+
     public void Flip()
 	{
 		// Switch the way the player is labelled as facing.

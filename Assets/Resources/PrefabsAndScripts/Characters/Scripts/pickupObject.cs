@@ -41,7 +41,9 @@ public class pickupObject : actionInRange
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
 
     [Space]
-    [Header("Character Facing Direction")]
+    [Header("Sprites")]
+    public bool hasHeldSprite = false;  //If true, the script will use a different sprite for when the object is held (heldSprite) vs when it is unheld (unheldSprite). Note that facing direction sprites will over-ride heldSprite, and heldSprite does not need to be specified if you're using facingDirection sprites as well.
+    public Sprite heldSprite, unheldSprite;
     public bool hasFacingDirections = false;
     public Sprite sideSprite, frontSprite, backSprite;
 
@@ -231,6 +233,11 @@ public class pickupObject : actionInRange
         this.setRangeActive(false);
         rb.mass = carryMass;
         holder = character;
+
+        if (hasHeldSprite && heldSprite != null) renderer.sprite = heldSprite;
+
+        if (hasFacingDirections) setFacingDirection(holder.GetComponent<CharacterController2D>().getFacingDirection());
+
         if (mCarryType == carryType.Top)
             carryTrans = top;
         if (mCarryType == carryType.Front)
@@ -386,7 +393,9 @@ public class pickupObject : actionInRange
             gameObject.transform.parent = parentPrevious;
         }
 
-         checkForArrows();
+        if (hasHeldSprite && unheldSprite != null) renderer.sprite = unheldSprite;
+
+        checkForArrows();
 
         if (freezeRotationOnPickup) rb.freezeRotation = initialRotationFreeze;
         Destroy(joint);
