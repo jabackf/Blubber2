@@ -10,6 +10,7 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     public CharacterController2D controller;
+    public bool requirePlayerTag = true; //If true, input will only function if this gameObject has the "Player" tag
     float horizontalMove = 0f;
     float aimAngleMove = 200f;    //Used in aiming the throw retical (angle)
     float aimForceMove = 15f;    //Used in aiming the throw retical (force)
@@ -44,117 +45,118 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-
-        if (controller.pickupEnabled())
+        if (requirePlayerTag == false || gameObject.tag == "Player")
         {
-            if (Input.GetButtonDown("Pickup"))
+            if (controller.pickupEnabled())
             {
-                if (!controller.holdingSomething())
-                    pickup = true;
+                if (Input.GetButtonDown("Pickup"))
+                {
+                    if (!controller.holdingSomething())
+                        pickup = true;
+                }
+                if (Input.GetButtonDown("Throw"))
+                {
+                    if (controller.holdingSomething())
+                        isThrowing = true;
+                }
             }
-            if (Input.GetButtonDown("Throw"))
-            {
-                if (controller.holdingSomething())
-                    isThrowing = true;
-            }
-        }
 
-        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+            horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-        if (!isThrowing) //Not in aiming mode
-        {
-            if (Input.GetButtonDown("UseItemAction"))
+            if (!isThrowing) //Not in aiming mode
             {
-                useItemActionPressed = true;
-            }
-            if (Input.GetButton("UseItemAction"))
-            {
-                useItemActionHeld = true;
+                if (Input.GetButtonDown("UseItemAction"))
+                {
+                    useItemActionPressed = true;
+                }
+                if (Input.GetButton("UseItemAction"))
+                {
+                    useItemActionHeld = true;
 
-                //Since we're not in throwing mode and we have the action button pressed, these controls are used for action aim instead
+                    //Since we're not in throwing mode and we have the action button pressed, these controls are used for action aim instead
+                    if (!Input.GetButton("throwAimHorizontal"))
+                    {   //Changing the angle
+                        aimActionAngleMove = Input.GetAxisRaw("throwAimVertical") * aimActionAngleSpeed;
+                        aimActionForceMove = 0;
+                    }
+                    else
+                    {   //Changing the force
+                        aimActionForceMove = Input.GetAxisRaw("throwAimVertical") * aimActionForceSpeed;
+                        aimActionAngleMove = 0;
+                    }
+                }
+                if (Input.GetButtonUp("UseItemAction"))
+                {
+                    useItemActionReleased = true;
+                }
+
+                if (Input.GetButtonDown("Jump"))
+                {
+                    jump = true;
+
+                    //If we're using the actionAim system, then don't jump. This bit of code assumes jump is the same as action aim controls.
+                    if (controller.holdingSomething() && controller.getHolding() != null)
+                    {
+                        if (Input.GetButton("UseItemAction") && controller.getHolding().hasActionAim)
+                            jump = false;
+                    }
+
+                }
+
+                if (Input.GetButtonDown("Dialog"))
+                {
+                    dialog = true;
+                }
+
+                if (Input.GetButtonDown("dropDown"))
+                {
+                    dropDown = true;
+                }
+
+                if (controller.getCanClimb())
+                {
+                    climb = Input.GetAxisRaw("Climb") * climbSpeed;
+                }
+
+
+                if (controller.crouchEnabled())
+                {
+                    if (Input.GetButtonDown("Crouch"))
+                    {
+                        crouch = true;
+                    }
+                    else if (Input.GetButtonUp("Crouch"))
+                    {
+                        crouch = false;
+                    }
+
+                }
+
+            }//end !isThrowing
+            else
+            {//We're throwing something
+                if (!Input.GetButton("Throw"))
+                {
+                    throwRelease = true;
+                }
+
                 if (!Input.GetButton("throwAimHorizontal"))
                 {   //Changing the angle
-                    aimActionAngleMove = Input.GetAxisRaw("throwAimVertical") * aimActionAngleSpeed;
-                    aimActionForceMove = 0;
+                    aimAngleMove = Input.GetAxisRaw("throwAimVertical") * aimAngleSpeed;
+                    aimForceMove = 0;
                 }
                 else
                 {   //Changing the force
-                    aimActionForceMove = Input.GetAxisRaw("throwAimVertical") * aimActionForceSpeed;
-                    aimActionAngleMove = 0;
+                    aimForceMove = Input.GetAxisRaw("throwAimVertical") * aimForceSpeed;
+                    aimAngleMove = 0;
                 }
-            }
-            if (Input.GetButtonUp("UseItemAction"))
-            {
-                useItemActionReleased = true;
-            }
 
-            if (Input.GetButtonDown("Jump"))
-            {
-                jump = true;
-
-                //If we're using the actionAim system, then don't jump. This bit of code assumes jump is the same as action aim controls.
-                if (controller.holdingSomething() && controller.getHolding()!=null)
+                if (!Input.GetButtonDown("holdingAction"))
                 {
-                    if (Input.GetButton("UseItemAction") && controller.getHolding().hasActionAim)
-                        jump = false;
+                    holdingAction = true;
                 }
-                    
             }
-
-            if (Input.GetButtonDown("Dialog"))
-            {
-                dialog = true;
-            }
-
-            if (Input.GetButtonDown("dropDown"))
-            {
-                dropDown = true;
-            }
-
-            if (controller.getCanClimb())
-            {
-                climb = Input.GetAxisRaw("Climb") * climbSpeed;
-            }
-
-
-            if (controller.crouchEnabled())
-            {
-                if (Input.GetButtonDown("Crouch"))
-                {
-                    crouch = true;
-                }
-                else if (Input.GetButtonUp("Crouch"))
-                {
-                    crouch = false;
-                }
-
-            }
-
-        }//end !isThrowing
-        else
-        {//We're throwing something
-            if (!Input.GetButton("Throw"))
-            {
-                throwRelease = true;
-            }
-
-            if (!Input.GetButton("throwAimHorizontal"))
-            {   //Changing the angle
-                aimAngleMove = Input.GetAxisRaw("throwAimVertical") * aimAngleSpeed;
-                aimForceMove = 0;
-            }
-            else
-            {   //Changing the force
-                aimForceMove = Input.GetAxisRaw("throwAimVertical") * aimForceSpeed;
-                aimAngleMove = 0;
-            }
-
-            if (!Input.GetButtonDown("holdingAction"))
-            {
-                holdingAction = true;
-            }
-        }
-
+        }//END if (requirePlayerTag==false || gameObject.tag=="Player")
     }
 
     void FixedUpdate()

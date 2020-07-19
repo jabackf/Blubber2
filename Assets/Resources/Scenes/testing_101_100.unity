@@ -2020,7 +2020,10 @@ GameObject:
   - component: {fileID: 190771343}
   - component: {fileID: 190771342}
   - component: {fileID: 190771341}
+  - component: {fileID: 190771344}
   - component: {fileID: 190771340}
+  - component: {fileID: 190771346}
+  - component: {fileID: 190771345}
   m_Layer: 0
   m_Name: RemoteControl
   m_TagString: Untagged
@@ -2036,7 +2039,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190771338}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 43.5, y: -0, z: 0}
+  m_LocalPosition: {x: 51.5, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1194112661}
@@ -2098,6 +2101,7 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 2
+  releasePosition: 1
   hasHeldSprite: 1
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: -2592813893773852874, guid: 3874c3ac765b31d49a0c2926ed350997,
@@ -2109,9 +2113,9 @@ MonoBehaviour:
     type: 3}
   backSprite: {fileID: 6611254611130644821, guid: 3874c3ac765b31d49a0c2926ed350997,
     type: 3}
-  hasAction: 0
+  hasAction: 1
   hasActionAim: 0
-  rotateWithAim: 1
+  rotateWithAim: 0
   actionAimArc: {fileID: 0}
   actionPressedSendMessage: 
   actionPressedMessageReceiver: {fileID: 0}
@@ -2121,7 +2125,18 @@ MonoBehaviour:
   actionReleasedMessageReceiver: {fileID: 0}
   ActionPressedCallback:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 190771344}
+        m_MethodName: ToggleActivate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   ActionHeldCallback:
@@ -2141,7 +2156,18 @@ MonoBehaviour:
       Culture=neutral, PublicKeyToken=null
   OnReleaseCallback:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 190771344}
+        m_MethodName: Deactivate
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!50 &190771342
@@ -2216,6 +2242,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &190771344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190771338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fda032de1cc68684aa54a3e25404ca80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controllerTag: RC
+  device: {fileID: 0}
+--- !u!114 &190771345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190771338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2351dff4b6e044746a3c84792c570b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
+    type: 3}
+  time: 1
+  spawnAtStartTransform: 1
+  respawnTransform: {fileID: 0}
+--- !u!114 &190771346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190771338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed35225a10e79574e9cbf79a599dac2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneBoundaryTag: sceneBoundary
+  buffer: {x: -1, y: -1}
 --- !u!1 &219522550
 GameObject:
   m_ObjectHideFlags: 0
@@ -2520,6 +2591,7 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 1
+  releasePosition: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
@@ -3339,6 +3411,284 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.1989088}
   m_EdgeRadius: 0
+--- !u!1 &571632999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 571633002}
+  - component: {fileID: 571633001}
+  - component: {fileID: 571633003}
+  - component: {fileID: 571633000}
+  - component: {fileID: 571633005}
+  - component: {fileID: 571633007}
+  - component: {fileID: 571633006}
+  - component: {fileID: 571633004}
+  - component: {fileID: 571633008}
+  m_Layer: 0
+  m_Name: helicopter_0
+  m_TagString: RC
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!95 &571633000
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3afa5b825050cac429e0079b57301add, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!212 &571633001
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -1604708741874733367, guid: 984317f0bbead3b4c872c17f8e6c750d,
+    type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.7916666, y: 0.6666667}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &571633002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 54.72, y: 0.42, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &571633003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264e4f2245110be47b48b148d3a2ff78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hspeed: 6
+  vspeed: 5
+  maxHspeed: 10
+  maxVspeed: 10
+  movementSmoothing: 0.15
+  activeGravity: 0
+  facingRight: 1
+--- !u!61 &571633004
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.10448074, y: 0.00846082}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.7916666, y: 0.6666667}
+    newSize: {x: 1.7916666, y: 0.6666667}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.5447159, y: 0.6594783}
+  m_EdgeRadius: 0
+--- !u!50 &571633005
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 3.7
+  m_LinearDrag: 0
+  m_AngularDrag: 0.5
+  m_GravityScale: 2
+  m_Material: {fileID: 0}
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &571633006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed35225a10e79574e9cbf79a599dac2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneBoundaryTag: sceneBoundary
+  buffer: {x: -1, y: -1}
+--- !u!114 &571633007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2351dff4b6e044746a3c84792c570b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
+    type: 3}
+  time: 1
+  spawnAtStartTransform: 1
+  respawnTransform: {fileID: 0}
+--- !u!114 &571633008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571632999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  ActionIconPrefab: {fileID: 571698414639169121, guid: 0abbc03f1ae53f842a19f8b2d823fbba,
+    type: 3}
+  rangeColliderTag: RangeCollider
+  iconXOffset: -0.2
+  iconYOffset: 0.5
+  offset: {x: 0, y: 0.6}
+  disableCollider: 0
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 600
+  carryMass: 0.5
+  flipOnX: 1
+  flipOnY: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
+  throwArc: {fileID: 0}
+  mCarryType: 0
+  releasePosition: 0
+  hasHeldSprite: 0
+  heldSprite: {fileID: 0}
+  unheldSprite: {fileID: 0}
+  hasFacingDirections: 0
+  sideSprite: {fileID: 0}
+  frontSprite: {fileID: 0}
+  backSprite: {fileID: 0}
+  hasAction: 0
+  hasActionAim: 0
+  rotateWithAim: 1
+  actionAimArc: {fileID: 0}
+  actionPressedSendMessage: 
+  actionPressedMessageReceiver: {fileID: 0}
+  actionHeldSendMessage: 
+  actionHeldMessageReceiver: {fileID: 0}
+  actionReleasedSendMessage: 
+  actionReleasedMessageReceiver: {fileID: 0}
+  ActionPressedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ActionHeldCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ActionReleasedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1 &600394155
 GameObject:
   m_ObjectHideFlags: 0
@@ -11039,6 +11389,7 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 1
+  releasePosition: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
@@ -12160,12 +12511,12 @@ PrefabInstance:
     - target: {fileID: 6112353306169971251, guid: ba96baff048d0244c83a3aae1393a1dc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 56.01
+      value: 98.85
       objectReference: {fileID: 0}
     - target: {fileID: 6112353306169971251, guid: ba96baff048d0244c83a3aae1393a1dc,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.43
+      value: -3.06
       objectReference: {fileID: 0}
     - target: {fileID: 6112353307453871694, guid: ba96baff048d0244c83a3aae1393a1dc,
         type: 3}
@@ -12422,6 +12773,7 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 1
+  releasePosition: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
@@ -13890,12 +14242,12 @@ PrefabInstance:
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0
+      value: 0.00019904971
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.9996019
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2893a7d494550224f822cf843e996621, type: 3}
@@ -14137,6 +14489,7 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 2
+  releasePosition: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}

@@ -40,6 +40,9 @@ public class pickupObject : actionInRange
     public enum carryType { Top, Front, exactPlayerPosition };
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
 
+    public enum releasePositions { None, Front, Top, Bottom }; //The character-relative positions that the this object can jump to on release. For example, if Front is selected, then on release the object will jump the character's Front position.
+    public releasePositions releasePosition = releasePositions.None;
+
     [Space]
     [Header("Sprites")]
     public bool hasHeldSprite = false;  //If true, the script will use a different sprite for when the object is held (heldSprite) vs when it is unheld (unheldSprite). Note that facing direction sprites will over-ride heldSprite, and heldSprite does not need to be specified if you're using facingDirection sprites as well.
@@ -397,6 +400,23 @@ public class pickupObject : actionInRange
 
         checkForArrows();
 
+        CharacterController2D cc2d = holder.GetComponent<CharacterController2D>();
+        if (cc2d)
+        {
+            switch (releasePosition)
+            {
+                case releasePositions.Front:
+                    transform.position = cc2d.getFrontPosition();
+                    break;
+                case releasePositions.Top:
+                    transform.position = cc2d.getTopPosition();
+                    break;
+                case releasePositions.Bottom:
+                    transform.position = cc2d.getBottomPosition();
+                    break;
+            }
+        }
+
         if (freezeRotationOnPickup) rb.freezeRotation = initialRotationFreeze;
         Destroy(joint);
         this.setRangeActive(true);
@@ -479,5 +499,11 @@ public class pickupObject : actionInRange
             if (dir == 1 && frontSprite != null) renderer.sprite = frontSprite;
             if (dir == 2 && backSprite != null) renderer.sprite = backSprite;
         }
+    }
+
+    public GameObject getHolder()
+    {
+        return holder;
+
     }
 }

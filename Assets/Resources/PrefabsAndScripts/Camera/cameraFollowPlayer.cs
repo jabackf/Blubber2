@@ -18,7 +18,7 @@ public class cameraFollowPlayer : MonoBehaviour
 
     public Canvas blankScreen; //This can be used to make the entire view go blank. See blankOn() and blankOff()
 
-    public bool clampX = true, clampY=true; //If set to true, the camera will clamp to the scene boundary. Requires scene boundary object! If none exists, setting this to true does nothing!
+    public bool clampX = true, clampY = true; //If set to true, the camera will clamp to the scene boundary. Requires scene boundary object! If none exists, setting this to true does nothing!
 
 
     private Vector2 worldCameraBottomLeft, worldCameraTopRight;
@@ -44,18 +44,15 @@ public class cameraFollowPlayer : MonoBehaviour
         //Determine clamping position for camera based on scene boundary
         calculateClampPosition();
 
-        if (playerT==null)
+        if (playerT == null)
             return false;
         else
             return true;
     }
 
-    public void getVariables()
+    public void findPlayer()
     {
         GameObject player = GameObject.FindWithTag(followTag);
-        camera = gameObject.GetComponent<Camera>() as Camera;
-        boundary = GameObject.FindWithTag(sceneBoundaryTag).GetComponent<sceneBoundary>() as sceneBoundary;
-       
         if (player)
         {
             playerT = player.GetComponent<Transform>() as Transform;
@@ -66,7 +63,13 @@ public class cameraFollowPlayer : MonoBehaviour
             //Player doesn't exist.
             playerT = null;
         }
+    }
 
+    public void getVariables()
+    {
+        camera = gameObject.GetComponent<Camera>() as Camera;
+        boundary = GameObject.FindWithTag(sceneBoundaryTag).GetComponent<sceneBoundary>() as sceneBoundary;
+        findPlayer();
     }
 
     public void blankOn()

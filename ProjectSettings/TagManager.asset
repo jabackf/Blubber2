@@ -21,6 +21,8 @@ TagManager:
   - CharacterDress
   - Water
   - dropShadow
+  - RC
+  - inactivePlayer
   layers:
   - Default
   - TransparentFX

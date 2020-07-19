@@ -532,6 +532,8 @@ public class CharacterController2D : MonoBehaviour
 
     public void die()
     {
+        if (isDead) return;
+
         dropObject();
         if (deathParticles)
         {
@@ -762,4 +764,18 @@ public class CharacterController2D : MonoBehaviour
         return m_Grounded;
     }
 
+    //Returns the vector for the sidecheck transform that the character is facing towards
+    public Vector3 getFrontPosition()
+    {
+        if (m_FacingRight) return m_SideCheckR.position;
+        else return m_SideCheckL.position;
+    }
+    public Vector3 getTopPosition()
+    {
+        return m_CeilingCheck.position;
+    }
+    public Vector3 getBottomPosition()
+    {
+        return m_GroundCheck.position;
+    }
 }
