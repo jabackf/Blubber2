@@ -64,6 +64,8 @@ public class DialogBox : MonoBehaviour
     public GameObject selItemPrefab;
     public GameObject selectCursorPrefab;
     public int selectItemHeight = 20;
+    public int maxItems = 5; //Any more than this and we will scroll through the menu to access other options. Includes index 0! So setting this to six means you get seven items.
+    private int listTopIndex = 0; //If we've scrolled down the list of items past maxItems, this variable tracks which index is at the top of the visible part of the list
     private GameObject menuGo;
     private RectTransform menuRect;
     private GameObject selectCursor;
@@ -143,17 +145,49 @@ public class DialogBox : MonoBehaviour
         menuGo = Instantiate(selListPrefab);
         menuGo.transform.parent = bg.transform;
         menuRect = menuGo.GetComponent<RectTransform>() as RectTransform;
+        int count = 0;
         foreach (string s in answers)
         {
-            GameObject item = Instantiate(selItemPrefab);
-            item.GetComponent<Text>().text = s;
-            item.transform.parent = menuGo.transform;
-            //answersGo.Add(item);
+
+            if (count <= maxItems)
+            {
+                GameObject item = Instantiate(selItemPrefab);
+                item.GetComponent<Text>().text = s;
+                item.transform.parent = menuGo.transform;
+                //answersGo.Add(item);
+            }
+
+            count += 1;
         }
         selectedIndex = 0;
 
         selectCursor = Instantiate(selectCursorPrefab);
         selectCursor.transform.parent = dBox.transform;
+    }
+
+    private void updateScrollableMenu()
+    {
+        bool regenerate = false;
+        if (selectedIndex > listTopIndex+maxItems) //We've gone off the bottom
+        {
+            listTopIndex = selectedIndex - maxItems;
+            regenerate = true;
+        }
+        if (selectedIndex < listTopIndex) //We've gone off the top
+        {
+            listTopIndex = selectedIndex;
+            regenerate = true;
+        }
+
+        if (regenerate)
+        {
+            int count = 0;
+            foreach (Transform item in menuGo.transform)
+            {
+                item.GetComponent<Text>().text = answers[count+listTopIndex];
+                count += 1;
+            }
+        }
     }
 
     public void LoadImage(string resource="")
@@ -236,11 +270,13 @@ public class DialogBox : MonoBehaviour
                 {
                     selectedIndex -= 1;
                     if (selectedIndex < 0) selectedIndex = answers.Count - 1;
+                    if (answers.Count > maxItems) updateScrollableMenu();
                 }
                 if (Input.GetButtonDown("MenuDown") && !transition)
                 {
                     selectedIndex += 1;
                     if (selectedIndex > answers.Count - 1) selectedIndex = 0;
+                    if (answers.Count > maxItems) updateScrollableMenu();
                 }
                 if (Input.GetButtonDown("MenuSelect") && !transition)
                 {
@@ -393,7 +429,7 @@ public class DialogBox : MonoBehaviour
 
             float halfW = (menuRect.rect.width / 2) * canvasComponent.scaleFactor;
             float halfH = (menuRect.rect.height / 2) * canvasComponent.scaleFactor;
-            selectCursor.transform.position = new Vector3(menuGo.transform.position.x - halfW + (cursorOffset.x * canvasComponent.scaleFactor), menuGo.transform.position.y + (cursorOffset.y * canvasComponent.scaleFactor) + halfH - (selectedIndex * selectItemHeight * canvasComponent.scaleFactor));
+            selectCursor.transform.position = new Vector3(menuGo.transform.position.x - halfW + (cursorOffset.x * canvasComponent.scaleFactor), menuGo.transform.position.y + (cursorOffset.y * canvasComponent.scaleFactor) + halfH - ( (selectedIndex-listTopIndex) * selectItemHeight * canvasComponent.scaleFactor));
         }
     }
 

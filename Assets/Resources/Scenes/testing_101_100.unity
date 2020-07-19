@@ -2591,7 +2591,7 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 1
-  releasePosition: 0
+  releasePosition: 2
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}

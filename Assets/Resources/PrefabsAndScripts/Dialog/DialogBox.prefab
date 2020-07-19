@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: ERROR
   text: This dialog box has not been assigned any text
-  useInput: 1
+  isAuto: 0
   dialogCanvasPrefab: {fileID: 2496172979223554600, guid: b5a99feb6ad6da349a5cfbf920534616,
     type: 3}
   followTop: {fileID: 0}
@@ -68,6 +68,7 @@ MonoBehaviour:
   selectCursorPrefab: {fileID: 5352880889229869703, guid: 0357a27dafdad4247bc206eb20bf6d09,
     type: 3}
   selectItemHeight: 20
+  maxItems: 5
   selectedIndex: 0
   cursorOffset: {x: 8, y: -7}
   answers: []
