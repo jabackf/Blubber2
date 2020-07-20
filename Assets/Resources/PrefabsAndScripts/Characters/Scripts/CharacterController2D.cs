@@ -524,10 +524,14 @@ public class CharacterController2D : MonoBehaviour
         {
             inWater = true;
         }
-        if (other.tag == "Checkpoint" && gameObject.tag=="Player")
-        {
-            if (respawnOverride != null) respawnPosition = other.transform.position;
-        }
+
+    }
+
+    //Called by checkpoint objects. If null is passed as the position, then the character's position is used.
+    public void registerCheckpoint(Vector3 position)
+    {
+        if (position == null) position = gameObject.transform.position;
+        if (respawnOverride == null) respawnPosition = position;
     }
 
     public void die()

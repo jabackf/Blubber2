@@ -23,6 +23,7 @@ TagManager:
   - dropShadow
   - RC
   - inactivePlayer
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
