@@ -24,6 +24,7 @@ TagManager:
   - RC
   - inactivePlayer
   - Checkpoint
+  - RopeAnchor
   layers:
   - Default
   - TransparentFX
