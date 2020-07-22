@@ -9,6 +9,19 @@ public class Rope : MonoBehaviour
 
     public GameObject AnchorA, AnchorB, Node;
 
+
+    //Different types of collision detection. A capsule collider should already be added to the node, and is used to determine the node's dimensions
+    //Sometimes capsule colliders can phase through objects if the rope stretches to much. I've added edge colliders to make this less likely.
+    //If selected, the capsule collider will be destroyed and list of EdgeCollider2Ds will be used instead. These edges will be updated every frame. None is no collision detection.
+    public enum collisionTypes { Capsule, Edge, None};
+    public collisionTypes collisionType = collisionTypes.Edge;
+    private List<EdgeCollider2D> edgeColliders = new List<EdgeCollider2D>(); //If we're using edge colliders, this holds a list of them
+    public bool ignoreAnchorCollisions = true; //If true, the rope will not collide with the anchors
+    public bool ignoreAnchorChildCollisions = true; //If true and ignoreAnchorCollisions is true, ignoreCollisions will be applied to both nodes/anchors and nodes/anchorChildren
+    public bool enableLineRenderer = true;
+    public LineRenderer line;
+    public bool drawNodeSprites = true; //Turn off to disable node sprites
+
     private HingeJoint2D hjA, hjB; //The hingejoints that connect Node1->AnchorA and NodeN->AnchorB
     private DistanceJoint2D myDJ;
 
@@ -21,6 +34,7 @@ public class Rope : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //Get the length of one node. Nodes sprites are assumed to be oriented vertically, so the length of a node is the height of the node's capsule collider.
         nodeLength = Node.GetComponent<CapsuleCollider2D>().size.y;
 
@@ -29,11 +43,12 @@ public class Rope : MonoBehaviour
         nodeCount = (int)Math.Ceiling(anchorDistance / nodeLength);
 
         float step = anchorDistance / nodeCount;
+        float ropeLength = nodeCount * nodeLength; //This is the actual full length of the rope, which will be slightly longer than AnchorDistance because we used Math.Ceiling to create NodeCount
         Vector3 dir = AnchorB.transform.position - AnchorA.transform.position;
         float angle = (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg)+90;
         Quaternion q = Quaternion.Euler(0f, 0f, angle);
-        //Destroy(AnchorA.GetComponent<HingeJoint2D>()); //We don't need the hinge joint on the first anchor.
         nodes.Add(AnchorA);
+
         for (int i = 1; i <= nodeCount; i++)
         {
             Vector3 pos = Vector3.MoveTowards(AnchorA.transform.position, AnchorB.transform.position, step * i);
@@ -50,7 +65,21 @@ public class Rope : MonoBehaviour
             else
             {
                 hj.connectedBody = nodes[i - 1].GetComponent<Rigidbody2D>();
-                hj.connectedAnchor = nodes[nodes.Count - 1].transform.position;
+                hj.connectedAnchor = nodes[i - 1].transform.position;
+            }
+
+            if (!drawNodeSprites) n.GetComponent<SpriteRenderer>().enabled = false;
+
+            if (collisionType==collisionTypes.Edge || collisionType==collisionTypes.None)
+            {
+                Destroy(n.GetComponent<CapsuleCollider2D>());
+                if (collisionType == collisionTypes.Edge)
+                {
+                    EdgeCollider2D e = n.AddComponent(typeof(EdgeCollider2D)) as EdgeCollider2D;
+                    e.points[0] = nodes[i - 1].transform.position;
+                    e.points[1] = n.transform.position;
+                    edgeColliders.Add(e);
+                }
             }
 
             nodes.Add(n);
@@ -65,14 +94,90 @@ public class Rope : MonoBehaviour
         //If we don't do this, then nasty things will happen. Like hinges drifting away from their anchor points. I have no idea why (or what this option actually does, really), but this seems to fix it.
         hjA.autoConfigureConnectedAnchor = hjB.autoConfigureConnectedAnchor = false;
 
+        //Add the final edge collider if needed. Note, the final edge is added to the last node instead of the box. Instead of node to previous node like the rest of them, this is node to anchorB.
+        if (collisionType == collisionTypes.Edge)
+        {
+            EdgeCollider2D e = nodes[nodes.Count - 2].AddComponent(typeof(EdgeCollider2D)) as EdgeCollider2D;
+            e.points[0] = nodes[nodes.Count - 2].transform.position;
+            e.points[1] = AnchorB.transform.position;
+            edgeColliders.Add(e);
+        }
+
+        //Add a distance joint to limit the maximum amount of distance
         myDJ = AnchorA.transform.parent.gameObject.AddComponent<DistanceJoint2D>();
         myDJ.autoConfigureDistance = false;
         myDJ.autoConfigureConnectedAnchor = false;
-        myDJ.distance = anchorDistance;
+        myDJ.distance = ropeLength;// +nodeLength; //I've found that it helps to have the dj slightly longer than the rope, so I added another node to the length
         myDJ.maxDistanceOnly = true;
         myDJ.breakForce = Mathf.Infinity;
         myDJ.breakTorque = Mathf.Infinity;
-        myDJ.enableCollision = true;
+        myDJ.enableCollision = false;
         myDJ.connectedBody = AnchorB.transform.parent.GetComponent<Rigidbody2D>();
+
+        myDJ.anchor = AnchorA.transform.position;
+        myDJ.connectedAnchor = AnchorB.transform.position;
+
+        //Handle the ignoreAnchorCollision stuff
+        if (ignoreAnchorCollisions && collisionType != collisionTypes.None)
+        {
+            foreach (var n in nodes)
+            {
+                ignoreCollide(n, AnchorA.transform.parent.gameObject, ignoreAnchorChildCollisions);
+                ignoreCollide(n, AnchorB.transform.parent.gameObject, ignoreAnchorChildCollisions);
+            }
+        }
+
+        //It's line renderer setup time!
+        if (enableLineRenderer && !line) line = gameObject.GetComponent<LineRenderer>();
+        if (enableLineRenderer && line)
+        {
+            line.positionCount = nodeCount+1;
+            updateLine();
+        }
+    }
+
+    void updateLine()
+    {
+        for (int i = 0; i <= nodeCount; i++)
+        {
+            line.SetPosition(i, new Vector3(nodes[i].transform.position.x, nodes[i].transform.position.y));
+        }
+    }
+
+    void ignoreCollide(GameObject A, GameObject B, bool ignoreChildrenToo = false)
+    {
+        foreach (var ca in A.GetComponents<Collider2D>())
+        {
+            foreach (var cb in B.GetComponents<Collider2D>())
+            {
+                Physics2D.IgnoreCollision(ca, cb);
+            }
+        }
+
+        if (ignoreChildrenToo)
+        {
+            foreach (var ca in A.GetComponentsInChildren<Collider2D>())
+            {
+                foreach (var cb in B.GetComponentsInChildren<Collider2D>())
+                {
+                    Physics2D.IgnoreCollision(ca, cb);
+                }
+            }
+        }
+    }
+
+    void Update()
+    {
+        //Update all edge colliders
+        if (collisionType==collisionTypes.Edge)
+        {
+            for (int i = 1; i <= nodeCount; i++) //Cycle through all nodes. First node (anchorA) does not have edge collider, so corresponding edges are edgeCollider[nodeIndex-1]
+            {
+                edgeColliders[i - 1].points[0] = nodes[i - 1].transform.position;
+                edgeColliders[i - 1].points[1] = nodes[i].transform.position;
+            }
+        }
+
+        if (enableLineRenderer && line) updateLine();
     }
 }
