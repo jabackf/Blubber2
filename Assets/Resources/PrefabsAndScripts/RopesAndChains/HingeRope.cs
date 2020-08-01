@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rope : MonoBehaviour
+public class HingeRope : MonoBehaviour
 {
     //Hinge connection pattern: AnchorA <-Node1  <-Node2  <-Node3  ...  <-NodeN->  AnchorB
 
@@ -21,6 +21,8 @@ public class Rope : MonoBehaviour
     public bool enableLineRenderer = true;
     public LineRenderer line;
     public bool drawNodeSprites = true; //Turn off to disable node sprites
+
+    public float angleLimitMin=-150, angleLimitMax = 150;
 
     private HingeJoint2D hjA, hjB; //The hingejoints that connect Node1->AnchorA and NodeN->AnchorB
     private DistanceJoint2D myDJ;
@@ -42,6 +44,7 @@ public class Rope : MonoBehaviour
 
         nodeCount = (int)Math.Ceiling(anchorDistance / nodeLength);
 
+        JointAngleLimits2D limits; //Will be used for setting stuff up
         float step = anchorDistance / nodeCount;
         float ropeLength = nodeCount * nodeLength; //This is the actual full length of the rope, which will be slightly longer than AnchorDistance because we used Math.Ceiling to create NodeCount
         Vector3 dir = AnchorB.transform.position - AnchorA.transform.position;
@@ -61,11 +64,21 @@ public class Rope : MonoBehaviour
                 hjA = hj;
                 hjA.connectedBody = nodes[i - 1].transform.parent.gameObject.GetComponent<Rigidbody2D>();
                 hjA.connectedAnchor = AnchorA.transform.position;
+                hjA.useLimits = true;
+                limits = hjA.limits;
+                limits.min = angleLimitMin;
+                limits.max = angleLimitMax;
+                hjA.limits = limits;
             }
             else
             {
                 hj.connectedBody = nodes[i - 1].GetComponent<Rigidbody2D>();
                 hj.connectedAnchor = nodes[i - 1].transform.position;
+                hj.useLimits = true;
+                limits = hj.limits;
+                limits.min = angleLimitMin;
+                limits.max = angleLimitMax;
+                hj.limits = limits;
             }
 
             if (!drawNodeSprites) n.GetComponent<SpriteRenderer>().enabled = false;
@@ -86,9 +99,14 @@ public class Rope : MonoBehaviour
         }
 
         //Add extra hinge joint from nodeN to AnchorB
-        hjB = nodes[nodes.Count - 1].AddComponent<HingeJoint2D>();
+        hjB = CopyComponent<HingeJoint2D>(nodes[1].GetComponent<HingeJoint2D>(),nodes[nodes.Count - 1]);
         hjB.connectedBody = AnchorB.transform.parent.gameObject.GetComponent<Rigidbody2D>();
         hjB.connectedAnchor = AnchorB.transform.position;
+        hjB.useLimits = true;
+        limits = hjB.limits;
+        limits.min = angleLimitMin;
+        limits.max = angleLimitMax;
+        hjB.limits = limits;
         nodes.Add(AnchorB);
 
         //If we don't do this, then nasty things will happen. Like hinges drifting away from their anchor points. I have no idea why (or what this option actually does, really), but this seems to fix it.
@@ -103,19 +121,20 @@ public class Rope : MonoBehaviour
             edgeColliders.Add(e);
         }
 
+        
         //Add a distance joint to limit the maximum amount of distance
         myDJ = AnchorA.transform.parent.gameObject.AddComponent<DistanceJoint2D>();
-        myDJ.autoConfigureDistance = false;
-        myDJ.autoConfigureConnectedAnchor = false;
-        myDJ.distance = ropeLength;// +nodeLength; //I've found that it helps to have the dj slightly longer than the rope, so I added another node to the length
+        myDJ.connectedBody = AnchorB.transform.parent.GetComponent<Rigidbody2D>();
+        //myDJ.anchor = nodeStartAnchor.position;
+        //myDJ.connectedAnchor = nodeEndAnchor.position;
         myDJ.maxDistanceOnly = true;
         myDJ.breakForce = Mathf.Infinity;
         myDJ.breakTorque = Mathf.Infinity;
         myDJ.enableCollision = false;
-        myDJ.connectedBody = AnchorB.transform.parent.GetComponent<Rigidbody2D>();
-
-        myDJ.anchor = AnchorA.transform.position;
-        myDJ.connectedAnchor = AnchorB.transform.position;
+        myDJ.autoConfigureDistance = false;
+        myDJ.autoConfigureConnectedAnchor = false;
+        myDJ.distance =  ropeLength * 1.5f; // Vector3.Distance(nodeStartAnchor.position, nodeEndAnchor.position) * 2;
+        
 
         //Handle the ignoreAnchorCollision stuff
         if (ignoreAnchorCollisions && collisionType != collisionTypes.None)
@@ -134,6 +153,18 @@ public class Rope : MonoBehaviour
             line.positionCount = nodeCount+1;
             updateLine();
         }
+    }
+
+    T CopyComponent<T>(T original, GameObject destination) where T : Component
+    {
+        System.Type type = original.GetType();
+        Component copy = destination.AddComponent(type);
+        System.Reflection.FieldInfo[] fields = type.GetFields();
+        foreach (System.Reflection.FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+        return copy as T;
     }
 
     void updateLine()

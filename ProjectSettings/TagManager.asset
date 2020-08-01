@@ -25,6 +25,7 @@ TagManager:
   - inactivePlayer
   - Checkpoint
   - RopeAnchor
+  - Food
   layers:
   - Default
   - TransparentFX

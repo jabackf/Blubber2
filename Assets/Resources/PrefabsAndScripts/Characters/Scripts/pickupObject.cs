@@ -506,4 +506,9 @@ public class pickupObject : actionInRange
         return holder;
 
     }
+
+    void OnDestroy()
+    {
+        if (holder != null) releaseFromHolder();
+    }
 }

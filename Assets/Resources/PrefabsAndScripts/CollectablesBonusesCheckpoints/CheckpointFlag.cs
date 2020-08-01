@@ -11,6 +11,8 @@ public class CheckpointFlag : MonoBehaviour
     public bool triggerWithInactivePlayer = true; //If set to true, the flag can either be triggered with a "Player" tag or an "inactivePlayer" tag
     public Transform spawnPoint; //The point to spawn the character at. If none is specified, the gameObject's position is used.
 
+    public GameObject confetti;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +31,8 @@ public class CheckpointFlag : MonoBehaviour
                 triggered = true;
                 anim.SetBool("Active", true);
                 cont.registerCheckpoint(spawnPoint.position);
+
+                if (confetti) Instantiate(confetti, transform);
             }
         }
     }
