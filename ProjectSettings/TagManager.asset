@@ -24,7 +24,6 @@ TagManager:
   - RC
   - inactivePlayer
   - Checkpoint
-  - RopeAnchor
   - Food
   layers:
   - Default

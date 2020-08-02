@@ -7,20 +7,13 @@ public class Animal : MonoBehaviour
 {
     public enum states
     {
-        idle, walk, graze, speak, flap, followFood
+        idle, walk, graze, speak, flap, followFood, makeSomething
     }
 
     public states state = states.idle;
-    public states[] availableStates = { states.idle, states.walk, states.graze, states.speak, states.followFood };
+    public states[] availableStates = { states.idle, states.walk, states.graze, states.speak, states.followFood }; //These are the states which will be randomly selected from. Some can be responses to things in the environment, like follow food, and will only be triggered if they appear in this list.
     public bool active = true; //If false, the cow will sit in default state
-    public float foodEatDistance = 1f; //The distance from front left/right transform that food needs to be within to be eaten
-    public states eatFoodState = states.graze;
-
-    public bool hasFallingState = false;
-    public float fallingVelocityThreshold = -0.5f; //Once vertical velocity goes below this value, falling state is triggered.
-    public states fallingState = states.flap;
-    bool falling = false;
-
+    public Transform leftTransform, rightTransform; //These represent the immediate left and right ends of the animal. Used to determine when an object is immediately in front or behind of the animal (for example, food)
     states previousState;
     private Animator anim;
     private Rigidbody2D rb;
@@ -31,11 +24,31 @@ public class Animal : MonoBehaviour
     public float walkVelocity = 4f, walkSmoothing = 0.1f;
     private SpriteRenderer renderer;
     public Transform rangeLeft, rangeRight; //If not null, these are used to keep the animal from walking outside of these x axis boundaries
-    private float boundXLeft=-1, boundXRight=-1; //Used internally with the rangeLeft and Right
+    private float boundXLeft = -1, boundXRight = -1; //Used internally with the rangeLeft and Right
+    private sceneSettings sceneSettingsGO;
+
+    [Space]
+    [Header("Food")]
+    public states eatFoodState = states.graze;
+    public float eatFoodRadius = 0.2f; //This is the radius of the circle used to determine if we are close enough to eat the food. Basically, a bigger number means we can eat the food from farther away.
     private GameObject food;
     private float eatTimer = 0;
 
-    public Transform leftTransform, rightTransform; //These represent the immediate left and right ends of the animal. Used to determine when an object is immediately in front or behind of the animal (for example, food)
+    [Space]
+    [Header("Falling")]
+    public bool hasFallingState = false;
+    public float fallingVelocityThreshold = -0.5f; //Once vertical velocity goes below this value, falling state is triggered.
+    public states fallingState = states.flap;
+    bool falling = false;
+
+    [Space]
+    [Header("Creating objects")]
+    //If the makeSomething state is triggered, then an object will be randomly selected from this list of object. For example, this list could contain eggs, poop, and whatever else an animal might create.
+    public List<GameObject> createObjects;
+    public bool createAtRearTransform = true; //If true then the created object(s) will be spawned at the animal's crapper. If false, it will be spawned by their face.
+    public states createState = states.speak; // This is the state we will switch into while creating the object. Basically, what animation would you like to play while we are creating the thing.
+    public float createTimer = 0.4f; //This is how long we wait before starting the createState animation and actually spawining the object.
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +56,7 @@ public class Animal : MonoBehaviour
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         renderer = GetComponent<SpriteRenderer>();
+        sceneSettingsGO = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
 
         if (leftTransform == null) leftTransform = transform;
         if (rightTransform == null) rightTransform = transform;
@@ -78,32 +92,37 @@ public class Animal : MonoBehaviour
 
         if (active && state == states.followFood && eatTimer<=0)
         {
-            if (food.transform.position.x > transform.position.x) dir = 0;
-            if (food.transform.position.x < transform.position.x) dir = 1;
-
-            float speed = 0f;
-            bool eatFood = false;
-            if (dir == 0) //right
+            if (!food) //Something happened to the food! It don't exist anymore! If it just left the trigger then we should have had the state changed to something other than followFood. I'll bet it got destroyed!
             {
-                speed = walkVelocity;
-                if (Vector3.Distance(rightTransform.position, food.transform.position) < foodEatDistance) eatFood = true;
-            }
-            if (dir == 1) //left
-            {
-                speed = -walkVelocity;
-                if (Vector3.Distance(leftTransform.position, food.transform.position) < foodEatDistance) eatFood = true;
-            }
-
-            if (!eatFood)
-            {
-                applyWalkingMotion(speed);
+                setState(states.idle);
+                resetTimer();
             }
             else
             {
-                eatTimer = 1f;
-                rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
-                anim.SetBool("Walking", false);
-                
+                if (food.transform.position.x > transform.position.x) dir = 0;
+                if (food.transform.position.x < transform.position.x) dir = 1;
+
+                float speed = 0f;
+                if (dir == 0) //right
+                {
+                    speed = walkVelocity;
+                }
+                if (dir == 1) //left
+                {
+                    speed = -walkVelocity;
+                }
+
+                if (!isFoodCloseEnoughToEat())
+                {
+                    applyWalkingMotion(speed);
+                }
+                else
+                {
+                    eatTimer = 1f;
+                    rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+                    anim.SetBool("Walking", false);
+
+                }
             }
         }
 
@@ -115,8 +134,26 @@ public class Animal : MonoBehaviour
             eatTimer -= Time.deltaTime;
             if (eatTimer <= 0)
             {
-                Destroy(food);
-                resetTimer();
+                //We started the food-eating process. The food doesn't dissappear immediately. We had to wait a second so the animal can stop and bend down. Now that we've waited, let's make sure the food is still close enough.
+                if (isFoodCloseEnoughToEat())
+                {
+                    //Nom nom
+                    Destroy(food);
+                    resetTimer();
+                }
+                else
+                {
+                    //The stupid food is moving! I don't know. We should probably keep chasing the food if it's still nearby. If it has left the trigger though then we'll just have to go back to the idle state and hope our sloppy code does something that looks intelligent.
+                    if (food == null) //It's null, so it's left the trigger!
+                    {
+                        setState(states.idle);
+                        resetTimer();
+                    }
+                    else
+                    {
+                        setState(states.followFood);
+                    }
+                }
             }
 
             return;
@@ -169,6 +206,18 @@ public class Animal : MonoBehaviour
         }
     }
 
+    bool isFoodCloseEnoughToEat()
+    {
+        if (food) //food still exists
+        {
+            Vector3 p = (dir == 0 ? rightTransform.position : leftTransform.position);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(p, eatFoodRadius);
+            foreach (var c in colliders) if (c.gameObject == food) return true;
+        }
+
+        return false;
+    }
+
     void applyWalkingMotion(float speed)
     {
         anim.SetBool("Walking", true);
@@ -191,7 +240,11 @@ public class Animal : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (eatTimer > 0) return;
+        if (eatTimer > 0) //We're trying to eat it. We don't really want to mess with the states. We do want to set food to null though so we know we can't chase it anymore.
+        {
+            if (other.gameObject == food) food = null;
+            return;
+        }
         if (active && state==states.followFood && other.gameObject == food)
         {
             food = null;
@@ -275,6 +328,26 @@ public class Animal : MonoBehaviour
         {
             state = states.followFood;
         }
+        if (s == states.makeSomething)
+        {
+            Invoke("createSomething", createTimer);
+
+            state = states.idle;
+            if (createState!=states.makeSomething) setState(createState); //We don't want recursion because that would be bad!
+        }
+    }
+
+    void createSomething()
+    {
+        if (createObjects.Count == 0) return;
+
+        Vector3 p;
+        if (createAtRearTransform) p = (dir == 1 ? rightTransform.position : leftTransform.position);
+        else p = (dir == 0 ? rightTransform.position : leftTransform.position);
+
+        GameObject go = Instantiate(createObjects[UnityEngine.Random.Range(0, (createObjects.Count - 1))],p, Quaternion.identity);
+
+        if (sceneSettingsGO != null) sceneSettingsGO.objectCreated(go);
     }
 
     void resetTimer()
