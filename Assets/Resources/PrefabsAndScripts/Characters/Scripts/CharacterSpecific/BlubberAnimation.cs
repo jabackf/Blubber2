@@ -21,9 +21,13 @@ public class BlubberAnimation : CharacterAnimation
      * 
      * Other:
      * 
-     *+ Front  (face player) (in CharacterAnimation)
+     *+ Front  (face forward) (in CharacterAnimation)
      *+ Back  (face background) (in CharacterAnimation)
      *+ Side  (face left or right as defined by the flip settings in CharacterController2D) (in CharacterAnimation)
+     *+ FaceLeft (in CharacterContoller2D)
+     *+ FaceRight (in CharacterController2D)
+     *+ facePlayer (faces left or right towards object with Player tag) (in CharacterAnimation)
+     *+ faceAwayPlayer (opposite of facePlayer) (in CharacterAnimation)
      *+ jumpingOn  (repeatedly jumps)
      *+ jumpingOff
      *+ jumpingToggle
@@ -126,6 +130,16 @@ public class BlubberAnimation : CharacterAnimation
             if (bii != null && jumping)
                 bii.jump = true;
         }
+    }
+
+    //Change the color of the blubber character
+    public void changeColor(Color c)
+    {
+        renderer.color = c;
+    }
+    public Color getColor()
+    {
+        return renderer.color;
     }
 
     //Sets the particles to specified prefab. Pass null for no particles

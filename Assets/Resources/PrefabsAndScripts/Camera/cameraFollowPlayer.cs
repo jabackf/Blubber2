@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class cameraFollowPlayer : MonoBehaviour
 {
+    public bool active = true; //When set to false everything in the script functions except for the actions that move the camera to follow the player
+
     public string followTag = "Player"; //The tag of the object to follow
     public string sceneBoundaryTag = "sceneBoundary"; //OPTIONAL The tag of the sceneBoundary object to prevent the camera from moving outside of the scene boundaries
     public float offset = 2;
@@ -99,6 +101,7 @@ public class cameraFollowPlayer : MonoBehaviour
     //This function immediately snaps the camera into place. It does not clamp!
     void snapIntoPosition()
     {
+        if (!active) return;
         if (playerT)
         {
             camera.transform.position = new Vector3(playerT.position.x, playerT.position.y, -10);
@@ -108,6 +111,7 @@ public class cameraFollowPlayer : MonoBehaviour
     //This function calculates the clamping position of the camera based on the scene boundaries
     void calculateClampPosition()
     {
+        
         calculateDimensions();
 
         if (boundary && playerT!=null)
@@ -121,7 +125,8 @@ public class cameraFollowPlayer : MonoBehaviour
                        boundary.getTopY() - halfHeight, -10f);
 
             //Snap the camera into the boundary
-            camera.transform.position = new Vector3( (clampX ? Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x) : camera.transform.position.x), (clampY ? Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y) : camera.transform.position.y), -10f);
+            if (active)
+                camera.transform.position = new Vector3( (clampX ? Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x) : camera.transform.position.x), (clampY ? Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y) : camera.transform.position.y), -10f);
         }
         
     }
@@ -197,20 +202,23 @@ public class cameraFollowPlayer : MonoBehaviour
 
             float smoothing = offsetSmoothing * Time.deltaTime;
 
-            //To clamp or not to clamp!
-            if (boundary != null && (clampX==true||clampY==true) )
+            if (active)
             {
-                //Actually move the camera
-                camera.transform.position = Vector3.Lerp(camera.transform.position, 
-                    new Vector3( (clampX ? Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x) : playerPosition.x), 
-                    (clampY ? Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y) : playerPosition.y), 
-                    -10f), offsetSmoothing * Time.deltaTime);
+                //To clamp or not to clamp!
+                if (boundary != null && (clampX == true || clampY == true))
+                {
+                    //Actually move the camera
+                    camera.transform.position = Vector3.Lerp(camera.transform.position,
+                        new Vector3((clampX ? Mathf.Clamp(playerPosition.x, clampMin.x, clampMax.x) : playerPosition.x),
+                        (clampY ? Mathf.Clamp(playerPosition.y, clampMin.y, clampMax.y) : playerPosition.y),
+                        -10f), offsetSmoothing * Time.deltaTime);
 
-            }
-            else
-            {
-                //Actually move the camera
-                camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
+                }
+                else
+                {
+                    //Actually move the camera
+                    camera.transform.position = Vector3.Lerp(camera.transform.position, playerPosition, offsetSmoothing * Time.deltaTime);
+                }
             }
 
             updateEdgeCoordinates();

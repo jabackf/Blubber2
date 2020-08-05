@@ -16,6 +16,7 @@ public class respawnOnDestroy : MonoBehaviour
 
     private float timer = 0;
     private Global global;
+    private bool applicationClosing = false; //Set to true by onApplicationQuit. Used so we aren't trying to respawn objects when we close the application.
 
     // Start is called before the first frame update
     void Start()
@@ -50,8 +51,17 @@ public class respawnOnDestroy : MonoBehaviour
         }
     }
 
+    void OnApplicationQuit()
+    {
+        applicationClosing = true;
+    }
+
     public void OnDestroy()
     {
+        //Don't respawn if the scene is changing or we are quitting the application
+        if (!global) return; //There is no global object. I think in some cases on application quit the global object gets destroyed before we get here, thus making this check necessary
+        if (global.isSceneChanging() || applicationClosing) return;
+
         GameObject spawnerGo = Instantiate(new GameObject(), spawnPosition, spawnRotation);
         //spawnerGo.transform.localScale = spawnScale;
 

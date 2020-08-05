@@ -25,6 +25,15 @@ TagManager:
   - inactivePlayer
   - Checkpoint
   - Food
+  - WarpLocationA
+  - WarpLocationB
+  - WarpLocationC
+  - WarpLocationD
+  - WarpLocationE
+  - WarpLocationF
+  - WarpLocationG
+  - WarpLocationH
+  - menuSelector
   layers:
   - Default
   - TransparentFX

@@ -175,9 +175,14 @@ public class Dialog : MonoBehaviour
 
     bool inView()
     {
-        if (view == null) return true; //If there is no script to make the camera follow the player, then assume we are in view
+        if (!view) return true; //If there is no script to make the camera follow the player, then assume we are in view
         else
-            return view.insideView(conversationCenterPoint, outsideCameraBuffer.x, outsideCameraBuffer.y);
+        {
+            if (view.isActiveAndEnabled)
+                return view.insideView(conversationCenterPoint, outsideCameraBuffer.x, outsideCameraBuffer.y);
+            else
+                return true; //If the component is there but disabled, then we aren't moving the view so we'll just return true;
+        }
     }
 
     // Update is called once per frame

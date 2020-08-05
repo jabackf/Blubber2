@@ -167,6 +167,8 @@ public class MapSystem
 		p.GetComponent<CharacterController2D>().sceneChangeStart(map);
 		
         startTransition(transitionString);
+
+        global.sceneChanging = true;
 		
 		return true;
 		
@@ -266,6 +268,8 @@ public class MapSystem
         }
 
         settings = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
+
+        global.sceneChanging = false;
     }
 
     //Removes any objects matching the specified resource from instantiateOnLoadList. Does not destroy instantiated objects!

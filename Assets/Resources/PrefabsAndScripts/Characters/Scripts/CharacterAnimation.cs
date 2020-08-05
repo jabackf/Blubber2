@@ -442,6 +442,45 @@ public class CharacterAnimation : MonoBehaviour
         {
             controller.getHolding().setFacingDirection(0);
         }
+        FlipX(controller.isFacingRight());
+
+        //Sometimes when we go from front or back to side the child sprites (dresses and stuff) don't get flipped because the Flip function (which handles this task) doesn't need to be called
+        //This is my incredibly lazy way of making sure the Flip function gets called anyway and the character maintains his left/right facing. I make no claims to be a good programmer.
+        controller.Flip();
+        controller.Flip();
+    }
+
+    public void facePlayer()
+    {
+        if (gameObject.tag == "Player") return;
+        GameObject player = GameObject.FindWithTag("Player");
+        if (!player) return;
+
+        if (controller.isFacingRight() && player.transform.position.x < transform.position.x) controller.FaceLeft();
+        if (!controller.isFacingRight() && player.transform.position.x > transform.position.x) controller.FaceRight();
+
+        facing = facingDirections.side;
+        setDressFacing(0);
+        if (controller.holdingSomething())
+        {
+            controller.getHolding().setFacingDirection(0);
+        }
+    }
+    public void faceAwayPlayer()
+    {
+        if (gameObject.tag == "Player") return;
+        GameObject player = GameObject.FindWithTag("Player");
+        if (!player) return;
+
+        if (controller.isFacingRight() && player.transform.position.x > transform.position.x) controller.FaceLeft();
+        if (!controller.isFacingRight() && player.transform.position.x < transform.position.x) controller.FaceRight();
+
+        facing = facingDirections.side;
+        setDressFacing(0);
+        if (controller.holdingSomething())
+        {
+            controller.getHolding().setFacingDirection(0);
+        }
     }
 
     //Returns our facing direction as an int. 0=side, 1=front, 2=back. Return -1 on error or no facing direction.

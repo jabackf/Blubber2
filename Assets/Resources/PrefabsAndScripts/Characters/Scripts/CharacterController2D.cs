@@ -93,7 +93,8 @@ public class CharacterController2D : MonoBehaviour
     private float initialGravityScale; //Used to store our gravity state in case we have to turn gravity off.
     private bool isClimbing = false;
     private dropDownPlatform onDropPlatformScript = null;
-    public bool isTalking=false;
+    public bool isTalking=false;       //Set to true when we are in dialog. No input will be accepted.
+    public bool pause = false;       //Set to true when we are selecting something from a menu like a color picker or the pause menu. Basically does the same thing as isTalking, but the character isn't necessarily talking
     private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
 
     [Space]
@@ -168,6 +169,13 @@ public class CharacterController2D : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+        //Let's freeze if the scene is changing.
+        if (global.isSceneChanging())
+        {
+            m_Rigidbody2D.velocity = new Vector3(0f, 0f, 0f);
+            return;
+        }
+
         if (isDead)
         {
             if (respawn)
@@ -506,6 +514,9 @@ public class CharacterController2D : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D other)
     {
+        if (global.isSceneChanging())
+            return;
+
         if (canDie && !isCharacterDead())
         {
             bool deathTag = false;
@@ -591,6 +602,14 @@ public class CharacterController2D : MonoBehaviour
     public void StartTalking()
     {
         isTalking = true;
+    }
+    public void unpauseCharacter()
+    {
+        pause = false;
+    }
+    public void pauseCharacter()
+    {
+        pause = true;
     }
     public void setIsOnConveyor(bool val)
     {

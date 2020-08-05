@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5304201513582561940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5304201513582561930}
+  - component: {fileID: 5304201513582561931}
+  m_Layer: 0
+  m_Name: Global
+  m_TagString: global
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &5304201513582561930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5304201513582561940}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.162698, y: -0.39292994, z: -33.045734}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5304201513582561931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5304201513582561940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fdb9c9661f4a8f4b8fdad44e99bd860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startScene: testing_101_100
+  dirResourceRoot: Assets/Resources/
+  dirAnimations: Animations/
+  dirBackgrounds: BackgroundsAndTiles/
+  dirFonts: Fonts/
+  dirMaterials: Materials/
+  dirPhysicsMaterials: PhysicsMaterials/
+  dirPrefabs: PrefabsAndScripts/
+  dirSpawners: PrefabsAndScripts/Spawners/
+  dirRenderer: Renderer/
+  dirScenes: Scenes/
+  dirSprites: Sprites/
+  dirImages: Sprites/Images/
+  dirIcons: Sprites/Icons/
+  dirParticleSystems: PrefabsAndScripts/Effects/
+  dirBlubberSprites: Sprites/Characters/Blubber/
+  dirCharacterDress: Sprites/Dress/
+  dirDialogSystem: PrefabsAndScripts/Dialog/
+  dirRangeIconSystem: PrefabsAndScripts/RangeIconSystem/

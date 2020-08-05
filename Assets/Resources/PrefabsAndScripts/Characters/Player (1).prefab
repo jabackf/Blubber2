@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneBoundaryTag: sceneBoundary
-  buffer: {x: -1, y: -1}
+  buffer: {x: -2, y: -2}
   callbacks:
   - m_PersistentCalls:
       m_Calls:
@@ -288,6 +288,7 @@ MonoBehaviour:
   m_DialogBottom: {fileID: 5583954899186943733}
   spriteFlipMethod: 1
   isTalking: 0
+  pause: 0
   canDie: 1
   respawn: 1
   killTags:

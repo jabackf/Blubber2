@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6726260276104746251}
   - component: {fileID: 8168887621478598250}
   - component: {fileID: 1178907235618284320}
+  - component: {fileID: 5544051427642014534}
   m_Layer: 0
   m_Name: egg
   m_TagString: Untagged
@@ -194,3 +195,17 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &5544051427642014534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067713703766799326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed35225a10e79574e9cbf79a599dac2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneBoundaryTag: sceneBoundary
+  buffer: {x: -1, y: -1}

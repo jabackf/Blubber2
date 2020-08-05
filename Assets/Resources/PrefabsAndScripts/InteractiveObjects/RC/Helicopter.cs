@@ -75,7 +75,7 @@ public class Helicopter : MonoBehaviour
         active = false;
         if (previousTag == "") gameObject.tag="RC";
         else gameObject.tag = previousTag;
-        pilot.tag = "Player";
+        if (pilot) pilot.tag = "Player";
         anim.SetBool("Active", active);
         Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
         rb.gravityScale = initialGravity;

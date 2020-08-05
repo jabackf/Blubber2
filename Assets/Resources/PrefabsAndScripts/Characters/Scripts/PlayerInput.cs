@@ -10,6 +10,7 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     public CharacterController2D controller;
+    private Global global;
     public bool requirePlayerTag = true; //If true, input will only function if this gameObject has the "Player" tag
     float horizontalMove = 0f;
     float aimAngleMove = 200f;    //Used in aiming the throw retical (angle)
@@ -41,10 +42,13 @@ public class PlayerInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
     }
 
     void Update()
     {
+
+
         if (requirePlayerTag == false || gameObject.tag == "Player")
         {
             if (controller.pickupEnabled())
@@ -161,7 +165,8 @@ public class PlayerInput : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!controller.isTalking && !controller.isCharacterDead()) //Not in dialog mode, not dead
+
+        if (!controller.pause && !controller.isTalking && !controller.isCharacterDead() && !global.isSceneChanging()) //Not in dialog mode, not dead, scene isn't changing
         {
             if (!isThrowing)
             {

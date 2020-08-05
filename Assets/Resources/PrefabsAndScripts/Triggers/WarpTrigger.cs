@@ -37,6 +37,11 @@ public class WarpTrigger : MonoBehaviour
 
     }
 
+    public void setCallOnTriggerEnter(bool callOnTrigger)
+    {
+        callOnTriggerEnter = callOnTrigger;
+    }
+
     void OnCollisionEnter2D(Collision2D other)
     {
        

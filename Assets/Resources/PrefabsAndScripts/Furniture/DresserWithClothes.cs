@@ -8,7 +8,12 @@ public class DresserWithClothes : OpenClose
 
     public Dialog selectDialog;
     public Transform dialogTop, dialogBottom;
-    public string noneString = "None";
+    public string noneString = "Cancel";
+    public string nakedString = "Get naked!";
+
+    public bool canChangeColor = true;
+    public string changeColorString = "Change color";
+    public GameObject colorPicker;
 
     private sceneSettings sceneSettingsGO;
 
@@ -19,6 +24,8 @@ public class DresserWithClothes : OpenClose
     void Awake()
     {
         selectDialog.injectAnswerBranch(0, -1, noneString);
+        if (canChangeColor) selectDialog.injectAnswerBranch(0, -1, changeColorString);
+        selectDialog.injectAnswerBranch(0, -1, nakedString);
         foreach (DressObject dress in dressList)
         {
             selectDialog.injectAnswerBranch(0, -1, dress.name);
@@ -65,19 +72,46 @@ public class DresserWithClothes : OpenClose
     public void dressSelected(string answer)
     {
         characterGo.SendMessage("Side", SendMessageOptions.DontRequireReceiver);
-        characterGo.SendMessage("removeNonessentialDresses", SendMessageOptions.DontRequireReceiver);
 
-        DressObject d = Array.Find(dressList, e => e.name == answer);
-        if (d)
+        if (canChangeColor && answer == changeColorString)
         {
-            GameObject newDress = Instantiate(d.gameObject, characterGo.transform);
-            SpriteRenderer dressRenderer = newDress.GetComponent<SpriteRenderer>() as SpriteRenderer;
-            dressRenderer.enabled = true;
-            characterGo.SendMessage("addDressObject", newDress, SendMessageOptions.DontRequireReceiver);
-            if (sceneSettingsGO!=null) sceneSettingsGO.objectCreated(newDress);
+            //Create a color picker and tell it to send us messages about it's state
+            GameObject cpo = Instantiate(colorPicker);
+            ColorPicker cp = cpo.GetComponent<ColorPicker>();
+            cp.addMessageObject(gameObject);
+            BlubberAnimation ba = characterGo.GetComponent<BlubberAnimation>();
+            if (ba)
+            {
+                cp.highlightColor(ba.getColor());
+            }
+        }
+        else
+        {
+            if (answer == nakedString)
+                characterGo.SendMessage("removeNonessentialDresses", SendMessageOptions.DontRequireReceiver);
+
+            DressObject d = Array.Find(dressList, e => e.name == answer);
+            if (d)
+            {
+                GameObject newDress = Instantiate(d.gameObject, characterGo.transform);
+                SpriteRenderer dressRenderer = newDress.GetComponent<SpriteRenderer>() as SpriteRenderer;
+                dressRenderer.enabled = true;
+                characterGo.SendMessage("addDressObject", newDress, SendMessageOptions.DontRequireReceiver);
+                if (sceneSettingsGO != null) sceneSettingsGO.objectCreated(newDress);
+            }
+            base.Close("", characterGo);
         }
 
-        base.Close("", characterGo);
     }
 
+    //This message is sent from the color picker. It is called when we highlight a color with the cursor in the picker.
+    public void OnColorHighlighted(Color c)
+    {
+        characterGo.SendMessage("changeColor", c, SendMessageOptions.DontRequireReceiver);
+    }
+    //Also sent from the color picker. Called when we choose a color and the picker closes
+    public void OnColorSelected(Color c)
+    {
+        base.Close("", characterGo);
+    }
 }

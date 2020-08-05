@@ -13,6 +13,7 @@ public class Global : MonoBehaviour
 
     public string startScene = "testing_100_100";
     public MapSystem map;
+    [HideInInspector] public bool sceneChanging = false; //This is set to true/false by the mapsystem. As soon as a scene change is triggered and a transition starts, this is marked true. It is marked false at the start of the new scene
 	
     [Space]
     [Header("Directories")]
@@ -25,6 +26,7 @@ public class Global : MonoBehaviour
 	[HideInInspector] public string dirMaterials = "Materials/";
 	[HideInInspector] public string dirPhysicsMaterials = "PhysicsMaterials/";
 	[HideInInspector] public string dirPrefabs = "PrefabsAndScripts/";
+    [HideInInspector] public string dirPalettes = "Palettes/";
     [HideInInspector] public string dirSpawners = "PrefabsAndScripts/Spawners/";
     [HideInInspector] public string dirRenderer = "Renderer/";
 	[HideInInspector] public string dirScenes = "Scenes/";
@@ -61,6 +63,11 @@ public class Global : MonoBehaviour
     {
         OnValidate(); //Implicitly call to setup game scene
         map.goTo(startScene, MapSystem.transitions.none, false);
+    }
+
+    public bool isSceneChanging()
+    {
+        return sceneChanging;
     }
 
     //Called when a field in the editor is changed
