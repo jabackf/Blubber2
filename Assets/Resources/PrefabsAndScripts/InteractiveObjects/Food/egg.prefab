@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8168887621478598250}
   - component: {fileID: 1178907235618284320}
   - component: {fileID: 5544051427642014534}
+  - component: {fileID: 1633435800327912460}
   m_Layer: 0
   m_Name: egg
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2067713703766799326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50.451313, y: -5.5077877, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -209,3 +210,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneBoundaryTag: sceneBoundary
   buffer: {x: -1, y: -1}
+--- !u!114 &1633435800327912460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067713703766799326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ff2142b3bea5664d9f5536d9524cf7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mask:
+    serializedVersion: 2
+    m_Bits: 7959
+  maxMagnitude: 8
+  destroyOnBreak: 1
+  particles: {fileID: 1794340304444153981, guid: a42b8f3828ccc804a9e9cfbfbd15de91,
+    type: 3}
+  particleColor: {r: 0.9150943, g: 0.90753126, b: 0.4704966, a: 1}

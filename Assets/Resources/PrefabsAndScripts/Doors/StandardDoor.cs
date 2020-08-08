@@ -66,6 +66,9 @@ public class StandardDoor : MonoBehaviour
 
     void OnDestroy()
     {
-        if (global.isSceneChanging()) player.SendMessage("Side", SendMessageOptions.DontRequireReceiver);
+        if (global)
+        {
+            if (global.isSceneChanging() && player) player.SendMessage("Side", SendMessageOptions.DontRequireReceiver);
+        }
     }
 }

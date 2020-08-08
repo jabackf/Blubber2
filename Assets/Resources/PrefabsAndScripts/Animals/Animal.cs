@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class Animal : MonoBehaviour
 {
+    [System.Serializable]
+    public class createObject
+    {
+        public GameObject obj; //The object to create
+        public int max = -1; //The maximum number of this object that this animal can create. -1 for infinite.
+        public states createState = states.speak; // This is the state we will switch into while creating the object. Basically, what animation would you like to play while we are creating the thing.
+        public bool createAtRearTransform = true; //If true then the created object(s) will be spawned at the animal's crapper. If false, it will be spawned by their face.
+        public float createTimer = 0.4f; //This is how long we wait before starting the createState animation and actually spawining the object.
+    }
+
+
     public enum states
     {
         idle, walk, graze, speak, flap, followFood, makeSomething
@@ -43,12 +54,8 @@ public class Animal : MonoBehaviour
 
     [Space]
     [Header("Creating objects")]
-    //If the makeSomething state is triggered, then an object will be randomly selected from this list of object. For example, this list could contain eggs, poop, and whatever else an animal might create.
-    public List<GameObject> createObjects;
-    public bool createAtRearTransform = true; //If true then the created object(s) will be spawned at the animal's crapper. If false, it will be spawned by their face.
-    public states createState = states.speak; // This is the state we will switch into while creating the object. Basically, what animation would you like to play while we are creating the thing.
-    public float createTimer = 0.4f; //This is how long we wait before starting the createState animation and actually spawining the object.
-
+    public List<createObject> createObjects;     //If the makeSomething state is triggered, then an object will be randomly selected from this list of object. For example, this list could contain eggs, poop, and whatever else an animal might create.
+    private int createSelection = 0; //This is used internally to select a random object from createObjects and start the animation before actually playing it
 
     // Start is called before the first frame update
     void Start()
@@ -303,6 +310,10 @@ public class Animal : MonoBehaviour
         anim.SetBool("Flapping", false);
 
         System.Random r = new System.Random();
+        if (s == states.idle)
+        {
+            state = states.idle;
+        }
         if (s == states.walk)
         {
             state = states.walk;
@@ -330,22 +341,57 @@ public class Animal : MonoBehaviour
         }
         if (s == states.makeSomething)
         {
-            Invoke("createSomething", createTimer);
-
             state = states.idle;
-            if (createState!=states.makeSomething) setState(createState); //We don't want recursion because that would be bad!
+            if (createObjects.Count == 0) return;
+
+            bool found = false;
+            int tries = 5; //We'll try to randomly select an object a few times. If we fail every time then we've exceeded the max limit on all the objects we tried. We'll just stop trying to make a thing in that case and go back to our idle state.
+            while (tries > 0)
+            {
+                createSelection = UnityEngine.Random.Range(0, (createObjects.Count - 1));
+
+                int count = -1;
+                if (createObjects[createSelection].max > 0)
+                    count = countObjectsByName(createObjects[createSelection].obj.name+"(Clone)");
+
+                if (count < createObjects[createSelection].max)
+                {
+                    Invoke("createSomething", createObjects[createSelection].createTimer);
+                    found = true;
+                    tries = -1;
+                }
+                else tries -= 1;
+
+            }
+            if (found)
+            {
+                if (createObjects[createSelection].createState != states.makeSomething) setState(createObjects[createSelection].createState); //We don't want recursion because that would be bad!
+            }
         }
+    }
+
+    public int countObjectsByName(string name)
+    {
+        int count = 0;
+        foreach (var gameObj in FindObjectsOfType(typeof(GameObject)) as GameObject[])
+        {
+            //Debug.Log(gameObj.name +" == "+ name);
+            if (gameObj.name == name)
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     void createSomething()
     {
-        if (createObjects.Count == 0) return;
-
         Vector3 p;
-        if (createAtRearTransform) p = (dir == 1 ? rightTransform.position : leftTransform.position);
+        if (createObjects[createSelection].createAtRearTransform) p = (dir == 1 ? rightTransform.position : leftTransform.position);
         else p = (dir == 0 ? rightTransform.position : leftTransform.position);
-
-        GameObject go = Instantiate(createObjects[UnityEngine.Random.Range(0, (createObjects.Count - 1))],p, Quaternion.identity);
+       
+        GameObject go = Instantiate(createObjects[createSelection].obj,p, Quaternion.identity);
 
         if (sceneSettingsGO != null) sceneSettingsGO.objectCreated(go);
     }

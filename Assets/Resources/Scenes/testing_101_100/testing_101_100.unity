@@ -2235,9 +2235,6 @@ MonoBehaviour:
   fallingVelocityThreshold: -0.5
   fallingState: 4
   createObjects: []
-  createAtRearTransform: 1
-  createState: 3
-  createTimer: 0.4
 --- !u!4 &226332811
 Transform:
   m_ObjectHideFlags: 0
@@ -3014,9 +3011,6 @@ MonoBehaviour:
   fallingVelocityThreshold: -0.5
   fallingState: 4
   createObjects: []
-  createAtRearTransform: 1
-  createState: 3
-  createTimer: 0.4
 --- !u!4 &342393406
 Transform:
   m_ObjectHideFlags: 0
@@ -4617,6 +4611,7 @@ MonoBehaviour:
   m_DialogBottom: {fileID: 235187553}
   spriteFlipMethod: 1
   isTalking: 0
+  pause: 0
   canDie: 1
   respawn: 1
   killTags:
@@ -9163,12 +9158,12 @@ PrefabInstance:
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.92
+      value: 35.44
       objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.38
+      value: 0.59
       objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
@@ -13410,10 +13405,11 @@ MonoBehaviour:
   fallingVelocityThreshold: -0.5
   fallingState: 4
   createObjects:
-  - {fileID: 2067713703766799326, guid: b3612858b8eb2644fa995011d5b68885, type: 3}
-  createAtRearTransform: 1
-  createState: 3
-  createTimer: 0.4
+  - obj: {fileID: 2067713703766799326, guid: b3612858b8eb2644fa995011d5b68885, type: 3}
+    max: 4
+    createState: 3
+    createAtRearTransform: 1
+    createTimer: 0.4
 --- !u!4 &1850002186
 Transform:
   m_ObjectHideFlags: 0
@@ -16319,6 +16315,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1629155487}
     m_Modifications:
+    - target: {fileID: 2071604565937980936, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: m_Name
+      value: psMusicNotes
+      objectReference: {fileID: 0}
     - target: {fileID: 2071604565937980939, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16373,11 +16374,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2071604565937980936, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
-        type: 3}
-      propertyPath: m_Name
-      value: psMusicNotes
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65c4b0a18f018da4eb4e9e1931c481a6, type: 3}

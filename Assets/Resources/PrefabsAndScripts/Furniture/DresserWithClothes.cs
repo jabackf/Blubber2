@@ -93,6 +93,7 @@ public class DresserWithClothes : OpenClose
             DressObject d = Array.Find(dressList, e => e.name == answer);
             if (d)
             {
+                characterGo.SendMessage("removeNonessentialDresses", SendMessageOptions.DontRequireReceiver);
                 GameObject newDress = Instantiate(d.gameObject, characterGo.transform);
                 SpriteRenderer dressRenderer = newDress.GetComponent<SpriteRenderer>() as SpriteRenderer;
                 dressRenderer.enabled = true;
