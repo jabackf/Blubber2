@@ -281,12 +281,17 @@ public class Dialog : MonoBehaviour
 
     //Called when someone is interupting our conversation.
     //Intended primarily for when NPCs are having an automatic conversation and the player interupts them 
-    public void interupt()
+    //Timer is an optional variable. If it's not -1, then it will automatically invoke resume after the time is up
+    public void interupt(float timer=-1)
     {
+        if (!active) return;
+
         activeBeforeInterupt = active;
         active = false;
         onScreen = false;
         KillBox(false);
+
+        if (timer != -1) Invoke("resume", timer);
     }
 
     //Resumes an interupted dialog

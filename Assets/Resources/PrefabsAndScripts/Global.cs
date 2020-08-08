@@ -20,24 +20,24 @@ public class Global : MonoBehaviour
 	//We want these directory variables to be the same for the whole project, meaning the same for all global objects. HideInspector helps ensure that the script is the only place we are defining these strings.
 	[HideInInspector] public string dirResourceRoot = "Assets/Resources/";
 
-	[HideInInspector] public string dirAnimations = "Animations/";
-	[HideInInspector] public string dirBackgrounds = "BackgroundsAndTiles/";
-	[HideInInspector] public string dirFonts = "Fonts/";
-	[HideInInspector] public string dirMaterials = "Materials/";
-	[HideInInspector] public string dirPhysicsMaterials = "PhysicsMaterials/";
-	[HideInInspector] public string dirPrefabs = "PrefabsAndScripts/";
-    [HideInInspector] public string dirPalettes = "Palettes/";
-    [HideInInspector] public string dirSpawners = "PrefabsAndScripts/Spawners/";
-    [HideInInspector] public string dirRenderer = "Renderer/";
-	[HideInInspector] public string dirScenes = "Scenes/";
-	[HideInInspector] public string dirSprites = "Sprites/";
-    [HideInInspector] public string dirImages = "Sprites/Images/";
-    [HideInInspector] public string dirIcons = "Sprites/Icons/";
-	[HideInInspector] public string dirParticleSystems = "PrefabsAndScripts/Effects/";
-	[HideInInspector] public string dirBlubberSprites = "Sprites/Characters/Blubber/";
-	[HideInInspector] public string dirCharacterDress = "Sprites/Dress/";
-	[HideInInspector] public string dirDialogSystem = "PrefabsAndScripts/Dialog/";
-	[HideInInspector] public string dirRangeIconSystem = "PrefabsAndScripts/RangeIconSystem/";
+    [System.NonSerialized] public string dirAnimations = "Animations/";
+    [System.NonSerialized] public string dirBackgrounds = "BackgroundsAndTiles/";
+    [System.NonSerialized] public string dirFonts = "Fonts/";
+    [System.NonSerialized] public string dirMaterials = "Materials/";
+	[System.NonSerialized] public string dirPhysicsMaterials = "PhysicsMaterials/";
+	[System.NonSerialized] public string dirPrefabs = "PrefabsAndScripts/";
+    [System.NonSerialized] public string dirPalettes = "Palettes/";
+    [System.NonSerialized] public string dirSpawners = "PrefabsAndScripts/Spawners/";
+    [System.NonSerialized] public string dirRenderer = "Renderer/";
+	[System.NonSerialized] public string dirScenes = "Scenes/";
+	[System.NonSerialized] public string dirSprites = "Sprites/";
+    [System.NonSerialized] public string dirImages = "Sprites/Images/";
+    [System.NonSerialized] public string dirIcons = "Sprites/Icons/";
+	[System.NonSerialized] public string dirParticleSystems = "PrefabsAndScripts/Effects/";
+	[System.NonSerialized] public string dirBlubberSprites = "Sprites/Characters/Blubber/";
+	[System.NonSerialized] public string dirCharacterDress = "Sprites/Dress/";
+	[System.NonSerialized] public string dirDialogSystem = "PrefabsAndScripts/MenusAndDialogs/Dialog/";
+	[System.NonSerialized] public string dirRangeIconSystem = "PrefabsAndScripts/RangeIconSystem/";
 	
 
     // Start is called before the first frame update

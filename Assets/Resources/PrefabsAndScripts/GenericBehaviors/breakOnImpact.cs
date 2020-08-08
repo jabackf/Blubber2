@@ -9,6 +9,9 @@ public class breakOnImpact : MonoBehaviour
     public bool destroyOnBreak = true;
     public GameObject particles;
     public Color particleColor=Color.white;
+    public string sendMessageToOther = "";
+
+    private GameObject other=null; //Stores the most recent other gameobject from onCollisionEnter
 
     void OnCollisionEnter2D(Collision2D other)
     {
@@ -16,6 +19,7 @@ public class breakOnImpact : MonoBehaviour
         {
             if (other.relativeVelocity.magnitude > maxMagnitude)
             {
+                this.other = other.gameObject;
                 Break();
             }
         }
@@ -30,6 +34,8 @@ public class breakOnImpact : MonoBehaviour
             var main = p.GetComponent<ParticleSystem>().main;
             main.startColor = particleColor;
         }
+
+        if (other!=null && sendMessageToOther != "") other.SendMessage(sendMessageToOther, SendMessageOptions.DontRequireReceiver);
 
         if (destroyOnBreak)
             Destroy(gameObject);

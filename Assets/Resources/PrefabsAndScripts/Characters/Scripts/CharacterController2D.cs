@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using System;
 
 public class CharacterController2D : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private float maxVelocity = -1;                              // The maximum velocity that the character is limited to. -1 = none.
     [SerializeField] private bool m_AirControl = true;                          // Whether or not a player can steer while jumping;
     [SerializeField] private bool canUseDropDownPlatforms = true;              // Whether or not a player can steer while jumping;
-    [SerializeField] private bool inWater = false;              
+    [SerializeField] private bool inWater = false;
     [SerializeField] private float waterMultiplier = 0.7f;                   //This value is multiplied to move speed when the player is in water
 
 
@@ -55,8 +56,8 @@ public class CharacterController2D : MonoBehaviour
     [Space]
     [Header("Other")]
     [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
-    [SerializeField] private Transform m_GroundCheck;							// A position marking where to check if the player is grounded.
-	[SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings. Also used to test for ladders.
+    [SerializeField] private Transform m_GroundCheck;                           // A position marking where to check if the player is grounded.
+    [SerializeField] private Transform m_CeilingCheck;                          // A position marking where to check for ceilings. Also used to test for ladders.
     [SerializeField] private Transform m_SideCheckL;                            // A position marking where to check if the player is grounded.
     [SerializeField] private Transform m_SideCheckR;                            // A position marking where to check for ceilings
     [SerializeField] private Collider2D m_rangeColliderL;                       // A position marking where to check if the player is grounded.
@@ -65,27 +66,27 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Transform m_DialogBottom;                          // The bottom position that the dialot box will point to
 
 
-    public Transform getDialogTop() { return m_DialogTop;  }
+    public Transform getDialogTop() { return m_DialogTop; }
     public Transform getDialogBottom() { return m_DialogBottom; }
 
-    private enum flipType { none, spriteRenderer, scale}
+    private enum flipType { none, spriteRenderer, scale }
     [SerializeField] private flipType spriteFlipMethod = flipType.scale;  // The method used for flipping the sprite when the character turns around. NOTE: Sprite renderer will also flip sprites of child objects       
 
     const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-	private bool m_Grounded;            // Whether or not the player is grounded. 
-	const float k_CeilingRadius = .1f; // Radius of the overlap circle to determine if the player can stand up. (Adjust is player is autocrouching or standing up when you don't want him to.)
+    private bool m_Grounded;            // Whether or not the player is grounded. 
+    const float k_CeilingRadius = .1f; // Radius of the overlap circle to determine if the player can stand up. (Adjust is player is autocrouching or standing up when you don't want him to.)
     const float k_SideRadius = .1f; // Radius of the overlap circle to determine if the player can stand up. (Adjust is player is autocrouching or standing up when you don't want him to.)
     private Rigidbody2D m_Rigidbody2D;
-	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
-	private Vector3 m_Velocity = Vector3.zero;
+    private bool m_FacingRight = true;  // For determining which way the player is currently facing.
+    private Vector3 m_Velocity = Vector3.zero;
     private int numJumps = 0; //Counts the number of jumps while in air. Resets when player lands. Used, for example, in double jumping.
     private GameObject currentPlatform = null; //One of the current platforms we are standing on. Null if not grounded.
-    private GameObject previousPlatform = null; 
+    private GameObject previousPlatform = null;
     private CharacterAnimation charAnim = null;
     private Vector2 platformPreviousPosition;
     private bool isPushing = false; //Set to true when the character is trying to push something while grounded
     private float pushTimer = -1; //Stores the timer for PushWait. -1 means countdown hasn't started yet.
-    private bool timerComplete=false; //Set to true when a timer has completed for pushing
+    private bool timerComplete = false; //Set to true when a timer has completed for pushing
     private bool isHolding = false; //Set to true if we're holding an object
     private pickupObject holding;     //The object we are currently (or were last) holding
     private GameObject actionObjectInRange; //This is set to the most recent gameobject using actionInRange that is colliding with this character's range colliders. Null if nothing in range.
@@ -93,7 +94,7 @@ public class CharacterController2D : MonoBehaviour
     private float initialGravityScale; //Used to store our gravity state in case we have to turn gravity off.
     private bool isClimbing = false;
     private dropDownPlatform onDropPlatformScript = null;
-    public bool isTalking=false;       //Set to true when we are in dialog. No input will be accepted.
+    public bool isTalking = false;       //Set to true when we are in dialog. No input will be accepted.
     public bool pause = false;       //Set to true when we are selecting something from a menu like a color picker or the pause menu. Basically does the same thing as isTalking, but the character isn't necessarily talking
     private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
 
@@ -109,27 +110,27 @@ public class CharacterController2D : MonoBehaviour
     private Vector3 respawnPosition;                                             //Used for tracking the respawn position. This will either be the position at scene start, position of checkpoint, or respawnOverride
     private bool isDead = false;                                                 //Set to true when the character is in the dead state
     private float respawnTimer = 0f;                                              //This is the timer that is set for respawning
-    private bool kinematicStateBeforeDeath=false;                               //Used to store and reset rb.isKinematic to it's normal state after death and respawn
+    private bool kinematicStateBeforeDeath = false;                               //Used to store and reset rb.isKinematic to it's normal state after death and respawn
     private int layerBeforeDeath;                                           //When you die, you are temporarily moved to the disableAllCollision layer. This is used to store the initial layer so you can be moved back at respawn
     [SerializeField] private float respawnLerpSpeed = 3f;                 //Speed used for lerping the character back to the respawn point. Enter -1 for instant jump
 
     [Header("Events")]
-	[Space]
+    [Space]
 
-	public UnityEvent OnLandEvent;
+    public UnityEvent OnLandEvent;
 
-	[System.Serializable]
-	public class BoolEvent : UnityEvent<bool> { }
+    [System.Serializable]
+    public class BoolEvent : UnityEvent<bool> { }
 
-	public BoolEvent OnCrouchEvent;
-	private bool m_wasCrouching = false;
+    public BoolEvent OnCrouchEvent;
+    private bool m_wasCrouching = false;
 
     private Global global;
 
     private bool heldObjectChangedScenes = false;   //Set to true when an object is taken to a new scene. Used to mark the object for destruction at next scene load when it's dropped.
 
     private void Awake()
-	{
+    {
         //We want the character to be persistent, and we only want one player
         if (gameObject.tag == "Player")
         {
@@ -143,21 +144,21 @@ public class CharacterController2D : MonoBehaviour
 
         global = GameObject.FindWithTag("global").GetComponent<Global>();
 
-		m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        m_Rigidbody2D = GetComponent<Rigidbody2D>();
         initialGravityScale = m_Rigidbody2D.gravityScale;
 
-		if (OnLandEvent == null)
-			OnLandEvent = new UnityEvent();
+        if (OnLandEvent == null)
+            OnLandEvent = new UnityEvent();
 
-		if (OnCrouchEvent == null)
-			OnCrouchEvent = new BoolEvent();
+        if (OnCrouchEvent == null)
+            OnCrouchEvent = new BoolEvent();
 
         charAnim = gameObject.GetComponent<CharacterAnimation>() as CharacterAnimation;
 
         respawnPosition = gameObject.transform.position;
 
         StartCoroutine(DelayedStart());
-		
+
     }
 
     IEnumerator DelayedStart()
@@ -167,8 +168,8 @@ public class CharacterController2D : MonoBehaviour
         if (startFlipped) Flip();
     }
 
-	private void FixedUpdate()
-	{
+    private void FixedUpdate()
+    {
         //Let's freeze if the scene is changing.
         if (global.isSceneChanging())
         {
@@ -191,7 +192,7 @@ public class CharacterController2D : MonoBehaviour
                     if (respawnLerpSpeed == -1) gameObject.transform.position = respawnPosition;
                     else gameObject.transform.position = Vector3.Lerp(transform.position, respawnPosition, Time.deltaTime * respawnLerpSpeed);
 
-                    if (Vector3.Distance(gameObject.transform.position, respawnPosition)<0.1f)
+                    if (Vector3.Distance(gameObject.transform.position, respawnPosition) < 0.1f)
                         respawnCharacter();
                 }
             }
@@ -249,7 +250,7 @@ public class CharacterController2D : MonoBehaviour
         }
     }
 
-    public void useItemAction(bool pressed, bool held, bool released, float horizontal=0, float vertical=0)
+    public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0, float vertical = 0)
     {
         if (isDead) return;
 
@@ -264,7 +265,7 @@ public class CharacterController2D : MonoBehaviour
     {
         if (isDead) return;
 
-        if (!isHolding || !canPickup || holding==null) return;
+        if (!isHolding || !canPickup || holding == null) return;
 
         holding.Aim(h, v, release, action);
 
@@ -272,8 +273,8 @@ public class CharacterController2D : MonoBehaviour
     }
 
 
-    public void Move(float move, bool crouch, bool jump, bool pickup=false, float climb=0, bool dropDown=false, bool dialog=false)
-	{
+    public void Move(float move, bool crouch, bool jump, bool pickup = false, float climb = 0, bool dropDown = false, bool dialog = false)
+    {
         if (isDead) return;
 
         bool justPickedUp = false;
@@ -286,28 +287,28 @@ public class CharacterController2D : MonoBehaviour
 
         // If crouching, check to see if the character can stand up
         if (!crouch && canCrouch)
-		{
-			// If the character has a ceiling preventing them from standing up, keep them crouching
-			if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
-			{
-				crouch = true;
+        {
+            // If the character has a ceiling preventing them from standing up, keep them crouching
+            if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
+            {
+                crouch = true;
             }
-		}
+        }
 
         //Climbing Code
         m_Rigidbody2D.gravityScale = initialGravityScale;
         if (charAnim != null) charAnim.climb = 0f;
-        if ( (climb!=0||isClimbing) && canClimb && (!isHolding||canCarryWhileClimbing) ) //We meet some conditions for climbing, so let's check for something to climb
+        if ((climb != 0 || isClimbing) && canClimb && (!isHolding || canCarryWhileClimbing)) //We meet some conditions for climbing, so let's check for something to climb
         {
             //check for climbing up and down the climb surface
             Collider2D collider = Physics2D.OverlapCircle(m_GroundCheck.position, k_GroundedRadius, m_WhatIsClimb);
-            if (collider==null) isClimbing = false;
+            if (collider == null) isClimbing = false;
             else
             {
                 isClimbing = true;
                 m_Grounded = true;
                 m_Rigidbody2D.gravityScale = 0;
-                m_Rigidbody2D.velocity = new Vector3(0,0,0);
+                m_Rigidbody2D.velocity = new Vector3(0, 0, 0);
                 numJumps = 0;
                 if (charAnim != null)
                 {
@@ -318,8 +319,8 @@ public class CharacterController2D : MonoBehaviour
                 //Vector3 climbVelocity = new Vector2(m_Rigidbody2D.velocity.x, m_ClimbSpeed);
                 // And then smoothing it out and applying it to the character
                 //m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, climbVelocity, ref m_Velocity, m_MovementSmoothing);
-                if (climb!=0)
-                    m_Rigidbody2D.MovePosition((Vector2)gameObject.transform.position + new Vector2(0,climb));
+                if (climb != 0)
+                    m_Rigidbody2D.MovePosition((Vector2)gameObject.transform.position + new Vector2(0, climb));
             }
         }
         if (charAnim != null) charAnim.isClimbing = isClimbing;
@@ -346,7 +347,8 @@ public class CharacterController2D : MonoBehaviour
                 // Disable one of the colliders when crouching
                 if (m_CrouchDisableCollider != null)
                     m_CrouchDisableCollider.enabled = false;
-            } else
+            }
+            else
             {
                 // Enable the collider when not crouching
                 if (m_CrouchDisableCollider != null)
@@ -415,7 +417,7 @@ public class CharacterController2D : MonoBehaviour
 
             // And then smoothing it out and applying it to the character
             m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
-            
+
             if (inWater)
             {
                 m_Rigidbody2D.velocity *= new Vector3(waterMultiplier, 1, 1);
@@ -426,16 +428,16 @@ public class CharacterController2D : MonoBehaviour
 
             // If the input is moving the player right and the player is facing left...
             if (move > 0 && !m_FacingRight)
-			{
-				// ... flip the player.
-				Flip();
-			}
-			// Otherwise if the input is moving the player left and the player is facing right...
-			else if (move < 0 && m_FacingRight)
-			{
-				// ... flip the player.
-				Flip();
-			}
+            {
+                // ... flip the player.
+                Flip();
+            }
+            // Otherwise if the input is moving the player left and the player is facing right...
+            else if (move < 0 && m_FacingRight)
+            {
+                // ... flip the player.
+                Flip();
+            }
 
             //Start pickup item code
             if (canPickup && !isHolding && m_Grounded && actionObjectInRange != null && pickup && (!isClimbing || !canClimb)) //We're in range of something, can pick it up, and trying to pick it up
@@ -483,16 +485,16 @@ public class CharacterController2D : MonoBehaviour
         charAnim.carryTop = false;
         charAnim.carryFront = false;
 
-        if (isHolding && charAnim!=null)
+        if (isHolding && charAnim != null)
         {
             if (holding.mCarryType == pickupObject.carryType.Top) charAnim.carryTop = true;
             if (holding.mCarryType == pickupObject.carryType.Front) charAnim.carryFront = true;
         }
 
         // If the player should jump...
-        if (jump && (!justPickedUp||!pickupWithJump||!canPickup) && (!isClimbing||!climbWithJump||!canClimb) )
-		{
-            if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded || (inWater&&infiniteWaterJump))
+        if (jump && (!justPickedUp || !pickupWithJump || !canPickup) && (!isClimbing || !climbWithJump || !canClimb))
+        {
+            if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded || (inWater && infiniteWaterJump))
             {
                 // Add a vertical force to the player.
                 m_Grounded = false;
@@ -508,7 +510,7 @@ public class CharacterController2D : MonoBehaviour
                 //Sometimes infinite jump or water jump can be exploited to lead to high speeds. This clamps the velocity down.
                 if (m_Rigidbody2D.velocity.y > m_MaxJumpVelocity) m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_MaxJumpVelocity);
             }
-		}
+        }
         inWater = false;
     }
 
@@ -520,7 +522,7 @@ public class CharacterController2D : MonoBehaviour
         if (canDie && !isCharacterDead())
         {
             bool deathTag = false;
-            foreach(string s in killTags)
+            foreach (string s in killTags)
             {
                 if (s == other.gameObject.tag) deathTag = true;
             }
@@ -617,7 +619,7 @@ public class CharacterController2D : MonoBehaviour
     }
     public bool getIsOnConveyor()
     {
-       return isOnConveyor;
+        return isOnConveyor;
     }
     public bool getCanClimb()
     {
@@ -675,9 +677,9 @@ public class CharacterController2D : MonoBehaviour
     }
 
     public void Flip()
-	{
-		// Switch the way the player is labelled as facing.
-		m_FacingRight = !m_FacingRight;
+    {
+        // Switch the way the player is labelled as facing.
+        m_FacingRight = !m_FacingRight;
         if (isHolding)
         {
             holding.SendMessage("changeFrontTransform", m_FacingRight ? m_pickupR : m_pickupL);
@@ -711,7 +713,7 @@ public class CharacterController2D : MonoBehaviour
         }
 
 
-        if (canPickup && (m_rangeColliderL!=null && m_rangeColliderR != null))
+        if (canPickup && (m_rangeColliderL != null && m_rangeColliderR != null))
         {
             m_rangeColliderR.enabled = m_FacingRight;
             m_rangeColliderL.enabled = !m_FacingRight;
@@ -782,7 +784,7 @@ public class CharacterController2D : MonoBehaviour
         }
     }
 
-   public bool isGrounded()
+    public bool isGrounded()
     {
         return m_Grounded;
     }
@@ -800,5 +802,39 @@ public class CharacterController2D : MonoBehaviour
     public Vector3 getBottomPosition()
     {
         return m_GroundCheck.position;
+    }
+
+    public bool getIsTalking()
+    {
+        return isTalking;
+    }
+
+    public bool getIsPaused()
+    {
+        return pause;
+    }
+
+    public void Say(string message, float time = 3f)
+    {
+        if (message == "") return;
+        DialogBox db = gameObject.AddComponent(typeof(DialogBox)) as DialogBox;
+        db.title = CharacterName;
+        db.text = message;
+        db.followTop = getDialogTop();
+        db.followBottom = getDialogBottom();
+        db.isAuto = true;
+        db.stayOnScreen = false;
+        db.autoSelfDestructTimer = time;
+    }
+
+    //Overrides Say by using an array of strings rather than a single string. Picks a random string out of the array to say.
+    public void Say(string[] messages, float time = 3f)
+    {
+        if (messages.Length <= 0) return;
+        int i = UnityEngine.Random.Range(0, messages.Length - 1);
+
+        Debug.Log("Saying: " + messages[i]);
+
+        Say(messages[i], time);
     }
 }

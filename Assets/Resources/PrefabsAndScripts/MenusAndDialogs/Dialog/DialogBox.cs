@@ -75,9 +75,20 @@ public class DialogBox : MonoBehaviour
 
     public Dialog dialogParent;
 
+    public float autoSelfDestructTimer = -1;
+
     void Awake()
     {
-        canvas = Instantiate(dialogCanvasPrefab);
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
+
+        if (dialogCanvasPrefab)
+            canvas = Instantiate(dialogCanvasPrefab);
+        else //Assets/Resources/PrefabsAndScripts/MenusAndDialogs/Dialog/DialogCanvas.prefab
+        {
+            Debug.Log(global.dirDialogSystem + "DialogCanvas");
+            canvas = Instantiate(Resources.Load<GameObject>(global.dirDialogSystem + "DialogCanvas"));
+        }
+
         canvasGroup = canvas.GetComponent<CanvasGroup>() as CanvasGroup;
         canvasComponent = canvas.GetComponent<Canvas>() as Canvas;
         canvas.SetActive(false); //We don't want to enable the canvas until after the firt OnGui event completes. This prevents some glitchy looking artifacts.
@@ -86,8 +97,9 @@ public class DialogBox : MonoBehaviour
         bgRect = bg.GetComponent<RectTransform>() as RectTransform;
 
         playerCam = Camera.main.GetComponent<cameraFollowPlayer>() as cameraFollowPlayer;
-        global = GameObject.FindWithTag("global").GetComponent<Global>();
 
+
+        if (autoSelfDestructTimer != -1) Invoke("closeBox", autoSelfDestructTimer);
     }
 
     // Start is called before the first frame update
@@ -131,6 +143,8 @@ public class DialogBox : MonoBehaviour
         Destroy(menuGo);
         Destroy(dBox);
         Destroy(canvas);
+
+        if (!dialogParent) Destroy(this); //The dialogBox component was added directly to the gameObject with a full dialog system (perhaps with the characterController2D.say() command)
     }
 
     //Starts fading the box out

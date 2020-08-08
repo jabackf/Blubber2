@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 140103500801170335}
   - component: {fileID: 1110821125419977147}
   - component: {fileID: 140103500801170329}
+  - component: {fileID: 4874446031572672989}
   m_Layer: 9
   m_Name: Player (1)
   m_TagString: Player
@@ -407,6 +408,33 @@ MonoBehaviour:
     type: 3}
   eiExclamationPoint: {fileID: 5449508022863895304, guid: 3bc1859d1f0052f429149980583ba307,
     type: 3}
+--- !u!114 &4874446031572672989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103500801170330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90a2b0969e7666846a3fe26de0daec52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rGross:
+    name: Gross
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
+  rMean:
+    name: Mean
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
+  rOuch:
+    name: Ouch
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
 --- !u!1 &936482574467484246
 GameObject:
   m_ObjectHideFlags: 0
