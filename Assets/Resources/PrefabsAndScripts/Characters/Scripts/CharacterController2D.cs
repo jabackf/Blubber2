@@ -69,6 +69,8 @@ public class CharacterController2D : MonoBehaviour
     public Transform getDialogTop() { return m_DialogTop; }
     public Transform getDialogBottom() { return m_DialogBottom; }
 
+    private DialogBox sayDialogBox; //This stores the current dialog box created with the Say() command
+
     private enum flipType { none, spriteRenderer, scale }
     [SerializeField] private flipType spriteFlipMethod = flipType.scale;  // The method used for flipping the sprite when the character turns around. NOTE: Sprite renderer will also flip sprites of child objects       
 
@@ -94,8 +96,8 @@ public class CharacterController2D : MonoBehaviour
     private float initialGravityScale; //Used to store our gravity state in case we have to turn gravity off.
     private bool isClimbing = false;
     private dropDownPlatform onDropPlatformScript = null;
-    public bool isTalking = false;       //Set to true when we are in dialog. No input will be accepted.
-    public bool pause = false;       //Set to true when we are selecting something from a menu like a color picker or the pause menu. Basically does the same thing as isTalking, but the character isn't necessarily talking
+    public bool isTalking = false;       //Set to true when we are in dialog. 
+    public bool pause = false;       //Set to true when we are selecting something from a menu like a color picker, in non-auto dialog, or the pause menu, ect. This freezes all input. 
     private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
 
     [Space]
@@ -457,15 +459,18 @@ public class CharacterController2D : MonoBehaviour
             //Start dialog initiation code
             if (dialog && !isHolding && m_Grounded && actionObjectInRange != null && (!isClimbing || !canClimb)) //We're in range of something that we can talk to, and are pressing the dialog button
             {
-                DialogRange d = actionObjectInRange.GetComponent<DialogRange>() as DialogRange;
-                if (d != null)
+                if (sayDialogBox == null)
                 {
-                    m_Rigidbody2D.velocity = new Vector2(0f, 0f);
-                    d.Initiate(CharacterName, gameObject, m_DialogTop, m_DialogBottom);
-                    isTalking = true;
-                    setActionObjectInRange(null);
+                    DialogRange d = actionObjectInRange.GetComponent<DialogRange>() as DialogRange;
+                    if (d != null)
+                    {
+                        m_Rigidbody2D.velocity = new Vector2(0f, 0f);
+                        d.Initiate(CharacterName, gameObject, m_DialogTop, m_DialogBottom);
+                        isTalking = true;
+                        pause = true;
+                        setActionObjectInRange(null);
+                    }
                 }
-
             }
 
             //Code for other range triggers (RangeTriggerEvent)
@@ -551,6 +556,9 @@ public class CharacterController2D : MonoBehaviour
     {
         if (isDead) return;
 
+        ClearSay();
+        StopTalking();
+
         dropObject();
         if (deathParticles)
         {
@@ -600,10 +608,12 @@ public class CharacterController2D : MonoBehaviour
     public void StopTalking()
     {
         isTalking = false;
+        pause = false;
     }
     public void StartTalking()
     {
         isTalking = true;
+        pause = true;
     }
     public void unpauseCharacter()
     {
@@ -749,6 +759,7 @@ public class CharacterController2D : MonoBehaviour
     //map = name of map we are moving to.
     public void sceneChangeStart(string map)
     {
+        ClearSay();
         //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
         if (holdingSomething())
         {
@@ -817,6 +828,7 @@ public class CharacterController2D : MonoBehaviour
     public void Say(string message, float time = 3f)
     {
         if (message == "") return;
+        ClearSay();
         DialogBox db = gameObject.AddComponent(typeof(DialogBox)) as DialogBox;
         db.title = CharacterName;
         db.text = message;
@@ -824,7 +836,21 @@ public class CharacterController2D : MonoBehaviour
         db.followBottom = getDialogBottom();
         db.isAuto = true;
         db.stayOnScreen = false;
+        db.dialogParent = null;
         db.autoSelfDestructTimer = time;
+        //db.dbOffset = new Vector2(0f, 1.7f);
+        sayDialogBox = db;
+        isTalking = true;
+        Invoke("ClearSay", time);
+    }
+
+    //This function clears the say command. It is either called when the Say command has ran it's course and the timer has ran out, or it can be called manually to get rid of a Say dialog
+    public void ClearSay()
+    {
+        if (sayDialogBox == null) return;
+        isTalking = false;
+        sayDialogBox.closeBox(); //This will initiate the process of killing the dialog box. Note: The db's autoSelfDestructTimer will do this anyway if the say timer has ran out, but we will do it implicity here as well in case we are explicitly bailing from a Say command.
+        sayDialogBox = null;
     }
 
     //Overrides Say by using an array of strings rather than a single string. Picks a random string out of the array to say.
@@ -832,8 +858,6 @@ public class CharacterController2D : MonoBehaviour
     {
         if (messages.Length <= 0) return;
         int i = UnityEngine.Random.Range(0, messages.Length - 1);
-
-        Debug.Log("Saying: " + messages[i]);
 
         Say(messages[i], time);
     }

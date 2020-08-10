@@ -291,7 +291,14 @@ public class Dialog : MonoBehaviour
         onScreen = false;
         KillBox(false);
 
-        if (timer != -1) Invoke("resume", timer);
+        if (timer != -1) Invoke("invokeResume", timer);
+    }
+
+    public void invokeResume()
+    {
+        //So you can't use Invoke("resume") because there are optional parameters. For some reason that's a no-no, even though if I'm using Invoke I don't want to pass parameters anyway.
+        //Instead I've created this invokeResume function that simple calls resume() without any parameters. Now I can call Invoke("invokeResume") and everything is just wonderful.
+        resume();
     }
 
     //Resumes an interupted dialog
@@ -329,6 +336,7 @@ public class Dialog : MonoBehaviour
 
         if (characterController != null && initiator != null)
         {
+            characterController.ClearSay();
             if (faceInitiator)
             {
                 originallyFacingRight = characterController.isFacingRight();

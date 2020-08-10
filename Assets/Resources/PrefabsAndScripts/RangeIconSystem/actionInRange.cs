@@ -14,6 +14,10 @@ public class actionInRange : MonoBehaviour
     public float iconXOffset = -0.2f;
     public float iconYOffset = 0.5f;
 
+    //The requireParentTags are a list of tags required of the rangeCollider's parent in order to trigger this range icon. Leave this list empty to not check tags at all.
+    //This is primarily used to restrict range icons to the player so, for example, if an NPC gets close to a box we don't get a pickup object icon.
+    private List<string> requireParentTags = new List<string>() { "Player" }; 
+
     private GameObject ActionIcon;
     private actionIcon iScript;
 
@@ -79,14 +83,26 @@ public class actionInRange : MonoBehaviour
     {
         if (other.gameObject.tag == "RangeCollider" && rangeActive)
         {
-            CharacterController2D cont = other.gameObject.transform.parent.GetComponent<CharacterController2D>() as CharacterController2D;
-            if (cont != null)
+            bool goodToGo = true;
+            if (requireParentTags.Count>0)
             {
-                if (!cont.isCharacterDead())
+                goodToGo = false;
+                foreach(var t in requireParentTags)
+                {
+                    if (t == other.transform.parent.gameObject.tag) goodToGo = true;
+                }
+            }
+            if (goodToGo)
+            {
+                CharacterController2D cont = other.gameObject.transform.parent.GetComponent<CharacterController2D>() as CharacterController2D;
+                if (cont != null)
+                {
+                    if (!cont.isCharacterDead())
+                        setInRange(true, other.gameObject.transform.parent.gameObject);
+                }
+                else
                     setInRange(true, other.gameObject.transform.parent.gameObject);
             }
-            else
-                setInRange(true, other.gameObject.transform.parent.gameObject);
         }
     }
     void OnTriggerExit2D(Collider2D other)

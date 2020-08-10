@@ -2572,13 +2572,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 715233493}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.003068799, z: -0, w: 0.9999953}
   m_LocalPosition: {x: 0.17707612, y: -0.33857507, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0.35200003, z: 0}
 --- !u!114 &715233496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4316,24 +4316,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startScene: testing_100_100
+  sceneChanging: 0
   dirResourceRoot: Assets/Resources/
-  dirAnimations: Animations/
-  dirBackgrounds: BackgroundsAndTiles/
-  dirFonts: Fonts/
-  dirMaterials: Materials/
-  dirPhysicsMaterials: PhysicsMaterials/
-  dirPrefabs: PrefabsAndScripts/
-  dirSpawners: PrefabsAndScripts/Spawners/
-  dirRenderer: Renderer/
-  dirScenes: Scenes/
-  dirSprites: Sprites/
-  dirImages: Sprites/Images/
-  dirIcons: Sprites/Icons/
-  dirParticleSystems: PrefabsAndScripts/Effects/
-  dirBlubberSprites: Sprites/Characters/Blubber/
-  dirCharacterDress: Sprites/Dress/
-  dirDialogSystem: PrefabsAndScripts/Dialog/
-  dirRangeIconSystem: PrefabsAndScripts/RangeIconSystem/
 --- !u!4 &1411719281
 Transform:
   m_ObjectHideFlags: 0

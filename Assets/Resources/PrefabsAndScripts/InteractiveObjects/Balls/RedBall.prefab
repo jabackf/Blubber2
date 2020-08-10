@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5943233631428061360}
   - component: {fileID: 1897389260739526287}
   - component: {fileID: 5882517447011270111}
+  - component: {fileID: 394419153}
   m_Layer: 8
   m_Name: RedBall
   m_TagString: Untagged
@@ -27,7 +28,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5670465454136827815}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -151,6 +152,14 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  releasePosition: 0
+  hasHeldSprite: 0
+  heldSprite: {fileID: 0}
+  unheldSprite: {fileID: 0}
+  hasFacingDirections: 0
+  sideSprite: {fileID: 0}
+  frontSprite: {fileID: 0}
+  backSprite: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
@@ -186,3 +195,24 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &394419153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5670465454136827815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ff2142b3bea5664d9f5536d9524cf7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mask:
+    serializedVersion: 2
+    m_Bits: 4355
+  maxMagnitude: 7
+  destroyOnBreak: 0
+  particles: {fileID: 0}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
+  sendMessageToOther: Ouch
+  tellOtherAboutThrower: 1

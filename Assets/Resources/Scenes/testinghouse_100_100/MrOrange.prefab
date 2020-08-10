@@ -152,55 +152,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 843082080891345096}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &739300399669081684
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 739300399669081691}
-  - component: {fileID: 739300399669081690}
-  m_Layer: 0
-  m_Name: dialogRange
-  m_TagString: RangeCollider
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &739300399669081691
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 739300399669081684}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.06, y: 0.17, z: 0}
-  m_LocalScale: {x: 1.4559, y: 1.4559, z: 1.4559}
-  m_Children: []
-  m_Father: {fileID: 843082080891345096}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &739300399669081690
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 739300399669081684}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0374583, y: 0.22475201}
-  serializedVersion: 2
-  m_Radius: 0.28773344
 --- !u!1 &843082082434138388
 GameObject:
   m_ObjectHideFlags: 0
@@ -245,7 +198,6 @@ Transform:
   - {fileID: 6002785735485148657}
   - {fileID: 3419744232645459697}
   - {fileID: 4428854082290972751}
-  - {fileID: 739300399669081691}
   - {fileID: 739300399233597887}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2327,6 +2279,7 @@ MonoBehaviour:
   m_DialogBottom: {fileID: 5133176338691529851}
   spriteFlipMethod: 1
   isTalking: 0
+  pause: 0
   canDie: 1
   respawn: 1
   killTags:

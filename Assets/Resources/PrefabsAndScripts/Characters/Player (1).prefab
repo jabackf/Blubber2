@@ -421,20 +421,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rGross:
+    isTalkingResponse: 2
     name: Gross
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiator: {fileID: 0}
     sayStrings: []
     Callbacks: []
     sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
   rMean:
+    isTalkingResponse: 2
     name: Mean
-    sayStrings: []
+    sayTime: 6
+    delayedMessagesTime: 3
+    initiatorMessagesTime: 1
+    initiator: {fileID: 0}
+    sayStrings:
+    - Oops! Did I do that?! My bad.
     Callbacks: []
-    sendMessages: []
-  rOuch:
-    name: Ouch
-    sayStrings: []
-    Callbacks: []
-    sendMessages: []
+    sendMessages:
+    - Angry
+    delayedMessages:
+    - Normal
+    initiatorMessages: []
 --- !u!1 &936482574467484246
 GameObject:
   m_ObjectHideFlags: 0

@@ -230,3 +230,5 @@ MonoBehaviour:
   particles: {fileID: 1794340304444153981, guid: a42b8f3828ccc804a9e9cfbfbd15de91,
     type: 3}
   particleColor: {r: 0.9150943, g: 0.90753126, b: 0.4704966, a: 1}
+  sendMessageToOther: Gross
+  tellOtherAboutThrower: 1

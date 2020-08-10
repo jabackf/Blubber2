@@ -33,12 +33,15 @@ public class lineArrow : MonoBehaviour
     private Transform followTransform;
     private LineRenderer lr; //Line renderer
 
+    Global global;
+
     void Awake()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
         lr = gameObject.AddComponent<LineRenderer>() as LineRenderer;
         gameObject.AddComponent<freezeZRotation>();
         lr.sortingLayerName = sortingLayerName;
-        lr.material = Resources.Load("Materials/Flat", typeof(Material)) as Material;
+        lr.material = Resources.Load(global.dirMaterials+"Flat", typeof(Material)) as Material;
         lr.useWorldSpace = false;
         lr.SetVertexCount(2);
         lr.startWidth = startWidth;
@@ -59,7 +62,9 @@ public class lineArrow : MonoBehaviour
         lr.endColor = endColor;
 
         SpriteRenderer renderer = arrowHeadGO.AddComponent<SpriteRenderer>();
+        renderer.material = Resources.Load(global.dirMaterials + "Sprite-Lit-Default", typeof(Material)) as Material;
         renderer.sprite = Resources.Load(GameObject.FindWithTag("global").GetComponent<Global>().dirIcons + (reticleMode ? reticleResource : spriteResource), typeof(Sprite)) as Sprite;
+        renderer.material = Resources.Load(global.dirMaterials + "Sprite-Lit-Default", typeof(Material)) as Material;
         renderer.sortingLayerName = sortingLayerName;
         renderer.sortingOrder = 1;
 

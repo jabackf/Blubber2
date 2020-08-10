@@ -27,6 +27,8 @@ public class pickupObject : actionInRange
     float releaseTimer = 0; //Timer. When set, the object will be released after it hits zero. This fixes a bug with attempting to pickup an object when something, like a ceiling, is in the way
     float releaseWaitTime = 0.015f; //The default time that the timer above will be set to.
     private bool undroppable = false; //Used to prevent the item from being dropped. Doesn't prevent an item from being thrown. This should be set using makeUndroppable!
+    private GameObject recentlyThrownBy; //This gets set to the most recent holder for a few seconds after being thrown. It then gets set to null. Can be useful to tell which character threw it.
+    private float recentlyThrownByTimer = 3f; //The amount of time before the recentlyThrownBy object gets cleared to null
 
     private SpriteRenderer renderer;
 
@@ -383,9 +385,23 @@ public class pickupObject : actionInRange
 
     public void throwItem()
     {
+        recentlyThrownBy = holder;
+        Invoke("ClearRecentlyThrownBy", recentlyThrownByTimer);
+
         releaseFromHolder();
         float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
         rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle))*throwForce*throwArc.length);
+    }
+
+    //Clears the recentlyThrownBy object
+    private void ClearRecentlyThrownBy()
+    {
+        recentlyThrownBy = null;
+    }
+    public GameObject getRecentlyThrownBy()
+    {
+        
+        return recentlyThrownBy;
     }
 
     public void releaseFromHolder()

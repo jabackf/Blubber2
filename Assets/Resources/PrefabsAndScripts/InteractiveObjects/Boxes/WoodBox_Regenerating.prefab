@@ -16,8 +16,9 @@ GameObject:
   - component: {fileID: 192027970074458189}
   - component: {fileID: 489994091}
   - component: {fileID: 44958962}
+  - component: {fileID: 4954285296686308807}
   m_Layer: 8
-  m_Name: WoodBox
+  m_Name: WoodBox_Regenerating
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,6 +178,10 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 0
+  releasePosition: 0
+  hasHeldSprite: 0
+  heldSprite: {fileID: 0}
+  unheldSprite: {fileID: 0}
   hasFacingDirections: 0
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
@@ -244,7 +249,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
     type: 3}
-  prefabRef: {fileID: 11400000, guid: 323a63de5af6486498cbc3ffd27598be, type: 2}
   time: 1
   spawnAtStartTransform: 1
   respawnTransform: {fileID: 0}
+--- !u!114 &4954285296686308807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651731028718573460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ff2142b3bea5664d9f5536d9524cf7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mask:
+    serializedVersion: 2
+    m_Bits: 4355
+  maxMagnitude: 7
+  destroyOnBreak: 0
+  particles: {fileID: 0}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
+  sendMessageToOther: Ouch
+  tellOtherAboutThrower: 1

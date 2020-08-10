@@ -85,7 +85,6 @@ public class DialogBox : MonoBehaviour
             canvas = Instantiate(dialogCanvasPrefab);
         else //Assets/Resources/PrefabsAndScripts/MenusAndDialogs/Dialog/DialogCanvas.prefab
         {
-            Debug.Log(global.dirDialogSystem + "DialogCanvas");
             canvas = Instantiate(Resources.Load<GameObject>(global.dirDialogSystem + "DialogCanvas"));
         }
 
@@ -99,7 +98,6 @@ public class DialogBox : MonoBehaviour
         playerCam = Camera.main.GetComponent<cameraFollowPlayer>() as cameraFollowPlayer;
 
 
-        if (autoSelfDestructTimer != -1) Invoke("closeBox", autoSelfDestructTimer);
     }
 
     // Start is called before the first frame update
@@ -131,6 +129,8 @@ public class DialogBox : MonoBehaviour
         {
             GenerateMenu();
         }
+
+        if (autoSelfDestructTimer != -1) Invoke("closeBox", autoSelfDestructTimer);
 
     }
 
@@ -339,6 +339,10 @@ public class DialogBox : MonoBehaviour
                         dialogParent.KillBox();
                     }
                 }
+                else
+                {
+                    Kill();
+                }
             }
         }
 
@@ -390,7 +394,7 @@ public class DialogBox : MonoBehaviour
         }
 
         //Move the box under the character if it would fit better on the screen, or if we've only specified a bottom transform
-        if (followBottom != null && (pos.y > (topViewEdge - halfH) || followTop == null))
+        if (followBottom != null && ( pos.y > (topViewEdge - halfH)  || followTop == null))
         {
             pos = Camera.main.WorldToScreenPoint(new Vector3(followBottom.position.x + dbOffset.x * canvasComponent.scaleFactor, followBottom.position.y - dbOffset.y * canvasComponent.scaleFactor, 0));
             pos.y -= halfH;

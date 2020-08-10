@@ -184,53 +184,6 @@ CircleCollider2D:
   m_Offset: {x: -0.0374583, y: 0.22475201}
   serializedVersion: 2
   m_Radius: 0.28773344
---- !u!1 &4089469755253323443
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4089469755253323440}
-  - component: {fileID: 4089469755253323441}
-  m_Layer: 0
-  m_Name: dialogRange
-  m_TagString: RangeCollider
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4089469755253323440
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4089469755253323443}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.01, y: 0.15, z: 0}
-  m_LocalScale: {x: 1, y: 1.5875, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4121084441267068740}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &4089469755253323441
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4089469755253323443}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0374583, y: 0.22475201}
-  serializedVersion: 2
-  m_Radius: 0.28773344
 --- !u!1 &4121084442974455448
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,7 +227,6 @@ Transform:
   - {fileID: 7047041644960778877}
   - {fileID: 2159315056127359357}
   - {fileID: 1149615866651328451}
-  - {fileID: 4089469755253323440}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -490,6 +442,7 @@ MonoBehaviour:
   m_DialogBottom: {fileID: 8484366591024978935}
   spriteFlipMethod: 1
   isTalking: 0
+  pause: 0
   canDie: 1
   respawn: 1
   killTags:
