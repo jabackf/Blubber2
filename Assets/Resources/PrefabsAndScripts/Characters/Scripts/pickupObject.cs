@@ -30,6 +30,7 @@ public class pickupObject : actionInRange
     private GameObject recentlyThrownBy; //This gets set to the most recent holder for a few seconds after being thrown. It then gets set to null. Can be useful to tell which character threw it.
     private float recentlyThrownByTimer = 3f; //The amount of time before the recentlyThrownBy object gets cleared to null
 
+    private sceneSettings sceneSettingsGO;
     private SpriteRenderer renderer;
 
     private Vector3 refVelocity = new Vector3(0, 0, 0);
@@ -57,6 +58,7 @@ public class pickupObject : actionInRange
     public bool hasAction = false;
     public bool hasActionAim = false;     //If set to true, an aiming reticle will be displayed when the useAction button is held
     public bool rotateWithAim = true;   //If set to true and hasActionAim is true, then the gameObject will be rotated with the aim reticle
+
     private GameObject actionAimObj;
     public lineArrow actionAimArc;
     public string actionPressedSendMessage = "";
@@ -65,6 +67,12 @@ public class pickupObject : actionInRange
     public GameObject actionHeldMessageReceiver;
     public string actionReleasedSendMessage = "";
     public GameObject actionReleasedMessageReceiver;
+
+    //This is used internally. It is set to true when we send an action keypress to this script, and false when we send an action key release.
+    //One of the main reasons it is useful to track this is to tell when this particular module has recieved BOTH the press and release signals from inside the release behavior code.
+    //For example, if you pass player control to a projectile on key release, then use the same keypress to send control back to the player, the next time you depress the key this module will get a key release without first having recieved a key press.
+    //If actionKeyPressed is false in the key release part of the code, then we know we did not recieve a key press signal and we can use that information as needed, for example, the prevent spawning another projectile immediately.
+    private bool actionKeyPressed = false;
 
     [SerializeField]
     public UnityEvent ActionPressedCallback;  //Called when the object gets a keypress signal from the use object input
@@ -77,6 +85,21 @@ public class pickupObject : actionInRange
     [SerializeField]
     public UnityEvent OnReleaseCallback;  //Called when the object is dropped or thrown
 
+    [Space]
+    [Header("Create Projectiles")]
+    public GameObject spawnProjectilePrefab = null; //The projectile to spawn. If null, nothing will be spawned.
+    public GameObject spawnProjectileParticles = null;
+    public float spawnProjectileRate = 0.5f; //The rate the projectile will be spawned if spawnProjectileBehavior is set to spawnWhileHeld
+    public float spawnProjectileDistance = 0.8f; //The distance from this gameObject to create the projectile (along the angle of rotation)
+    public bool playerControlledProjectile = false; //Set to true if the player controls the projectile (like a guided missile). This sends a "initiatePlayerControl(GameObject character)" message to the projectile after it's created, so the projectile should implement this function to take control of input. 
+    public bool setProjectileRotation = true; //If true, and if we have checked hasActionAim, then the projectile's transform.rotation will be set to the angle of our aim
+    public enum spawnProjectileBehaviors
+    {
+        spawnOnPress, //Spawns on action key press
+        spawnOnRelease, //Spawns on action key release
+        spawnWhileHeld //Repeatedly spawns at spawnProjectileRate as long as the key is held down. Note: You cannot do playerControlledProjectile if you select this behavior.
+    }
+    public spawnProjectileBehaviors spawnProjectileBehavior;
 
     //This is set to some number greater than one upon picking an item up. It then counts down and hits zero a couple frames after picking it up.
     //This was added as a hacky fix for a glitch I was having with the action aim arrows not pointing the proper direction after first picking them up.
@@ -87,6 +110,7 @@ public class pickupObject : actionInRange
     {
         base.Start();
         rb = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
+        sceneSettingsGO = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
         renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
         initialMass = rb.mass;
         createThrowArrow();
@@ -193,6 +217,31 @@ public class pickupObject : actionInRange
         }
     }
 
+    //This function spawns a projectile based on all of the projectile settings. Typically called from useItemAction
+    public void spawnProjectile()
+    {
+        if (!spawnProjectilePrefab) return;
+        Vector3 spawnPos;
+        if (hasActionAim) spawnPos = gameObject.transform.position + actionAimArc.getPointAlongAngle(spawnProjectileDistance);
+        else
+        {
+            spawnPos = gameObject.transform.position + (Vector3)offset;
+            spawnPos.x += spawnProjectileDistance * (flippedX ? -1 : 1);
+        }
+        GameObject projectile = Instantiate(spawnProjectilePrefab, spawnPos, Quaternion.identity);
+        if (sceneSettingsGO != null) sceneSettingsGO.objectCreated(projectile);
+        if (spawnProjectileParticles) Instantiate(spawnProjectileParticles, spawnPos, Quaternion.identity);
+        if (setProjectileRotation && hasActionAim)
+        {
+            projectile.transform.eulerAngles = new Vector3(0f, 0f, actionAimArc.angle);
+        }
+
+        if (playerControlledProjectile && spawnProjectileBehavior != spawnProjectileBehaviors.spawnWhileHeld && holder!=null)
+        {
+            projectile.SendMessage("initiatePlayerControl", holder, SendMessageOptions.DontRequireReceiver);
+        }
+    }
+
     //First three variables indicate the state of the action button (pressed, held, released). Last two variables are for aiming the useAction reticle (if there is one)
     public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0f, float vertical = 0f)
     {
@@ -200,16 +249,19 @@ public class pickupObject : actionInRange
 
         if (pressed)
         {
+            actionKeyPressed = true;
             if (ActionPressedCallback != null) ActionPressedCallback.Invoke();
             if (actionPressedMessageReceiver != null && actionPressedSendMessage != "")
             {
                 actionPressedMessageReceiver.SendMessage(actionPressedSendMessage);
             }
 
-
+            if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnOnPress)
+                spawnProjectile();
         }
         else if (released)
         {
+            
             if (ActionReleasedCallback != null) ActionReleasedCallback.Invoke();
             if (actionReleasedMessageReceiver != null && actionReleasedSendMessage != "")
             {
@@ -217,6 +269,17 @@ public class pickupObject : actionInRange
             }
 
             if (hasActionAim) actionAimArc.hide();
+
+            if (actionKeyPressed) //Make sure this module recieved a keyPress command. If we didn't, then that means the key was pressed while control was passed to some other object (like a projectile) and we don't want to respond to this key release by making another projectile.
+            {
+                if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnOnRelease)
+                    spawnProjectile();
+            }
+
+            actionKeyPressed = false;
+
+            if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnWhileHeld)
+                CancelInvoke("spawnProjectile");
         }
         else if (held)
         {
@@ -227,6 +290,11 @@ public class pickupObject : actionInRange
             }
 
             if (hasActionAim) actionAim(horizontal, vertical);
+
+            if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnWhileHeld && actionKeyPressed)
+            {
+                InvokeRepeating("spawnProjectile", 0.1f, spawnProjectileRate);
+            }
         }
     }
 

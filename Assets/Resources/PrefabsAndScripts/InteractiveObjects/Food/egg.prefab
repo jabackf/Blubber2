@@ -142,7 +142,7 @@ MonoBehaviour:
   iconXOffset: -0.2
   iconYOffset: 0.4
   offset: {x: 0, y: 0.5}
-  disableCollider: 0
+  disableCollider: 1
   breakForce: 520
   breakTorque: 520
   throwForce: 160

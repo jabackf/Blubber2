@@ -15,11 +15,23 @@ public class React : MonoBehaviour
             react, dontReact, interupt
         }
 
+        //If we turn to face the initator, then we need to know what to do after the reaction is done. Should we turn back?
+        public enum facingReturnBehaviors
+        {
+            priorToReact, //Get the facing direction immediately before the reaction and return to this direction. Note that if you initate a reaction, turn the character, then initiate another reaction while the character is still turned then the character towards initator direction will be the new previous direction. If you have a character that is generally intended to face a certain direction, it's better to use the next option
+            useStartFacing, //Return to the facing direction that the character was initially in at the start of the scene. This tends to be better for NPCs that generally tend to face in a given direction, perhaps because they are in auto dialog with another npc.
+            none //Do nothing. Just keep on facing in the direction that the initiator was in at the start of the reaction.
+        }
+
+
         public isTalkingResponses isTalkingResponse = isTalkingResponses.interupt;
 
         public string name;
         public bool faceInitiator = true; //Requires a CharacterController2D on this object. It also requires an initiator be passed with the reaction. This makes the character turn to face the initiator when the reaction is triggered. Character turns back when the reaction is complete.
+        public facingReturnBehaviors facingReturnBehavior = facingReturnBehaviors.useStartFacing;
         [HideInInspector] public bool previousIsFacingRight; //The facing direction that the character was pointing before faceInitiator was triggered. Used to reverse the faceInitiator action.
+
+
         public float sayTime = 6f;
         public float delayedMessagesTime = 7f;
         public float initiatorMessagesTime = 1f;
@@ -28,12 +40,12 @@ public class React : MonoBehaviour
         //An initiator is an object that ultimately caused us to recieve a command. If a player throws a turd and the turd hits us in the face and sends us a Gross() command then the turd can also send us the initiator (the thrower). We can then send a Mean() message to the initiator.
         [HideInInspector] public GameObject initiator; //Stores the most recently detected initiator. This gets cleared after initiatorMessages are sent.
 
-        public List<string> sayStrings;
-        public List<UnityEvent> Callbacks;
-        public List<string> sendMessages;
-        public List<string> delayedMessages; //Like send messages, but these are delayed by delayedMessagesTime amount. E.g., you could send Angry at the start then Normal as a delay
-        public List<string> initiatorMessages; //Send messages to the initiator of the object (if this object has a pickupObject.recentlyThrownBy). This can be set to a delay specified by initiatorMessagesTime
-        public List<string> initiatorSay; //Send messages to the initiator of the object (if this object has a pickupObject.recentlyThrownBy). This can be set to a delay specified by initiatorMessagesTime
+        public List<string> sayStrings = new List<string>();
+        public List<UnityEvent> Callbacks = new List<UnityEvent>();
+        public List<string> sendMessages = new List<string>();
+        public List<string> delayedMessages = new List<string>(); //Like send messages, but these are delayed by delayedMessagesTime amount. E.g., you could send Angry at the start then Normal as a delay
+        public List<string> initiatorMessages = new List<string>(); //Send messages to the initiator of the object (if this object has a pickupObject.recentlyThrownBy). This can be set to a delay specified by initiatorMessagesTime
+        public List<string> initiatorSay = new List<string>(); //Send messages to the initiator of the object (if this object has a pickupObject.recentlyThrownBy). This can be set to a delay specified by initiatorMessagesTime
 
 
         //Store all of the defaults that were initially specified when the character was configured in the editor.
@@ -126,16 +138,17 @@ public class React : MonoBehaviour
 
 
     CharacterController2D cont;
+    [HideInInspector] public BlubberAnimation blubberAnim;
 
     public void Start()
     {
         cont = GetComponent<CharacterController2D>();
+        blubberAnim = GetComponent<BlubberAnimation>();
     }
 
     public void execute(reaction r)
     {
 
-        Debug.Log("Recieved " + r.name);
 
         if (cont)
         {
@@ -152,8 +165,9 @@ public class React : MonoBehaviour
 
         preExecute(r);
 
-        if (cont)
-            cont.Say(r.sayStrings.ToArray(), r.sayTime) ;
+        if (cont && r.sayStrings.Count>0)
+            cont.Say(r.sayStrings.ToArray(), r.sayTime);
+
         foreach (var c in r.Callbacks) c.Invoke();
         foreach (var m in r.sendMessages) gameObject.SendMessage(m, SendMessageOptions.DontRequireReceiver);
 
@@ -184,8 +198,16 @@ public class React : MonoBehaviour
     IEnumerator returnFacingDirection(reaction r)
     {
         yield return new WaitForSeconds(r.getFullReactionTime()+1);
-        if (r.previousIsFacingRight) cont.FaceRight();
-        else cont.FaceLeft();
+
+        if (r.facingReturnBehavior == reaction.facingReturnBehaviors.priorToReact)
+        {
+            if (r.previousIsFacingRight) cont.FaceRight();
+            else cont.FaceLeft();
+        }
+        if (r.facingReturnBehavior == reaction.facingReturnBehaviors.useStartFacing)
+        {
+            cont.faceInitialDirection();
+        }
     }
 
     IEnumerator executeDelayedMessages(reaction r)
@@ -205,11 +227,10 @@ public class React : MonoBehaviour
     IEnumerator executeInitiatorSay(reaction r)
     {
         yield return new WaitForSeconds(r.initiatorSayDelay);
-        Debug.Log("init say " + r.initiator);
+
         if (r.initiator != null)
         {
             CharacterController2D icont = r.initiator.GetComponent<CharacterController2D>();
-            Debug.Log("icont " + icont);
             if (icont)
                 icont.Say(r.initiatorSay.ToArray(), r.sayTime);
         }

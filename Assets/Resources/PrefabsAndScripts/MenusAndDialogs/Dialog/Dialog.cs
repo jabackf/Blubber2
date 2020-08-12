@@ -41,7 +41,7 @@ public class Dialog : MonoBehaviour
                                                                                     //pause = pause stream until it re-enters screen, restart = stop stream and restart when it re-enters stream, continueOffScreen = keep playing conversation and allow it to go off screen (basically just set dbox.stayOnScreen to false), continueOnEdge = show stream on the edge of screen (basically doing nothing in code and leaving default settings)
 
     public enum type { Straightshot, Group, Random, AutoRandom, AutoStraightshot, AutoStraightshotLoop, AutoGroup, AutoGroupLoop };
-    public bool outOfView = false;
+    [HideInInspector]public bool outOfView = false;
     public type myType = type.Straightshot;
     public offScreenBehaviors offScreenBehavior = offScreenBehaviors.pause; //See offScreenBehaviors enum
     public Transform conversationCenterPoint; //This is the "center point" if the conversation, used primarily for determining if the character are on screen. If null, the center point will be assumed to be the gameObject.transform that this script is attached to
@@ -50,6 +50,7 @@ public class Dialog : MonoBehaviour
     public bool faceInitiator = true; //Requires characterController2D! If true, then character this dialog is attached to will face the initiator at start of any conversation with initiator. Character then turns back to original position at the end of conversation stream.
     private bool originallyFacingRight = false; //Stores direction the character was originally facing before turning to initiator
     private CharacterController2D characterController = null;
+    public bool autoInitiateAtStart = true; //If this is an auto type and autoInitiateAtStart = true, then the dialog will initiate at the start of this object
 
     private int currentGroup = 0;   //This stores the current group we're playing (only applies to types that use groups)
     public int startGroup = 0;      //This can be used in the inspector to set the currentGroup in the Start() function
@@ -169,7 +170,7 @@ public class Dialog : MonoBehaviour
         if (myType == type.AutoGroup || myType == type.AutoGroupLoop || myType == type.AutoRandom || myType == type.AutoStraightshot || myType == type.AutoStraightshotLoop)
         {
             isAutoType = true;
-            Initiate();
+            if (autoInitiateAtStart) Initiate();
         }
     }
 
@@ -301,6 +302,11 @@ public class Dialog : MonoBehaviour
         resume();
     }
 
+    public void resumeAfterTime(float timer)
+    {
+        Invoke("invokeResume", timer);
+    }
+
     //Resumes an interupted dialog
     public void resume(bool attachInteruptString = true, bool restart=false)
     {
@@ -321,6 +327,11 @@ public class Dialog : MonoBehaviour
 
             }
         }
+    }
+
+    public void InitiateNoParameters()
+    {
+        Initiate();
     }
 
     //Initiates a dialog sequence
@@ -526,6 +537,11 @@ public class Dialog : MonoBehaviour
         {
             LoadBox(); //Repeat the message with new text appended
         }
+    }
+
+    public void EndConversationAfterTime(float timer)
+    {
+        Invoke("EndConversation", timer);
     }
 
     public void EndConversation()

@@ -161,6 +161,13 @@ public class lineArrow : MonoBehaviour
         }
     }
 
+    //Returns a point that is a specified distance from the line's base along the angle. returned point is in local space.
+    public Vector3 getPointAlongAngle(float distance)
+    {
+        float radAngle = (-angle + 90) * Mathf.Deg2Rad;
+        return new Vector3(Mathf.Sin(radAngle) * distance, Mathf.Cos(radAngle) * distance, 0f) + new Vector3(offset.x, offset.y, 0);
+    }
+
     public void calculate()
     {
         

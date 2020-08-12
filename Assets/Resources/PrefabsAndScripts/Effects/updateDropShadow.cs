@@ -16,6 +16,9 @@ public class updateDropShadow : MonoBehaviour
     void Start()
     {
         renderer = GetComponent<SpriteRenderer>() as SpriteRenderer;
+        renderer.sprite = objSpriteRenderer.sprite;
+        renderer.drawMode = objSpriteRenderer.drawMode;
+        renderer.tileMode = objSpriteRenderer.tileMode;
     }
 
 
@@ -33,6 +36,7 @@ public class updateDropShadow : MonoBehaviour
             renderer.flipX = objSpriteRenderer.flipX;
             renderer.flipY = objSpriteRenderer.flipY;
             renderer.sprite = objSpriteRenderer.sprite;
+            renderer.size = objSpriteRenderer.size;
 
             //update the position and rotation of the sprite's shadow with moving sprite
 

@@ -15,7 +15,7 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private bool canUseDropDownPlatforms = true;              // Whether or not a player can steer while jumping;
     [SerializeField] private bool inWater = false;
     [SerializeField] private float waterMultiplier = 0.7f;                   //This value is multiplied to move speed when the player is in water
-
+    private bool initialIsFacingRight;                                      //This is set to m_isFacingRight at the start of the object and retains this value. Can be retrieved using isInitiallyFacingRight(). Can be useful for knowing what direction an NPC was initially configured to face in the editor 
 
     [Space]
     [Header("Jumping")]
@@ -158,6 +158,8 @@ public class CharacterController2D : MonoBehaviour
         charAnim = gameObject.GetComponent<CharacterAnimation>() as CharacterAnimation;
 
         respawnPosition = gameObject.transform.position;
+
+        initialIsFacingRight = (startFlipped ? false : true);
 
         StartCoroutine(DelayedStart());
 
@@ -733,6 +735,17 @@ public class CharacterController2D : MonoBehaviour
     public bool isFacingRight()
     {
         return m_FacingRight;
+    }
+    public bool isInitiallyFacingRight()
+    {
+        return initialIsFacingRight;
+    }
+
+    //Call to point the character back in the direction he/she was configured to face at the start of the scene
+    public void faceInitialDirection()
+    {
+        if (isInitiallyFacingRight()) FaceRight();
+        else FaceLeft();
     }
 
     //Called from pickupObject script when holding item is released (dropped, thrown, added to inventory, etc)

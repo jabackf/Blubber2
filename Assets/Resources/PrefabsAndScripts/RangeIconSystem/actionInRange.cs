@@ -127,6 +127,7 @@ public class actionInRange : MonoBehaviour
     }
     public void setInRange(bool inRange, GameObject go)
     {
+
         iScript.setVisible(inRange);
         range = inRange;
 

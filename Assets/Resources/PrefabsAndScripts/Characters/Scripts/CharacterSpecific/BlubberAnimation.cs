@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Extensions;
 
 public class BlubberAnimation : CharacterAnimation
 {
@@ -78,6 +79,18 @@ public class BlubberAnimation : CharacterAnimation
 
     }
 
+    //This function look at various character settings (dresses, color, ect) and looks for specific combinations. It returns a string that represents the first combination found
+    //For example, it you're wearing a Santa costume then it it returns "Santa"
+    public string getCharacterConfigurationString()
+    {
+        foreach (var d in dressList)
+        {
+            if (d.name.CaseInsensitiveContains("chef")) return "Chef";
+            if (d.name.CaseInsensitiveContains("santa")) return "Santa";
+        }
+        return "None";
+    }
+
     public override void SetupCharacter()
     {
         blinkTimer = UnityEngine.Random.Range(blinkTimerMin, blinkTimerMax);
@@ -131,6 +144,8 @@ public class BlubberAnimation : CharacterAnimation
                 bii.jump = true;
         }
     }
+
+
 
     //Change the color of the blubber character
     public void changeColor(Color c)
