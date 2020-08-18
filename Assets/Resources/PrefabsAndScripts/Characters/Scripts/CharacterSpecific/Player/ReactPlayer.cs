@@ -6,6 +6,7 @@ public class ReactPlayer : React
 {
     public override void preExecute(reaction r)
     {
+
         if (!blubberAnim) return;
 
         string character = blubberAnim.getCharacterConfigurationString();
@@ -17,6 +18,8 @@ public class ReactPlayer : React
         {
             if (character == "Chef")
                 r.sayStrings = new List<string>() { "Revenge is a dish best served cold.", "Bon apetit, you jerk!" };
+            if (character == "Link")
+                r.sayStrings = new List<string>() { "Well excuuuuse me, Princess!" };
             if (character == "Santa")
                 r.sayStrings = new List<string>() { "Merry Christmas, you filthy animal!", "Coal in your stocking just didn't seem good enough", "Maybe next time you'll stay off my naughty list!" };
         }

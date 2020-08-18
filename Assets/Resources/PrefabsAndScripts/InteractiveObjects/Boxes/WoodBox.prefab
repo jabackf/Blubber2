@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1319655185
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d3cecd787bd69174e9bf7b7d44d870fa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -220,6 +220,13 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  spawnProjectilePrefab: {fileID: 0}
+  spawnProjectileParticles: {fileID: 0}
+  spawnProjectileRate: 0.5
+  spawnProjectileDistance: 0.8
+  playerControlledProjectile: 0
+  setProjectileRotation: 1
+  spawnProjectileBehavior: 0
 --- !u!114 &489994091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,5 +260,6 @@ MonoBehaviour:
   destroyOnBreak: 0
   particles: {fileID: 0}
   particleColor: {r: 1, g: 1, b: 1, a: 1}
+  breakOnExplode: 1
   sendMessageToOther: Ouch
   tellOtherAboutThrower: 1

@@ -387,6 +387,11 @@ public class CharacterAnimation : MonoBehaviour
         isDead = false;
         turnOnChildSprites();
         renderer.enabled = true;
+        onRespawn();
+    }
+    public virtual void onRespawn()
+    {
+
     }
 
     public void FlipX(bool flip)

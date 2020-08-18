@@ -5,6 +5,7 @@ using Extensions;
 
 //This class does thing when the attached object collides with an impact that exceeds the specified value.
 //Can be used, for example, to make an object break or to send an "Ouch" command when something hits a character too hard.
+//Notes: This won't be triggered with everything unless your rigidbody is set to dynamic. Some collisions won't be detected if you're set to kinematic.
 
 public class impactThreshold : MonoBehaviour
 {
@@ -13,8 +14,10 @@ public class impactThreshold : MonoBehaviour
     public bool destroyOnBreak = true;
     public GameObject particles; //Option particles to create
     public Color particleColor=Color.white;
+    public bool breakOnExplode = true; //If we recieve an Explode() message, then break the object
     public string sendMessageToOther = ""; //If we hit something and this object breaks, we can send a message to the something that we hit.
     public bool tellOtherAboutThrower = true; //If set to true, we will tell the Other that was hit who threw the object when we send the message (if the information is available)
+
 
     private GameObject other=null; //Stores the most recent other gameobject from onCollisionEnter
 
@@ -28,6 +31,11 @@ public class impactThreshold : MonoBehaviour
                 thresholdExceeded();
             }
         }
+    }
+
+    void Explode()
+    {
+        if (breakOnExplode) thresholdExceeded();
     }
 
     void thresholdExceeded()

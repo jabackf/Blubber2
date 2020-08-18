@@ -116,6 +116,7 @@ public class Dialog : MonoBehaviour
         public string sendMessageStart = ""; //If not empty, then this message is sent to the gameObject (or initiator, if gameObject is null) at the start of this box. You can send multiple messages by separating messages with pipe (e.g. Angry|CircleOn)
         public string sendMessageEnd = ""; //Same as above, but it sent at the end of the message
         public GameObject gameObject;
+        public string gameObjectTag = ""; //If not empty, then we will search for the first object with this tag instead of using gameObject as our speaker
         public string startAnimation; //Animation to play when the box first opens. Applies to the speaker or the specified gameObject if not null
         public string endAnimation;  //Animation to play when the box closes
         public Transform locationTop; //If both transforms are null and saidByInitiator is false, the dialog will appear in the center of the screen
@@ -567,6 +568,17 @@ public class Dialog : MonoBehaviour
         }
     }
 
+    //Ends the conversation, but also calls KillBox so the conversation stops immediately and the dbox timers are cancelled.
+    public void EndConversationImmediately()
+    {
+        EndConversation();
+        KillBox();
+    }
+    public void EndConversationImmediatelyAfterTime(float timer)
+    {
+        Invoke("EndConversationImmediately", timer);
+    }
+
     //This function actually instantiates the box and passes the settings to it
     public void LoadBox()
     {
@@ -594,6 +606,26 @@ public class Dialog : MonoBehaviour
                         entries[index].locationTop = cont.getDialogTop();
                         if (entries[index].locationBottom == null)
                             entries[index].locationBottom = cont.getDialogBottom();
+                    }
+                }
+            }
+
+            //If a tag was specified, we'll try to pull it from there.
+            if (entries[index].gameObjectTag != "")
+            {
+                GameObject go = GameObject.FindWithTag(entries[index].gameObjectTag);
+                if (go)
+                {
+                    CharacterController2D cont = go.GetComponent<CharacterController2D>() as CharacterController2D;
+                    if (cont != null)
+                    {
+                        if (entries[index].Title == "") entries[index].Title = cont.CharacterName;
+                        if (entries[index].locationTop == null)
+                        {
+                            entries[index].locationTop = cont.getDialogTop();
+                            if (entries[index].locationBottom == null)
+                                entries[index].locationBottom = cont.getDialogBottom();
+                        }
                     }
                 }
             }

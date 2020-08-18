@@ -12,6 +12,8 @@ public class Missile : MonoBehaviour
 
     private float horizontalMove, verticalMove;
 
+    public GameObject explosion;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +36,8 @@ public class Missile : MonoBehaviour
     {
         if (horizontalMove < 0 || verticalMove > 0) transform.eulerAngles += new Vector3(0f, 0f, rotateSpeed * Time.deltaTime);
         if (horizontalMove > 0 || verticalMove < 0) transform.eulerAngles -= new Vector3(0f, 0f, rotateSpeed * Time.deltaTime);
-        rb.MovePosition(transform.position + (transform.right * Time.deltaTime * speed) );
+        //rb.MovePosition(transform.position + (transform.right * Time.deltaTime * speed) );
+        rb.velocity =  (transform.right * speed);
     }
 
     //Activates player control. This function is called by any weapon with playerControlledProjectile and spawnProjectile set
@@ -57,6 +60,8 @@ public class Missile : MonoBehaviour
             pilot.tag = "Player";
             Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
         }
+
+        if (explosion) Instantiate(explosion, transform.position, Quaternion.identity);
     }
 
 }

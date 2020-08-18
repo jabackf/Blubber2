@@ -29,6 +29,23 @@ public class cameraFollowPlayer : MonoBehaviour
     //Camera dimensions in world units! Calculated in the calculateDimensions() function
     private float width, height, halfWidth, halfHeight;
 
+
+    [Space]
+    [Header("Camera Shake Effect")]
+
+    // Desired duration of the shake effect
+    private float shakeDuration = 0f;
+
+    // A measure of magnitude for the shake. 
+    private float shakeMagnitude = 0.7f;
+
+    // A measure of how quickly the shake effect should evaporate
+    private float dampingSpeed = 1.0f;
+
+    private float defaultShakeMagnitude = 0.5f;
+    private float defaultShakeDuration = 0.3f;
+
+
     void Start()
     {
         cameraPreviousPosition = gameObject.transform.position;
@@ -181,9 +198,17 @@ public class cameraFollowPlayer : MonoBehaviour
 
     void LateUpdate()
     {
+        // This is used to apply a shaking effect additively
+        Vector3 shakeOffset = new Vector3(0f,0f,0f);
+        if (shakeDuration > 0)
+        {
+            shakeOffset = Random.insideUnitSphere * shakeMagnitude;
+            shakeDuration -= Time.deltaTime * dampingSpeed;
+        }
+
 
         bool playerExists = true;
-        if (playerT==null)
+        if (playerT == null)
         {
             playerExists = Initialize();
         }
@@ -204,6 +229,9 @@ public class cameraFollowPlayer : MonoBehaviour
 
             if (active)
             {
+
+                camera.transform.position += shakeOffset;
+
                 //To clamp or not to clamp!
                 if (boundary != null && (clampX == true || clampY == true))
                 {
@@ -223,5 +251,24 @@ public class cameraFollowPlayer : MonoBehaviour
 
             updateEdgeCoordinates();
         }
+       
+    }
+
+    //Use these functions to trigger shakes of various magnitudes and durations
+    public void TriggerShake() //This uses default settings
+    {
+
+        shakeDuration = defaultShakeDuration;
+        shakeMagnitude = defaultShakeMagnitude;
+    }
+    public void TriggerShakeDuration(float duration)
+    {
+        shakeDuration = duration;
+        shakeMagnitude = defaultShakeMagnitude;
+    }
+    public void TriggerShakeExt(float magnitude, float duration)
+    {
+        shakeDuration = duration;
+        shakeMagnitude = magnitude;
     }
 }

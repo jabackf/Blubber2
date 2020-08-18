@@ -136,6 +136,10 @@ public class React : MonoBehaviour
     public void IOuch(GameObject initiator) { rOuch.initiator = initiator; execute(rOuch); }
     public void Ouch() { rOuch.initiator = null; execute(rOuch); }
 
+    public reaction rExplode = new reaction("Explode"); //Triggered when something Explode happens to this character
+    public void IExplode(GameObject initiator) { rExplode.initiator = initiator; execute(rExplode); }
+    public void Explode() { rExplode.initiator = null; execute(rExplode); }
+
 
     CharacterController2D cont;
     [HideInInspector] public BlubberAnimation blubberAnim;
@@ -220,8 +224,11 @@ public class React : MonoBehaviour
     {
         yield return new WaitForSeconds(r.initiatorMessagesTime);
         if (r.initiator != null)
-        {
-            foreach (var m in r.initiatorMessages) r.initiator.SendMessage(m, SendMessageOptions.DontRequireReceiver);
+        { 
+            foreach (var m in r.initiatorMessages)
+            {
+                r.initiator.SendMessage(m, SendMessageOptions.DontRequireReceiver);
+            }
         }
     }
     IEnumerator executeInitiatorSay(reaction r)

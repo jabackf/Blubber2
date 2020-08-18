@@ -49,7 +49,7 @@ public class BlubberAnimation : CharacterAnimation
 
     bool jumping = false; //Set to true and the character will jump repeatedly, provided it has a BlubberInputInterface
 
-
+    public bool normalOnRespawn = true; //If true, we will send a Normal() message to the character upon respawn.
 
     bool blink = false;
     float blinkTimerMin = 4f;
@@ -87,6 +87,7 @@ public class BlubberAnimation : CharacterAnimation
         {
             if (d.name.CaseInsensitiveContains("chef")) return "Chef";
             if (d.name.CaseInsensitiveContains("santa")) return "Santa";
+            if (d.name.CaseInsensitiveContains("linkhat")) return "Link";
         }
         return "None";
     }
@@ -178,6 +179,15 @@ public class BlubberAnimation : CharacterAnimation
             emoteIcon.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
             emoteIcon.transform.parent = gameObject.transform;
         }
+    }
+
+    public override void onRespawn()
+    {
+        if (normalOnRespawn)
+        {
+            Normal();
+        }
+
     }
 
     //START EMOTION IMPLEMENTATION

@@ -68,11 +68,17 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
-    uniqueID: 1006801551
+  - name: Background0
+    uniqueID: 1337349455
     locked: 0
   - name: DropShadow
     uniqueID: 2297248403
+    locked: 0
+  - name: Background1
+    uniqueID: 1006801551
+    locked: 0
+  - name: Background2
+    uniqueID: 3391841551
     locked: 0
   - name: ObjectsBehindDefault
     uniqueID: 671181451

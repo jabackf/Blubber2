@@ -121,8 +121,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 671181451
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9146d46525dbe5b4ba3732346a4edda7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -187,11 +187,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transType: 2
-  goTo: testinghouse_100_100
+  goTo: testing_101_100
   callOnTriggerEnter: 0
   takeCarriedObject: 1
   repositionType: 2
-  warpTag: playerSpawn
+  warpTag: WarpLocationA
   wrapOffset: {x: 1, y: 1}
   screenEdgeBuffer: {x: 2, y: 2}
   jumpToRelativeX: 0
