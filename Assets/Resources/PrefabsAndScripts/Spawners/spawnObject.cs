@@ -11,6 +11,7 @@ public class spawnObject : MonoBehaviour
     public bool destroyOnSpawn = false; //If true, the gameObject this spawn script is attached to will self destruct when the spawn is created.
 
     public GameObject spawnParticles;
+    public Vector2 spawnParticlesOffset = new Vector2(0f, 0f);
 
     private float spawnTimer = 0;
 
@@ -64,6 +65,11 @@ public class spawnObject : MonoBehaviour
         destroyOnSpawn = dos;
     }
 
+    public void setParticlesOffset(Vector2 offset)
+    {
+        spawnParticlesOffset = offset;
+    }
+
     public void Spawn(int index = -1)
     {
         if (objectList.Count != 0)
@@ -92,7 +98,7 @@ public class spawnObject : MonoBehaviour
             }
 
             global.map.settings.objectCreated(go);
-            if (spawnParticles!=null) Instantiate(spawnParticles, gameObject.transform.position, gameObject.transform.rotation);
+            if (spawnParticles!=null) Instantiate(spawnParticles, gameObject.transform.position+(Vector3)spawnParticlesOffset, gameObject.transform.rotation);
             if (destroyOnSpawn) Destroy(gameObject);
         }
     }

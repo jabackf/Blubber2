@@ -91,8 +91,10 @@ public class pickupObject : actionInRange
     public GameObject spawnProjectileParticles = null;
     public float spawnProjectileRate = 0.5f; //The rate the projectile will be spawned if spawnProjectileBehavior is set to spawnWhileHeld
     public float spawnProjectileDistance = 0.8f; //The distance from this gameObject to create the projectile (along the angle of rotation)
+    public Vector2 spawnProjectileOffset = new Vector2(0f, 0f); //An optional positioning offset that can be applied to the spawn position
     public bool playerControlledProjectile = false; //Set to true if the player controls the projectile (like a guided missile). This sends a "initiatePlayerControl(GameObject character)" message to the projectile after it's created, so the projectile should implement this function to take control of input. 
     public bool setProjectileRotation = true; //If true, and if we have checked hasActionAim, then the projectile's transform.rotation will be set to the angle of our aim
+    public bool setParticleRotation = false; //If true, the particles are rotated and flipped to match the weapon
     public enum spawnProjectileBehaviors
     {
         spawnOnPress, //Spawns on action key press
@@ -100,6 +102,8 @@ public class pickupObject : actionInRange
         spawnWhileHeld //Repeatedly spawns at spawnProjectileRate as long as the key is held down. Note: You cannot do playerControlledProjectile if you select this behavior.
     }
     public spawnProjectileBehaviors spawnProjectileBehavior;
+
+    public float projectileCamshakeIntensity = 0f, projectileCamshakeDuration = 0f; //You can use these to shake the camera when firing a projectile. Both need to be set to a value greater than zero to work.
 
     //This is set to some number greater than one upon picking an item up. It then counts down and hits zero a couple frames after picking it up.
     //This was added as a hacky fix for a glitch I was having with the action aim arrows not pointing the proper direction after first picking them up.
@@ -222,23 +226,30 @@ public class pickupObject : actionInRange
     {
         if (!spawnProjectilePrefab) return;
         Vector3 spawnPos;
-        if (hasActionAim) spawnPos = gameObject.transform.position + actionAimArc.getPointAlongAngle(spawnProjectileDistance);
+        if (hasActionAim) spawnPos = gameObject.transform.position + actionAimArc.getPointAlongAngle(spawnProjectileDistance) + (Vector3)offset + (Vector3)spawnProjectileOffset;
         else
         {
-            spawnPos = gameObject.transform.position + (Vector3)offset;
+            spawnPos = gameObject.transform.position + (Vector3)offset + (Vector3)spawnProjectileOffset;
             spawnPos.x += spawnProjectileDistance * (flippedX ? -1 : 1);
         }
         GameObject projectile = Instantiate(spawnProjectilePrefab, spawnPos, Quaternion.identity);
         if (sceneSettingsGO != null) sceneSettingsGO.objectCreated(projectile);
-        if (spawnProjectileParticles) Instantiate(spawnProjectileParticles, spawnPos, Quaternion.identity);
+        GameObject particles=null;
+        if (spawnProjectileParticles) particles = Instantiate(spawnProjectileParticles, spawnPos, Quaternion.identity);
         if (setProjectileRotation && hasActionAim)
-        {
             projectile.transform.eulerAngles = new Vector3(0f, 0f, actionAimArc.angle);
-        }
+        if (setParticleRotation && hasActionAim && particles)
+            particles.transform.eulerAngles = new Vector3(0f, 0f, actionAimArc.angle);
 
         if (playerControlledProjectile && spawnProjectileBehavior != spawnProjectileBehaviors.spawnWhileHeld && holder!=null)
         {
             projectile.SendMessage("initiatePlayerControl", holder, SendMessageOptions.DontRequireReceiver);
+        }
+
+        if (projectileCamshakeDuration!=0 && projectileCamshakeIntensity!=0)
+        {
+            cameraFollowPlayer cfp = Camera.main.GetComponent<cameraFollowPlayer>();
+            if (cfp) cfp.TriggerShakeExt(projectileCamshakeIntensity, projectileCamshakeDuration);
         }
     }
 
@@ -258,6 +269,11 @@ public class pickupObject : actionInRange
 
             if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnOnPress)
                 spawnProjectile();
+
+            if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnWhileHeld)
+            {
+                InvokeRepeating("spawnProjectile", 0.1f, spawnProjectileRate);
+            }
         }
         else if (released)
         {
@@ -290,11 +306,6 @@ public class pickupObject : actionInRange
             }
 
             if (hasActionAim) actionAim(horizontal, vertical);
-
-            if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnWhileHeld && actionKeyPressed)
-            {
-                InvokeRepeating("spawnProjectile", 0.1f, spawnProjectileRate);
-            }
         }
     }
 
@@ -481,6 +492,8 @@ public class pickupObject : actionInRange
         }
 
         if (hasHeldSprite && unheldSprite != null) renderer.sprite = unheldSprite;
+
+        CancelInvoke("spawnProjectile");
 
         checkForArrows();
 

@@ -15,6 +15,7 @@ public class impactThreshold : MonoBehaviour
     public GameObject particles; //Option particles to create
     public Color particleColor=Color.white;
     public bool breakOnExplode = true; //If we recieve an Explode() message, then break the object
+    public bool breakOnShot = true;
     public string sendMessageToOther = ""; //If we hit something and this object breaks, we can send a message to the something that we hit.
     public bool tellOtherAboutThrower = true; //If set to true, we will tell the Other that was hit who threw the object when we send the message (if the information is available)
 
@@ -33,10 +34,11 @@ public class impactThreshold : MonoBehaviour
         }
     }
 
-    void Explode()
-    {
-        if (breakOnExplode) thresholdExceeded();
-    }
+    void Explode(){ if (breakOnExplode) thresholdExceeded();}
+    void IExplode(GameObject go) { if (breakOnExplode) thresholdExceeded(); }
+    void Shot() { if (breakOnShot) thresholdExceeded(); }
+    void IShot(GameObject go) { if (breakOnShot) thresholdExceeded(); }
+    void PShot(Vector2 Pos) { if (breakOnShot) thresholdExceeded(); }
 
     void thresholdExceeded()
     {

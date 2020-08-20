@@ -31,6 +31,10 @@ public class React : MonoBehaviour
         public facingReturnBehaviors facingReturnBehavior = facingReturnBehaviors.useStartFacing;
         [HideInInspector] public bool previousIsFacingRight; //The facing direction that the character was pointing before faceInitiator was triggered. Used to reverse the faceInitiator action.
 
+        //Some data that can optionally be sent with the reaction message. For example, PShot sends Vector3 indicating position that the bullet hit.
+        [HideInInspector] public Vector3 data_position;
+        [HideInInspector] public GameObject data_gameObject;
+        [HideInInspector] public string data_string;
 
         public float sayTime = 6f;
         public float delayedMessagesTime = 7f;
@@ -136,9 +140,14 @@ public class React : MonoBehaviour
     public void IOuch(GameObject initiator) { rOuch.initiator = initiator; execute(rOuch); }
     public void Ouch() { rOuch.initiator = null; execute(rOuch); }
 
-    public reaction rExplode = new reaction("Explode"); //Triggered when something Explode happens to this character
+    public reaction rExplode = new reaction("Explode"); //Triggered when this character is within explosion range
     public void IExplode(GameObject initiator) { rExplode.initiator = initiator; execute(rExplode); }
     public void Explode() { rExplode.initiator = null; execute(rExplode); }
+
+    public reaction rShot = new reaction("Shot"); //Triggered when a character is shot by ammunition
+    public void IShot(GameObject initiator) { rShot.initiator = initiator; execute(rShot); }
+    public void PShot(Vector3 position) { rShot.data_position = position; execute(rShot); } //Carries the position that the shot took place.
+    public void Shot() { rShot.initiator = null; execute(rShot); }
 
 
     CharacterController2D cont;

@@ -5,6 +5,7 @@ using UnityEngine;
 public class respawnOnDestroy : MonoBehaviour
 {
     public GameObject spawnParticles;
+    public Vector2 spawnParticlesOffset = new Vector2(0f, 0f);
     private GameObject spawnPrefab;
     public float time = 1f;
 
@@ -69,6 +70,7 @@ public class respawnOnDestroy : MonoBehaviour
         spawner.addRespawnObject(spawnPrefab);
         spawner.setTimer(time);
         spawner.setParticles(spawnParticles);
+        spawner.setParticlesOffset(spawnParticlesOffset);
         spawner.setDestroyOnSpawn(true);
 
         Destroy(gameObject);

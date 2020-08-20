@@ -7,6 +7,7 @@ public class lightIntensityFade : MonoBehaviour
 {
     public Light2D light;
     public float fadeSpeed = 0.1f;
+    public bool destroyWhenDone = true;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,11 @@ public class lightIntensityFade : MonoBehaviour
         if (light.intensity>0)
         {
             light.intensity -= Time.deltaTime * fadeSpeed;
-            if (light.intensity < 0) light.intensity = 0;
+            if (light.intensity < 0)
+            {
+                light.intensity = 0;
+                if (destroyWhenDone) Destroy(gameObject);
+            }
         }
     }
 }

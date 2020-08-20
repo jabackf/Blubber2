@@ -34,6 +34,7 @@ TagManager:
   - WarpLocationG
   - WarpLocationH
   - menuSelector
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -52,7 +53,7 @@ TagManager:
   - Background1
   - PostProcessing
   - DisableAllCollision
-  - 
+  - OnlyCollideWithGround
   - 
   - 
   - 
