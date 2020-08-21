@@ -10,6 +10,7 @@ public class updateDropShadow : MonoBehaviour
     public GameObject obj;  //The object that is casting the shadow
     public SpriteRenderer objSpriteRenderer;
     public Vector2 offset;
+    Color color; //Used so we can store our initial color and match the object's alpha
 
     private SpriteRenderer renderer;
 
@@ -19,6 +20,9 @@ public class updateDropShadow : MonoBehaviour
         renderer.sprite = objSpriteRenderer.sprite;
         renderer.drawMode = objSpriteRenderer.drawMode;
         renderer.tileMode = objSpriteRenderer.tileMode;
+        color = renderer.color;
+        color.a = objSpriteRenderer.color.a;
+        renderer.color = color;
     }
 
 
@@ -37,6 +41,8 @@ public class updateDropShadow : MonoBehaviour
             renderer.flipY = objSpriteRenderer.flipY;
             renderer.sprite = objSpriteRenderer.sprite;
             renderer.size = objSpriteRenderer.size;
+            color.a = objSpriteRenderer.color.a;
+            renderer.color = color;
 
             //update the position and rotation of the sprite's shadow with moving sprite
 

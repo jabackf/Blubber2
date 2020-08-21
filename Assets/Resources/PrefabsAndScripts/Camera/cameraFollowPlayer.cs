@@ -26,6 +26,9 @@ public class cameraFollowPlayer : MonoBehaviour
     private Vector2 worldCameraBottomLeft, worldCameraTopRight;
     private Vector3 cameraPreviousPosition, clampMin, clampMax;
 
+    public bool drawClampBoundaries = false; //Use for debugging. Draws a line around the camera clamp boundaries
+    private LineRenderer clampLine = null;
+
     //Camera dimensions in world units! Calculated in the calculateDimensions() function
     private float width, height, halfWidth, halfHeight;
 
@@ -49,8 +52,37 @@ public class cameraFollowPlayer : MonoBehaviour
     void Start()
     {
         cameraPreviousPosition = gameObject.transform.position;
+
+        if (drawClampBoundaries)
+        {
+            clampLine = gameObject.AddComponent(typeof(LineRenderer)) as LineRenderer;
+            Invoke("setupClampLine", 0.2f);
+        }
     }
 
+    void setupClampLine()
+    {
+        //clampLine.material = new Material(Resources.Load("Materials/Flat"));
+        clampLine.widthMultiplier = 0.08f;
+        clampLine.positionCount = 4;
+        clampLine.loop = true;
+        clampLine.startColor = clampLine.endColor = Color.red;
+        Vector3[] points = new Vector3[4];
+        points[0].x = clampMin.x; points[0].y = clampMax.y;
+        points[1].x = clampMax.x; points[1].y = clampMax.y;
+        points[2].x = clampMax.x; points[2].y = clampMin.y;
+        points[3].x = clampMin.x; points[3].y = clampMin.y;
+
+        /*I used the following lines to test out the viewport of the camera.
+         * points[0].x = transform.position.x - halfWidth; points[0].y = transform.position.y + halfHeight;
+        points[1].x = transform.position.x + halfWidth; points[1].y = transform.position.y + halfHeight;
+        points[2].x = transform.position.x + halfWidth; points[2].y = transform.position.y - halfHeight;
+        points[3].x = transform.position.x - halfWidth; points[3].y = transform.position.y - halfHeight;*/
+
+        points[0].z = points[1].z = points[2].z = points[3].z = 0f;
+        clampLine.SetPositions(points);
+        
+    }
 
     bool Initialize()
     {
@@ -67,6 +99,7 @@ public class cameraFollowPlayer : MonoBehaviour
             return false;
         else
             return true;
+
     }
 
     public void findPlayer()
@@ -109,10 +142,21 @@ public class cameraFollowPlayer : MonoBehaviour
     void calculateDimensions()
     {
         //Calculate some junk that might be useful
-        height = camera.orthographicSize * 2.0f;
+
+        /*
+         * These following lines are the *appropriate* way to do this, but for some reason it's not giving me accurate values. The values it gives me are slightly larger than the camera's viewport. So I found a different way to do it that actually works correctly.
+         * height = camera.orthographicSize * 2.0f;
         width = height * camera.aspect;
         halfHeight = camera.orthographicSize;
-        halfWidth = camera.aspect * halfHeight;
+        halfWidth = camera.aspect * halfHeight;*/
+
+        var lowerLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
+        var upperRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+
+        height = upperRight.y-lowerLeft.y;
+        width = upperRight.x-lowerLeft.x;
+        halfHeight = height/2;
+        halfWidth = width/2;
     }
 
     //This function immediately snaps the camera into place. It does not clamp!
@@ -139,7 +183,7 @@ public class cameraFollowPlayer : MonoBehaviour
             clampMin = new Vector3(boundary.getLeftX() + halfWidth,
                                    boundary.getBottomY() + halfHeight, -10f);
             clampMax = new Vector3(boundary.getRightX() - halfWidth,
-                       boundary.getTopY() - halfHeight, -10f);
+                                   boundary.getTopY() - halfHeight, -10f);
 
             //Snap the camera into the boundary
             if (active)

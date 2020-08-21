@@ -20,6 +20,34 @@ public class sceneBoundary : MonoBehaviour
 
     private List<collision> currentCollisions = new List<collision>();
 
+    public bool drawBoundaries = false; //Use for debugging. Draws a line around the boundaries
+    private LineRenderer boundLine = null;
+
+    void Start()
+    {
+        if (drawBoundaries)
+        {
+            boundLine = gameObject.AddComponent(typeof(LineRenderer)) as LineRenderer;
+            Invoke("setupBoundLine", 0.1f);
+        }
+    }
+
+    //Sets up the line renderer that draws the boundary lines for debugging purposes. Turn on drawBoundaries to use
+    void setupBoundLine()
+    {
+        boundLine.widthMultiplier = 0.08f;
+        boundLine.positionCount = 4;
+        boundLine.loop = true;
+        boundLine.startColor = boundLine.endColor = Color.red;
+        Vector3[] points = new Vector3[4];
+        points[0].x = getLeftX(); points[0].y = getTopY();
+        points[1].x = getRightX(); points[1].y = getTopY();
+        points[2].x = getRightX(); points[2].y = getBottomY();
+        points[3].x = getLeftX(); points[3].y = getBottomY();
+        points[0].z = points[1].z = points[2].z = points[3].z = 0f;
+        boundLine.SetPositions(points);
+    }
+
     //Checks if the specified object is outside one of the room boundaries. Returns "top" "left" "right" "bottom" or "none"
     //Optional buffer can be added to the interior of the scene boundaries to shrink it
     public string boundaryCheck(GameObject obj, float bufferX=0f, float bufferY=0f)

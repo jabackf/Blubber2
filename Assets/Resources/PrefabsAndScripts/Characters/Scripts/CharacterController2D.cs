@@ -20,6 +20,7 @@ public class CharacterController2D : MonoBehaviour
     [Space]
     [Header("Jumping")]
     [SerializeField] private float m_JumpVelocity = 10.5f;                       // Amount of velocity added when the player jumps. 
+    [SerializeField] private bool temporaryExtraJump = false;                   //If this gets set to true, the player will get a temporary double jump that will go away either upon landing or using it. For example, used by double jump arrow
     [SerializeField] private bool canDoubleJump = false;                        // Whether or not the player can jump a second time
     [SerializeField] private bool infiniteJump = false;                         // Jump whenever you want!
     [SerializeField] private bool infiniteWaterJump = true;                    //Jump anytime, if in water
@@ -225,10 +226,12 @@ public class CharacterController2D : MonoBehaviour
                 if (colliders[i].gameObject != gameObject)
                 {
                     m_Grounded = true;
+                    temporaryExtraJump = false;
                     currentPlatform = colliders[i].gameObject;
 
                     if (!wasGrounded && m_Rigidbody2D.velocity.y < 0)
                     {
+                        
                         OnLandEvent.Invoke();
                         if (charAnim != null)
                         {
@@ -501,11 +504,15 @@ public class CharacterController2D : MonoBehaviour
         // If the player should jump...
         if (jump && (!justPickedUp || !pickupWithJump || !canPickup) && (!isClimbing || !climbWithJump || !canClimb))
         {
-            if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded || (inWater && infiniteWaterJump))
+            if (infiniteJump || (canDoubleJump && numJumps < 2) || m_Grounded || (inWater && infiniteWaterJump) || temporaryExtraJump)
             {
                 // Add a vertical force to the player.
                 m_Grounded = false;
                 numJumps++;
+
+                //With the temporary extra jump things tend to work more consistently when we cancel out any current y velocities and start at zero. This gives us better control over the jump.
+                if (temporaryExtraJump) m_Rigidbody2D.velocity = new Vector3(m_Rigidbody2D.velocity.x, 0f, 0f);
+                temporaryExtraJump = false;
                 if (charAnim != null)
                 {
                     charAnim.jump = true;
@@ -545,6 +552,12 @@ public class CharacterController2D : MonoBehaviour
             inWater = true;
         }
 
+    }
+
+    //This function will give the player the ability to temporarily double jump until they either use their double jump or land on the ground. Only works while they are still in the air.
+    public void addTemporaryJump()
+    {
+        temporaryExtraJump = true;
     }
 
     //Called by checkpoint objects. If null is passed as the position, then the character's position is used.

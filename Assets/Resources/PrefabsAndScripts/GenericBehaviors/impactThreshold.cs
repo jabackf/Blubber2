@@ -34,11 +34,11 @@ public class impactThreshold : MonoBehaviour
         }
     }
 
-    void Explode(){ if (breakOnExplode) thresholdExceeded();}
-    void IExplode(GameObject go) { if (breakOnExplode) thresholdExceeded(); }
-    void Shot() { if (breakOnShot) thresholdExceeded(); }
-    void IShot(GameObject go) { if (breakOnShot) thresholdExceeded(); }
-    void PShot(Vector2 Pos) { if (breakOnShot) thresholdExceeded(); }
+    public void Explode(){ if (breakOnExplode) thresholdExceeded();}
+    public void IExplode(GameObject go) { if (breakOnExplode) thresholdExceeded(); }
+    public void Shot() { if (breakOnShot) thresholdExceeded(); }
+    public void IShot(GameObject go) { if (breakOnShot) thresholdExceeded(); }
+    public void PShot(Vector3 Pos) { if (breakOnShot) thresholdExceeded(); }
 
     void thresholdExceeded()
     {
