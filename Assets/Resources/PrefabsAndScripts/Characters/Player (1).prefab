@@ -254,6 +254,7 @@ MonoBehaviour:
   inWater: 0
   waterMultiplier: 0.7
   m_JumpVelocity: 10.5
+  temporaryExtraJump: 0
   canDoubleJump: 0
   infiniteJump: 0
   infiniteWaterJump: 1
@@ -278,7 +279,7 @@ MonoBehaviour:
     m_Bits: 2048
   m_WhatIsGround:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 257
   m_GroundCheck: {fileID: 5583954899186943733}
   m_CeilingCheck: {fileID: 5456296111386055994}
   m_SideCheckL: {fileID: 3004943861297770472}
@@ -402,6 +403,7 @@ MonoBehaviour:
   climbingAnimatorFloat: 
   climbingAnimatorBool: 
   dressList: []
+  normalOnRespawn: 1
   particlesLovePrefab: {fileID: 1343902013502930873, guid: 3540d062a76f0224a99c91f485eadc95,
     type: 3}
   particlesTearsPrefab: {fileID: 3099225133798276787, guid: f36f23d7b0618b5409fddc0bc7458100,
@@ -420,24 +422,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90a2b0969e7666846a3fe26de0daec52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interuptDialog: {fileID: 0}
   rGross:
     isTalkingResponse: 2
     name: Gross
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 7
     initiatorMessagesTime: 1
+    initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
     Callbacks: []
     sendMessages: []
     delayedMessages: []
     initiatorMessages: []
+    initiatorSay: []
   rMean:
     isTalkingResponse: 2
     name: Mean
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 3
     initiatorMessagesTime: 1
+    initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings:
     - Oops! Did I do that?! My bad.
@@ -447,6 +465,68 @@ MonoBehaviour:
     delayedMessages:
     - Normal
     initiatorMessages: []
+    initiatorSay: []
+  rOuch:
+    isTalkingResponse: 2
+    name: Ouch
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rExplode:
+    isTalkingResponse: 2
+    name: Explode
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rShot:
+    isTalkingResponse: 2
+    name: Shot
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  blubberAnim: {fileID: 0}
 --- !u!1 &936482574467484246
 GameObject:
   m_ObjectHideFlags: 0

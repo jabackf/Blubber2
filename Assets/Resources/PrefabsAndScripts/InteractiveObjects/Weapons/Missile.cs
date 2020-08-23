@@ -12,6 +12,9 @@ public class Missile : MonoBehaviour
 
     private float horizontalMove, verticalMove;
 
+    public bool mouseControl = true;
+    private float mouseAngle=-1f;
+
     public GameObject explosion;
 
     // Start is called before the first frame update
@@ -28,14 +31,28 @@ public class Missile : MonoBehaviour
         {
             horizontalMove = Input.GetAxisRaw("Horizontal");
             verticalMove = Input.GetAxisRaw("Vertical") ;
-            if (Input.GetButtonDown("UseItemAction")) Destroy(gameObject);
+            if (Input.GetButtonDown("Throw") || (Input.GetButtonDown("UseItemAction")&&!mouseControl) ) Destroy(gameObject);
+            if (Input.GetButton("UseItemAction") && mouseControl)
+            {
+                Vector3 point = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                mouseAngle = Mathf.Atan2(point.y - transform.position.y, point.x - transform.position.x) * 180 / Mathf.PI;
+                if (mouseAngle < 0) mouseAngle += 360;
+            }
+            else
+            {
+                mouseAngle = -1f;
+            }
         }
     }
 
     void FixedUpdate()
     {
-        if (horizontalMove < 0 || verticalMove > 0) transform.eulerAngles += new Vector3(0f, 0f, rotateSpeed * Time.deltaTime);
-        if (horizontalMove > 0 || verticalMove < 0) transform.eulerAngles -= new Vector3(0f, 0f, rotateSpeed * Time.deltaTime);
+        if (horizontalMove < 0 || verticalMove > 0) transform.eulerAngles += new Vector3(0f, 0f, rotateSpeed * Time.fixedDeltaTime);
+        if (horizontalMove > 0 || verticalMove < 0) transform.eulerAngles -= new Vector3(0f, 0f, rotateSpeed * Time.fixedDeltaTime);
+        if (mouseControl && mouseAngle!=-1f)
+        {
+            transform.eulerAngles = new Vector3(0f,0f,Mathf.MoveTowardsAngle(transform.eulerAngles.z,mouseAngle, rotateSpeed * Time.fixedDeltaTime));
+        }
         //rb.MovePosition(transform.position + (transform.right * Time.deltaTime * speed) );
         rb.velocity =  (transform.right * speed);
     }

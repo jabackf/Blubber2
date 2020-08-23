@@ -48,11 +48,11 @@ public class backAndForthMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (stopped)
         {
-            timer -= Time.deltaTime;
+            timer -= Time.fixedDeltaTime;
             if (timer <= 0)
             {
                 stopped = false;
@@ -61,7 +61,7 @@ public class backAndForthMovement : MonoBehaviour
         }
         else
         {
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, target, moveSpeed*Time.deltaTime);
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, target, moveSpeed*Time.fixedDeltaTime);
 
             if ( Math.Abs(gameObject.transform.position.x-target.x)<0.01 && Math.Abs(gameObject.transform.position.y - target.y) < 0.01)
             {

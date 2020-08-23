@@ -1,0 +1,9 @@
+FATAL ERROR in
+action number 1
+of Other Event: Room Start
+for object levelExporter:
+
+COMPILATION ERROR in code actionError in code at line 2:   
+file = file_text_open_write("working_directory""C:"+ "\output\"+room_get_name(room)+".txt");at position 49: Symbol , or ) expected.
+
+

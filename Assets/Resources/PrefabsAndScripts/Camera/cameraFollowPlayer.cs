@@ -58,6 +58,7 @@ public class cameraFollowPlayer : MonoBehaviour
             clampLine = gameObject.AddComponent(typeof(LineRenderer)) as LineRenderer;
             Invoke("setupClampLine", 0.2f);
         }
+
     }
 
     void setupClampLine()
@@ -93,7 +94,8 @@ public class cameraFollowPlayer : MonoBehaviour
         updateEdgeCoordinates();
 
         //Determine clamping position for camera based on scene boundary
-        calculateClampPosition();
+        //For some reason I can't call it immediately. I don't know why. I need to wait a split second or else sometimes screen width and height isn't properly calculated.
+        Invoke("calculateClampPosition", 0.01f);
 
         if (playerT == null)
             return false;
@@ -143,20 +145,29 @@ public class cameraFollowPlayer : MonoBehaviour
     {
         //Calculate some junk that might be useful
 
-        /*
-         * These following lines are the *appropriate* way to do this, but for some reason it's not giving me accurate values. The values it gives me are slightly larger than the camera's viewport. So I found a different way to do it that actually works correctly.
-         * height = camera.orthographicSize * 2.0f;
-        width = height * camera.aspect;
-        halfHeight = camera.orthographicSize;
-        halfWidth = camera.aspect * halfHeight;*/
+        //var lowerLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
+        //var upperRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+        var lowerLeft = Camera.main.ViewportToWorldPoint(new Vector3(0f, 0f, 0f));
+        var upperRight = Camera.main.ViewportToWorldPoint(new Vector3(1f, 1f, 0f));
+        height = upperRight.y - lowerLeft.y;
+        width = upperRight.x - lowerLeft.x;
+        halfHeight = height / 2;
+        halfWidth = width / 2;
 
-        var lowerLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
-        var upperRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-
-        height = upperRight.y-lowerLeft.y;
-        width = upperRight.x-lowerLeft.x;
-        halfHeight = height/2;
-        halfWidth = width/2;
+        /*Test out the calculated screen dimensions by drawing a line from lowerLeft to upperRight
+         * GameObject vpline = new GameObject("vpline");
+        LineRenderer dbl = vpline.AddComponent(typeof(LineRenderer)) as LineRenderer;
+        dbl.widthMultiplier = 0.08f;
+        dbl.positionCount = 4;
+        dbl.loop = true;
+        dbl.startColor = dbl.endColor = Color.green;
+        Vector3[] points = new Vector3[4];
+        points[0].x = lowerLeft.x; points[0].y = upperRight.y;
+        points[1].x = upperRight.x; points[1].y = upperRight.y;
+        points[2].x = upperRight.x; points[2].y = lowerLeft.y;
+        points[3].x = lowerLeft.x; points[3].y = lowerLeft.y;
+        points[0].z = points[1].z = points[2].z = points[3].z = 0f;
+        dbl.SetPositions(points);*/
     }
 
     //This function immediately snaps the camera into place. It does not clamp!

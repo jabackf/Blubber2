@@ -16,6 +16,8 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private bool inWater = false;
     [SerializeField] private float waterMultiplier = 0.7f;                   //This value is multiplied to move speed when the player is in water
     private bool initialIsFacingRight;                                      //This is set to m_isFacingRight at the start of the object and retains this value. Can be retrieved using isInitiallyFacingRight(). Can be useful for knowing what direction an NPC was initially configured to face in the editor 
+    private bool mouseAim = false;                                          //Set to true by the input controller to aim throw and action reticals with mouse
+    private Vector3 previousMousePosition=new Vector3(0f,0f,0f);               //Used for mouse aiming to track the previous position of the mouse in the frame update
 
     [Space]
     [Header("Jumping")]
@@ -223,7 +225,12 @@ public class CharacterController2D : MonoBehaviour
                 //Get the dropDown platform if we're on it
                 onDropPlatformScript = colliders[i].gameObject.GetComponent<dropDownPlatform>() as dropDownPlatform;
 
-                if (colliders[i].gameObject != gameObject)
+                GameObject holdingGo = null;
+                if (holdingSomething())
+                    holdingGo = holding.gameObject;
+
+
+                if (colliders[i].gameObject != gameObject && colliders[i].gameObject != holdingGo && !colliders[i].isTrigger)
                 {
                     m_Grounded = true;
                     temporaryExtraJump = false;
@@ -263,7 +270,15 @@ public class CharacterController2D : MonoBehaviour
 
         if (!isHolding || !canPickup || holding == null) return;
 
+        //Debug.Log("P:" + pressed + ", H:" + held + ", R:" + released + ", Hor:" + horizontal + ", Vert:" + vertical);
+
         holding.useItemAction(pressed, held, released, horizontal, vertical);
+
+        if (mouseAim && Input.mousePosition != previousMousePosition)
+        {
+            holding.setActionAimAngleTowardsPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            previousMousePosition = Input.mousePosition;
+        }
     }
 
     //Use the throwing retical
@@ -275,6 +290,12 @@ public class CharacterController2D : MonoBehaviour
         if (!isHolding || !canPickup || holding == null) return;
 
         holding.Aim(h, v, release, action);
+
+        if (mouseAim && Input.mousePosition != previousMousePosition)
+        {
+            holding.setThrowAimAngleTowardsPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+            previousMousePosition = Input.mousePosition;
+        }
 
         if (charAnim != null) charAnim.throwing = release;
     }
@@ -296,9 +317,15 @@ public class CharacterController2D : MonoBehaviour
         if (!crouch && canCrouch)
         {
             // If the character has a ceiling preventing them from standing up, keep them crouching
-            if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
+            Collider2D col = Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround);
+            if (col)
             {
-                crouch = true;
+                GameObject holdingGo = null;
+                if (holdingSomething())
+                    holdingGo = holding.gameObject;
+
+                if (!col.isTrigger && col.gameObject!=holdingGo)
+                    crouch = true;
             }
         }
 
@@ -382,10 +409,33 @@ public class CharacterController2D : MonoBehaviour
             {
                 bool pushingLeft = false;
                 bool pushingRight = false;
-                Collider2D leftCol = Physics2D.OverlapCircle(m_SideCheckL.position, k_SideRadius, m_WhatIsGround);
-                Collider2D rightCol = Physics2D.OverlapCircle(m_SideCheckR.position, k_SideRadius, m_WhatIsGround);
-                if (leftCol != null && move < 0) pushingLeft = true;
-                if (rightCol != null && move > 0) pushingRight = true;
+
+                Collider2D[] leftColAll = Physics2D.OverlapCircleAll(m_SideCheckL.position, k_SideRadius, m_WhatIsGround);
+                Collider2D[] rightColAll = Physics2D.OverlapCircleAll(m_SideCheckR.position, k_SideRadius, m_WhatIsGround);
+                Collider2D leftCol = null, rightCol = null;
+
+                GameObject holdingGo = null;
+                if (holdingSomething())
+                    holdingGo = holding.gameObject;
+
+                foreach (var l in leftColAll)
+                {
+                    if (l != null && l.gameObject != holdingGo && !l.isTrigger && move < 0)
+                    {
+                        pushingLeft = true;
+                        leftCol = l;
+                        break;
+                    }
+                }
+                foreach (var r in rightColAll)
+                {
+                    if (r != null && r.gameObject != holdingGo && !r.isTrigger && move > 0)
+                    {
+                        rightCol = r;
+                        pushingRight = true;
+                        break;
+                    }
+                }
 
                 if (pushingLeft || pushingRight)
                 {
@@ -824,6 +874,12 @@ public class CharacterController2D : MonoBehaviour
     public bool isGrounded()
     {
         return m_Grounded;
+    }
+
+    //This should be called by the playerInput module. If you are trying to toggle mouse aim, call setMouseAim from there
+    public void setMouseAim(bool set)
+    {
+        mouseAim = set;
     }
 
     //Returns the vector for the sidecheck transform that the character is facing towards

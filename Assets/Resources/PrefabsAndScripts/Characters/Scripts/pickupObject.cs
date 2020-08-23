@@ -17,6 +17,7 @@ public class pickupObject : actionInRange
     public float carryMass = 0.5f;  //This is the mass of the object while it's being carried
     public bool flipOnX = true;     //Flips with the character holding it if set to true
     public bool flipOnY = true;
+    public bool flipCharacterWithMouseAim = true; //If set to true and the character controller is aiming with the mouse, then the character will flip to face the mouse direction when throw or action button is held down
     public bool freezeRotationOnPickup = true; //If true, the object's ability to rotate on the Z axis will freeze when picked up. When dropped, it's ability to rotate will be reset to whatever it was previously
     public bool resetRotationOnPickup = true; //If true, the object's Z rotation will be set to whatever it was at initialization when picked up
     private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
@@ -29,6 +30,11 @@ public class pickupObject : actionInRange
     private bool undroppable = false; //Used to prevent the item from being dropped. Doesn't prevent an item from being thrown. This should be set using makeUndroppable!
     private GameObject recentlyThrownBy; //This gets set to the most recent holder for a few seconds after being thrown. It then gets set to null. Can be useful to tell which character threw it.
     private float recentlyThrownByTimer = 3f; //The amount of time before the recentlyThrownBy object gets cleared to null
+
+    float minAimNotFlipped = 0f;
+    float maxAimNotFlipped = 90f;
+    float minAimFlipped = 90f;
+    float maxAimFlipped = 180f;
 
     private sceneSettings sceneSettingsGO;
     private SpriteRenderer renderer;
@@ -177,8 +183,9 @@ public class pickupObject : actionInRange
         if (!throwArc.isShowing())
         {
             throwArc.show();
-            throwArc.setAngle(flippedX ? 50 : 130);
-            throwArc.setMinMax(flippedX ? 0 : 90, flippedX ? 90 : 180);
+            throwArc.setAngle(flippedX ? 130 : 50);
+            //throwArc.setMinMax(flippedX ? 0 : 90, flippedX ? 90 : 180);
+            throwArc.setMinMax(flippedX ? minAimFlipped : minAimNotFlipped, flippedX ? maxAimFlipped : maxAimNotFlipped);
         }
         if (release)
         {
@@ -187,9 +194,40 @@ public class pickupObject : actionInRange
         else
         {
 
-            throwArc.setAngle(throwArc.angle += (flippedX ? v : -v));
+            throwArc.setAngle(throwArc.angle += (flippedX ? -v : v));
             throwArc.setLength(throwArc.length + h);
         }
+    }
+
+    //These can be used to set aim arc directly to look at the point (world coord) and the function was primarily implemented for mouse aiming. They are intended to be called right before calling Aim() and actionAim() to adjust the angle with the mouse. Called in characterControllers
+    public void setThrowAimAngleTowardsPoint(Vector3 point)
+    {
+        throwArc.setMinMax(flippedX ? minAimFlipped : minAimNotFlipped, flippedX ? maxAimFlipped : maxAimNotFlipped);
+        float angle = Mathf.Atan2(point.y - transform.position.y+offset.y, point.x - transform.position.x + offset.x) * 180 / Mathf.PI;
+        if (angle < -90) angle += 360;
+
+        if (flipCharacterWithMouseAim)
+        {
+            if (angle > 90 && !flippedX) holder.SendMessage("FaceLeft", SendMessageOptions.DontRequireReceiver);
+            if (angle < 90 && flippedX) holder.SendMessage("FaceRight", SendMessageOptions.DontRequireReceiver);
+        }
+
+        throwArc.setAngle(angle);
+    }
+    public void setActionAimAngleTowardsPoint(Vector3 point)
+    {
+        if (!hasAction || !hasActionAim) return;
+        actionAimArc.setMinMax(flippedX ? minAimFlipped : minAimNotFlipped, flippedX ? maxAimFlipped : maxAimNotFlipped);
+        float angle = Mathf.Atan2(point.y - transform.position.y + offset.y, point.x - transform.position.x + offset.x) * 180 / Mathf.PI;
+        if (angle < -90) angle +=360;
+
+        if (flipCharacterWithMouseAim)
+        {
+            if (angle > 90 && !flippedX) holder.SendMessage("FaceLeft", SendMessageOptions.DontRequireReceiver);
+            if (angle < 90 && flippedX) holder.SendMessage("FaceRight", SendMessageOptions.DontRequireReceiver);
+        }
+
+        actionAimArc.setAngle(angle);
     }
 
     //This function controls the actionAim arrow
@@ -211,13 +249,13 @@ public class pickupObject : actionInRange
             {
                 actionAimArc.show();
                 //actionAimArc.setAngle(flippedX ? actionAimArc.angle : actionAimArc.angle );
-                actionAimArc.setMinMax(flippedX ? 0 : 90, flippedX ? 90 : 180);
+                actionAimArc.setMinMax(flippedX ? minAimFlipped : minAimNotFlipped, flippedX ? maxAimFlipped : maxAimNotFlipped);
             }
 
-            actionAimArc.setAngle(actionAimArc.angle += (flippedX ? v : -v));
+            actionAimArc.setAngle(actionAimArc.angle += (flippedX ? -v : v));
             actionAimArc.setLength(actionAimArc.length + h);
 
-            if (rotateWithAim) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle + 180);
+            if (rotateWithAim) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle + 180 : actionAimArc.angle);
         }
     }
 
@@ -552,29 +590,36 @@ public class pickupObject : actionInRange
             gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
         }
 
-        flippedX = !flipX ;
+        flippedX = flipX;//!flipX;
 
         //We still want to change the throw arc to the direction we're facing, even if we're not flipping the sprite.
         checkForArrows();
         if (!flippedX)
         {
-            throwArc.setMinMax(90, 180);
-            if (hasActionAim) actionAimArc.setMinMax(90, 180);
+            //throwArc.setMinMax(90, 180);
+            //if (hasActionAim) actionAimArc.setMinMax(90, 180);
+            throwArc.setMinMax(minAimNotFlipped, maxAimNotFlipped);
+            if (hasActionAim) actionAimArc.setMinMax(minAimNotFlipped, maxAimNotFlipped);
         }
         else
         {
-            throwArc.setMinMax(0, 90);
-            if (hasActionAim) actionAimArc.setMinMax(0, 90);
+            //throwArc.setMinMax(0, 90);
+            //if (hasActionAim) actionAimArc.setMinMax(0, 90);
+            throwArc.setMinMax(minAimFlipped, maxAimFlipped);
+            if (hasActionAim) actionAimArc.setMinMax(minAimFlipped, maxAimFlipped);
         }
         throwArc.setAngle( (180-throwArc.angle) );
 
         if (hasAction && hasActionAim)
         {
              if (justPickedUp==0) actionAimArc.setAngle(180 - actionAimArc.angle);
-             else actionAimArc.setAngle(flippedX ? 0 : 180);
+             else actionAimArc.setAngle(flippedX ? 180 : 0);
         }
 
-        if (rotateWithAim && hasActionAim && hasAction) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle + 180);
+        //if (rotateWithAim && hasActionAim && hasAction) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle + 180);
+        if (rotateWithAim && hasActionAim && hasAction) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle + 180 : actionAimArc.angle );
+
+
     }
     public void flipSpriteY(bool flipY)
     {

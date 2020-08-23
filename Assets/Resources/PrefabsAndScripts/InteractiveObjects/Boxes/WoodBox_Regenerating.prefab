@@ -17,6 +17,9 @@ GameObject:
   - component: {fileID: 489994091}
   - component: {fileID: 44958962}
   - component: {fileID: 4954285296686308807}
+  - component: {fileID: 233862267880880218}
+  - component: {fileID: 2839352242609961458}
+  - component: {fileID: 4751695887166681271}
   m_Layer: 8
   m_Name: WoodBox_Regenerating
   m_TagString: Untagged
@@ -225,9 +228,13 @@ MonoBehaviour:
   spawnProjectileParticles: {fileID: 0}
   spawnProjectileRate: 0.5
   spawnProjectileDistance: 0.8
+  spawnProjectileOffset: {x: 0, y: 0}
   playerControlledProjectile: 0
   setProjectileRotation: 1
+  setParticleRotation: 0
   spawnProjectileBehavior: 0
+  projectileCamshakeIntensity: 0
+  projectileCamshakeDuration: 0
 --- !u!114 &489994091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,6 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
     type: 3}
+  spawnParticlesOffset: {x: 0, y: -0.5}
   time: 1
   spawnAtStartTransform: 1
   respawnTransform: {fileID: 0}
@@ -279,5 +287,70 @@ MonoBehaviour:
   particles: {fileID: 0}
   particleColor: {r: 1, g: 1, b: 1, a: 1}
   breakOnExplode: 1
+  breakOnShot: 1
   sendMessageToOther: Ouch
   tellOtherAboutThrower: 1
+--- !u!114 &233862267880880218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651731028718573460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3595e374173bf40be95d680bcca5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 7014697317153826937, guid: ecb249016bc5e6f4e823a4867c58cfe7, type: 3}
+  spawnCount: 1
+  positionOffset: {x: 0, y: 0}
+  randomizePosition: {x: 0, y: 0}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
+  useStartForce: 0
+  forceTransformMultiplier: 0
+  mode: 1
+  force: {x: 1, y: 1, z: 0}
+  forceRandomize: {x: 0.1, y: 0.1, z: 0}
+  torqueMax: 1
+  torqueMin: -1
+--- !u!114 &2839352242609961458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651731028718573460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc7ffd0d4cc2874ba49fae242b286a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 7
+  particles: {fileID: 777228698083735751, guid: 0731d8b1f0e731b4cb990f61fb1104b2,
+    type: 3}
+  particleColor: {r: 0.6117647, g: 0.37254903, b: 0.34117648, a: 1}
+--- !u!114 &4751695887166681271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651731028718573460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3595e374173bf40be95d680bcca5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 1794340304444153981, guid: a42b8f3828ccc804a9e9cfbfbd15de91, type: 3}
+  spawnCount: 1
+  positionOffset: {x: 0, y: 0}
+  randomizePosition: {x: 0, y: 0}
+  particleColor: {r: 0.627451, g: 0.37254903, b: 0.34117648, a: 1}
+  useStartForce: 0
+  forceTransformMultiplier: 0
+  mode: 1
+  force: {x: 1, y: 1, z: 0}
+  forceRandomize: {x: 0.1, y: 0.1, z: 0}
+  torqueMax: 1
+  torqueMin: -1

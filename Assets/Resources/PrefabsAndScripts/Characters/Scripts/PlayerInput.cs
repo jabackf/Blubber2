@@ -19,6 +19,7 @@ public class PlayerInput : MonoBehaviour
     public float runSpeed = 35f;
     public float aimAngleSpeed = 200f; //Speed for aiming the angle of the throwing retical
     public float aimForceSpeed = 50f; //Speed for aiming the angle of the throwing retical
+    public bool mouseAim = true; //Set to true to allow the mouse to aim the throw or action reticals
 
     float aimActionAngleMove = 200f;    //Used in aiming the action retical (angle)
     float aimActionForceMove = 15f;    //Used in aiming the action retical (force)
@@ -43,6 +44,7 @@ public class PlayerInput : MonoBehaviour
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>();
+        if (mouseAim) controller.setMouseAim(mouseAim);
     }
 
     void Update()
@@ -161,6 +163,12 @@ public class PlayerInput : MonoBehaviour
                 }
             }
         }//END if (requirePlayerTag==false || gameObject.tag=="Player")
+    }
+
+    public void setMouseAim(bool set)
+    {
+        mouseAim = set;
+        controller.setMouseAim(set);
     }
 
     void FixedUpdate()

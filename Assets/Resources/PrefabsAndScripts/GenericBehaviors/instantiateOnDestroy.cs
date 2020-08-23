@@ -11,6 +11,7 @@ public class instantiateOnDestroy : MonoBehaviour
     public int spawnCount = 1; //The number of these things to instantiate
     public Vector2 positionOffset = new Vector2(0f, 0f);
     public Vector2 randomizePosition = new Vector2(0f, 0f);
+    public Color particleColor = Color.white; //If the object is a particle system, this can be used to color it
 
     [Space]
     [Header("Apply Start Force")]
@@ -48,6 +49,13 @@ public class instantiateOnDestroy : MonoBehaviour
                 + new Vector3(Random.Range(-randomizePosition.x, randomizePosition.x), Random.Range(-randomizePosition.y, randomizePosition.y)),
                 Quaternion.identity);
 
+            var ps = g.GetComponent<ParticleSystem>();
+            if (ps)
+            {
+                var main = ps.main;
+                main.startColor = particleColor;
+            }
+
             if (useStartForce)
             {
                 applyStartForce asf = g.AddComponent(typeof(applyStartForce)) as applyStartForce;
@@ -59,5 +67,6 @@ public class instantiateOnDestroy : MonoBehaviour
                 asf.torqueMin = torqueMin;
             }
         }
+        
     }
 }

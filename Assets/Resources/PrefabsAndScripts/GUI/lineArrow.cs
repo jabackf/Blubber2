@@ -120,6 +120,7 @@ public class lineArrow : MonoBehaviour
 
     public void setMinMax(float min, float max)
     {
+        //Debug.Log("min: " + min + ", max: " + max);
         this.minAngle = min;
         this.maxAngle = max;
     }

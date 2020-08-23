@@ -2700,6 +2700,7 @@ MonoBehaviour:
   spawnCount: 3
   positionOffset: {x: 0, y: 0}
   randomizePosition: {x: 1, y: 0.3}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
   useStartForce: 1
   forceTransformMultiplier: 1
   mode: 1
@@ -2723,6 +2724,7 @@ MonoBehaviour:
   spawnCount: 1
   positionOffset: {x: 0, y: 0}
   randomizePosition: {x: 0, y: 0}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
   useStartForce: 0
   forceTransformMultiplier: 0
   mode: 1
@@ -10308,11 +10310,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8257769699971363042, guid: 3f92a2134a6b691488ad41981745d8fe,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f92a2134a6b691488ad41981745d8fe, type: 3}
 --- !u!4 &1210327346 stripped
@@ -10509,12 +10506,12 @@ PrefabInstance:
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 85.42
+      value: 13.27
       objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.55
+      value: 0.84
       objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
@@ -14322,6 +14319,13 @@ GameObject:
   - component: {fileID: 1838729806}
   - component: {fileID: 1838729810}
   - component: {fileID: 1838729811}
+  - component: {fileID: 1838729816}
+  - component: {fileID: 1838729815}
+  - component: {fileID: 1838729814}
+  - component: {fileID: 1838729813}
+  - component: {fileID: 1838729817}
+  - component: {fileID: 1838729812}
+  - component: {fileID: 1838729818}
   m_Layer: 0
   m_Name: flyguy_0
   m_TagString: killPlayer
@@ -14405,8 +14409,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1590694485
-  m_SortingLayer: 1
+  m_SortingLayerID: 1319655185
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -7723267790030489995, guid: bab7560ddbae2f04a81180e1cea9dfd9,
     type: 3}
@@ -14477,6 +14481,135 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.6639404}
   m_EdgeRadius: 0
+--- !u!114 &1838729812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838729805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3595e374173bf40be95d680bcca5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 1794340304444153981, guid: a42b8f3828ccc804a9e9cfbfbd15de91, type: 3}
+  spawnCount: 1
+  positionOffset: {x: 0, y: 0}
+  randomizePosition: {x: 0, y: 0}
+  particleColor: {r: 0.83921576, g: 0.5137255, b: 0.36862746, a: 1}
+  useStartForce: 0
+  forceTransformMultiplier: 0
+  mode: 1
+  force: {x: 1, y: 1, z: 0}
+  forceRandomize: {x: 0.1, y: 0.1, z: 0}
+  torqueMax: 1
+  torqueMin: -1
+--- !u!114 &1838729813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838729805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3595e374173bf40be95d680bcca5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 7014697317153826937, guid: ecb249016bc5e6f4e823a4867c58cfe7, type: 3}
+  spawnCount: 1
+  positionOffset: {x: 0, y: 0}
+  randomizePosition: {x: 0, y: 0}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
+  useStartForce: 0
+  forceTransformMultiplier: 0
+  mode: 1
+  force: {x: 1, y: 1, z: 0}
+  forceRandomize: {x: 0.1, y: 0.1, z: 0}
+  torqueMax: 1
+  torqueMin: -1
+--- !u!114 &1838729814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838729805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc7ffd0d4cc2874ba49fae242b286a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 3
+  particles: {fileID: 777228698083735751, guid: 0731d8b1f0e731b4cb990f61fb1104b2,
+    type: 3}
+  particleColor: {r: 0.83921576, g: 0.5137255, b: 0.36862746, a: 1}
+--- !u!114 &1838729815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838729805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2351dff4b6e044746a3c84792c570b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
+    type: 3}
+  spawnParticlesOffset: {x: 0, y: 0}
+  time: 10
+  spawnAtStartTransform: 1
+  respawnTransform: {fileID: 0}
+--- !u!114 &1838729816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838729805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed35225a10e79574e9cbf79a599dac2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneBoundaryTag: sceneBoundary
+  buffer: {x: -1, y: -1}
+--- !u!114 &1838729817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838729805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c92b11da14d4804ab773b5d9d30827a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &1838729818
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838729805}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!4 &1848374732 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7561067211822079515, guid: 8a1a32ba5de817f4096c122710a39c5d,
@@ -18497,7 +18630,7 @@ MonoBehaviour:
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
   mCarryType: 2
-  releasePosition: 0
+  releasePosition: 1
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
