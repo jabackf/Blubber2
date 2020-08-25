@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4855685822183428089}
   - component: {fileID: 6239513050533618351}
   - component: {fileID: 8154633828465002136}
+  - component: {fileID: 3422610658348248717}
+  - component: {fileID: 3128277224876716550}
   m_Layer: 0
   m_Name: Cheeseburger
   m_TagString: Untagged
@@ -149,6 +151,7 @@ MonoBehaviour:
   rangeColliderTag: RangeCollider
   iconXOffset: 0
   iconYOffset: 1
+  name: 
   offset: {x: 0, y: 0.4}
   disableCollider: 1
   breakForce: 500
@@ -157,11 +160,20 @@ MonoBehaviour:
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
+  swapXFlip: 0
+  flipCharacterWithMouseAim: 1
   freezeRotationOnPickup: 1
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
+  minAimNotFlipped: -20
+  maxAimNotFlipped: 90
+  minAimFlipped: 90
+  maxAimFlipped: 200
+  sendFaceMessage: 0
   mCarryType: 1
   releasePosition: 0
+  changeRigidBodyType: 0
+  bodyTypeWhileCarried: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
@@ -215,3 +227,42 @@ MonoBehaviour:
   spawnProjectileBehavior: 0
   projectileCamshakeIntensity: 0
   projectileCamshakeDuration: 0
+--- !u!114 &3422610658348248717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733145135382212521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc7ffd0d4cc2874ba49fae242b286a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 1
+  particles: {fileID: 0}
+  particleColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &3128277224876716550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733145135382212521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3595e374173bf40be95d680bcca5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 1794340304444153981, guid: a42b8f3828ccc804a9e9cfbfbd15de91, type: 3}
+  spawnCount: 1
+  positionOffset: {x: 0, y: 0}
+  randomizePosition: {x: 0, y: 0}
+  particleColor: {r: 0.6156863, g: 0.32156864, b: 0.28627452, a: 1}
+  useStartForce: 0
+  forceTransformMultiplier: 0
+  mode: 1
+  force: {x: 1, y: 1, z: 0}
+  forceRandomize: {x: 0.1, y: 0.1, z: 0}
+  torqueMax: 1
+  torqueMin: -1

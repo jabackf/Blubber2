@@ -35,6 +35,7 @@ TagManager:
   - WarpLocationH
   - menuSelector
   - Weapon
+  - GameplayUIOverlay
   layers:
   - Default
   - TransparentFX

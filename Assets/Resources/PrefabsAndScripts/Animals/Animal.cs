@@ -24,6 +24,8 @@ public class Animal : MonoBehaviour
     public states state = states.idle;
     public states[] availableStates = { states.idle, states.walk, states.graze, states.speak, states.followFood }; //These are the states which will be randomly selected from. Some can be responses to things in the environment, like follow food, and will only be triggered if they appear in this list.
     public bool active = true; //If false, the cow will sit in default state
+    private bool distressed = false; //If distressed, we will stay in the state marked as distressed until distressed is false. Can be toggled on and off with setDistressed(bool) and toggleDistressed()
+    public states distressedState = states.flap;
     public Transform leftTransform, rightTransform; //These represent the immediate left and right ends of the animal. Used to determine when an object is immediately in front or behind of the animal (for example, food)
     states previousState;
     private Animator anim;
@@ -44,6 +46,11 @@ public class Animal : MonoBehaviour
     public float eatFoodRadius = 0.2f; //This is the radius of the circle used to determine if we are close enough to eat the food. Basically, a bigger number means we can eat the food from farther away.
     private GameObject food;
     private float eatTimer = 0;
+
+    //If the collider you are using for food is separate from this game object, then check this to true;
+    //You can have two food collider setups. The first is to add a trigger that acts as a food collider to this object and uncheck this option.
+    //The second is to add a child object with the food collider and the "animalFoodCollider" script attached and this option checked. This prevents us having to add a trigger to this object which could interfere with things like pickupObject ranges and stuff.
+    public bool foodColliderIsSeparate = false; 
 
     [Space]
     [Header("Falling")]
@@ -78,24 +85,27 @@ public class Animal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hasFallingState && rb.velocity.y<fallingVelocityThreshold)
+        if (!distressed)
         {
-            setState(fallingState);
-            falling = true;
-            return;
-        }
-        else
-        {
-            if (falling)
+            if (hasFallingState && rb.velocity.y < fallingVelocityThreshold)
             {
-                falling = false;
-                setState(states.idle);
+                setState(fallingState);
+                falling = true;
+                return;
+            }
+            else
+            {
+                if (falling)
+                {
+                    falling = false;
+                    setState(states.idle);
+                }
             }
         }
 
         if (state!=states.followFood && eatTimer<=0) getStateFromAnimator();
 
-        spriteFacingDirection();
+        if (!distressed) spriteFacingDirection(); //We don't want to mess with the facing direction if we are distressed, because distressed is generally called for things like being carried.
 
         if (active && state == states.followFood && eatTimer<=0)
         {
@@ -213,6 +223,32 @@ public class Animal : MonoBehaviour
         }
     }
 
+    public void setDistressed(bool on)
+    {
+        distressed = on;
+        if (distressed) setState(distressedState);
+        else setState(states.idle);
+        active = !distressed;
+    }
+    public void distressedOff()
+    {
+        distressed = false;
+        setState(states.idle);
+        active = !distressed;
+    }
+    public void distressedTime(float time)
+    {
+        distressed = true;
+        setState(distressedState);
+        active = !distressed;
+        Invoke("distressedOff", time);
+    }
+
+    public void toggleDistressed()
+    {
+        setDistressed(!distressed);
+    }
+
     bool isFoodCloseEnoughToEat()
     {
         if (food) //food still exists
@@ -232,10 +268,10 @@ public class Animal : MonoBehaviour
             rb.velocity = Vector3.Lerp(rb.velocity, new Vector3(speed, rb.velocity.y, 0), walkSmoothing);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public void triggerEntered(Collider2D other)
     {
         if (eatTimer > 0) return;
-        if (other.gameObject.tag == "Food" && active && state!=states.followFood)
+        if (other.gameObject.tag == "Food" && active && state != states.followFood)
         {
             if (hasState(states.followFood))
             {
@@ -244,21 +280,30 @@ public class Animal : MonoBehaviour
             }
         }
     }
-
-    void OnTriggerExit2D(Collider2D other)
+    public void triggerExited(Collider2D other)
     {
         if (eatTimer > 0) //We're trying to eat it. We don't really want to mess with the states. We do want to set food to null though so we know we can't chase it anymore.
         {
             if (other.gameObject == food) food = null;
             return;
         }
-        if (active && state==states.followFood && other.gameObject == food)
+        if (active && state == states.followFood && other.gameObject == food)
         {
             food = null;
             state = states.idle;
             resetTimer();
             anim.SetBool("Walking", false);
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        triggerEntered(other); //We're making these separate functions so we can call them from "animalFoodCollider" when using a separate food collider
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        triggerExited(other);
     }
 
 
@@ -405,5 +450,16 @@ public class Animal : MonoBehaviour
     {
         if (dir == 0) renderer.flipX = true;
         else renderer.flipX = false;
+    }
+
+    public void FaceLeft()
+    {
+        renderer.flipX = false;
+        dir = 1;
+    }
+    public void FaceRight()
+    {
+        renderer.flipX = true;
+        dir = 0;
     }
 }

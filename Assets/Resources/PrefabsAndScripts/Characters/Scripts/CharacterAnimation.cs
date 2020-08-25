@@ -369,7 +369,8 @@ public class CharacterAnimation : MonoBehaviour
     {
         for (int i = 0; i < spritesTurnedOff.Length; i++)
         {
-            spritesTurnedOff[i].enabled = spritesTurnedOffEnabled[i];
+            if (spritesTurnedOff[i])
+                spritesTurnedOff[i].enabled = spritesTurnedOffEnabled[i];
         }
     }
 

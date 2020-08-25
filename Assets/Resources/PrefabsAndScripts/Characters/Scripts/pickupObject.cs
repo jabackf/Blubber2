@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public class pickupObject : actionInRange
 {
+    public string name = "";
+
     private GameObject holder; //This is the character holding this object
     private FixedJoint2D joint; //This is the joint used to connect the object to the character
     private Transform carryTrans;  //The transform used for carrying objects
@@ -17,7 +19,8 @@ public class pickupObject : actionInRange
     public float carryMass = 0.5f;  //This is the mass of the object while it's being carried
     public bool flipOnX = true;     //Flips with the character holding it if set to true
     public bool flipOnY = true;
-    public bool flipCharacterWithMouseAim = true; //If set to true and the character controller is aiming with the mouse, then the character will flip to face the mouse direction when throw or action button is held down
+    public bool swapXFlip = false; //Set to true if your sprite by default faces left instead of right
+    public bool flipCharacterWithMouseAim = true; //If set to true and the character controller is aiming with the mouse, then the character will flip to face the mouse direction when throw or action button is held down. Flipping is handled in the character controller! This merely tells the character controller how it should behave with this object.
     public bool freezeRotationOnPickup = true; //If true, the object's ability to rotate on the Z axis will freeze when picked up. When dropped, it's ability to rotate will be reset to whatever it was previously
     public bool resetRotationOnPickup = true; //If true, the object's Z rotation will be set to whatever it was at initialization when picked up
     private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
@@ -31,10 +34,10 @@ public class pickupObject : actionInRange
     private GameObject recentlyThrownBy; //This gets set to the most recent holder for a few seconds after being thrown. It then gets set to null. Can be useful to tell which character threw it.
     private float recentlyThrownByTimer = 3f; //The amount of time before the recentlyThrownBy object gets cleared to null
 
-    float minAimNotFlipped = 0f;
-    float maxAimNotFlipped = 90f;
-    float minAimFlipped = 90f;
-    float maxAimFlipped = 180f;
+    public float minAimNotFlipped = -20f;
+    public float maxAimNotFlipped = 90f;
+    public float minAimFlipped = 90f;
+    public float maxAimFlipped = 200f;
 
     private sceneSettings sceneSettingsGO;
     private SpriteRenderer renderer;
@@ -45,12 +48,18 @@ public class pickupObject : actionInRange
 
     private Transform parentPrevious = null; //Stores the previous parent for exactPlayerPosition. This is because exactPlayerPosition actually parents the object to the holder instead of creating a joint and following
 
+    public bool sendFaceMessage = false; //If true, a FaceLeft() or FaceRight() (depending on the holder facing) message will be sent to THIS gameobject on pickup
+
     //Top = carry with the character's top transform. Front = carry with the player's front transform. exactPlayerPosition = parent the object to the player and follow his position exactly, don't use a joint, don't smoothDamp, kinematic physics while held.
     public enum carryType { Top, Front, exactPlayerPosition };
     public carryType mCarryType = carryType.Top; //Rather we carry this item on top or in front
 
     public enum releasePositions { None, Front, Top, Bottom }; //The character-relative positions that the this object can jump to on release. For example, if Front is selected, then on release the object will jump the character's Front position.
     public releasePositions releasePosition = releasePositions.None;
+
+    public bool changeRigidBodyType = false; //If set to true, then rigidBody type will be set to the following variable (bodyTypeWhilecarried) when picked up. It will revert to whatever it's initial bodyType was when released.
+    public RigidbodyType2D bodyTypeWhileCarried = RigidbodyType2D.Dynamic; //Note that this changeRigidBodyType feature can be glitchy. When throwing an object, changing it's body type mid throw can change the way the forces act on it and create unnatural movement. I originally added this feature to change the body type of the chicken but I didn't end up using it for this reason.
+    private RigidbodyType2D bodyTypeAtStart;
 
     [Space]
     [Header("Sprites")]
@@ -120,6 +129,7 @@ public class pickupObject : actionInRange
     {
         base.Start();
         rb = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
+        if (rb) bodyTypeAtStart = rb.bodyType;
         sceneSettingsGO = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
         renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
         initialMass = rb.mass;
@@ -206,12 +216,6 @@ public class pickupObject : actionInRange
         float angle = Mathf.Atan2(point.y - transform.position.y+offset.y, point.x - transform.position.x + offset.x) * 180 / Mathf.PI;
         if (angle < -90) angle += 360;
 
-        if (flipCharacterWithMouseAim)
-        {
-            if (angle > 90 && !flippedX) holder.SendMessage("FaceLeft", SendMessageOptions.DontRequireReceiver);
-            if (angle < 90 && flippedX) holder.SendMessage("FaceRight", SendMessageOptions.DontRequireReceiver);
-        }
-
         throwArc.setAngle(angle);
     }
     public void setActionAimAngleTowardsPoint(Vector3 point)
@@ -220,12 +224,6 @@ public class pickupObject : actionInRange
         actionAimArc.setMinMax(flippedX ? minAimFlipped : minAimNotFlipped, flippedX ? maxAimFlipped : maxAimNotFlipped);
         float angle = Mathf.Atan2(point.y - transform.position.y + offset.y, point.x - transform.position.x + offset.x) * 180 / Mathf.PI;
         if (angle < -90) angle +=360;
-
-        if (flipCharacterWithMouseAim)
-        {
-            if (angle > 90 && !flippedX) holder.SendMessage("FaceLeft", SendMessageOptions.DontRequireReceiver);
-            if (angle < 90 && flippedX) holder.SendMessage("FaceRight", SendMessageOptions.DontRequireReceiver);
-        }
 
         actionAimArc.setAngle(angle);
     }
@@ -382,11 +380,22 @@ public class pickupObject : actionInRange
             joint.breakTorque = this.breakTorque;
         }
 
+        if (sendFaceMessage)
+        {
+            if (holder.GetComponent<CharacterController2D>().isFacingRight()) gameObject.SendMessage("FaceRight", SendMessageOptions.DontRequireReceiver);
+            else gameObject.SendMessage("FaceLeft", SendMessageOptions.DontRequireReceiver);
+        }
 
         if (resetRotationOnPickup)
             gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, initialZRotation);
         if (freezeRotationOnPickup)
             rb.freezeRotation = true;
+
+        if (changeRigidBodyType)
+        {
+            rb.bodyType = bodyTypeWhileCarried;
+        }
+
 
         if (disableCollider) //We're not using a collider for this item
         {
@@ -506,8 +515,9 @@ public class pickupObject : actionInRange
         Invoke("ClearRecentlyThrownBy", recentlyThrownByTimer);
 
         releaseFromHolder();
+
         float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
-        rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle))*throwForce*throwArc.length);
+        rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle)) * throwForce * throwArc.length);
     }
 
     //Clears the recentlyThrownBy object
@@ -534,6 +544,13 @@ public class pickupObject : actionInRange
         CancelInvoke("spawnProjectile");
 
         checkForArrows();
+
+        if (changeRigidBodyType)
+        {
+            //We don't want to immediately revert back to our original bodytype, because if we were thrown we want to apply the forces to the bodytype we had while carried.
+            Invoke("revertBodyType", 1f);
+        }
+
 
         CharacterController2D cc2d = holder.GetComponent<CharacterController2D>();
         if (cc2d)
@@ -571,6 +588,11 @@ public class pickupObject : actionInRange
         if (OnReleaseCallback != null) OnReleaseCallback.Invoke();
     }
 
+    private void revertBodyType()
+    {
+        rb.bodyType = bodyTypeAtStart;
+    }
+
     public void changeTransform(Transform newT)
     {
         carryTrans = newT;
@@ -587,7 +609,9 @@ public class pickupObject : actionInRange
         if (flipOnX)
         {
             offset.x = initialOffset.x * (flipX ? -1 : 1);
-            gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
+            
+            if (!swapXFlip) gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
+            else gameObject.GetComponent<SpriteRenderer>().flipX = !flipX;
         }
 
         flippedX = flipX;//!flipX;

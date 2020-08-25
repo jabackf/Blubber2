@@ -201,6 +201,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7824296257769419215, guid: 6578271a7c2e99246ba98a77ed51c9e9,
+        type: 3}
+      propertyPath: m_Name
+      value: sprLadderTall_0
+      objectReference: {fileID: 0}
     - target: {fileID: 7824296257769419056, guid: 6578271a7c2e99246ba98a77ed51c9e9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -255,11 +260,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7824296257769419215, guid: 6578271a7c2e99246ba98a77ed51c9e9,
-        type: 3}
-      propertyPath: m_Name
-      value: sprLadderTall_0
       objectReference: {fileID: 0}
     - target: {fileID: 7824296257632114847, guid: 6578271a7c2e99246ba98a77ed51c9e9,
         type: 3}
@@ -935,6 +935,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 423419969}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: sprPlatformYellow_0
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -989,11 +994,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: sprPlatformYellow_0
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656799, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -1313,6 +1313,9 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 6
     initiatorMessagesTime: 1
@@ -1332,6 +1335,9 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 7
     initiatorMessagesTime: 1
@@ -1349,6 +1355,9 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 7
     initiatorMessagesTime: 1
@@ -1366,6 +1375,29 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rShot:
+    isTalkingResponse: 2
+    name: Shot
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 7
     initiatorMessagesTime: 1
@@ -1690,27 +1722,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6143473746289090509, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: colorPicker
-      value: 
-      objectReference: {fileID: 4379163986830053641, guid: a524c0a6c8dd4a24986eb650224020c6,
-        type: 3}
-    - target: {fileID: 6143473746289090509, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: noneString
-      value: Cancel
-      objectReference: {fileID: 0}
-    - target: {fileID: 6143473746536970293, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6143473746536970293, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.09
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a123ea57d5736442b1bc620b055f986, type: 3}
 --- !u!4 &906885693 stripped
@@ -1726,6 +1737,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 423419969}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: sprPlatformYellow_0
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1780,11 +1796,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: sprPlatformYellow_0
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656799, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -2091,6 +2102,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 423419969}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: sprPlatformYellow_0 (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2145,11 +2161,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: sprPlatformYellow_0 (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656799, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -5844,6 +5855,9 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 5
     delayedMessagesTime: 6
     initiatorMessagesTime: 3
@@ -5863,6 +5877,9 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 7
     initiatorMessagesTime: 1
@@ -5880,6 +5897,9 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 7
     initiatorMessagesTime: 1
@@ -5898,6 +5918,29 @@ MonoBehaviour:
     faceInitiator: 1
     facingReturnBehavior: 1
     previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rShot:
+    isTalkingResponse: 2
+    name: Shot
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
     sayTime: 6
     delayedMessagesTime: 7
     initiatorMessagesTime: 1

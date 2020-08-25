@@ -24,6 +24,11 @@ namespace Extensions
             }
             return null;
         }
+
+        public static Global GetGlobal(this MonoBehaviour obj)
+        {
+            return GameObject.FindWithTag("global").GetComponent<Global>();
+        }
     }
 
     public static class StringExtensions

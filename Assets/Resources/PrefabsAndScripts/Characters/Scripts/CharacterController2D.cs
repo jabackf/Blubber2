@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using System.Collections;
 using System;
 
@@ -18,6 +19,7 @@ public class CharacterController2D : MonoBehaviour
     private bool initialIsFacingRight;                                      //This is set to m_isFacingRight at the start of the object and retains this value. Can be retrieved using isInitiallyFacingRight(). Can be useful for knowing what direction an NPC was initially configured to face in the editor 
     private bool mouseAim = false;                                          //Set to true by the input controller to aim throw and action reticals with mouse
     private Vector3 previousMousePosition=new Vector3(0f,0f,0f);               //Used for mouse aiming to track the previous position of the mouse in the frame update
+    [HideInInspector] public bool currentlyMouseAiming = false;                              //Used internally for setting character facing direction with mouse aim. This is set to true if we are holding down the throw or action AND we have since moved the mouse, false upon throw or action release
 
     [Space]
     [Header("Jumping")]
@@ -134,6 +136,8 @@ public class CharacterController2D : MonoBehaviour
 
     private bool heldObjectChangedScenes = false;   //Set to true when an object is taken to a new scene. Used to mark the object for destruction at next scene load when it's dropped.
 
+    private UIOverlayScript uiOverlay;
+
     private void Awake()
     {
         //We want the character to be persistent, and we only want one player
@@ -145,6 +149,8 @@ public class CharacterController2D : MonoBehaviour
                 Destroy(gameObject);
                 return;
             }
+
+            getHoldingUI();
         }
 
         global = GameObject.FindWithTag("global").GetComponent<Global>();
@@ -173,6 +179,11 @@ public class CharacterController2D : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
 
         if (startFlipped) Flip();
+    }
+
+    void LateUpdate()
+    {
+        previousMousePosition = Input.mousePosition;
     }
 
     private void FixedUpdate()
@@ -271,14 +282,25 @@ public class CharacterController2D : MonoBehaviour
         if (!isHolding || !canPickup || holding == null) return;
 
         //Debug.Log("P:" + pressed + ", H:" + held + ", R:" + released + ", Hor:" + horizontal + ", Vert:" + vertical);
+        if (mouseAim)
+        {
+            if (Input.mousePosition != previousMousePosition)
+            {
+                if (held) currentlyMouseAiming = true;
+                holding.setActionAimAngleTowardsPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+            }
+            if (currentlyMouseAiming && holding.flipCharacterWithMouseAim)
+            {
+                if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x) FaceLeft();
+                if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x) FaceRight();
+                horizontal = vertical = 0f;
+            }
+        }
+
+        if (released) currentlyMouseAiming = false;
 
         holding.useItemAction(pressed, held, released, horizontal, vertical);
-
-        if (mouseAim && Input.mousePosition != previousMousePosition)
-        {
-            holding.setActionAimAngleTowardsPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            previousMousePosition = Input.mousePosition;
-        }
     }
 
     //Use the throwing retical
@@ -288,14 +310,26 @@ public class CharacterController2D : MonoBehaviour
         if (isDead) return;
 
         if (!isHolding || !canPickup || holding == null) return;
+        
+        if (mouseAim)
+        {
+            if (Input.mousePosition != previousMousePosition)
+            {
+                currentlyMouseAiming = true;
+                holding.setThrowAimAngleTowardsPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+            }
+            if (currentlyMouseAiming && holding.flipCharacterWithMouseAim)
+            {
+                if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x < transform.position.x) FaceLeft();
+                if (Camera.main.ScreenToWorldPoint(Input.mousePosition).x > transform.position.x) FaceRight();
+                h = v = 0f;
+            }
+        }
+
+        if (release) currentlyMouseAiming = false;
 
         holding.Aim(h, v, release, action);
-
-        if (mouseAim && Input.mousePosition != previousMousePosition)
-        {
-            holding.setThrowAimAngleTowardsPoint(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            previousMousePosition = Input.mousePosition;
-        }
 
         if (charAnim != null) charAnim.throwing = release;
     }
@@ -483,14 +517,22 @@ public class CharacterController2D : MonoBehaviour
 
             if (charAnim != null) charAnim.speed = Mathf.Abs(move);
 
+            //We're about to flip the character. If we're aiming with the mouse then we don't want to flip the character while walking. Let's check for that first.
+            var dontFlip = false;
+            if (isHolding)
+            {
+                if (mouseAim && currentlyMouseAiming && holding.flipCharacterWithMouseAim) 
+                    dontFlip = true;
+            }
+
             // If the input is moving the player right and the player is facing left...
-            if (move > 0 && !m_FacingRight)
+            if (move > 0 && !m_FacingRight && !dontFlip)
             {
                 // ... flip the player.
                 Flip();
             }
             // Otherwise if the input is moving the player left and the player is facing right...
-            else if (move < 0 && m_FacingRight)
+            else if (move < 0 && m_FacingRight && !dontFlip)
             {
                 // ... flip the player.
                 Flip();
@@ -502,8 +544,11 @@ public class CharacterController2D : MonoBehaviour
                 holding = actionObjectInRange.GetComponent<pickupObject>() as pickupObject;
                 if (holding != null)
                 {
+                    currentlyMouseAiming = false;
+
                     holding.pickMeUp(gameObject, m_pickupTop, m_FacingRight ? m_pickupR : m_pickupL);
                     isHolding = true;
+                    setHoldingUIText(holding.name);
                     setActionObjectInRange(null);
                     justPickedUp = true;
                     if (charAnim != null) charAnim.pickingUp = true;
@@ -814,6 +859,9 @@ public class CharacterController2D : MonoBehaviour
     //Called from pickupObject script when holding item is released (dropped, thrown, added to inventory, etc)
     public void pickupReleased()
     {
+        setHoldingUIText("");
+
+        currentlyMouseAiming = false;
         isHolding = false;
         if (heldObjectChangedScenes)
         {
@@ -825,6 +873,7 @@ public class CharacterController2D : MonoBehaviour
     //Drops an object if one is carried
     public void dropObject()
     {
+        currentlyMouseAiming = false;
         if (holdingSomething())
         {
             holding.releaseFromHolder();
@@ -836,6 +885,7 @@ public class CharacterController2D : MonoBehaviour
     public void sceneChangeStart(string map)
     {
         ClearSay();
+        currentlyMouseAiming = false;
         //If the warp trigger doesn't want us to carry the object across, it should have sent us a dropObject message by now. So we'll assume we can take it with us.
         if (holdingSomething())
         {
@@ -859,6 +909,11 @@ public class CharacterController2D : MonoBehaviour
             holding.makeDroppable();
             holding.changedScenes();
             heldObjectChangedScenes = true;  //Used to mark the object for destruction on next scene load after it is dropped
+            setHoldingUIText(holding.name);
+        }
+        else
+        {
+            setHoldingUIText("");
         }
 
         //If this character just entered a new scene, then we can't use the old respond position for the previous scene
@@ -920,7 +975,6 @@ public class CharacterController2D : MonoBehaviour
         db.stayOnScreen = false;
         db.dialogParent = null;
         db.autoSelfDestructTimer = time;
-        //db.dbOffset = new Vector2(0f, 1.7f);
         sayDialogBox = db;
         isTalking = true;
         Invoke("ClearSay", time);
@@ -942,5 +996,24 @@ public class CharacterController2D : MonoBehaviour
         int i = UnityEngine.Random.Range(0, messages.Length - 1);
 
         Say(messages[i], time);
+    }
+
+    //Internal helper. Searches for the UI element that displays the text name of the object we are holding and assigns it to holdingUIText.
+    private void getHoldingUI()
+    {
+        GameObject overlaygo = GameObject.FindWithTag("GameplayUIOverlay");
+        if (overlaygo) uiOverlay = overlaygo.GetComponent<UIOverlayScript>();
+    }
+
+    private void setHoldingUIText(string text)
+    {
+        if (gameObject.tag == "Player")
+        {
+            if (!uiOverlay) getHoldingUI();
+            if (uiOverlay)
+            {
+                uiOverlay.setHoldingText(text);
+            }
+        }
     }
 }

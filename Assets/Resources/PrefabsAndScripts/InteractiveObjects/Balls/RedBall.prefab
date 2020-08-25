@@ -140,6 +140,7 @@ MonoBehaviour:
   rangeColliderTag: RangeCollider
   iconXOffset: -0.2
   iconYOffset: 0.4
+  name: Red Ball
   offset: {x: 0, y: 0.5}
   disableCollider: 0
   breakForce: 520
@@ -148,11 +149,20 @@ MonoBehaviour:
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
+  swapXFlip: 0
+  flipCharacterWithMouseAim: 1
   freezeRotationOnPickup: 1
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
+  minAimNotFlipped: -20
+  maxAimNotFlipped: 90
+  minAimFlipped: 90
+  maxAimFlipped: 200
+  sendFaceMessage: 0
   mCarryType: 0
   releasePosition: 0
+  changeRigidBodyType: 0
+  bodyTypeWhileCarried: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
@@ -199,9 +209,13 @@ MonoBehaviour:
   spawnProjectileParticles: {fileID: 0}
   spawnProjectileRate: 0.5
   spawnProjectileDistance: 0.8
+  spawnProjectileOffset: {x: 0, y: 0}
   playerControlledProjectile: 0
   setProjectileRotation: 1
+  setParticleRotation: 0
   spawnProjectileBehavior: 0
+  projectileCamshakeIntensity: 0
+  projectileCamshakeDuration: 0
 --- !u!114 &394419153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,5 +236,6 @@ MonoBehaviour:
   particles: {fileID: 0}
   particleColor: {r: 1, g: 1, b: 1, a: 1}
   breakOnExplode: 1
+  breakOnShot: 1
   sendMessageToOther: Ouch
   tellOtherAboutThrower: 1

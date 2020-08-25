@@ -87,7 +87,7 @@ public class BlubberAnimation : CharacterAnimation
         {
             if (d.name.CaseInsensitiveContains("chef")) return "Chef";
             if (d.name.CaseInsensitiveContains("santa")) return "Santa";
-            if (d.name.CaseInsensitiveContains("linkhat")) return "Link";
+            if (d.name.CaseInsensitiveContains("link hat")) return "Link";
         }
         return "None";
     }

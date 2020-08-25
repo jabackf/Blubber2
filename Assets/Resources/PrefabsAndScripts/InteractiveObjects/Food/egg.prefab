@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 2067713703766799326}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0508, y: 1.0508, z: 1.0508}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -141,6 +141,7 @@ MonoBehaviour:
   rangeColliderTag: RangeCollider
   iconXOffset: -0.2
   iconYOffset: 0.4
+  name: Egg
   offset: {x: 0, y: 0.5}
   disableCollider: 1
   breakForce: 520
@@ -149,11 +150,20 @@ MonoBehaviour:
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
+  swapXFlip: 0
+  flipCharacterWithMouseAim: 1
   freezeRotationOnPickup: 1
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
+  minAimNotFlipped: -20
+  maxAimNotFlipped: 90
+  minAimFlipped: 90
+  maxAimFlipped: 200
+  sendFaceMessage: 0
   mCarryType: 0
   releasePosition: 0
+  changeRigidBodyType: 0
+  bodyTypeWhileCarried: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
@@ -200,9 +210,13 @@ MonoBehaviour:
   spawnProjectileParticles: {fileID: 0}
   spawnProjectileRate: 0.5
   spawnProjectileDistance: 0.8
+  spawnProjectileOffset: {x: 0, y: 0}
   playerControlledProjectile: 0
   setProjectileRotation: 1
+  setParticleRotation: 0
   spawnProjectileBehavior: 0
+  projectileCamshakeIntensity: 0
+  projectileCamshakeDuration: 0
 --- !u!114 &5544051427642014534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,5 +252,6 @@ MonoBehaviour:
     type: 3}
   particleColor: {r: 0.9150943, g: 0.90753126, b: 0.4704966, a: 1}
   breakOnExplode: 1
+  breakOnShot: 1
   sendMessageToOther: Gross
   tellOtherAboutThrower: 1

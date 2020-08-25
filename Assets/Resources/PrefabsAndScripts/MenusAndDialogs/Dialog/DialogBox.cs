@@ -19,7 +19,7 @@ public class DialogBox : MonoBehaviour
     public Transform followTop;  //The top point of the character/sign/whatever that the dbox should point to. Leave this variable and the bottom variable null to show the dialog in the center.
     public Transform followBottom; //The bottom part (used mainly if the character/sign/whatever is near the top of the screen, or used exclusively if no topFollow is provided)
     public int lineBreakWidth = 60; //This max number of characters a string can have before a linebreak is used. The linebreak will replace the nearest space behind this number.
-    public Vector2 dbOffset = new Vector2(0f, .5f);
+    [HideInInspector]public Vector2 dbOffset = new Vector2(0f, 0.2f);
     public bool stayOnScreen = true; //If set to true, the script will adjust the dialog box to try to keep it on screen.
 
     private Image image;  //An image to display in the text box. 
@@ -388,7 +388,7 @@ public class DialogBox : MonoBehaviour
 
         if (followTop != null)
         {
-            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x * canvasComponent.scaleFactor, dbOffset.y * canvasComponent.scaleFactor, 0));
+            pos = Camera.main.WorldToScreenPoint(followTop.position + new Vector3(dbOffset.x, dbOffset.y, 0)) + new Vector3(0f, tailHalfH*2, 0f);
             pos.y += halfH;
             tailY = pos.y - halfH - (tailHalfH);
         }
@@ -396,7 +396,7 @@ public class DialogBox : MonoBehaviour
         //Move the box under the character if it would fit better on the screen, or if we've only specified a bottom transform
         if (followBottom != null && ( pos.y > (topViewEdge - halfH)  || followTop == null))
         {
-            pos = Camera.main.WorldToScreenPoint(new Vector3(followBottom.position.x + dbOffset.x * canvasComponent.scaleFactor, followBottom.position.y - dbOffset.y * canvasComponent.scaleFactor, 0));
+            pos = Camera.main.WorldToScreenPoint(followBottom.position + new Vector3(dbOffset.x, dbOffset.y, 0)) + new Vector3(0f, tailHalfH * 2, 0f);
             pos.y -= halfH;
 
             tailY = pos.y + halfH + (tailHalfH);

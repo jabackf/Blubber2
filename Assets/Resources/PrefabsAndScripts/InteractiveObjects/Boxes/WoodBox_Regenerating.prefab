@@ -169,6 +169,7 @@ MonoBehaviour:
   rangeColliderTag: RangeCollider
   iconXOffset: -0.2
   iconYOffset: 0.5
+  name: Wooden Box
   offset: {x: 0, y: 0.6}
   disableCollider: 0
   breakForce: 500
@@ -177,11 +178,20 @@ MonoBehaviour:
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
+  swapXFlip: 0
+  flipCharacterWithMouseAim: 1
   freezeRotationOnPickup: 1
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
+  minAimNotFlipped: -20
+  maxAimNotFlipped: 90
+  minAimFlipped: 90
+  maxAimFlipped: 200
+  sendFaceMessage: 0
   mCarryType: 0
   releasePosition: 0
+  changeRigidBodyType: 0
+  bodyTypeWhileCarried: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}

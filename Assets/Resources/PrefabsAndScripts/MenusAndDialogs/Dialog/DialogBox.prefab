@@ -51,7 +51,7 @@ MonoBehaviour:
   followTop: {fileID: 0}
   followBottom: {fileID: 0}
   lineBreakWidth: 60
-  dbOffset: {x: 0, y: 1.2}
+  dbOffset: {x: 0, y: 0.2}
   stayOnScreen: 1
   imgResource: 
   imgSprite: {fileID: 0}
@@ -73,3 +73,4 @@ MonoBehaviour:
   cursorOffset: {x: 8, y: -7}
   answers: []
   dialogParent: {fileID: 0}
+  autoSelfDestructTimer: -1

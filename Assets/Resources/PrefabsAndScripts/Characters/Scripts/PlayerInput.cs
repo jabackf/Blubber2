@@ -80,7 +80,7 @@ public class PlayerInput : MonoBehaviour
                     useItemActionHeld = true;
 
                     //Since we're not in throwing mode and we have the action button pressed, these controls are used for action aim instead
-                    if (!Input.GetButton("throwAimHorizontal"))
+                    if (!Input.GetButton("throwAimHorizontal") )
                     {   //Changing the angle
                         aimActionAngleMove = Input.GetAxisRaw("throwAimVertical") * aimActionAngleSpeed;
                         aimActionForceMove = 0;
@@ -103,7 +103,7 @@ public class PlayerInput : MonoBehaviour
                     //If we're using the actionAim system, then don't jump. This bit of code assumes jump is the same as action aim controls.
                     if (controller.holdingSomething() && controller.getHolding() != null)
                     {
-                        if (Input.GetButton("UseItemAction") && controller.getHolding().hasActionAim)
+                        if ( Input.GetButton("UseItemAction") && controller.getHolding().hasActionAim && !controller.currentlyMouseAiming )
                             jump = false;
                     }
 
@@ -141,6 +141,14 @@ public class PlayerInput : MonoBehaviour
             }//end !isThrowing
             else
             {//We're throwing something
+
+                //If we're aiming the pickup retical with the mouse then we can still jump
+                if (Input.GetButtonDown("Jump"))
+                {
+                    if (controller.currentlyMouseAiming)
+                        jump = true;
+                }
+
                 if (!Input.GetButton("Throw"))
                 {
                     throwRelease = true;
@@ -184,7 +192,7 @@ public class PlayerInput : MonoBehaviour
             else
             {
                 controller.Aim(aimForceMove * Time.fixedDeltaTime, aimAngleMove * Time.fixedDeltaTime, throwRelease, holdingAction);
-                controller.Move(horizontalMove * Time.fixedDeltaTime, false, false, false, 0, false, false);
+                controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false, 0, false, false);
                 if (throwRelease) isThrowing = false;
             }
         }

@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7561067211822079512}
   - component: {fileID: 7561067211822079513}
   - component: {fileID: 7561067211822079514}
-  m_Layer: 8
-  m_Name: sprPizza_0
+  m_Layer: 0
+  m_Name: pizza
   m_TagString: Food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7561067211822079516}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 47, y: 1, z: 0}
   m_LocalScale: {x: 0.9, y: 0.7, z: 1}
   m_Children: []
@@ -149,6 +149,7 @@ MonoBehaviour:
   rangeColliderTag: RangeCollider
   iconXOffset: 0
   iconYOffset: 1
+  name: Pizza
   offset: {x: 0, y: 0.4}
   disableCollider: 1
   breakForce: 500
@@ -157,11 +158,20 @@ MonoBehaviour:
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
+  swapXFlip: 0
+  flipCharacterWithMouseAim: 1
   freezeRotationOnPickup: 1
   resetRotationOnPickup: 1
   throwArc: {fileID: 0}
+  minAimNotFlipped: -20
+  maxAimNotFlipped: 90
+  minAimFlipped: 90
+  maxAimFlipped: 200
+  sendFaceMessage: 0
   mCarryType: 1
   releasePosition: 0
+  changeRigidBodyType: 0
+  bodyTypeWhileCarried: 0
   hasHeldSprite: 0
   heldSprite: {fileID: 0}
   unheldSprite: {fileID: 0}
@@ -204,3 +214,14 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  spawnProjectilePrefab: {fileID: 0}
+  spawnProjectileParticles: {fileID: 0}
+  spawnProjectileRate: 0.5
+  spawnProjectileDistance: 0.8
+  spawnProjectileOffset: {x: 0, y: 0}
+  playerControlledProjectile: 0
+  setProjectileRotation: 1
+  setParticleRotation: 0
+  spawnProjectileBehavior: 0
+  projectileCamshakeIntensity: 0
+  projectileCamshakeDuration: 0

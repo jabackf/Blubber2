@@ -14,7 +14,10 @@ public class Global : MonoBehaviour
     public string startScene = "testing_100_100";
     public MapSystem map;
     [HideInInspector] public bool sceneChanging = false; //This is set to true/false by the mapsystem. As soon as a scene change is triggered and a transition starts, this is marked true. It is marked false at the start of the new scene
-	
+
+    public AudioManager audio;
+    public AudioSource audioEffectsSource, audioMusicSource;
+
     [Space]
     [Header("Directories")]
 	//We want these directory variables to be the same for the whole project, meaning the same for all global objects. HideInspector helps ensure that the script is the only place we are defining these strings.
@@ -57,6 +60,10 @@ public class Global : MonoBehaviour
         map.global = this;
         map.currentMap = startScene;
         map.setRepositionType(MapSystem.repositionTypes.none);
+
+        audio = new AudioManager();
+        audio.EffectsSource = audioEffectsSource;
+        audio.MusicSource = audioMusicSource;
     }
 
     private void Start()
@@ -75,5 +82,7 @@ public class Global : MonoBehaviour
     {
 
     }
+
+
 
 }
