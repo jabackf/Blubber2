@@ -253,6 +253,7 @@ MonoBehaviour:
   canUseDropDownPlatforms: 1
   inWater: 0
   waterMultiplier: 0.7
+  currentlyMouseAiming: 0
   m_JumpVelocity: 10.5
   temporaryExtraJump: 0
   canDoubleJump: 0
@@ -260,6 +261,7 @@ MonoBehaviour:
   infiniteWaterJump: 1
   m_WaterJumpMultiplier: 0.6
   m_MaxJumpVelocity: 12
+  jumpSound: {fileID: 8300000, guid: adcfed4f5b1ee584090edd12f17fff6e, type: 3}
   canCrouch: 0
   m_CrouchSpeed: 0.36
   m_CrouchDisableCollider: {fileID: 0}
@@ -302,6 +304,8 @@ MonoBehaviour:
   respawnOverride: {fileID: 0}
   respawnTime: 0.5
   respawnLerpSpeed: 4
+  dieSound: {fileID: 8300000, guid: 4e7de9d1782c25d429b3f8d5075a6549, type: 3}
+  spawnSound: {fileID: 8300000, guid: 5a2327420ec531e4f90d8a5bd9393dbf, type: 3}
   OnLandEvent:
     m_PersistentCalls:
       m_Calls:
@@ -351,6 +355,7 @@ MonoBehaviour:
   runSpeed: 35
   aimAngleSpeed: 200
   aimForceSpeed: 15
+  mouseAim: 1
   aimActionAngleSpeed: 200
   aimActionForceSpeed: 50
   climbSpeed: 5

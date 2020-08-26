@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.SceneManagement;
+using Extensions;
 
 //The scene settings class contains various settings for every scene.
 //The map system keeps a reference to the current scene settings, and can be accessed through global.map.settings
 
 public class sceneSettings : MonoBehaviour
 {
+    Global global;
+
     [Header("Message")]
     public string bottomMessage = "";
+
+    [Header("Background Music")]
+    public List<AudioClip> music = new List<AudioClip>(); //Leave empty to continue playing whatever is currently playing
+    public bool randomizePlaylist = false; //If false, then we play the list all the way through looping to the first track when complete. If true then the tracks will be played randomly (but tracks will not be repeated back-to-back)
+    public bool noSceneMusic = false; //If no AudioClip is selected for music, then whatever music is currently playing will continue to play. In order to have a scene that is completely silent, you must check this option.
+    public bool restartIfPlaying = false; //If the music is already playing the setting this to true will restart it on scene load
+    public bool loopAudio = true; //If true then the music will loop indefinitely. If multilple tracks are selected then the playlist will loop indefinitely
 
     //Settings for the drop shadow system
     //NOTE: When using the drop shadow system, this object must be notified of new objects that are created. Otherwise these new objects will not have a drop shadow.
@@ -35,6 +45,8 @@ public class sceneSettings : MonoBehaviour
 
     void ssSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        global = this.GetGlobal();
+
         //Start attaching drop shadows to stuff
         if (dsEnabled)
         { 
@@ -47,6 +59,11 @@ public class sceneSettings : MonoBehaviour
             }
         }
         SceneManager.sceneLoaded -= ssSceneLoaded;
+
+        if (music.Count==1) global.audio.PlayMusic(music[0], loopAudio, restartIfPlaying);
+        if (music.Count>1) global.audio.PlayMusic(music, loopAudio, restartIfPlaying, randomizePlaylist);
+
+        if (noSceneMusic) global.audio.StopMusic();
     }
 
     void destroyAllDropShadows()

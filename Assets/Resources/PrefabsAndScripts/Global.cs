@@ -64,12 +64,19 @@ public class Global : MonoBehaviour
         audio = new AudioManager();
         audio.EffectsSource = audioEffectsSource;
         audio.MusicSource = audioMusicSource;
+        audio.Start(gameObject);
     }
 
     private void Start()
     {
         OnValidate(); //Implicitly call to setup game scene
         map.goTo(startScene, MapSystem.transitions.none, false);
+    }
+
+    private void Update()
+    {
+        //Update any of our classes that are not inheriting from and need an update
+        audio.Update();
     }
 
     public bool isSceneChanging()

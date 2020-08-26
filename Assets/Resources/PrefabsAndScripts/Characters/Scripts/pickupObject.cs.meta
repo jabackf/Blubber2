@@ -3,7 +3,25 @@ guid: 7328c9662bd38d749aec0f0c4e401e51
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - ActionIconPrefab: {instanceID: 0}
+  - throwArc: {instanceID: 0}
+  - heldSprite: {instanceID: 0}
+  - unheldSprite: {instanceID: 0}
+  - sideSprite: {instanceID: 0}
+  - frontSprite: {instanceID: 0}
+  - backSprite: {instanceID: 0}
+  - sndOnPickup: {instanceID: 0}
+  - sndOnThrow: {instanceID: 0}
+  - sndOnActionPress: {instanceID: 0}
+  - sndOnActionRelease: {instanceID: 0}
+  - sndSpawnProjectile: {instanceID: 0}
+  - actionAimArc: {instanceID: 0}
+  - actionPressedMessageReceiver: {instanceID: 0}
+  - actionHeldMessageReceiver: {instanceID: 0}
+  - actionReleasedMessageReceiver: {instanceID: 0}
+  - spawnProjectilePrefab: {instanceID: 0}
+  - spawnProjectileParticles: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

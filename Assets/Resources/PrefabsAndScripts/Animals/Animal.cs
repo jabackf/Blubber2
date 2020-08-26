@@ -39,6 +39,15 @@ public class Animal : MonoBehaviour
     public Transform rangeLeft, rangeRight; //If not null, these are used to keep the animal from walking outside of these x axis boundaries
     private float boundXLeft = -1, boundXRight = -1; //Used internally with the rangeLeft and Right
     private sceneSettings sceneSettingsGO;
+    Global global;
+
+    [Space]
+    [Header("Sounds")]
+    //Note: These sounds will only play if they are within the camera view+camera buffer, or if cameraFollowPlayer does not exist on the camera.
+    public AudioClip sndSpeak;
+    public AudioClip sndGraze;
+    public AudioClip sndMakeSomething;
+    public AudioClip sndFlap;
 
     [Space]
     [Header("Food")]
@@ -71,6 +80,7 @@ public class Animal : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         renderer = GetComponent<SpriteRenderer>();
         sceneSettingsGO = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
 
         if (leftTransform == null) leftTransform = transform;
         if (rightTransform == null) rightTransform = transform;
@@ -369,16 +379,19 @@ public class Animal : MonoBehaviour
         {
             state = states.graze;
             anim.SetBool("Grazing", true);
+            if (sndGraze) global.audio.PlayIfOnScreen(sndGraze, (Vector2)transform.position);
         }
         if (s == states.speak)
         {
             anim.SetBool("Speaking", true);
             state = states.speak;
+            if (sndSpeak) global.audio.PlayIfOnScreen(sndSpeak, (Vector2)transform.position);
         }
         if (s == states.flap)
         {
             anim.SetBool("Flapping", true);
             state = states.flap;
+            if (sndFlap) global.audio.PlayIfOnScreen(sndFlap, (Vector2)transform.position);
         }
         if (s == states.followFood)
         {
@@ -402,6 +415,7 @@ public class Animal : MonoBehaviour
                 if (count < createObjects[createSelection].max)
                 {
                     Invoke("createSomething", createObjects[createSelection].createTimer);
+                    if (sndMakeSomething) global.audio.PlayIfOnScreen(sndMakeSomething, (Vector2)transform.position);
                     found = true;
                     tries = -1;
                 }

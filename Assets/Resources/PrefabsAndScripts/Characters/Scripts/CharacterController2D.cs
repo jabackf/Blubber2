@@ -30,6 +30,7 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private bool infiniteWaterJump = true;                    //Jump anytime, if in water
     [SerializeField] private float m_WaterJumpMultiplier = 0.6f;                    //Multiplied to jump force if in water
     [SerializeField] private float m_MaxJumpVelocity = 12f;                    //Infinite jump or water jump can be exploited to lead to high speeds. This clamps the speed after jumping.
+    [SerializeField] private AudioClip jumpSound;
 
     [Space]
     [Header("Crouching")]
@@ -120,6 +121,8 @@ public class CharacterController2D : MonoBehaviour
     private bool kinematicStateBeforeDeath = false;                               //Used to store and reset rb.isKinematic to it's normal state after death and respawn
     private int layerBeforeDeath;                                           //When you die, you are temporarily moved to the disableAllCollision layer. This is used to store the initial layer so you can be moved back at respawn
     [SerializeField] private float respawnLerpSpeed = 3f;                 //Speed used for lerping the character back to the respawn point. Enter -1 for instant jump
+    [SerializeField] private AudioClip dieSound;
+    [SerializeField] private AudioClip spawnSound;
 
     [Header("Events")]
     [Space]
@@ -618,6 +621,8 @@ public class CharacterController2D : MonoBehaviour
 
                 //Sometimes infinite jump or water jump can be exploited to lead to high speeds. This clamps the velocity down.
                 if (m_Rigidbody2D.velocity.y > m_MaxJumpVelocity) m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_MaxJumpVelocity);
+
+                if (jumpSound) global.audio.RandomSoundEffect(jumpSound);
             }
         }
         inWater = false;
@@ -686,6 +691,8 @@ public class CharacterController2D : MonoBehaviour
 
         isDead = true;
 
+        if (dieSound) global.audio.Play(dieSound);
+
         layerBeforeDeath = gameObject.layer;
         gameObject.layer = LayerMask.NameToLayer("DisableAllCollision");
         kinematicStateBeforeDeath = m_Rigidbody2D.isKinematic;
@@ -707,6 +714,7 @@ public class CharacterController2D : MonoBehaviour
         gameObject.layer = layerBeforeDeath;
         if (spawnParticles) Instantiate(spawnParticles, gameObject.transform.position, Quaternion.identity);
         if (charAnim == null) charAnim = gameObject.GetComponent<CharacterAnimation>();
+        if (spawnSound) global.audio.Play(spawnSound);
         charAnim.characterRespawned();
     }
 

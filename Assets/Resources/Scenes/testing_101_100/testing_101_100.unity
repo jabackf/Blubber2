@@ -1885,6 +1885,13 @@ MonoBehaviour:
     type: 3}
   backSprite: {fileID: 6611254611130644821, guid: 3874c3ac765b31d49a0c2926ed350997,
     type: 3}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 1
   hasActionAim: 0
   rotateWithAim: 0
@@ -2587,6 +2594,10 @@ MonoBehaviour:
   walkSmoothing: 0.3
   rangeLeft: {fileID: 323788629}
   rangeRight: {fileID: 1375832542}
+  sndSpeak: {fileID: 0}
+  sndGraze: {fileID: 0}
+  sndMakeSomething: {fileID: 0}
+  sndFlap: {fileID: 0}
   eatFoodState: 2
   eatFoodRadius: 0.1
   foodColliderIsSeparate: 0
@@ -3127,6 +3138,13 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 1
   hasActionAim: 1
   rotateWithAim: 1
@@ -3484,6 +3502,10 @@ MonoBehaviour:
   walkSmoothing: 0.3
   rangeLeft: {fileID: 1780399613}
   rangeRight: {fileID: 1889605559}
+  sndSpeak: {fileID: 8300000, guid: 71915ace923b95346a1c775c2738b7f2, type: 3}
+  sndGraze: {fileID: 0}
+  sndMakeSomething: {fileID: 0}
+  sndFlap: {fileID: 0}
   eatFoodState: 2
   eatFoodRadius: 0.1
   foodColliderIsSeparate: 0
@@ -4509,6 +4531,13 @@ MonoBehaviour:
     type: 3}
   backSprite: {fileID: -4567092851126130046, guid: 18f5545f2577a1e4db4abf38c4fa6a15,
     type: 3}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
@@ -5262,6 +5291,13 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
@@ -5721,6 +5757,7 @@ MonoBehaviour:
   infiniteWaterJump: 1
   m_WaterJumpMultiplier: 0.8
   m_MaxJumpVelocity: 12
+  jumpSound: {fileID: 0}
   canCrouch: 0
   m_CrouchSpeed: 0.36
   m_CrouchDisableCollider: {fileID: 0}
@@ -5763,6 +5800,8 @@ MonoBehaviour:
   respawnOverride: {fileID: 0}
   respawnTime: 2
   respawnLerpSpeed: 4
+  dieSound: {fileID: 0}
+  spawnSound: {fileID: 0}
   OnLandEvent:
     m_PersistentCalls:
       m_Calls:
@@ -13105,6 +13144,13 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 1
   hasActionAim: 0
   rotateWithAim: 1
@@ -15182,6 +15228,10 @@ MonoBehaviour:
   walkSmoothing: 0.3
   rangeLeft: {fileID: 1318896669}
   rangeRight: {fileID: 545340532}
+  sndSpeak: {fileID: 8300000, guid: 451cdde23efd91a49b6081aeb3888bf0, type: 3}
+  sndGraze: {fileID: 8300000, guid: cfe57a40c61c0c042916ab3b9a928e42, type: 3}
+  sndMakeSomething: {fileID: 8300000, guid: 8c3bf8eb9ec2bf64fbdfa4121232b2d2, type: 3}
+  sndFlap: {fileID: 8300000, guid: 8c3bf8eb9ec2bf64fbdfa4121232b2d2, type: 3}
   eatFoodState: 2
   eatFoodRadius: 0.2
   foodColliderIsSeparate: 1
@@ -15293,6 +15343,13 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 8300000, guid: 451cdde23efd91a49b6081aeb3888bf0, type: 3}
+  sndLoopOnPickup: {fileID: 8300000, guid: cfe57a40c61c0c042916ab3b9a928e42, type: 3}
+  sndOnThrow: {fileID: 8300000, guid: 8c3bf8eb9ec2bf64fbdfa4121232b2d2, type: 3}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
@@ -20112,6 +20169,13 @@ MonoBehaviour:
     type: 3}
   backSprite: {fileID: -4567092851126130046, guid: 18f5545f2577a1e4db4abf38c4fa6a15,
     type: 3}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
@@ -20680,6 +20744,11 @@ PrefabInstance:
       propertyPath: m_NormalizedViewPortRect.width
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7437196726464237106, guid: 2893a7d494550224f822cf843e996621,
+        type: 3}
+      propertyPath: drawClampBoundaries
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 138644006106389070, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -20774,11 +20843,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7437196726464237106, guid: 2893a7d494550224f822cf843e996621,
-        type: 3}
-      propertyPath: drawClampBoundaries
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2893a7d494550224f822cf843e996621, type: 3}
@@ -21164,6 +21228,13 @@ MonoBehaviour:
     type: 3}
   backSprite: {fileID: -1007072940018743515, guid: b225784440f5c8947a939f2e36b0fd52,
     type: 3}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
@@ -22137,6 +22208,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: music.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: music.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 53fbcd57bd7a96d4daff199408aef59b, type: 3}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: music.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: fe168cf8fbff5524dbc4f613e3ecd2dd, type: 3}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: music.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: a780400e654a1064facda6127c949773, type: 3}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: music.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 627ac2f208d046041a7a8fa1486c40c3, type: 3}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: randomizePlaylist
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 642110ba2d1a82241a471ecc9752a083, type: 3}
 --- !u!4 &5090312260304738415
@@ -22855,6 +22956,13 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 8300000, guid: fdab7cfb24752b14198a984e920b7114, type: 3}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 8300000, guid: dce61533b390858488d50c8fa4848a78, type: 3}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 8300000, guid: 0c73964301b523d46967bc534575f994, type: 3}
   hasAction: 1
   hasActionAim: 1
   rotateWithAim: 1
@@ -23024,6 +23132,13 @@ MonoBehaviour:
     type: 3}
   backSprite: {fileID: -4567092851126130046, guid: 18f5545f2577a1e4db4abf38c4fa6a15,
     type: 3}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1

@@ -7,6 +7,8 @@ public class pickupObject : actionInRange
 {
     public string name = "";
 
+    Global global;
+
     private GameObject holder; //This is the character holding this object
     private FixedJoint2D joint; //This is the joint used to connect the object to the character
     private Transform carryTrans;  //The transform used for carrying objects
@@ -69,6 +71,16 @@ public class pickupObject : actionInRange
     public Sprite sideSprite, frontSprite, backSprite;
 
     [Space]
+    [Header("Sounds")]
+    public AudioClip sndOnPickup;
+    public AudioClip sndLoopOnPickup; //This sound will loop until the object is released
+    public AudioClip sndOnThrow;
+    public AudioClip sndOnActionPress;
+    public AudioClip sndOnActionRelease;
+    public AudioClip sndLoopOnActionHeld; //Loops for the entire time the action button is held down
+    public AudioClip sndSpawnProjectile;
+
+    [Space]
     [Header("Item Use Action")]
     public bool hasAction = false;
     public bool hasActionAim = false;     //If set to true, an aiming reticle will be displayed when the useAction button is held
@@ -127,6 +139,8 @@ public class pickupObject : actionInRange
 
     void Start()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
+
         base.Start();
         rb = gameObject.GetComponent<Rigidbody2D>() as Rigidbody2D;
         if (rb) bodyTypeAtStart = rb.bodyType;
@@ -287,6 +301,8 @@ public class pickupObject : actionInRange
             cameraFollowPlayer cfp = Camera.main.GetComponent<cameraFollowPlayer>();
             if (cfp) cfp.TriggerShakeExt(projectileCamshakeIntensity, projectileCamshakeDuration);
         }
+
+        if (sndSpawnProjectile) global.audio.Play(sndSpawnProjectile);
     }
 
     //First three variables indicate the state of the action button (pressed, held, released). Last two variables are for aiming the useAction reticle (if there is one)
@@ -310,6 +326,9 @@ public class pickupObject : actionInRange
             {
                 InvokeRepeating("spawnProjectile", 0.1f, spawnProjectileRate);
             }
+
+            if (sndOnActionPress) global.audio.Play(sndOnActionPress);
+            if (sndLoopOnActionHeld) global.audio.PlayFXLoop(sndLoopOnActionHeld);
         }
         else if (released)
         {
@@ -332,6 +351,9 @@ public class pickupObject : actionInRange
 
             if (spawnProjectilePrefab && spawnProjectileBehavior == spawnProjectileBehaviors.spawnWhileHeld)
                 CancelInvoke("spawnProjectile");
+
+            if (sndOnActionRelease) global.audio.Play(sndOnActionRelease);
+            if (sndLoopOnActionHeld) global.audio.StopFXLoop(sndLoopOnActionHeld);
         }
         else if (held)
         {
@@ -429,6 +451,9 @@ public class pickupObject : actionInRange
             actionAimArc.setAngle(flippedX ? 180 : 0);
         }
 
+        if (sndOnPickup) global.audio.Play(sndOnPickup);
+        if (sndLoopOnPickup) global.audio.PlayFXLoop(sndLoopOnPickup);
+
         if (OnPickupCallback != null) OnPickupCallback.Invoke();
 
     }
@@ -514,6 +539,8 @@ public class pickupObject : actionInRange
         recentlyThrownBy = holder;
         Invoke("ClearRecentlyThrownBy", recentlyThrownByTimer);
 
+        if (sndOnThrow) global.audio.Play(sndOnThrow);
+
         releaseFromHolder();
 
         float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
@@ -584,6 +611,8 @@ public class pickupObject : actionInRange
         rb.mass = initialMass;
         if (disableCollider)
             gameObject.GetComponent<Collider2D>().isTrigger = false;
+
+        if (sndLoopOnPickup) global.audio.StopFXLoop(sndLoopOnPickup);
 
         if (OnReleaseCallback != null) OnReleaseCallback.Invoke();
     }
