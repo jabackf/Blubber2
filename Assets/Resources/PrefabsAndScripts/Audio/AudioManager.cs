@@ -21,6 +21,19 @@ public class AudioManager
     int currentTrack = 0;
     bool playlistComplete = false;
 
+    //Used for stopFxPitchDrop where we can stop looping effects by winding them down. Call StopFXLoopPitchDrop to stop an effects loop using this feature
+    //NOTE: Pitch can also go up if endPitch is higher than current pitch
+    class fxLoopPitchDrop
+    {
+        public AudioClip clip;
+        public int bufferIndex;
+        public float dropSpeed;
+        public float endPitch;
+        public bool pitchGoesUp = false;
+        public bool done = false; //Set to true when we have finished dropping the pitch. Used when stopping a sound from this list to remove it from the list.
+    }
+    List<fxLoopPitchDrop> fxLoopPitchDropList = new List<fxLoopPitchDrop>();
+
     T CopyComponent<T>(T original, GameObject destination) where T : Component
     {
         System.Type type = original.GetType();
@@ -36,18 +49,20 @@ public class AudioManager
     public void Start(GameObject caller)
     {
         effectsBuffer.Add(EffectsSource);
-        for (int i = 1; i<effectBufferCount; i++)
+        for (int i = 1; i < effectBufferCount; i++)
         {
             effectsBuffer.Add(CopyComponent<AudioSource>(EffectsSource, caller));
         }
     }
 
     // Play a single clip through the sound effects source.
-    public void Play(AudioClip clip)
+    public void Play(AudioClip clip, float randomizePitchMin = 1, float randomizePitchMax = 1)
     {
+        float randomPitch = Random.Range(randomizePitchMin, randomizePitchMax);
+
         int sourceIndex = getEffectsBufferIndex();
         effectsBuffer[sourceIndex].clip = clip;
-        effectsBuffer[sourceIndex].pitch = 1;
+        effectsBuffer[sourceIndex].pitch = randomPitch;
         effectsBuffer[sourceIndex].Play();
     }
     //Plays an effect in loop indefinitely. Must be stopped with either StopFXLoop or StopFXLoopAll
@@ -70,6 +85,7 @@ public class AudioManager
                 effectsBuffer[i].Stop();
             }
         }
+        markStopppedSoundsFromPitchDropListAsDone();
     }
     //Stops any sound effects that are looping.
     public void StopFXLoopAll()
@@ -82,13 +98,67 @@ public class AudioManager
                 effectsBuffer[i].Stop();
             }
         }
+        markStopppedSoundsFromPitchDropListAsDone();
+    }
+
+    //Stops the fx loop, but first it gradually brings the pitch down to create a motor wind-down effect. Speed is how fast the pitch falls and must always be positive, endingPitch is the amount the destination we must reach before the sound stops.
+    //NOTE: Pitch can also go up if endPitch is higher than current pitch. This means pitch will be incremented by speed rather than decremented by it
+    public void StopFXLoopPitchDrop(AudioClip clip, float endingPitch = 0.5f, float speed = 0.7f)
+    {
+        if (speed <= 0)
+        {
+            Debug.Log("You passed an endingPitch that was <= 0 to AudioManager.StopFXLoopPitchDrop. You can't do that, you jerk! We need a positive speed or else the pitch change would never reach its destination! The pitch change can go in either direciton, but you set that with endingPitch and NOT with speed. The next log will contain the offending AudioClip, then we will abort this function call without doing anything else!");
+            Debug.Log(clip);
+            return;
+        }
+        for (int i = 0; i < effectBufferCount; i++)
+        {
+            if (effectsBuffer[i].clip == clip) //Found it. Lets make sure we've not already added this thing to the pitch drop list 
+            {
+                bool alreadyOnList = false;
+                if (fxLoopPitchDropList.Count > 0)
+                {
+                    foreach (var p in fxLoopPitchDropList)
+                    {
+                        if (p.bufferIndex == i) alreadyOnList = true;
+                    }
+                }
+
+                if (!alreadyOnList)
+                {
+                    fxLoopPitchDrop p = new fxLoopPitchDrop();
+                    p.bufferIndex = i;
+                    p.clip = clip;
+                    p.dropSpeed = speed;
+                    p.endPitch = endingPitch;
+                    if (effectsBuffer[i].pitch < endingPitch) p.pitchGoesUp = true;
+                    fxLoopPitchDropList.Add(p);
+                }
+            }
+        }
+    }
+
+    //This is used internally. It checks fxLoopPitchDropList for any sounds that have been manually stopped and marks them as done.
+    void markStopppedSoundsFromPitchDropListAsDone()
+    {
+        if (fxLoopPitchDropList.Count == 0) return;
+        foreach (var p in fxLoopPitchDropList)
+        {
+            if (!effectsBuffer[p.bufferIndex].isPlaying) p.done = true;
+        }
+    }
+    void removeDoneSoundsFromPitchDropList()
+    {
+        if (fxLoopPitchDropList.Count == 0) return;
+        fxLoopPitchDropList.RemoveAll(p => p.done == true);
     }
 
     //Plays a sound effect if the specified position is within the camera's view. If cameraFollowPlayer does not exist then it will play the sound every time. 
     //Buffer is added to the boundaries of the camera so pos can be a little outside of the view (negative buffer) or needs to be a little inside of the view (positive buffer)
     //By default the pos can be within one unit ouside of the view and the sound will still play.
-    public void PlayIfOnScreen(AudioClip clip, Vector2 pos, float buffer=-1f)
+    public void PlayIfOnScreen(AudioClip clip, Vector2 pos, float buffer=-1f, float randomizePitchMin = 1, float randomizePitchMax = 1)
     {
+
         if (!cameraFollow)
         {
             cameraFollow = Camera.main.GetComponent<cameraFollowPlayer>();
@@ -101,8 +171,13 @@ public class AudioManager
             if (!cameraFollow.insideView(pos, buffer, buffer)) play = false;
         }
 
-        if (play) Play(clip);
+        if (play) Play(clip, randomizePitchMin, randomizePitchMax);
 
+    }
+    public void PlayIfOnScreen(List<AudioClip> clips, Vector2 pos, float buffer = -1f, float randomizePitchMin = 1, float randomizePitchMax = 1)
+    {
+        int randomIndex = Random.Range(0, clips.Count);
+        PlayIfOnScreen(clips[randomIndex], pos, buffer, randomizePitchMin, randomizePitchMax);
     }
 
     public int getEffectsBufferIndex()
@@ -234,7 +309,7 @@ public class AudioManager
     }
 
     //Called from the Global class which keeps the reference to this instance
-    public void Update()
+    public void Update(float deltaTime)
     {
         if (usingPlaylist)
         {
@@ -251,6 +326,23 @@ public class AudioManager
                     }
                 }
             }
+        }
+
+        //Process any looping effects that are currently shutting off with the wind-down pitch drop effect
+        if (fxLoopPitchDropList.Count > 0)
+        {
+            foreach (var p in fxLoopPitchDropList)
+            {
+                effectsBuffer[p.bufferIndex].pitch -= (p.pitchGoesUp ? -p.dropSpeed : p.dropSpeed)*deltaTime;
+                bool done = false;
+                if (p.pitchGoesUp && effectsBuffer[p.bufferIndex].pitch > p.endPitch) done = true;
+                if (!p.pitchGoesUp && effectsBuffer[p.bufferIndex].pitch < p.endPitch) done = true;
+                if (done)
+                {
+                    StopFXLoop(p.clip);
+                }
+            }
+            removeDoneSoundsFromPitchDropList();
         }
     }
 }

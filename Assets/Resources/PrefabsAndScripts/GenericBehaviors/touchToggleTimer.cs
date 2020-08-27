@@ -20,11 +20,19 @@ public class touchToggleTimer : MonoBehaviour
     public List<string> sendMessages = new List<string>(); //Messages get sent to the triggering object (probably the Player)
     public UnityEvent[] triggerEvents;  //Called when triggered
 
+    public List<AudioClip> playOnTrigger = new List<AudioClip>();
+    public List<AudioClip> playOnReset = new List<AudioClip>();
+    public float randomizePitchMin=1f, randomizePitchMax=1f;
+
+    Global global;
+
     // Start is called before the first frame update
     void Start()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
         if (!renderer) renderer = GetComponent<SpriteRenderer>();
         if (triggered) trigger();
+        
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -56,6 +64,8 @@ public class touchToggleTimer : MonoBehaviour
 
         if (triggerParticles) Instantiate(triggerParticles, transform.position, Quaternion.identity);
 
+        if (playOnTrigger.Count > 0) global.audio.PlayIfOnScreen(playOnTrigger, (Vector2)transform.position, randomizePitchMin, randomizePitchMax);
+
         foreach (UnityEvent e in triggerEvents)
         {
             e.Invoke();
@@ -77,6 +87,7 @@ public class touchToggleTimer : MonoBehaviour
                 timer = 0;
                 renderer.sprite = nonTriggeredSprite;
                 triggered = false;
+                if (playOnReset.Count > 0) global.audio.PlayIfOnScreen(playOnReset, (Vector2)transform.position, randomizePitchMin, randomizePitchMax);
             }
         }
     }

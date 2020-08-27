@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   light: {fileID: 7736759852675722907}
   fadeSpeed: 0.8
+  destroyWhenDone: 1
 --- !u!1 &3397494522368347932
 GameObject:
   m_ObjectHideFlags: 0
@@ -94,6 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1660291703862673418}
+  - component: {fileID: 5604396268020327514}
   - component: {fileID: 1000517329076470458}
   - component: {fileID: 8404860695248457163}
   - component: {fileID: 7457939018968915521}
@@ -123,6 +125,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5604396268020327514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3397494522368347932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24e396ef09bf0b44185f5321b7ff6522, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStart: {fileID: 8300000, guid: 615aac8a82fc91540809d8124a32f899, type: 3}
+  onDestroy: {fileID: 0}
+  onEnable: {fileID: 0}
+  onDisable: {fileID: 0}
+  onTriggerEnter: {fileID: 0}
+  onTriggerExit: {fileID: 0}
+  onCollisionEnter: {fileID: 0}
+  onCollisionExit: {fileID: 0}
+  mask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!198 &1000517329076470458
 ParticleSystem:
   m_ObjectHideFlags: 0

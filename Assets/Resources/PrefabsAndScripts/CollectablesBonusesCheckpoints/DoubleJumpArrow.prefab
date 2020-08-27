@@ -108,6 +108,11 @@ MonoBehaviour:
   sendMessages:
   - addTemporaryJump
   triggerEvents: []
+  playOnTrigger:
+  - {fileID: 8300000, guid: 2dc6e3bf69613f84c99f33c3122b413d, type: 3}
+  playOnReset: []
+  randomizePitchMin: 0.9
+  randomizePitchMax: 1.1
 --- !u!61 &293117410391415039
 BoxCollider2D:
   m_ObjectHideFlags: 0

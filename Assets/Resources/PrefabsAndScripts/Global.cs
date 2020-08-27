@@ -76,7 +76,7 @@ public class Global : MonoBehaviour
     private void Update()
     {
         //Update any of our classes that are not inheriting from and need an update
-        audio.Update();
+        audio.Update(Time.deltaTime);
     }
 
     public bool isSceneChanging()

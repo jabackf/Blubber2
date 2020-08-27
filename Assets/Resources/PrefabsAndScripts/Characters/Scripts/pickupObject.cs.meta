@@ -11,10 +11,12 @@ MonoImporter:
   - sideSprite: {instanceID: 0}
   - frontSprite: {instanceID: 0}
   - backSprite: {instanceID: 0}
-  - sndOnPickup: {instanceID: 0}
-  - sndOnThrow: {instanceID: 0}
+  - sndOnPickup: {fileID: 8300000, guid: 237b2ed578d6ce54cb66f132d9c63b6d, type: 3}
+  - sndLoopOnPickup: {instanceID: 0}
+  - sndOnThrow: {fileID: 8300000, guid: a8e068621e5c5994ab586a968dd0763b, type: 3}
   - sndOnActionPress: {instanceID: 0}
   - sndOnActionRelease: {instanceID: 0}
+  - sndLoopOnActionHeld: {instanceID: 0}
   - sndSpawnProjectile: {instanceID: 0}
   - actionAimArc: {instanceID: 0}
   - actionPressedMessageReceiver: {instanceID: 0}

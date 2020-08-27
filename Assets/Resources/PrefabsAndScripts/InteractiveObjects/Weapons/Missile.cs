@@ -17,10 +17,14 @@ public class Missile : MonoBehaviour
 
     public GameObject explosion;
 
+    Global global;
+    public AudioClip sndOnPlayerControl;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
     }
 
     // Update is called once per frame
@@ -60,7 +64,8 @@ public class Missile : MonoBehaviour
     //Activates player control. This function is called by any weapon with playerControlledProjectile and spawnProjectile set
     public void initiatePlayerControl(GameObject character)
     {
-
+        if (!global) global = GameObject.FindWithTag("global").GetComponent<Global>();
+        if (sndOnPlayerControl) global.audio.Play(sndOnPlayerControl);
         pilot = character;
         playerControlled = true;
         gameObject.tag = "Player";

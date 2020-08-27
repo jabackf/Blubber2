@@ -170,6 +170,13 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 8300000, guid: a8e068621e5c5994ab586a968dd0763b, type: 3}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1

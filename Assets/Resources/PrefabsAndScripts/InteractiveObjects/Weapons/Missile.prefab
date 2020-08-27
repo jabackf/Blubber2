@@ -101,8 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 4
   rotateSpeed: 190
+  mouseControl: 1
   explosion: {fileID: 3397494522368347932, guid: f39ac79a5d26e2446973a209935ce76a,
     type: 3}
+  sndOnPlayerControl: {fileID: 8300000, guid: 63432792faed1644b80d5c38b55c16b9, type: 3}
 --- !u!50 &2677650111759520394
 Rigidbody2D:
   serializedVersion: 4
@@ -185,6 +187,7 @@ MonoBehaviour:
     type: 3}
   particleColor: {r: 0.75645244, g: 0.76528394, b: 0.8396226, a: 1}
   breakOnExplode: 1
+  breakOnShot: 1
   sendMessageToOther: 
   tellOtherAboutThrower: 1
 --- !u!1001 &7710863943160561931

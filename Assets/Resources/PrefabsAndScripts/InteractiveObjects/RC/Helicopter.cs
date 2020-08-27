@@ -20,9 +20,13 @@ public class Helicopter : MonoBehaviour
     public bool facingRight = true;
     private SpriteRenderer renderer;
 
+    public AudioClip sndActiveLoop;
+    Global global;
+
     // Start is called before the first frame update
     void Start()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         renderer = GetComponent<SpriteRenderer>();
@@ -68,6 +72,11 @@ public class Helicopter : MonoBehaviour
         anim.SetBool("Active", active);
         Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
         rb.gravityScale = activeGravity;
+        if (sndActiveLoop)
+        {
+            global.audio.StopFXLoop(sndActiveLoop); //If the motor is winding down from calling pitch drop we want to make sure that's fully stopped first
+            global.audio.PlayFXLoop(sndActiveLoop);
+        }
     }
 
     public void Deactivate(GameObject character)
@@ -79,6 +88,7 @@ public class Helicopter : MonoBehaviour
         anim.SetBool("Active", active);
         Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
         rb.gravityScale = initialGravity;
+        if (sndActiveLoop) global.audio.StopFXLoopPitchDrop(sndActiveLoop);
     }
 
     public void Deactivate()

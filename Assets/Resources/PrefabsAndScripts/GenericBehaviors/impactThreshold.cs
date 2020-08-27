@@ -18,9 +18,11 @@ public class impactThreshold : MonoBehaviour
     public bool breakOnShot = true;
     public string sendMessageToOther = ""; //If we hit something and this object breaks, we can send a message to the something that we hit.
     public bool tellOtherAboutThrower = true; //If set to true, we will tell the Other that was hit who threw the object when we send the message (if the information is available)
-
+    public List<AudioClip> playOnExceed = new List<AudioClip>();
 
     private GameObject other=null; //Stores the most recent other gameobject from onCollisionEnter
+
+    Global global;
 
     void OnCollisionEnter2D(Collision2D other)
     {
@@ -64,6 +66,9 @@ public class impactThreshold : MonoBehaviour
             else
                 other.SendMessage(sendMessageToOther, SendMessageOptions.DontRequireReceiver);
         }
+
+        if (!global) global = GameObject.FindWithTag("global").GetComponent<Global>();
+        if (playOnExceed.Count>0) global.audio.PlayIfOnScreen(playOnExceed, (Vector2)transform.position, 0.8f, 1.2f);
 
         if (destroyOnBreak)
             Destroy(gameObject);

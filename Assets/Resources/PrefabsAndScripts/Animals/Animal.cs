@@ -44,7 +44,7 @@ public class Animal : MonoBehaviour
     [Space]
     [Header("Sounds")]
     //Note: These sounds will only play if they are within the camera view+camera buffer, or if cameraFollowPlayer does not exist on the camera.
-    public AudioClip sndSpeak;
+    public List<AudioClip> sndSpeak = new List<AudioClip>();
     public AudioClip sndGraze;
     public AudioClip sndMakeSomething;
     public AudioClip sndFlap;
@@ -99,7 +99,10 @@ public class Animal : MonoBehaviour
         {
             if (hasFallingState && rb.velocity.y < fallingVelocityThreshold)
             {
-                setState(fallingState);
+                if (state != fallingState)
+                {
+                    setState(fallingState);
+                }
                 falling = true;
                 return;
             }
@@ -385,7 +388,10 @@ public class Animal : MonoBehaviour
         {
             anim.SetBool("Speaking", true);
             state = states.speak;
-            if (sndSpeak) global.audio.PlayIfOnScreen(sndSpeak, (Vector2)transform.position);
+            if (sndSpeak.Count > 0)
+            {
+                global.audio.PlayIfOnScreen(sndSpeak, (Vector2)transform.position, 0.8f, 1.2f);
+            }
         }
         if (s == states.flap)
         {
