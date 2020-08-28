@@ -31,6 +31,9 @@ public class React : MonoBehaviour
         public facingReturnBehaviors facingReturnBehavior = facingReturnBehaviors.useStartFacing;
         [HideInInspector] public bool previousIsFacingRight; //The facing direction that the character was pointing before faceInitiator was triggered. Used to reverse the faceInitiator action.
 
+        public List<AudioClip> playSound = new List<AudioClip>();
+        public float randomizePitchMin = 1f, randomizePitchMax = 1f;
+
         //Some data that can optionally be sent with the reaction message. For example, PShot sends Vector3 indicating position that the bullet hit.
         [HideInInspector] public Vector3 data_position;
         [HideInInspector] public GameObject data_gameObject;
@@ -65,6 +68,8 @@ public class React : MonoBehaviour
         private List<string> def_initiatorMessages;
         private List<string> def_initiatorSay;
         private float def_initiatorSayDelay;
+        private List<AudioClip> def_playSound = new List<AudioClip>();
+        private float def_randomizePitchMin = 1f, def_randomizePitchMax = 1f;
 
         public reaction(string name)
         {
@@ -80,6 +85,9 @@ public class React : MonoBehaviour
             def_initiatorMessages = initiatorMessages;
             def_initiatorSay = initiatorSay;
             def_initiatorSayDelay = initiatorSayDelay;
+            def_playSound = playSound;
+            def_randomizePitchMin = randomizePitchMin;
+            def_randomizePitchMax = randomizePitchMax;
         }
 
         //Resets all value to default configuration specified in the editor
@@ -95,6 +103,9 @@ public class React : MonoBehaviour
             initiatorMessages = def_initiatorMessages;
             initiatorSay = def_initiatorSay;
             initiatorSayDelay = def_initiatorSayDelay;
+            playSound = def_playSound;
+            randomizePitchMin = def_randomizePitchMin;
+            randomizePitchMax = def_randomizePitchMax;
         }
 
         //This function looks at the settings and determines the maximum amount of time it will take to send the final reaction message or clear the final sayString.
@@ -152,11 +163,14 @@ public class React : MonoBehaviour
 
     CharacterController2D cont;
     [HideInInspector] public BlubberAnimation blubberAnim;
+    Global global;
 
     public void Start()
     {
         cont = GetComponent<CharacterController2D>();
         blubberAnim = GetComponent<BlubberAnimation>();
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
+
     }
 
     public void execute(reaction r)
@@ -189,7 +203,6 @@ public class React : MonoBehaviour
             StartCoroutine(executeDelayedMessages(r));
         }
 
-
         if (r.initiator != null)
         {
             if (r.faceInitiator && cont)
@@ -205,6 +218,9 @@ public class React : MonoBehaviour
             if (r.initiatorSay.Count >= 0)
                 StartCoroutine(executeInitiatorSay(r));
         }
+
+        if (r.playSound.Count > 0) global.audio.RandomSoundEffect(r.playSound.ToArray(), r.randomizePitchMin, r.randomizePitchMax);
+
     }
 
     //If r.faceInitiator is used then the character will turn to face the initiator. This function will be triggered at the end of the reaction to turn the character back to his original facing direction.

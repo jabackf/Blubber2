@@ -61,6 +61,9 @@ MonoBehaviour:
     type: 3}
   maxWidth: 150
   maxHeight: 150
+  dialogSound: {fileID: 8300000, guid: 3ddc78fc4209fd940b8d24e7d2805b03, type: 3}
+  dontPlaySound: 0
+  dialogBlipTimeInterval: 0.05
   selListPrefab: {fileID: 7559009157587396383, guid: 7e68608224fd22d428266296e8ec3d08,
     type: 3}
   selItemPrefab: {fileID: 8964117528771551504, guid: a26453c2e94725b44aab8b64684436aa,

@@ -23,7 +23,7 @@ namespace ilhamhe {
         public bool noInitialSplash = true;  //If objects start static in the water, then when the scene loads the script will detect it as something that dropped in and create a splash.
                                              //If we set noInitialSplash to true, it will prevent splashes for the first few frames of the scene
         private bool canSplash = true;       //Set to false to prevent splashes. Used for noInitialSplash, can be used to turn splashing off. noInitialSplash being set to true will make this change to true after the first couple frames
-        public float splashVelocityThreshold = 1;  //Object's y velocity must be below -splashVelocityThreshold or above +splashVelocityThreshold value to create a splash
+        public float splashVelocityThreshold = 2.5f;  //Object's y velocity must be below -splashVelocityThreshold or above +splashVelocityThreshold value to create a splash
 
         public string sortingLayerName;
 		private Bound bound;
@@ -37,6 +37,12 @@ namespace ilhamhe {
 		private Vector3[] vertices;
 
 		private Mesh mesh;
+
+        [Header("Sound")]
+        public List<AudioClip> sndSplash;
+        public float randomizeSplashPitchMin = 0.8f, randomizeSplashPitchMax = 1.2f;
+        public bool onlyPlayIfSurfaceIsOnScreen = true;
+        public float minimumForceForSound = 4f;
 
         [Header("Physics Settings")]
         public bool simulateSurface = true;
@@ -59,7 +65,15 @@ namespace ilhamhe {
 
         //private BoxCollider2D surfaceOnlyTrigger;
 
+        Global global;
+        cameraFollowPlayer cameraFollow;
+
         private void Start () {
+            global = GameObject.FindWithTag("global").GetComponent<Global>();
+            if (!cameraFollow)
+            {
+                cameraFollow = Camera.main.GetComponent<cameraFollowPlayer>();
+            }
 
             bEffectorOne = GetComponent<BuoyancyEffector2D>() as BuoyancyEffector2D;
             if (buoyancyEffectorTwoGo!=null) bEffectorTwo = buoyancyEffectorTwoGo.GetComponent<BuoyancyEffector2D>() as BuoyancyEffector2D;
@@ -256,6 +270,8 @@ namespace ilhamhe {
             //Don't splash unless we've hit hard enough
             if (force > -splashVelocityThreshold && force < splashVelocityThreshold) return;
 
+            float iforce = force;
+
             force *= collisionVelocityFactor;
             timer = 3f;
 			float radius = col.bounds.max.x - col.bounds.min.x;
@@ -271,12 +287,38 @@ namespace ilhamhe {
 					velocities[i] = force;
 				}
 			}
-		}
+
+            //Sounds
+            if (sndSplash.Count > 0 && (iforce < -minimumForceForSound || iforce > minimumForceForSound) )
+            {
+                bool play = true;
+                if (onlyPlayIfSurfaceIsOnScreen) play = isWaterSurfaceOnScreen();
+                if (play) global.audio.RandomSoundEffect(sndSplash.ToArray(), randomizeSplashPitchMin, randomizeSplashPitchMax);
+            }
+        }
+
+        public bool isWaterSurfaceOnScreen()
+        {
+            if (!cameraFollow)
+                cameraFollow = Camera.main.GetComponent<cameraFollowPlayer>();
+            if (!cameraFollow) return true;
+            float cl = cameraFollow.getLeftViewX() - 1f;
+            float cr = cameraFollow.getRightViewX()+1f;
+            float ct = cameraFollow.getTopViewY()+1f;
+            float cb = cameraFollow.getBottomViewY()-1f;
+
+            Rect cam = new Rect(cl, cb, cr - cl, ct - cb);
+
+            if (cam.Overlaps(new Rect(bound.left, bound.top, bound.right, bound.top + 1f)))
+                return true;
+            else
+                return false;
+        }
 
 		bool PointInsideCircle (Vector2 point, Vector2 center, float radius) {
 			return Vector2.Distance (point, center) < radius;
 		}
 
-	}
+    }
 
 }

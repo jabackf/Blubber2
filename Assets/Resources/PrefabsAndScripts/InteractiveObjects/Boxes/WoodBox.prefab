@@ -198,7 +198,7 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
-  sndOnPickup: {fileID: 8300000, guid: 237b2ed578d6ce54cb66f132d9c63b6d, type: 3}
+  sndOnPickup: {fileID: 8300000, guid: f1ec5fd2e2bce6a4b9c047a9f2abfa53, type: 3}
   sndLoopOnPickup: {fileID: 0}
   sndOnThrow: {fileID: 8300000, guid: a8e068621e5c5994ab586a968dd0763b, type: 3}
   sndOnActionPress: {fileID: 0}
@@ -288,6 +288,7 @@ MonoBehaviour:
   breakOnShot: 1
   sendMessageToOther: Ouch
   tellOtherAboutThrower: 1
+  playOnExceed: []
 --- !u!114 &1012018315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,9 +326,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 7
+  HPSubtractOnShot: 1
   particles: {fileID: 777228698083735751, guid: 0731d8b1f0e731b4cb990f61fb1104b2,
     type: 3}
   particleColor: {r: 0.6117647, g: 0.37254903, b: 0.34117648, a: 1}
+  sndGetShot: []
+  sndKillShot:
+  - {fileID: 8300000, guid: afd68f5e1be5a8249974953fd22d20fc, type: 3}
+  sndKillPitchRandomizeMin: 0.8
+  sndKillPitchRandomizeMax: 1.2
+  sndShotPitchRandomizeMin: 1
+  sndShotPitchRandomizeMax: 1
 --- !u!114 &1012018317
 MonoBehaviour:
   m_ObjectHideFlags: 0

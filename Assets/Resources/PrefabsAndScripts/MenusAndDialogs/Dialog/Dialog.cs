@@ -116,6 +116,8 @@ public class Dialog : MonoBehaviour
         public string sendMessageStart = ""; //If not empty, then this message is sent to the gameObject (or initiator, if gameObject is null) at the start of this box. You can send multiple messages by separating messages with pipe (e.g. Angry|CircleOn)
         public string sendMessageEnd = ""; //Same as above, but it sent at the end of the message
         public GameObject gameObject;
+        public AudioClip dialogSound; //First we try to use this sound. If nothing is specified, then we try to pull the sound from the CharacterController for the speaker. If no luck, then we use the default sound specified in the DialogBox class. If you want silence, check the bool dontPlaySound option.
+        public bool dontPlaySound = false;
         public string gameObjectTag = ""; //If not empty, then we will search for the first object with this tag instead of using gameObject as our speaker
         public string startAnimation; //Animation to play when the box first opens. Applies to the speaker or the specified gameObject if not null
         public string endAnimation;  //Animation to play when the box closes
@@ -591,6 +593,15 @@ public class Dialog : MonoBehaviour
             dialogBox.followTop = initiatorTop;
             dialogBox.followBottom = initiatorBottom;
             dialogBox.title = initiatorName;
+
+            if (initiator)
+            {
+                CharacterController2D cont = initiator.GetComponent<CharacterController2D>() as CharacterController2D;
+                if (cont != null)
+                {
+                    dialogBox.dialogSound = cont.GetDialogSound();
+                }
+            }
         }
         else
         {
@@ -601,6 +612,7 @@ public class Dialog : MonoBehaviour
                 if (cont != null)
                 {
                     if (entries[index].Title == "") entries[index].Title = cont.CharacterName;
+                    dialogBox.dialogSound = cont.GetDialogSound();
                     if (entries[index].locationTop == null)
                     {
                         entries[index].locationTop = cont.getDialogTop();
@@ -620,6 +632,7 @@ public class Dialog : MonoBehaviour
                     if (cont != null)
                     {
                         if (entries[index].Title == "") entries[index].Title = cont.CharacterName;
+                        dialogBox.dialogSound = cont.GetDialogSound();
                         if (entries[index].locationTop == null)
                         {
                             entries[index].locationTop = cont.getDialogTop();
@@ -642,6 +655,8 @@ public class Dialog : MonoBehaviour
         dialogBox.answers = entries[index].answers;
         dialogBox.getTextInput = entries[index].getTextInput;
         dialogBox.inputType = entries[index].inputType;
+        dialogBox.dontPlaySound = entries[index].dontPlaySound;
+        if (entries[index].dialogSound) dialogBox.dialogSound = entries[index].dialogSound;
 
         if (isAutoType)
         {

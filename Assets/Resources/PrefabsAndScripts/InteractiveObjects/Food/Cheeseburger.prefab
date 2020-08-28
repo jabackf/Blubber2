@@ -181,6 +181,13 @@ MonoBehaviour:
   sideSprite: {fileID: 0}
   frontSprite: {fileID: 0}
   backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 0}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
@@ -240,8 +247,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 1
+  HPSubtractOnShot: 1
   particles: {fileID: 0}
   particleColor: {r: 1, g: 1, b: 1, a: 1}
+  sndGetShot: []
+  sndKillShot:
+  - {fileID: 8300000, guid: caa55169b64eb9941ad90b52eae78910, type: 3}
+  - {fileID: 8300000, guid: c9b905747144c7a4988f8c3ed6a5ed74, type: 3}
+  sndKillPitchRandomizeMin: 1
+  sndKillPitchRandomizeMax: 1
+  sndShotPitchRandomizeMin: 1
+  sndShotPitchRandomizeMax: 1
 --- !u!114 &3128277224876716550
 MonoBehaviour:
   m_ObjectHideFlags: 0

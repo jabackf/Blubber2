@@ -70,7 +70,7 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Collider2D m_rangeColliderR;                       // A position marking where to check for ceilings
     [SerializeField] private Transform m_DialogTop;                             // The top position that the dialog box will point to
     [SerializeField] private Transform m_DialogBottom;                          // The bottom position that the dialot box will point to
-
+    [SerializeField] private AudioClip dialogSound;
 
     public Transform getDialogTop() { return m_DialogTop; }
     public Transform getDialogBottom() { return m_DialogBottom; }
@@ -983,6 +983,7 @@ public class CharacterController2D : MonoBehaviour
         db.stayOnScreen = false;
         db.dialogParent = null;
         db.autoSelfDestructTimer = time;
+        db.dialogSound = GetDialogSound();
         sayDialogBox = db;
         isTalking = true;
         Invoke("ClearSay", time);
@@ -1024,4 +1025,6 @@ public class CharacterController2D : MonoBehaviour
             }
         }
     }
+
+    public AudioClip GetDialogSound() { return dialogSound; }
 }

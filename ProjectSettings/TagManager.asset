@@ -36,6 +36,7 @@ TagManager:
   - menuSelector
   - Weapon
   - GameplayUIOverlay
+  - changeMusicTrigger
   layers:
   - Default
   - TransparentFX

@@ -56,6 +56,10 @@ public class DialogBox : MonoBehaviour
     private cameraFollowPlayer playerCam;
     private Global global;
 
+    public AudioClip dialogSound; //This is the sound that is played while the text is appearing. The dialog class will attempt to set this as either the sound specified in the chain entry or pull it from the character controller. See the Dialog class -> entry for more details.
+    public bool dontPlaySound = false;
+    public float dialogBlipTimeInterval = 0.04f;
+
 
     [Space]
     [Header("Menu")]
@@ -132,6 +136,7 @@ public class DialogBox : MonoBehaviour
 
         if (autoSelfDestructTimer != -1) Invoke("closeBox", autoSelfDestructTimer);
 
+        InvokeRepeating("PlayDialogSound", 0.05f, dialogBlipTimeInterval);
     }
 
     public void Kill()
@@ -360,6 +365,21 @@ public class DialogBox : MonoBehaviour
         {
             transition = false;
         }
+    }
+
+    //Called by invokeRepeating. Plays the dialog sound as long as text typer is active.
+    void PlayDialogSound()
+    {
+        if (textTyper != null && !dontPlaySound)
+        {
+            if (!textTyper.done)
+                global.audio.Play(dialogSound, 0.85f, 1.15f);
+            else
+                CancelInvoke("PlayDialogSound");
+        }
+        else
+            CancelInvoke("PlayDialogSound");
+
     }
 
     //Updates the positioning of the dialog box on the screen

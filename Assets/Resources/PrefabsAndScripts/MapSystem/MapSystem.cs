@@ -303,6 +303,9 @@ public class MapSystem
             wrapSide = boundary.boundaryCheck(player, wrapEdgeBuffer.x, wrapEdgeBuffer.y);
         }
 
+        //Notify the global object
+        global.onSceneChanging();
+
         ///LOAD THE NEW SCENE
         SceneManager.LoadScene(map, LoadSceneMode.Single);
     }

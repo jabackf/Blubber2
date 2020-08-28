@@ -7,9 +7,21 @@ using UnityEngine;
 
 public class shotByBullet : MonoBehaviour
 {
-    public float HP = -1f; //-1 for infinite health points
+    public float HP = 5f;
+    public float HPSubtractOnShot = 1f; //How much we subtract from HP when we get shot. Set to zero and health will not drain.
     public GameObject particles;
     public Color particleColor = Color.white;
+
+    public List<AudioClip> sndGetShot = new List<AudioClip>(); //The sound that plays when we get shot but our hp hasn't ran out
+    public List<AudioClip> sndKillShot = new List<AudioClip>(); //The sound that plays on the shot that takes our hp to zero
+    public float sndKillPitchRandomizeMin=1f, sndKillPitchRandomizeMax = 1f, sndShotPitchRandomizeMin = 1f, sndShotPitchRandomizeMax = 1f;
+
+    Global global;
+
+    public void Start()
+    {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
+    }
 
     public void PShot(Vector3 position)
     {
@@ -25,10 +37,16 @@ public class shotByBullet : MonoBehaviour
 
     public void Shot()
     {
-        if (HP>0)
+        HP -= HPSubtractOnShot;
+
+        if (HP <= 0)
         {
-            HP -= 1f;
-            if (HP <= 0) Destroy(gameObject);
+            if (sndKillShot.Count > 0) global.audio.RandomSoundEffect(sndKillShot.ToArray(), sndKillPitchRandomizeMin, sndKillPitchRandomizeMax);
+            Destroy(gameObject);
+        }
+        else
+        {
+            if (sndGetShot.Count > 0) global.audio.RandomSoundEffect(sndGetShot.ToArray(), sndShotPitchRandomizeMin, sndShotPitchRandomizeMax);
         }
     }
 }

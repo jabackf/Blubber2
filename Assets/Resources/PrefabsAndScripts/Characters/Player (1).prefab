@@ -290,6 +290,7 @@ MonoBehaviour:
   m_rangeColliderR: {fileID: 8036988582916006721}
   m_DialogTop: {fileID: 5456296111386055994}
   m_DialogBottom: {fileID: 5583954899186943733}
+  dialogSound: {fileID: 8300000, guid: 3ddc78fc4209fd940b8d24e7d2805b03, type: 3}
   spriteFlipMethod: 1
   isTalking: 0
   pause: 0

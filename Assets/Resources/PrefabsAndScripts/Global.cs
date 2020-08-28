@@ -84,6 +84,12 @@ public class Global : MonoBehaviour
         return sceneChanging;
     }
 
+    //Called by map system when the scene is about to change
+    public void onSceneChanging()
+    {
+        audio.onSceneChanging();
+    }
+
     //Called when a field in the editor is changed
     private void OnValidate()
     {

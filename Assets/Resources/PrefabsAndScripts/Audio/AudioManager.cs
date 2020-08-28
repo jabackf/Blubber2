@@ -8,6 +8,9 @@ public class AudioManager
     public AudioSource EffectsSource;
     public AudioSource MusicSource;
 
+    //You can manually add sources from other scripts using addSource(). This can be used for things like music zones and cross fading tracks.
+    private List<AudioSource> additionalSources = new List<AudioSource>();
+
     private int effectBufferCount = 10; //The number of sources we use for effects. Basically, we can't have more than thing many effects playing at once.
     private List<AudioSource> effectsBuffer = new List<AudioSource>(); //This is the buffer of audio clips. Basically, EffectsSource is duplicated and used to fill this buffer.
 
@@ -15,7 +18,7 @@ public class AudioManager
 
     //Playlist settings
     List<AudioClip> playlist = new List<AudioClip>();
-    bool usingPlaylist = false;
+    public bool usingPlaylist = false;
     bool loopPlaylist = true;
     bool randomizePlaylist = false;
     int currentTrack = 0;
@@ -34,6 +37,8 @@ public class AudioManager
     }
     List<fxLoopPitchDrop> fxLoopPitchDropList = new List<fxLoopPitchDrop>();
 
+    GameObject globalObject;
+
     T CopyComponent<T>(T original, GameObject destination) where T : Component
     {
         System.Type type = original.GetType();
@@ -49,10 +54,30 @@ public class AudioManager
     public void Start(GameObject caller)
     {
         effectsBuffer.Add(EffectsSource);
+        globalObject = caller;
         for (int i = 1; i < effectBufferCount; i++)
         {
             effectsBuffer.Add(CopyComponent<AudioSource>(EffectsSource, caller));
         }
+    }
+
+    //Adds a new audio source and returns it.
+    public AudioSource AddSource()
+    {
+        AudioSource newSource = CopyComponent<AudioSource>(MusicSource, globalObject);
+        additionalSources.Add(newSource);
+        return newSource;
+    }
+
+    public AudioSource getMusicSource() { return MusicSource; }
+
+    //Called by global right before a scene change
+    public void onSceneChanging()
+    {
+        foreach (var s in additionalSources) GameObject.Destroy(s);
+        additionalSources.Clear();
+        MusicSource.volume = 1f;
+        MusicSource.UnPause();
     }
 
     // Play a single clip through the sound effects source.

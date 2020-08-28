@@ -16,6 +16,9 @@ public class pushButton : MonoBehaviour
     private bool activated = false;
     private SpriteRenderer renderer;
     private bool justDeactivated = false;
+    public AudioClip sndOnActivate, sndOnDeactivate;
+
+    Global global;
 
     [Space]
     [Header("Button Light")]
@@ -47,6 +50,7 @@ public class pushButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
         if (activeTimer > 0)
         {
             activeTimer -= Time.deltaTime;
@@ -94,6 +98,7 @@ public class pushButton : MonoBehaviour
         {
             activated = true;
             renderer.sprite = buttonDown;
+            if (sndOnActivate) global.audio.Play(sndOnActivate);
             if (activeTimeWait != -1) activeTimer = activeTimeWait;
             if (OnActivateEvent != null) OnActivateEvent.Invoke();
         }
@@ -106,6 +111,7 @@ public class pushButton : MonoBehaviour
         if (activated)
         {
             activated = false;
+            if (sndOnDeactivate) global.audio.Play(sndOnDeactivate);
             justDeactivated = true;
             renderer.sprite = buttonUp;
             if (activeTimeWait != -1) activeTimer = 0;
