@@ -45,6 +45,7 @@ public class Animal : MonoBehaviour
     [Header("Sounds")]
     //Note: These sounds will only play if they are within the camera view+camera buffer, or if cameraFollowPlayer does not exist on the camera.
     public List<AudioClip> sndSpeak = new List<AudioClip>();
+    public float sndSpeakTimeOffset = 0f;
     public AudioClip sndGraze;
     public AudioClip sndMakeSomething;
     public AudioClip sndFlap;
@@ -390,7 +391,8 @@ public class Animal : MonoBehaviour
             state = states.speak;
             if (sndSpeak.Count > 0)
             {
-                global.audio.PlayIfOnScreen(sndSpeak, (Vector2)transform.position, 0.8f, 1.2f);
+                Invoke("playSpeakSound", sndSpeakTimeOffset);
+                
             }
         }
         if (s == states.flap)
@@ -433,6 +435,11 @@ public class Animal : MonoBehaviour
                 if (createObjects[createSelection].createState != states.makeSomething) setState(createObjects[createSelection].createState); //We don't want recursion because that would be bad!
             }
         }
+    }
+
+    public void playSpeakSound()
+    {
+        global.audio.PlayIfOnScreen(sndSpeak, (Vector2)transform.position, 0.8f, 1.2f);
     }
 
     public int countObjectsByName(string name)

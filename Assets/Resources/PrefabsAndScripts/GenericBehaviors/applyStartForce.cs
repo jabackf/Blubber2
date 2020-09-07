@@ -27,6 +27,11 @@ public class applyStartForce : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        applyForce();
+    }
+
+    public void applyForce()
+    {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
         if (forceTransformMultipler == forceTransformMultipliers.TransformUp)
@@ -45,8 +50,5 @@ public class applyStartForce : MonoBehaviour
         rb.AddForce(force, mode);
 
         rb.AddTorque(Random.Range(torqueMin, torqueMax), mode);
-
     }
-
-
 }

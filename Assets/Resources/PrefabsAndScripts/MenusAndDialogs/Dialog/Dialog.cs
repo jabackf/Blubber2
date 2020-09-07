@@ -283,6 +283,13 @@ public class Dialog : MonoBehaviour
         
     }
 
+    //Removes all answers from the answer brack of the injectIndex
+    public void emptyAnswerBranch(int injectIndex)
+    {
+        entries[injectIndex].answers.Clear();
+        entries[injectIndex].answerBranch.Clear();
+    }
+
     //Called when someone is interupting our conversation.
     //Intended primarily for when NPCs are having an automatic conversation and the player interupts them 
     //Timer is an optional variable. If it's not -1, then it will automatically invoke resume after the time is up

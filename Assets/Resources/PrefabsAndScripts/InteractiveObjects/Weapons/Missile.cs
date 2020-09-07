@@ -71,6 +71,7 @@ public class Missile : MonoBehaviour
         gameObject.tag = "Player";
         pilot.tag = "inactivePlayer";
         Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
+        pilot.SendMessage("onControlTaken", SendMessageOptions.DontRequireReceiver);
     }
 
 
@@ -81,6 +82,7 @@ public class Missile : MonoBehaviour
             playerControlled = false;
             pilot.tag = "Player";
             Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
+            pilot.SendMessage("onControlResumed", SendMessageOptions.DontRequireReceiver);
         }
 
         if (explosion) Instantiate(explosion, transform.position, Quaternion.identity);

@@ -11,6 +11,9 @@ public class OpenClose : MonoBehaviour
     public Sprite closedSprite, openSprite;
     private SpriteRenderer renderer;
 
+    public AudioClip sndOpen, sndClose;
+    Global global;
+
     public bool triggerCallbackOnStart = true; //If true, then we will trigger either the onOpen or onClose events in the start of this script to tell other components if the thing is default opened or closed
     public UnityEvent[] onOpenEvents, onCloseEvents;
 
@@ -22,6 +25,8 @@ public class OpenClose : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        global = GameObject.FindWithTag("global").GetComponent<Global>();
+
         renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
         updateSprite();
 
@@ -55,6 +60,8 @@ public class OpenClose : MonoBehaviour
         updateSprite();
         if (closedByPlayer) gameObject.SendMessage("setRangeActive", true, SendMessageOptions.DontRequireReceiver);
 
+        if (sndOpen) global.audio.Play(sndOpen);
+
         foreach (UnityEvent e in onOpenEvents)
         {
             e.Invoke();
@@ -66,6 +73,8 @@ public class OpenClose : MonoBehaviour
         gameObject.SendMessage("setRangeActive", true, SendMessageOptions.DontRequireReceiver);
         open = false;
         updateSprite();
+
+        if (sndClose) global.audio.Play(sndClose);
 
         foreach (UnityEvent e in onCloseEvents)
         {

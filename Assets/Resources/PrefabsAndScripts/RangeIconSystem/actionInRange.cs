@@ -27,6 +27,7 @@ public class actionInRange : MonoBehaviour
     private bool isChild = false; //If the action icon is a child to the object or not.
 
     private Global global;
+    bool justEnabled = true;
 
     // Start is called before the first frame update
     protected void Start()
@@ -64,6 +65,11 @@ public class actionInRange : MonoBehaviour
                 ActionIcon.transform.localPosition = new Vector3(gameObject.transform.position.x + iconXOffset, gameObject.transform.position.y + iconYOffset, 0f);
         }
     }
+    
+    public void LateUpdate()
+    {
+        justEnabled = false;
+    }
 
 
     //These functions make the action icon a child of the gameObject. This is mainly used to pack the icon with the gameobject for transfer to new scene.
@@ -81,6 +87,7 @@ public class actionInRange : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (justEnabled) return;
         if (other.gameObject.tag == "RangeCollider" && rangeActive)
         {
             bool goodToGo = true;
@@ -107,10 +114,18 @@ public class actionInRange : MonoBehaviour
     }
     void OnTriggerExit2D(Collider2D other)
     {
+        if (justEnabled) return;
         if (other.gameObject.tag == "RangeCollider" && rangeActive)
         {
             setInRange(false, null);
         }
+    }
+
+    public void OnEnable()
+    {
+        //There was a glitch that occured when items go from inactive to active while colliding with the player. This was happening on opening the fridge and spawning an item.
+        //Still not sure why it was happening, but I found that ignoring all triggers during the first frame of becoming active fixed it. That's what this variable does.
+        justEnabled = true;
     }
 
     public void setRangeActive(bool rangeActive)
@@ -127,8 +142,8 @@ public class actionInRange : MonoBehaviour
     }
     public void setInRange(bool inRange, GameObject go)
     {
-
-        iScript.setVisible(inRange);
+        if (!iScript) iScript = ActionIcon.GetComponent<actionIcon>();
+        if (iScript) iScript.setVisible(inRange);
         range = inRange;
 
         if (characterObject != null)
@@ -144,7 +159,8 @@ public class actionInRange : MonoBehaviour
 
         if (characterObject != null)
         {
-            characterObject.GetComponent<CharacterController2D>().setActionObjectInRange(gameObject);
+            var cont = characterObject.GetComponent<CharacterController2D>();
+            if (cont) cont.setActionObjectInRange(gameObject);
         }
     }
 

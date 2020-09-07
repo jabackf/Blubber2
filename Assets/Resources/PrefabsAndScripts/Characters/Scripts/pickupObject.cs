@@ -18,6 +18,7 @@ public class pickupObject : actionInRange
     public float breakForce = 500;  //The amount of force needed to break the joint between the holding character this object
     public float breakTorque = 500;
     public float throwForce = 200; //This number is multiplied by length of the throw arrow.
+    public float throwTorque = 0f; //Torque applied on throwing. This value is negated when facing left, so torque is applied in the character's facing direction.
     public float carryMass = 0.5f;  //This is the mass of the object while it's being carried
     public bool flipOnX = true;     //Flips with the character holding it if set to true
     public bool flipOnY = true;
@@ -545,6 +546,11 @@ public class pickupObject : actionInRange
 
         float radAngle = (-throwArc.angle + 90) * Mathf.Deg2Rad;
         rb.AddForce(new Vector2(Mathf.Sin(radAngle), Mathf.Cos(radAngle)) * throwForce * throwArc.length);
+
+        if (throwTorque!=0)
+        {
+            rb.AddTorque(flippedX ? throwTorque : -throwTorque, ForceMode2D.Impulse);
+        }
     }
 
     //Clears the recentlyThrownBy object

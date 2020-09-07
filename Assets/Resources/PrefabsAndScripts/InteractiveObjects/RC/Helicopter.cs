@@ -70,6 +70,7 @@ public class Helicopter : MonoBehaviour
         gameObject.tag = "Player";
         pilot.tag = "inactivePlayer";
         anim.SetBool("Active", active);
+        character.SendMessage("onControlTaken", SendMessageOptions.DontRequireReceiver);
         Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
         rb.gravityScale = activeGravity;
         if (sndActiveLoop)
@@ -84,9 +85,14 @@ public class Helicopter : MonoBehaviour
         active = false;
         if (previousTag == "") gameObject.tag="RC";
         else gameObject.tag = previousTag;
-        if (pilot) pilot.tag = "Player";
+        if (pilot)
+        {
+            pilot.tag = "Player";
+            pilot.SendMessage("onControlResumed", SendMessageOptions.DontRequireReceiver);
+        }
         anim.SetBool("Active", active);
         Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
+        
         rb.gravityScale = initialGravity;
         if (sndActiveLoop) global.audio.StopFXLoopPitchDrop(sndActiveLoop);
     }

@@ -105,6 +105,7 @@ public class CharacterController2D : MonoBehaviour
     public bool isTalking = false;       //Set to true when we are in dialog. 
     public bool pause = false;       //Set to true when we are selecting something from a menu like a color picker, in non-auto dialog, or the pause menu, ect. This freezes all input. 
     private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
+    private bool controlTaken = false;
 
     [Space]
     [Header("Death")]
@@ -267,7 +268,10 @@ public class CharacterController2D : MonoBehaviour
 
             if (currentPlatform == previousPlatform && currentPlatform != null) //Still on the same platform. Add any platform motion to the character.
             {
-                gameObject.transform.Translate(currentPlatform.transform.position.x - platformPreviousPosition.x, currentPlatform.transform.position.y - platformPreviousPosition.y, 0);
+                //But first let's make sure the platform didn't move a ridiculously large amount. Generally, if the platform teleports out from under us we probably don't want to go with it. 
+                //An example of this is the half segmented conveyor belts. Segments jump from the end rotor to the beginning, and we don't want to take the player.
+                if ( Mathf.Abs(currentPlatform.transform.position.x - platformPreviousPosition.x) <= 1f && Mathf.Abs(currentPlatform.transform.position.y - platformPreviousPosition.y) <= 1f)
+                    gameObject.transform.Translate(currentPlatform.transform.position.x - platformPreviousPosition.x, currentPlatform.transform.position.y - platformPreviousPosition.y, 0);
             }
 
 
@@ -340,7 +344,7 @@ public class CharacterController2D : MonoBehaviour
 
     public void Move(float move, bool crouch, bool jump, bool pickup = false, float climb = 0, bool dropDown = false, bool dialog = false)
     {
-        if (isDead) return;
+        if (isDead || controlTaken || pause) return;
 
         bool justPickedUp = false;
 
@@ -506,6 +510,7 @@ public class CharacterController2D : MonoBehaviour
                 }
             }
 
+            
             // Move the character by finding the target velocity
             Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
 
@@ -609,15 +614,18 @@ public class CharacterController2D : MonoBehaviour
                 numJumps++;
 
                 //With the temporary extra jump things tend to work more consistently when we cancel out any current y velocities and start at zero. This gives us better control over the jump.
-                if (temporaryExtraJump) m_Rigidbody2D.velocity = new Vector3(m_Rigidbody2D.velocity.x, 0f, 0f);
+                //Also fixes a glitch that makes conveyor belts "sticky" when trying to jump on them.
+                if (temporaryExtraJump || isOnConveyor) m_Rigidbody2D.velocity = new Vector3(m_Rigidbody2D.velocity.x, 0f, 0f);
+
                 temporaryExtraJump = false;
                 if (charAnim != null)
                 {
                     charAnim.jump = true;
                     if (numJumps > 1) charAnim.doubleJump = true;
                 }
+
                 //m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
-                m_Rigidbody2D.velocity += (new Vector2(0f, m_JumpVelocity * (inWater ? m_WaterJumpMultiplier : 1)));
+                m_Rigidbody2D.velocity += (new Vector2(0f, m_JumpVelocity * (inWater ? m_WaterJumpMultiplier : 1)  ));
 
                 //Sometimes infinite jump or water jump can be exploited to lead to high speeds. This clamps the velocity down.
                 if (m_Rigidbody2D.velocity.y > m_MaxJumpVelocity) m_Rigidbody2D.velocity = new Vector2(m_Rigidbody2D.velocity.x, m_MaxJumpVelocity);
@@ -970,7 +978,7 @@ public class CharacterController2D : MonoBehaviour
         return pause;
     }
 
-    public void Say(string message, float time = 3f)
+    public void Say(string message, float time = 2.5f)
     {
         if (message == "") return;
         ClearSay();
@@ -999,7 +1007,7 @@ public class CharacterController2D : MonoBehaviour
     }
 
     //Overrides Say by using an array of strings rather than a single string. Picks a random string out of the array to say.
-    public void Say(string[] messages, float time = 3f)
+    public void Say(string[] messages, float time = 2.5f)
     {
         if (messages.Length <= 0) return;
         int i = UnityEngine.Random.Range(0, messages.Length - 1);
@@ -1027,4 +1035,15 @@ public class CharacterController2D : MonoBehaviour
     }
 
     public AudioClip GetDialogSound() { return dialogSound; }
+
+    //These are called by objects (like rc vehicles, guided missiles, ect) when control has been taken from this player and given back (resumed).
+    public void onControlTaken()
+    {
+        controlTaken = true;
+        m_Rigidbody2D.velocity = new Vector3(0f, m_Rigidbody2D.velocity.y, 0f);
+    }
+    public void onControlResumed()
+    {
+        controlTaken = false;
+    }
 }
