@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -1817,6 +1817,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 100
+  throwTorque: 0
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
@@ -2734,6 +2735,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 100
+  throwTorque: 0
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
@@ -3776,6 +3778,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 600
+  throwTorque: 0
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
@@ -4387,6 +4390,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 600
+  throwTorque: 0
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
@@ -9874,11 +9878,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6145378233625631958, guid: 57ac04339e38e7b43b6d02301abf1a30,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerSpawn
-      objectReference: {fileID: 0}
     - target: {fileID: 6145378233625633577, guid: 57ac04339e38e7b43b6d02301abf1a30,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9933,6 +9932,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6145378233625631958, guid: 57ac04339e38e7b43b6d02301abf1a30,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerSpawn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57ac04339e38e7b43b6d02301abf1a30, type: 3}
@@ -11022,11 +11026,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5670465454136827815, guid: 6a1486edaf52eeb46962db0b6666f1b2,
-        type: 3}
-      propertyPath: m_Name
-      value: RedBall
-      objectReference: {fileID: 0}
     - target: {fileID: 1203834790958050006, guid: 6a1486edaf52eeb46962db0b6666f1b2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11081,6 +11080,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.24700001
+      objectReference: {fileID: 0}
+    - target: {fileID: 5670465454136827815, guid: 6a1486edaf52eeb46962db0b6666f1b2,
+        type: 3}
+      propertyPath: m_Name
+      value: RedBall
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a1486edaf52eeb46962db0b6666f1b2, type: 3}
@@ -12144,6 +12148,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 100
+  throwTorque: 0
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
@@ -18577,6 +18582,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 600
+  throwTorque: 0
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
@@ -19493,6 +19499,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 100
+  throwTorque: 0
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
@@ -20322,6 +20329,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1629155487}
     m_Modifications:
+    - target: {fileID: 2071604565937980936, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
+        type: 3}
+      propertyPath: m_Name
+      value: psMusicNotes
+      objectReference: {fileID: 0}
     - target: {fileID: 2071604565937980939, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20376,11 +20388,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2071604565937980936, guid: 65c4b0a18f018da4eb4e9e1931c481a6,
-        type: 3}
-      propertyPath: m_Name
-      value: psMusicNotes
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65c4b0a18f018da4eb4e9e1931c481a6, type: 3}
@@ -20697,7 +20704,7 @@ PrefabInstance:
     - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
         type: 3}
       propertyPath: music.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
         type: 3}
@@ -20708,20 +20715,25 @@ PrefabInstance:
         type: 3}
       propertyPath: music.Array.data[1]
       value: 
-      objectReference: {fileID: 8300000, guid: fe168cf8fbff5524dbc4f613e3ecd2dd, type: 3}
+      objectReference: {fileID: 8300000, guid: a783f6b27953e3e47bb11da1ef1bed8e, type: 3}
     - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
         type: 3}
       propertyPath: music.Array.data[2]
       value: 
-      objectReference: {fileID: 8300000, guid: a780400e654a1064facda6127c949773, type: 3}
+      objectReference: {fileID: 8300000, guid: 6336be8bc4e596c4f8dbd1d391d87228, type: 3}
     - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
         type: 3}
       propertyPath: music.Array.data[3]
       value: 
-      objectReference: {fileID: 8300000, guid: 627ac2f208d046041a7a8fa1486c40c3, type: 3}
+      objectReference: {fileID: 8300000, guid: 314d0a7ef817cae43b1c75b2d45c9f1a, type: 3}
     - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
         type: 3}
       propertyPath: randomizePlaylist
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: loopAudio
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -20747,16 +20759,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2038998460492237061, guid: 71fc6c6582e1b9d4f910116c710a21b9,
-        type: 3}
-      propertyPath: m_Name
-      value: psSceneParticlesSparklyHorizontal2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2038998460492237061, guid: 71fc6c6582e1b9d4f910116c710a21b9,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6793224446301020611, guid: 71fc6c6582e1b9d4f910116c710a21b9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20810,6 +20812,16 @@ PrefabInstance:
     - target: {fileID: 6793224446301020611, guid: 71fc6c6582e1b9d4f910116c710a21b9,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038998460492237061, guid: 71fc6c6582e1b9d4f910116c710a21b9,
+        type: 3}
+      propertyPath: m_Name
+      value: psSceneParticlesSparklyHorizontal2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2038998460492237061, guid: 71fc6c6582e1b9d4f910116c710a21b9,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -21019,16 +21031,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5861364902376718198, guid: 4812ef10f1b1a1940be57d18f5098257,
-        type: 3}
-      propertyPath: wrapOffset.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861364902376718198, guid: 4812ef10f1b1a1940be57d18f5098257,
-        type: 3}
-      propertyPath: transType
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5861364902376718199, guid: 4812ef10f1b1a1940be57d18f5098257,
         type: 3}
       propertyPath: m_Offset.x
@@ -21038,6 +21040,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Size.x
       value: 1.1913586
+      objectReference: {fileID: 0}
+    - target: {fileID: 5861364902376718198, guid: 4812ef10f1b1a1940be57d18f5098257,
+        type: 3}
+      propertyPath: wrapOffset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5861364902376718198, guid: 4812ef10f1b1a1940be57d18f5098257,
+        type: 3}
+      propertyPath: transType
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4812ef10f1b1a1940be57d18f5098257, type: 3}
@@ -21487,6 +21499,7 @@ MonoBehaviour:
   breakForce: 300
   breakTorque: 500
   throwForce: 100
+  throwTorque: 0
   carryMass: 0.3
   flipOnX: 1
   flipOnY: 1
@@ -21573,6 +21586,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1194112661}
     m_Modifications:
+    - target: {fileID: 7561067211822079516, guid: 8a1a32ba5de817f4096c122710a39c5d,
+        type: 3}
+      propertyPath: m_Name
+      value: sprPizza_0
+      objectReference: {fileID: 0}
     - target: {fileID: 7561067211822079515, guid: 8a1a32ba5de817f4096c122710a39c5d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21628,11 +21646,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7561067211822079516, guid: 8a1a32ba5de817f4096c122710a39c5d,
-        type: 3}
-      propertyPath: m_Name
-      value: sprPizza_0
-      objectReference: {fileID: 0}
     - target: {fileID: 7561067211822079514, guid: 8a1a32ba5de817f4096c122710a39c5d,
         type: 3}
       propertyPath: sndOnThrow
@@ -21664,6 +21677,7 @@ MonoBehaviour:
   breakForce: 500
   breakTorque: 500
   throwForce: 600
+  throwTorque: 0
   carryMass: 0.5
   flipOnX: 1
   flipOnY: 1
@@ -21752,6 +21766,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1194112661}
     m_Modifications:
+    - target: {fileID: 7824296257769419215, guid: 6578271a7c2e99246ba98a77ed51c9e9,
+        type: 3}
+      propertyPath: m_Name
+      value: sprLadderTall_0
+      objectReference: {fileID: 0}
     - target: {fileID: 7824296257769419056, guid: 6578271a7c2e99246ba98a77ed51c9e9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21806,11 +21825,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7824296257769419215, guid: 6578271a7c2e99246ba98a77ed51c9e9,
-        type: 3}
-      propertyPath: m_Name
-      value: sprLadderTall_0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6578271a7c2e99246ba98a77ed51c9e9, type: 3}

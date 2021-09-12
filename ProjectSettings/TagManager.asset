@@ -56,7 +56,7 @@ TagManager:
   - PostProcessing
   - DisableAllCollision
   - OnlyCollideWithGround
-  - 
+  - DontCollideWithSelf
   - 
   - 
   - 

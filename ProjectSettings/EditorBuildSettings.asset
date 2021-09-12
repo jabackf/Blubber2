@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Resources/Scenes/testing_100_100/testing_100_100.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Resources/Scenes/testing_99_100/testing_99_100.unity
+    guid: e5193a4a92c7d1a4db95f9d21e484ecd
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
