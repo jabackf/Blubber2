@@ -54,7 +54,7 @@ public class OpenClose : MonoBehaviour
         renderer.sprite = (open ? openSprite : closedSprite);
     }
 
-    public void Open(string name, GameObject characterGo)
+    public void Open(string name="", GameObject characterGo=null)
     {
         open = true;
         updateSprite();
@@ -68,7 +68,7 @@ public class OpenClose : MonoBehaviour
         }
     }
 
-    public void Close(string name, GameObject characterGo)
+    public void Close(string name="", GameObject characterGo=null)
     {
         gameObject.SendMessage("setRangeActive", true, SendMessageOptions.DontRequireReceiver);
         open = false;

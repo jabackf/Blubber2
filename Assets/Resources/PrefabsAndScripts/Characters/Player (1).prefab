@@ -254,7 +254,7 @@ MonoBehaviour:
   inWater: 0
   waterMultiplier: 0.7
   currentlyMouseAiming: 0
-  m_JumpVelocity: 10.5
+  m_JumpVelocity: 11.5
   temporaryExtraJump: 0
   canDoubleJump: 0
   infiniteJump: 0
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controller: {fileID: 140103500801170335}
   requirePlayerTag: 1
-  runSpeed: 35
+  runSpeed: 38
   aimAngleSpeed: 200
   aimForceSpeed: 15
   mouseAim: 1

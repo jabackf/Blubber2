@@ -37,6 +37,7 @@ TagManager:
   - Weapon
   - GameplayUIOverlay
   - changeMusicTrigger
+  - crystal
   layers:
   - Default
   - TransparentFX

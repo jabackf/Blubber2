@@ -108,6 +108,8 @@ public class ConveyorSegmented : MonoBehaviour
     public movementTypes movementType = movementTypes.speed;
     public int maxSegments = 800; //The maximum number of segments we are allowed to have. Primarily used in case a glitch happens during segment instantiation and the segments try to go on forever, getting us stuck in an infinite loop. 
 
+    public GameObject beltCaps; //If an object is specified (and the belt is open ended), this object will be duplicated and placed at each end of the belt.
+
     //These are used to control lerpOnCommand. If you're wanting to manually lerp the belt, you can do so from script by calling advanceLeft() or advanceRight(),
     //OR you can set either one of these to true (which is good for testing in the editor). The lerping code will set them back to false after it receives the command to lerp.
     [SerializeField] private bool advanceLeftBool = false;
@@ -307,6 +309,20 @@ public class ConveyorSegmented : MonoBehaviour
                     newseg.SetActive(e.active);
                 }
             }
+        }
+
+        //place caps at the ends of the belt
+        if (beltCaps && !pathCreator.path.isClosedLoop)
+        {
+            GameObject endcap = GameObject.Instantiate(beltCaps, transform);
+            endcap.transform.position = Segments[Segments.Count - 1].gameObject.transform.position;
+            endcap.transform.rotation = Segments[Segments.Count - 1].gameObject.transform.rotation;
+            endcap.SetActive(true);
+
+            GameObject startcap = GameObject.Instantiate(beltCaps, transform);
+            startcap.transform.position = Segments[0].gameObject.transform.position;
+            startcap.transform.rotation = Segments[0].gameObject.transform.rotation;
+            startcap.SetActive(true);
         }
 
         beltFullyInitialized = true;

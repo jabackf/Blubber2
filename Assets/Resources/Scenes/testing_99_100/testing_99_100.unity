@@ -616,10 +616,16 @@ MonoBehaviour:
   editorData:
     _bezierPath:
       points:
-      - {x: -11.910624, y: 0.13000011, z: 0}
-      - {x: -11.801799, y: 0.13000011, z: 0}
-      - {x: 7.888632, y: 0.13000011, z: 0}
-      - {x: 8.355715, y: 0.13000011, z: 0}
+      - {x: -12.2261505, y: -1.0098767, z: 0}
+      - {x: -12.224274, y: -1.0098767, z: 0}
+      - {x: -12.1696415, y: 0.12995481, z: 0}
+      - {x: -11.561178, y: 0.13112974, z: 0}
+      - {x: -10.828058, y: 0.13254538, z: 0}
+      - {x: 6.829998, y: 0.195267, z: 0}
+      - {x: 7.9699664, y: 0.13000011, z: 0}
+      - {x: 8.49634, y: 0.09986353, z: 0}
+      - {x: 8.4735985, y: -0.7451043, z: 0}
+      - {x: 8.482489, y: -0.7451043, z: 0}
       isClosed: 0
       space: 1
       controlMode: 0
@@ -629,6 +635,8 @@ MonoBehaviour:
         m_Center: {x: -6.880907, y: 2.6704137, z: 0}
         m_Extent: {x: 1.9999998, y: 0.14433765, z: 0}
       perAnchorNormalsAngle:
+      - 0
+      - 0
       - 0
       - 0
       globalNormalsAngle: 0
@@ -679,6 +687,7 @@ MonoBehaviour:
     objectList: []
   movementType: 0
   maxSegments: 800
+  beltCaps: {fileID: 0}
   advanceLeftBool: 0
   advanceRightBool: 0
   stopBool: 0
@@ -1464,7 +1473,7 @@ PrefabInstance:
     - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
         type: 3}
       propertyPath: music.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
         type: 3}
@@ -1491,6 +1500,16 @@ PrefabInstance:
       propertyPath: bottomMessage
       value: Conveyor belt test
       objectReference: {fileID: 0}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: loopAudio
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5007306062988290118, guid: 642110ba2d1a82241a471ecc9752a083,
+        type: 3}
+      propertyPath: music.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: aaf96f9419ab629429d38fb922d6ff07, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 642110ba2d1a82241a471ecc9752a083, type: 3}
 --- !u!1 &683664195
@@ -3134,6 +3153,7 @@ MonoBehaviour:
     objectList: []
   movementType: 0
   maxSegments: 800
+  beltCaps: {fileID: 0}
   advanceLeftBool: 0
   advanceRightBool: 0
   stopBool: 0
@@ -3390,6 +3410,7 @@ MonoBehaviour:
     objectList: []
   movementType: 1
   maxSegments: 800
+  beltCaps: {fileID: 0}
   advanceLeftBool: 0
   advanceRightBool: 0
   stopBool: 0
@@ -6289,6 +6310,7 @@ MonoBehaviour:
     objectList: []
   movementType: 2
   maxSegments: 800
+  beltCaps: {fileID: 0}
   advanceLeftBool: 0
   advanceRightBool: 0
   stopBool: 0
@@ -6871,6 +6893,7 @@ MonoBehaviour:
     objectList: []
   movementType: 0
   maxSegments: 800
+  beltCaps: {fileID: 0}
   advanceLeftBool: 0
   advanceRightBool: 0
   stopBool: 0
@@ -11792,12 +11815,12 @@ PrefabInstance:
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.00038820505
+      value: 0.000349164
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9992236
+      value: 0.9993017
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}

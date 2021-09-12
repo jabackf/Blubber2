@@ -15,16 +15,16 @@ public class BlubberOneLevelImporter
         { "WoodBox", "staticWoodBox" },
         { "GreenPlat", "staticGreenBrick" },
         { "YellowPlat", "PlatformYellow" },
-        { "Bouncer", "" }, 
-        { "ConvPlatLeft", "" }, 
-        { "ConvPlatRight", "" },
+        { "Bouncer", "BounceBlock_stationary" }, 
+        { "ConvPlatLeft", "Conveyor1Left" }, 
+        { "ConvPlatRight", "Conveyor1Right" },
         { "PlatFade", "blueFadePlatObj" },
         { "IceBrick", "" },
         { "SnowTop", "" },
         { "IceDirt", "" },
         { "SnowEndLeft", "" },
         { "SnowEndRight", "" },
-        { "MovePlat", "" },
+        { "MovePlat", "MovePlatformHorizontal" },
         { "IceBlock", "" },
         { "ForestGround", "" },
         { "ForestDirt", "" },
@@ -35,14 +35,14 @@ public class BlubberOneLevelImporter
 
         //Good stuff
         { "Crystal", "standardCrystal" },
-        { "Door", "" },
+        { "Door", "crystalDoor" },
         { "DoubleJump", "DoubleJumpArrow" },
         { "GiantCrystal", "" },
 
         //Meanies
-        { "FlyGuy", "" }, 
-        { "Killbot", "" },
-        { "SpikeUp", "" },
+        { "FlyGuy", "FlyGuy_Standard" }, 
+        { "Killbot", "Robot_Standard" },
+        { "SpikeUp", "spikeup" },
         { "SpikeDown", "" },
         { "SpikeLeft", "" },
         { "SpikeRight", "" },
@@ -55,10 +55,10 @@ public class BlubberOneLevelImporter
 
         //Triggers and Markers
         { "WaterCollider", "" },
-        { "EnemyMarker", "" }, 
+        { "EnemyMarker", "GenericTrigger" }, 
         { "TNTMaker", "" }, 
         { "TNTDestroyer", "" },
-        { "PlatformMarker", "" },
+        { "PlatformMarker", "GenericTrigger" },
 
         //Players
         { "PlayerOne", "PlayerSpawnObj" },
@@ -115,11 +115,17 @@ public class BlubberOneLevelImporter
                                     {
                                         Debug.Log("Found: " + assetPath);
                                         Vector3 pos = new Vector3(Convert.ToInt32(d[1]) / 24, -Convert.ToInt32(d[2]) / 24, 0f);
-                                        GameObject go = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject)) as GameObject, pos, Quaternion.identity);
+                                        //GameObject go = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject)) as GameObject, pos, Quaternion.identity);
+                                        GameObject go = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject)));
+                                        go.transform.position = pos;
                                         go.transform.parent = parent.transform;
 
                                         //Special rules for special stuffs
                                         if (d[0] == "PlayerOne" || d[0] == "PlayerTwo") go.transform.position += new Vector3(0.5f, -1f, 0f);
+                                        if (d[0] == "SpikeUp") go.transform.position += new Vector3(0f, 1f, 0f);
+                                        if (d[0] == "Door") go.transform.position += new Vector3(0f, 1.16f, 0f);
+                                        if (d[0] == "Killbot") go.transform.position += new Vector3(0f, 0.2f, 0f);
+
                                     }
                                 }
                             }

@@ -13,7 +13,7 @@ public class StandardDoor : MonoBehaviour
     }
 
     public types type = types.standard;
-
+    OpenClose openclose_script;
 
     bool open = false;
 
@@ -26,16 +26,26 @@ public class StandardDoor : MonoBehaviour
         global = GameObject.FindWithTag("global").GetComponent<Global>();
         warp = GetComponent<WarpTrigger>();
         warp.setCallOnTriggerEnter(false);
+
+        openclose_script = gameObject.GetComponent(typeof(OpenClose)) as OpenClose;
     }
 
-    //onOpen and onClose should be triggered by an external script (like OpenClose) to tell us when the door has been opened or closed.
+    //onOpen and onClose is sometimes triggered by an external script (like OpenClose) to tell us when the door has been opened or closed.
     public void onOpen()
     {
+        if (open) return;
         open = true;
+
+        if (type == types.crystal && openclose_script) //For doors that the play does not manually open and close, we have to tell the openclose script to do it's thing.
+            openclose_script.Open();
     }
     public void onClose()
     {
+        if (!open) return;
         open = false;
+
+        if (type == types.crystal && openclose_script) //For doors that the play does not manually open and close, we have to tell the openclose script to do it's thing.
+            openclose_script.Close();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -61,6 +71,14 @@ public class StandardDoor : MonoBehaviour
             //We're in the trigger zone, the door is open, and the player is pressing the enter door key.
             player.SendMessage("Back", SendMessageOptions.DontRequireReceiver);
             warp.Warp();
+        }
+
+        if (type == types.crystal)
+        {
+            if (GameObject.FindGameObjectsWithTag("crystal").Length <= 0)
+            {
+                onOpen();
+            }
         }
     }
 
