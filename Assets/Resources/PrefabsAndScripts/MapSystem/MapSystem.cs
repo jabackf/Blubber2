@@ -41,7 +41,8 @@ public class MapSystem
         none,       //Do not move the character
         wrap,       //Wrap if we're off the screen 
         warpTag,    //Use the specified warpTag
-        characterJump   //Jump to the x,y location specified by CharacterJumpPos
+        characterJump,   //Jump to the x,y location specified by CharacterJumpPos
+		playerSpawn		//Looks for an object with the "playerSpawn" tag and moves there. 
     }
 
     repositionTypes repositionType = repositionTypes.none;
@@ -327,6 +328,12 @@ public class MapSystem
         if (repositionType == repositionTypes.warpTag)
         {
             GameObject warpTo = GameObject.FindWithTag(warpTag);
+            characterReposition.x = warpTo.transform.position.x;
+            characterReposition.y = warpTo.transform.position.y;
+        }
+		if (repositionType == repositionTypes.playerSpawn)
+        {
+            GameObject warpTo = GameObject.FindWithTag("playerSpawn");
             characterReposition.x = warpTo.transform.position.x;
             characterReposition.y = warpTo.transform.position.y;
         }

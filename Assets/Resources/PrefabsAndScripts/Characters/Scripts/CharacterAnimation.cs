@@ -518,6 +518,27 @@ public class CharacterAnimation : MonoBehaviour
         }
         dressList.RemoveAll(d => d.destroyed==true);
     }
+	
+	public void hideNonessentialDresses()
+	{
+        foreach (dress d in dressList)
+        {
+            if (!d.essentialDress)
+            {
+                d.ShowHide(false);
+            }
+        }
+	}
+	public void showNonessentialDresses()
+	{
+        foreach (dress d in dressList)
+        {
+            if (!d.essentialDress)
+            {
+                d.ShowHide(true);
+            }
+        }
+	}
 
     public void CircleOn()
     {

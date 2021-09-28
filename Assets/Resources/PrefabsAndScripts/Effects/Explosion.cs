@@ -6,13 +6,16 @@ using Extensions;
 public class Explosion : MonoBehaviour
 {
     public LayerMask mask; //Anything on this mask will receive the explosion messages
+	
+	public bool shakeScreen = true;
 
     private float timer = 0.3f; //The trigger stops working after this time.
 
     // Start is called before the first frame update
     void Start()
     {
-        Camera.main.SendMessage("TriggerShake", SendMessageOptions.DontRequireReceiver);
+		if (shakeScreen)
+			Camera.main.SendMessage("TriggerShake", SendMessageOptions.DontRequireReceiver);
     }
 
     void Update()

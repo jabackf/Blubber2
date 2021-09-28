@@ -90,6 +90,14 @@ public class AudioManager
         effectsBuffer[sourceIndex].pitch = randomPitch;
         effectsBuffer[sourceIndex].Play();
     }
+	
+	//Overriden function will take a list of audio and play randomly from it.
+	public void Play(List<AudioClip> clips, float randomizePitchMin = 1, float randomizePitchMax = 1)
+    {
+        int randomIndex = Random.Range(0, clips.Count);
+        Play(clips[randomIndex],randomizePitchMin, randomizePitchMax);
+    }
+	
     //Plays an effect in loop indefinitely. Must be stopped with either StopFXLoop or StopFXLoopAll
     public void PlayFXLoop(AudioClip clip)
     {

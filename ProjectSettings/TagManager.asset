@@ -38,6 +38,8 @@ TagManager:
   - GameplayUIOverlay
   - changeMusicTrigger
   - crystal
+  - TNT_DestroyTrigger
+  - Conveyor
   layers:
   - Default
   - TransparentFX

@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 140103500430803526}
   - component: {fileID: 3062676972944686910}
   - component: {fileID: 4415814581880738231}
+  - component: {fileID: 5011096291788760822}
   - component: {fileID: 140103500801170323}
   - component: {fileID: -4930788884433185288}
   - component: {fileID: 8562145065021211513}
-  - component: {fileID: 8556278917998712158}
   - component: {fileID: 2487212718000470568}
   - component: {fileID: 140103500801170335}
+  - component: {fileID: 8556278917998712158}
   - component: {fileID: 1110821125419977147}
   - component: {fileID: 140103500801170329}
   - component: {fileID: 4874446031572672989}
@@ -121,6 +122,23 @@ MonoBehaviour:
   squishXAxis: 1
   squishYAxis: 1
   squishZAxis: 0
+  yCap: 0.7
+--- !u!114 &5011096291788760822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103500801170330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10c32cbb599060e468d28f7bbde7d547, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  axis: 1
+  behavior: 2
+  intensity: 0.018
+  max: 0.15
 --- !u!95 &140103500801170323
 Animator:
   serializedVersion: 3
@@ -196,22 +214,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.64733005, y: 0.5670309}
   m_EdgeRadius: 0
---- !u!58 &8556278917998712158
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 140103500801170330}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 6200000, guid: 71a6c24e9845b1c4c8194d0fabbfdb6e, type: 2}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.41389275}
-  serializedVersion: 2
-  m_Radius: 0.35296917
 --- !u!50 &2487212718000470568
 Rigidbody2D:
   serializedVersion: 4
@@ -247,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Blubber
   startFlipped: 0
-  m_MovementSmoothing: 0.05
+  m_MovementSmoothing: 0.126
   maxVelocity: 20
   m_AirControl: 1
   canUseDropDownPlatforms: 1
@@ -292,6 +294,7 @@ MonoBehaviour:
   m_DialogBottom: {fileID: 5583954899186943733}
   dialogSound: {fileID: 8300000, guid: 3ddc78fc4209fd940b8d24e7d2805b03, type: 3}
   spriteFlipMethod: 1
+  k_GroundedRadius: 0.1
   isTalking: 0
   pause: 0
   canDie: 1
@@ -307,6 +310,8 @@ MonoBehaviour:
   respawnLerpSpeed: 4
   dieSound: {fileID: 8300000, guid: 4e7de9d1782c25d429b3f8d5075a6549, type: 3}
   spawnSound: {fileID: 8300000, guid: 5a2327420ec531e4f90d8a5bd9393dbf, type: 3}
+  d_showCurrentPlatform: 0
+  d_showPlatformCheck: 0
   OnLandEvent:
     m_PersistentCalls:
       m_Calls:
@@ -339,6 +344,22 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: CharacterController2D+BoolEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!58 &8556278917998712158
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140103500801170330}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 6200000, guid: 71a6c24e9845b1c4c8194d0fabbfdb6e, type: 2}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.41389275}
+  serializedVersion: 2
+  m_Radius: 0.35296917
 --- !u!114 &1110821125419977147
 MonoBehaviour:
   m_ObjectHideFlags: 0

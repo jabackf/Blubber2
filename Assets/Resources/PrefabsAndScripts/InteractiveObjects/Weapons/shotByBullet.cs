@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 //This can be used to add a generic response to "Shot()" or "PShot(Vector3 position)" messages
 //Lets you specify an HP (-1 for infinite) which goes down by one each show. Also gives you the ability to spawn particles at shot position (only on PShot).
@@ -16,6 +17,9 @@ public class shotByBullet : MonoBehaviour
     public List<AudioClip> sndKillShot = new List<AudioClip>(); //The sound that plays on the shot that takes our hp to zero
     public float sndKillPitchRandomizeMin=1f, sndKillPitchRandomizeMax = 1f, sndShotPitchRandomizeMin = 1f, sndShotPitchRandomizeMax = 1f;
 
+	[SerializeField]
+    public UnityEvent OnShotCallback;  //Called every single time the object is shot
+	
     Global global;
 
     public void Start()
@@ -38,6 +42,9 @@ public class shotByBullet : MonoBehaviour
     public void Shot()
     {
         HP -= HPSubtractOnShot;
+		
+		if (OnShotCallback != null) OnShotCallback.Invoke();
+
 
         if (HP <= 0)
         {

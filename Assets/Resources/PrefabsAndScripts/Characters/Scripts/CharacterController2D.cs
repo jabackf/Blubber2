@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEditor;
 using System.Collections;
 using System;
 
@@ -71,6 +72,7 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Transform m_DialogTop;                             // The top position that the dialog box will point to
     [SerializeField] private Transform m_DialogBottom;                          // The bottom position that the dialot box will point to
     [SerializeField] private AudioClip dialogSound;
+	
 
     public Transform getDialogTop() { return m_DialogTop; }
     public Transform getDialogBottom() { return m_DialogBottom; }
@@ -80,7 +82,7 @@ public class CharacterController2D : MonoBehaviour
     private enum flipType { none, spriteRenderer, scale }
     [SerializeField] private flipType spriteFlipMethod = flipType.scale;  // The method used for flipping the sprite when the character turns around. NOTE: Sprite renderer will also flip sprites of child objects       
 
-    const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+    [SerializeField] private float k_GroundedRadius = .1f; // Radius of the overlap circle to determine if grounded
     private bool m_Grounded;            // Whether or not the player is grounded. 
     const float k_CeilingRadius = .1f; // Radius of the overlap circle to determine if the player can stand up. (Adjust is player is autocrouching or standing up when you don't want him to.)
     const float k_SideRadius = .1f; // Radius of the overlap circle to determine if the player can stand up. (Adjust is player is autocrouching or standing up when you don't want him to.)
@@ -98,7 +100,7 @@ public class CharacterController2D : MonoBehaviour
     private bool isHolding = false; //Set to true if we're holding an object
     private pickupObject holding;     //The object we are currently (or were last) holding
     private GameObject actionObjectInRange; //This is set to the most recent gameobject using actionInRange that is colliding with this character's range colliders. Null if nothing in range.
-    private bool isOnConveyor = false; //Set by the conveyor script
+    private bool isOnConveyor = false; //Set to true when a platform below us has the "Conveyor" tag
     private float initialGravityScale; //Used to store our gravity state in case we have to turn gravity off.
     private bool isClimbing = false;
     private dropDownPlatform onDropPlatformScript = null;
@@ -106,6 +108,7 @@ public class CharacterController2D : MonoBehaviour
     public bool pause = false;       //Set to true when we are selecting something from a menu like a color picker, in non-auto dialog, or the pause menu, ect. This freezes all input. 
     private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
     private bool controlTaken = false;
+
 
     [Space]
     [Header("Death")]
@@ -125,6 +128,14 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private AudioClip dieSound;
     [SerializeField] private AudioClip spawnSound;
 
+    [Space]
+    [Header("Debug")]
+	
+	[SerializeField] private bool d_showCurrentPlatform = false;	//When set to true, the platform that the player is currently standing on will be highlighted. Note this does not work for tiles.
+	private Color d_showCurrentPlatformStartColor=Color.white;					//Used internally so we can revert the current platform back to it's normal color when we leave it.
+	[SerializeField] private bool d_showPlatformCheck=false;		//When set to true, a circle is drawn showing the position and radius of the circle cast that detects the platform.
+	
+	
     [Header("Events")]
     [Space]
 
@@ -192,6 +203,7 @@ public class CharacterController2D : MonoBehaviour
 
     private void FixedUpdate()
     {
+		
         //Let's freeze if the scene is changing.
         if (global.isSceneChanging())
         {
@@ -235,6 +247,15 @@ public class CharacterController2D : MonoBehaviour
             // The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
             // This can be done using layers instead but Sample Assets will not overwrite your project settings.
             Collider2D[] colliders = Physics2D.OverlapCircleAll(m_GroundCheck.position, k_GroundedRadius, m_WhatIsGround);
+			
+			isOnConveyor=false;
+			
+			float shortestDistance=-1f;
+			
+			//We don't want to keep switching the platform we are on, as that can cause problems. Particularly when it comes to lots of tiny platforms that are close together and moving (like conveyors)
+			//We'll use this flag to see if the collider list contains the previous platform. If it does, we'll favor sticking to that one.
+			bool containsPreviousPlatform=false;
+			
             for (int i = 0; i < colliders.Length; i++)
             {
                 //Get the dropDown platform if we're on it
@@ -243,13 +264,27 @@ public class CharacterController2D : MonoBehaviour
                 GameObject holdingGo = null;
                 if (holdingSomething())
                     holdingGo = holding.gameObject;
+				
+				//Check if it is a conveyor
+				if (colliders[i].gameObject.tag=="Conveyor") 
+				{
+					isOnConveyor=true;
+				}
 
 
                 if (colliders[i].gameObject != gameObject && colliders[i].gameObject != holdingGo && !colliders[i].isTrigger)
                 {
                     m_Grounded = true;
                     temporaryExtraJump = false;
-                    currentPlatform = colliders[i].gameObject;
+					
+					if (colliders[i].gameObject==previousPlatform)
+					{
+						containsPreviousPlatform=true;
+					}
+					
+					//We want to choose the platform that is closest to our groundcheck position to be our current platform.
+					if (Mathf.Abs(Vector3.Distance(colliders[i].gameObject.transform.position,m_GroundCheck.position))<shortestDistance || shortestDistance==-1)
+						currentPlatform = colliders[i].gameObject;
 
                     if (!wasGrounded && m_Rigidbody2D.velocity.y < 0)
                     {
@@ -264,14 +299,21 @@ public class CharacterController2D : MonoBehaviour
                     }
                 }
             }
+			
+			//Favor the platform we were already standing on.
+			if (containsPreviousPlatform ) currentPlatform=previousPlatform;
 
 
-            if (currentPlatform == previousPlatform && currentPlatform != null) //Still on the same platform. Add any platform motion to the character.
+
+			//The following code helps move the player along any moving objects or platforms. 
+            if ( currentPlatform == previousPlatform && currentPlatform != null) //Still on the same platform. Add any platform motion to the character.
             {
                 //But first let's make sure the platform didn't move a ridiculously large amount. Generally, if the platform teleports out from under us we probably don't want to go with it. 
                 //An example of this is the half segmented conveyor belts. Segments jump from the end rotor to the beginning, and we don't want to take the player.
                 if ( Mathf.Abs(currentPlatform.transform.position.x - platformPreviousPosition.x) <= 1f && Mathf.Abs(currentPlatform.transform.position.y - platformPreviousPosition.y) <= 1f)
-                    gameObject.transform.Translate(currentPlatform.transform.position.x - platformPreviousPosition.x, currentPlatform.transform.position.y - platformPreviousPosition.y, 0);
+                {
+					gameObject.transform.Translate(currentPlatform.transform.position.x - platformPreviousPosition.x, currentPlatform.transform.position.y - platformPreviousPosition.y, 0);
+				}
             }
 
 
@@ -279,6 +321,26 @@ public class CharacterController2D : MonoBehaviour
             {
                 platformPreviousPosition = new Vector2(currentPlatform.transform.position.x, currentPlatform.transform.position.y);
             }
+			
+			if (d_showCurrentPlatform)
+			{
+				if(currentPlatform!=previousPlatform)
+				{
+					if (previousPlatform!=null) 
+					{
+						if (previousPlatform.GetComponent<SpriteRenderer>()!=null)
+							previousPlatform.GetComponent<SpriteRenderer>().color = d_showCurrentPlatformStartColor;
+					}
+					if (currentPlatform!=null) 
+					{
+						if (currentPlatform.GetComponent<SpriteRenderer>())
+						{
+							d_showCurrentPlatformStartColor=currentPlatform.GetComponent<SpriteRenderer>().color;
+							currentPlatform.GetComponent<SpriteRenderer>().color = Color.yellow;
+						}
+					}
+				}
+			}
         }
     }
 
@@ -344,6 +406,7 @@ public class CharacterController2D : MonoBehaviour
 
     public void Move(float move, bool crouch, bool jump, bool pickup = false, float climb = 0, bool dropDown = false, bool dialog = false)
     {
+
         if (isDead || controlTaken || pause) return;
 
         bool justPickedUp = false;
@@ -509,14 +572,16 @@ public class CharacterController2D : MonoBehaviour
                     timerComplete = false;
                 }
             }
+			
+			//if ( (isOnConveyor && move!=0 ) || !isOnConveyor) 
+		
+				// Move the character by finding the target velocity
+				Vector3 targetVelocity = new Vector3(move * 10f, m_Rigidbody2D.velocity.y,3);
 
-            
-            // Move the character by finding the target velocity
-            Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
-
-            // And then smoothing it out and applying it to the character
-            m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
-
+				// And then smoothing it out and applying it to the character
+				m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+	
+	
             if (inWater)
             {
                 m_Rigidbody2D.velocity *= new Vector3(waterMultiplier, 1, 1);
@@ -614,8 +679,7 @@ public class CharacterController2D : MonoBehaviour
                 numJumps++;
 
                 //With the temporary extra jump things tend to work more consistently when we cancel out any current y velocities and start at zero. This gives us better control over the jump.
-                //Also fixes a glitch that makes conveyor belts "sticky" when trying to jump on them.
-                if (temporaryExtraJump || isOnConveyor) m_Rigidbody2D.velocity = new Vector3(m_Rigidbody2D.velocity.x, 0f, 0f);
+                if (temporaryExtraJump ) m_Rigidbody2D.velocity = new Vector3(m_Rigidbody2D.velocity.x, 0f, 0f);
 
                 temporaryExtraJump = false;
                 if (charAnim != null)
@@ -635,6 +699,16 @@ public class CharacterController2D : MonoBehaviour
         }
         inWater = false;
     }
+	
+	private void OnDrawGizmos()
+	{
+		if (d_showPlatformCheck)
+		{
+			UnityEditor.Handles.color = Color.green;
+			UnityEditor.Handles.DrawWireDisc(m_GroundCheck.position , Vector3.forward, k_GroundedRadius);
+		}
+
+	}
 
     public void OnCollisionEnter2D(Collision2D other)
     {

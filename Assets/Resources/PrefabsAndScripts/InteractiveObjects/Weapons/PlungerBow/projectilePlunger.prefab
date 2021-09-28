@@ -1,0 +1,426 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6248485026542054692
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6248485026542054688}
+  - component: {fileID: 6248485026542054695}
+  - component: {fileID: 269233506463132357}
+  - component: {fileID: 6248485026542054694}
+  - component: {fileID: 6248485026542054689}
+  - component: {fileID: 8525000580132295779}
+  - component: {fileID: 1256698093093728325}
+  - component: {fileID: 838164994081052944}
+  - component: {fileID: 1420034615393747046}
+  - component: {fileID: 1274956719601502901}
+  m_Layer: 0
+  m_Name: projectilePlunger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6248485026542054688
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2664414360670758753}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &6248485026542054695
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: ca207544a3d7ea147ad7e331fb4a68a1, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.0833334, y: 0.5}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &269233506463132357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bc7ffd0d4cc2874ba49fae242b286a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 5
+  HPSubtractOnShot: 1
+  particles: {fileID: 0}
+  particleColor: {r: 0.7607844, g: 0.7607844, b: 0.7607844, a: 1}
+  sndGetShot: []
+  sndKillShot:
+  - {fileID: 8300000, guid: 25ca23079c683584aaa72e820608a8bb, type: 3}
+  sndKillPitchRandomizeMin: 1
+  sndKillPitchRandomizeMax: 1
+  sndShotPitchRandomizeMin: 1
+  sndShotPitchRandomizeMax: 1
+  OnShotCallback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8525000580132295779}
+        m_MethodName: unstick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+--- !u!50 &6248485026542054694
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.01
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 0
+--- !u!114 &6248485026542054689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed35225a10e79574e9cbf79a599dac2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneBoundaryTag: sceneBoundary
+  buffer: {x: -1, y: -1}
+--- !u!114 &8525000580132295779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1cb1aafde61da4da3de21a7a587db0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plungerHeadCenter: {fileID: 2664414360670758753}
+  maxAngleStickiness: 33
+  minimumImpulse: 5
+  rendererFlipX: 1
+  rendererFlipY: 1
+  unstickOtherPlungers: 1
+  manuallyUnstick: 0
+  sndStick: {fileID: 8300000, guid: 334e14afe03a78b4dbb4387101a03406, type: 3}
+  sndUnstick: {fileID: 8300000, guid: 6060e1c1522a99845a44ecc2935fd276, type: 3}
+  filter:
+    useTriggers: 0
+    useLayerMask: 0
+    useDepth: 0
+    useOutsideDepth: 0
+    useNormalAngle: 0
+    useOutsideNormalAngle: 0
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 257
+    minDepth: 0
+    maxDepth: 0
+    minNormalAngle: 0
+    maxNormalAngle: 0
+--- !u!61 &1256698093093728325
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.521842, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.0833334, y: 0.5}
+    newSize: {x: 1.0833334, y: 0.5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.029980421, y: 0.5}
+  m_EdgeRadius: 0
+--- !u!114 &838164994081052944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7328c9662bd38d749aec0f0c4e401e51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rangeActive: 1
+  ActionIconPrefab: {fileID: 571698414639169121, guid: 0abbc03f1ae53f842a19f8b2d823fbba,
+    type: 3}
+  rangeColliderTag: RangeCollider
+  iconXOffset: 0
+  iconYOffset: 1
+  name: Toilet Plunger
+  offset: {x: 0, y: 0.4}
+  disableCollider: 1
+  breakForce: 500
+  breakTorque: 500
+  throwForce: 100
+  throwTorque: 0
+  carryMass: 0.3
+  flipOnX: 1
+  flipOnY: 1
+  swapXFlip: 0
+  flipWithScale: 0
+  flipCharacterWithMouseAim: 1
+  freezeRotationOnPickup: 1
+  resetRotationOnPickup: 1
+  pushOutOnRotate: 0
+  aimOriginOffset: {x: 0, y: 0}
+  throwArc: {fileID: 0}
+  minAimNotFlipped: -20
+  maxAimNotFlipped: 90
+  minAimFlipped: 90
+  maxAimFlipped: 200
+  sendFaceMessage: 0
+  mCarryType: 1
+  releasePosition: 0
+  changeRigidBodyType: 0
+  bodyTypeWhileCarried: 0
+  hasHeldSprite: 0
+  heldSprite: {fileID: 0}
+  unheldSprite: {fileID: 0}
+  hasFacingDirections: 0
+  sideSprite: {fileID: 0}
+  frontSprite: {fileID: 0}
+  backSprite: {fileID: 0}
+  sndOnPickup: {fileID: 0}
+  sndLoopOnPickup: {fileID: 0}
+  sndOnThrow: {fileID: 8300000, guid: a8e068621e5c5994ab586a968dd0763b, type: 3}
+  sndOnActionPress: {fileID: 0}
+  sndOnActionRelease: {fileID: 0}
+  sndLoopOnActionHeld: {fileID: 0}
+  sndSpawnProjectile: {fileID: 0}
+  hasAction: 0
+  hasActionAim: 0
+  rotateWithAim: 1
+  actionAimArc: {fileID: 0}
+  actionPressedSendMessage: 
+  actionPressedMessageReceiver: {fileID: 0}
+  actionHeldSendMessage: 
+  actionHeldMessageReceiver: {fileID: 0}
+  actionReleasedSendMessage: 
+  actionReleasedMessageReceiver: {fileID: 0}
+  ActionPressedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ActionHeldCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  ActionReleasedCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnPickupCallback:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8525000580132295779}
+        m_MethodName: unstick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  OnReleaseCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  spawnProjectilePrefab: {fileID: 0}
+  spawnProjectileParticles: {fileID: 0}
+  spawnProjectileRate: 0.5
+  spawnProjectileDistance: 0.8
+  spawnProjectileOffset: {x: 0, y: 0}
+  projectileSpawnTransform: {fileID: 0}
+  spawnProjectileForce: 0
+  playerControlledProjectile: 0
+  setProjectileRotation: 1
+  setParticleRotation: 0
+  spawnProjectileBehavior: 0
+  projectileCamshakeIntensity: 0
+  projectileCamshakeDuration: 0
+--- !u!114 &1420034615393747046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe3595e374173bf40be95d680bcca5bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  go: {fileID: 1794340304444153981, guid: a42b8f3828ccc804a9e9cfbfbd15de91, type: 3}
+  spawnCount: 1
+  positionOffset: {x: 0, y: 0}
+  randomizePosition: {x: 0, y: 0}
+  particleColor: {r: 0.6117647, g: 0.31764707, b: 0.28235295, a: 1}
+  active: 1
+  useStartForce: 1
+  forceTransformMultiplier: 0
+  mode: 1
+  force: {x: 1, y: 1, z: 0}
+  forceRandomize: {x: 0.1, y: 0.1, z: 0}
+  torqueMax: 1
+  torqueMin: -1
+--- !u!61 &1274956719601502901
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248485026542054692}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.021716624, y: 0.00049331784}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.0833334, y: 0.5}
+    newSize: {x: 1.0833334, y: 0.5}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.9494136, y: 0.078784645}
+  m_EdgeRadius: 0.04
+--- !u!1 &8119890579257734865
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2664414360670758753}
+  m_Layer: 0
+  m_Name: plungerHeadCenter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2664414360670758753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8119890579257734865}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5425, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6248485026542054688}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

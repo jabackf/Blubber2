@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class destroyOnTriggered : MonoBehaviour
 {
+	[System.Serializable]
+    public enum destroyBehaviors
+    {
+		self,
+		other,
+		both
+	}
+	
+	public destroyBehaviors destroyBehavior = destroyBehaviors.self;
     public List<string> requireTags = new List<string>() { "Player" };
     public GameObject particles; //Option particles to create
     public Color particleColor = Color.white;
@@ -32,8 +41,13 @@ public class destroyOnTriggered : MonoBehaviour
                 main.startColor = particleColor;
             }
             if (!global) global = GameObject.FindWithTag("global").GetComponent<Global>();
-            if (audio.Count > 0) global.audio.PlayIfOnScreen(audio, (Vector2)transform.position, 0.8f, 1.2f);
-            Destroy(gameObject);
+            if (audio.Count > 0) global.audio.Play(audio, 0.9f, 1.2f);
+			
+			if (destroyBehavior==destroyBehaviors.other || destroyBehavior==destroyBehaviors.both)
+				Destroy(other.gameObject);
+			
+			if (destroyBehavior==destroyBehaviors.self || destroyBehavior==destroyBehaviors.both)
+				Destroy(gameObject);
         }
     }
 }

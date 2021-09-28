@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 3024262277685152822}
   m_Layer: 18
   m_Name: csSegmentWall
-  m_TagString: Untagged
+  m_TagString: Conveyor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -291,7 +291,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3024262278218017094}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.15, y: 4.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -426,8 +426,9 @@ MonoBehaviour:
   smoothDampTimer: 0.5
   movementDistance: 4
   finishLerpBuffer: 0.02
-  direction: 1
+  direction: 0
   rotateSegments: 1
+  rotateSegmentInDirection: 0
   lerpSegmentRotation: 0
   segmentLerpRotSpeed: 200
   segmentRotationOffset: -90
@@ -455,10 +456,16 @@ MonoBehaviour:
   editorData:
     _bezierPath:
       points:
-      - {x: -4, y: 0.13, z: 0}
-      - {x: -3.8911753, y: 0.13, z: 0}
-      - {x: 3.5329175, y: 0.13, z: 0}
-      - {x: 4, y: 0.13, z: 0}
+      - {x: -3.5059583, y: -0.40378952, z: 0}
+      - {x: -3.2938008, y: -0.39808798, z: 0}
+      - {x: -3.560911, y: -0.49147606, z: 0}
+      - {x: -3.6045551, y: -0.23001528, z: 0}
+      - {x: -3.6402555, y: -0.016144633, z: 0}
+      - {x: -3.4054818, y: 0, z: 0}
+      - {x: -3.3960056, y: 0, z: 0}
+      - {x: -2.5122867, y: 0, z: 0}
+      - {x: 20.012333, y: 0, z: 0}
+      - {x: 20.012333, y: 0, z: 0}
       isClosed: 0
       space: 1
       controlMode: 0
@@ -468,6 +475,8 @@ MonoBehaviour:
         m_Center: {x: -6.880907, y: 2.6704137, z: 0}
         m_Extent: {x: 1.9999998, y: 0.14433765, z: 0}
       perAnchorNormalsAngle:
+      - 0
+      - 0
       - 0
       - 0
       globalNormalsAngle: 0
@@ -590,7 +599,7 @@ GameObject:
   - component: {fileID: 3024262278738889999}
   m_Layer: 18
   m_Name: csSegment
-  m_TagString: Untagged
+  m_TagString: Conveyor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -709,9 +718,9 @@ BoxCollider2D:
   m_GameObject: {fileID: 3024262278738889985}
   m_Enabled: 0
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b7d5bd8299bbe7a43a7a6388a11803ff, type: 2}
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.009258449}
   m_SpriteTilingProperty:
@@ -735,9 +744,9 @@ CircleCollider2D:
   m_GameObject: {fileID: 3024262278738889985}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: b7d5bd8299bbe7a43a7a6388a11803ff, type: 2}
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: -0.0032424927, y: 0.01945515}
   serializedVersion: 2

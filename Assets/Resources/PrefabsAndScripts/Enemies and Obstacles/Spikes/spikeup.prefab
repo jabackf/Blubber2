@@ -130,7 +130,7 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 0.4}
+    - - {x: 0, y: 0.37}
       - {x: -0.47, y: -0.4}
       - {x: 0.4, y: -0.4}
 --- !u!1 &3462492705516374478

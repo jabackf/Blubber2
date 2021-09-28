@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class spawnObject : MonoBehaviour
     public Vector2 spawnParticlesOffset = new Vector2(0f, 0f);
 
     private float spawnTimer = 0;
+	
+	public applyStartForce spawnStartForce;
 
     Global global;
 
@@ -88,6 +91,11 @@ public class spawnObject : MonoBehaviour
             if (!objectExists)
             {
                 go = Instantiate(objectList[index], gameObject.transform.position, gameObject.transform.rotation);
+				if (spawnStartForce)
+                {
+                    var n=CopyComponent<applyStartForce>(spawnStartForce,go);
+                    n.enabled = true;
+                }
             }
             else
             {
@@ -101,6 +109,18 @@ public class spawnObject : MonoBehaviour
             if (spawnParticles!=null) Instantiate(spawnParticles, gameObject.transform.position+(Vector3)spawnParticlesOffset, gameObject.transform.rotation);
             if (destroyOnSpawn) Destroy(gameObject);
         }
+    }
+	
+	T CopyComponent<T>(T original, GameObject destination) where T : Component
+    {
+        System.Type type = original.GetType();
+        Component copy = destination.AddComponent(type);
+        System.Reflection.FieldInfo[] fields = type.GetFields();
+        foreach (System.Reflection.FieldInfo field in fields)
+        {
+            field.SetValue(copy, field.GetValue(original));
+        }
+        return copy as T;
     }
 
 }

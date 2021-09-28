@@ -26,6 +26,7 @@ public class backAndForthMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+		initialPosition=gameObject.transform.position;
         if (!start)
         {
             GameObject goStart = new GameObject("start");

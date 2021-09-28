@@ -89,11 +89,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1843335636872603637, guid: dcebf188b24ca7b4887fd8b7332d012f,
-        type: 3}
-      propertyPath: m_Name
-      value: BounceBlock_stationary
-      objectReference: {fileID: 0}
     - target: {fileID: 1843335636872603638, guid: dcebf188b24ca7b4887fd8b7332d012f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -149,6 +144,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1843335636872603637, guid: dcebf188b24ca7b4887fd8b7332d012f,
+        type: 3}
+      propertyPath: m_Name
+      value: BounceBlock_stationary
+      objectReference: {fileID: 0}
+    - target: {fileID: 1843335636872603633, guid: dcebf188b24ca7b4887fd8b7332d012f,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1843335636872603634, guid: dcebf188b24ca7b4887fd8b7332d012f,
         type: 3}
       propertyPath: m_Simulated
@@ -158,6 +163,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_BodyType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1843335636872603628, guid: dcebf188b24ca7b4887fd8b7332d012f,
+        type: 3}
+      propertyPath: bounceForce
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 1843335636872603631, guid: dcebf188b24ca7b4887fd8b7332d012f,
         type: 3}

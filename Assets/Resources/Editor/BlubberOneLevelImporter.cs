@@ -75,6 +75,7 @@ public class BlubberOneLevelImporter
         {
 
             GameObject parent =new GameObject("GMXImport");
+			
 
             string fileContents = File.ReadAllText(path);
 
@@ -114,11 +115,19 @@ public class BlubberOneLevelImporter
                                     if (assetPath.Length > 0)
                                     {
                                         Debug.Log("Found: " + assetPath);
+										
+										GameObject item_parent = GameObject.Find("GMXImport/"+assetName);
+										if (!item_parent) 
+										{
+											item_parent=new GameObject(assetName);
+											item_parent.transform.parent=parent.transform;
+										}
+										
                                         Vector3 pos = new Vector3(Convert.ToInt32(d[1]) / 24, -Convert.ToInt32(d[2]) / 24, 0f);
                                         //GameObject go = GameObject.Instantiate(AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject)) as GameObject, pos, Quaternion.identity);
                                         GameObject go = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath(assetPath, typeof(GameObject)));
                                         go.transform.position = pos;
-                                        go.transform.parent = parent.transform;
+                                        go.transform.parent = item_parent.transform;
 
                                         //Special rules for special stuffs
                                         if (d[0] == "PlayerOne" || d[0] == "PlayerTwo") go.transform.position += new Vector3(0.5f, -1f, 0f);

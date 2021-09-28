@@ -12,6 +12,7 @@ public class instantiateOnDestroy : MonoBehaviour
     public Vector2 positionOffset = new Vector2(0f, 0f);
     public Vector2 randomizePosition = new Vector2(0f, 0f);
     public Color particleColor = Color.white; //If the object is a particle system, this can be used to color it
+	public bool active=true; //If set to false, nothing will be created.
 
     [Space]
     [Header("Apply Start Force")]
@@ -39,6 +40,7 @@ public class instantiateOnDestroy : MonoBehaviour
 
     public void OnDestroy()
     {
+		if (!active) return;
         //Don't instantiate this crap if the scene is changing or we are quitting the application
         if (!global) return; //There is no global object. I think in some cases on application quit the global object gets destroyed before we get here, thus making this check necessary
         if (global.isSceneChanging() || applicationClosing) return;

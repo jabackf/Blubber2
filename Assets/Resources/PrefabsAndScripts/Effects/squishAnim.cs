@@ -19,6 +19,8 @@ public class squishAnim : MonoBehaviour
     public bool squishXAxis = false;
     public bool squishYAxis = true;
     public bool squishZAxis = false;
+	
+	public float yCap = 0; //If the object's y velocity exceeds this value, then the squishing animation will stop. Set to zero if you want to bypass this option and squish regardless of y velocity.
 
     private float velocity = 0;
 
@@ -33,12 +35,26 @@ public class squishAnim : MonoBehaviour
             squish = UnityEngine.Random.Range(targetBottom, targetTop);
             goingUp = UnityEngine.Random.Range(0f, 1f) <= 0.5f ? true : false;
         }
-
     }
+	
 
     // Update is called once per frame
     void Update()
     {
+		if (yCap!=0)
+		{
+			Rigidbody2D rb = GetComponent<Rigidbody2D>();
+			if (rb)
+			{
+				if (Mathf.Abs(rb.velocity.y)>yCap)
+				{
+					squish = targetTop;
+					gameObject.transform.localScale = new Vector3(squishXAxis ? squish : gameObject.transform.localScale.x, squishYAxis ? squish : gameObject.transform.localScale.y, squishZAxis ? squish : gameObject.transform.localScale.z);
+					return;
+				}
+			}
+		}
+		
         if (!goingUp)
         {
             

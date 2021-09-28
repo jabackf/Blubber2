@@ -224,11 +224,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 293117410391415034}
     m_Modifications:
-    - target: {fileID: 6217384204595390337, guid: 1306d5adaca0b2d4da7d0f9be604490f,
-        type: 3}
-      propertyPath: m_Name
-      value: psSparkles
-      objectReference: {fileID: 0}
     - target: {fileID: 6217384204595390338, guid: 1306d5adaca0b2d4da7d0f9be604490f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -283,6 +278,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6217384204595390337, guid: 1306d5adaca0b2d4da7d0f9be604490f,
+        type: 3}
+      propertyPath: m_Name
+      value: psSparkles
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1306d5adaca0b2d4da7d0f9be604490f, type: 3}

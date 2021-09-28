@@ -15,6 +15,8 @@ public class pickupObject : actionInRange
     public Vector2 offset = new Vector2(0, 0.4f);  //The offset for carrying objects on top
     private Vector2 initialOffset;
     public bool disableCollider = true; //if true, the collider will be changed to a trigger when the object is carried.
+	public bool resetScaleOnRelease = true; //If true, the transform scale will be set back to what it initially was before it was picked up after release.
+	private Vector3 initialScale;
     public float breakForce = 500;  //The amount of force needed to break the joint between the holding character this object
     public float breakTorque = 500;
     public float throwForce = 200; //This number is multiplied by length of the throw arrow.
@@ -22,11 +24,15 @@ public class pickupObject : actionInRange
     public float carryMass = 0.5f;  //This is the mass of the object while it's being carried
     public bool flipOnX = true;     //Flips with the character holding it if set to true
     public bool flipOnY = true;
+	private bool initialFlipX = false; //This will hold the initial state of the sprite renderer flipX property
     public bool swapXFlip = false; //Set to true if your sprite by default faces left instead of right
+    public bool flipWithScale = false; //If set to true, the scale will be flipped instead of the sprite renderer. flipOnX and/or Y still must be true. NOTE that you cannot use renderer flipx at all with this option checked. FlipY was not tested with this option, but it *might* work.
     public bool flipCharacterWithMouseAim = true; //If set to true and the character controller is aiming with the mouse, then the character will flip to face the mouse direction when throw or action button is held down. Flipping is handled in the character controller! This merely tells the character controller how it should behave with this object.
     public bool freezeRotationOnPickup = true; //If true, the object's ability to rotate on the Z axis will freeze when picked up. When dropped, it's ability to rotate will be reset to whatever it was previously
     public bool resetRotationOnPickup = true; //If true, the object's Z rotation will be set to whatever it was at initialization when picked up
-    private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
+    public float pushOutOnRotate=0f;	//This will scale the object out as it is rotated closer to vertical. For example, if set to some magnitude then the object will move outward (away from the character) as it is rotated upwards. Can be used to adjust rotation.
+	public Vector2 aimOriginOffset = new Vector2(0f,0f);	//This is added to the position of the throw and aim reticles.
+	private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
     private Rigidbody2D rb;
     public lineArrow throwArc;   //The reference to the lineArrow script
     private GameObject throwArcObj;    //The reference to the object containing the lineArrow script
@@ -52,6 +58,8 @@ public class pickupObject : actionInRange
     private Transform parentPrevious = null; //Stores the previous parent for exactPlayerPosition. This is because exactPlayerPosition actually parents the object to the holder instead of creating a joint and following
 
     public bool sendFaceMessage = false; //If true, a FaceLeft() or FaceRight() (depending on the holder facing) message will be sent to THIS gameobject on pickup
+
+	public bool hideCharacterDress=false;	//If true, the character dresses will be set to hidden when picked up. They will then be returned to their prior state on drop off.
 
     //Top = carry with the character's top transform. Front = carry with the player's front transform. exactPlayerPosition = parent the object to the player and follow his position exactly, don't use a joint, don't smoothDamp, kinematic physics while held.
     public enum carryType { Top, Front, exactPlayerPosition };
@@ -120,6 +128,8 @@ public class pickupObject : actionInRange
     public float spawnProjectileRate = 0.5f; //The rate the projectile will be spawned if spawnProjectileBehavior is set to spawnWhileHeld
     public float spawnProjectileDistance = 0.8f; //The distance from this gameObject to create the projectile (along the angle of rotation)
     public Vector2 spawnProjectileOffset = new Vector2(0f, 0f); //An optional positioning offset that can be applied to the spawn position
+	public Transform projectileSpawnTransform; //If supplied, distance and aim angle will not be used for positioning and the projectile will instead be spawned at this transform point.
+	public float spawnProjectileForce = 0f;	//Optionally impart impulse force in aim direction on the projectile at spawn
     public bool playerControlledProjectile = false; //Set to true if the player controls the projectile (like a guided missile). This sends a "initiatePlayerControl(GameObject character)" message to the projectile after it's created, so the projectile should implement this function to take control of input. 
     public bool setProjectileRotation = true; //If true, and if we have checked hasActionAim, then the projectile's transform.rotation will be set to the angle of our aim
     public bool setParticleRotation = false; //If true, the particles are rotated and flipped to match the weapon
@@ -127,8 +137,9 @@ public class pickupObject : actionInRange
     {
         spawnOnPress, //Spawns on action key press
         spawnOnRelease, //Spawns on action key release
-        spawnWhileHeld //Repeatedly spawns at spawnProjectileRate as long as the key is held down. Note: You cannot do playerControlledProjectile if you select this behavior.
-    }
+        spawnWhileHeld, //Repeatedly spawns at spawnProjectileRate as long as the key is held down. Note: You cannot do playerControlledProjectile if you select this behavior.
+		none			//This doesn't spawn the projectile at all. Instead, another script will have to invoke spawnProjectile() to create the projectile.
+	}
     public spawnProjectileBehaviors spawnProjectileBehavior;
 
     public float projectileCamshakeIntensity = 0f, projectileCamshakeDuration = 0f; //You can use these to shake the camera when firing a projectile. Both need to be set to a value greater than zero to work.
@@ -147,6 +158,7 @@ public class pickupObject : actionInRange
         if (rb) bodyTypeAtStart = rb.bodyType;
         sceneSettingsGO = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
         renderer = gameObject.GetComponent<SpriteRenderer>() as SpriteRenderer;
+		initialFlipX=renderer.flipX;
         initialMass = rb.mass;
         createThrowArrow();
 
@@ -159,22 +171,32 @@ public class pickupObject : actionInRange
         initialRotationFreeze = rb.freezeRotation;
         initialZRotation = gameObject.transform.eulerAngles.z;
     }
+	
+	void Update()
+	{
+		base.Update();
+		//The character controller attempts to automatically flip sprites that are children of the character. If we are flipping with scale, then we don't want none of the crap.
+		if (flipWithScale)
+			renderer.flipX=initialFlipX;
+	}
 
     //Since the throw and action arrows are not child objects, these next three functions check if they exist and create them. We'll call checkForArrow anytime we know that we need one of the arrows, in case we've changed scenes and lost our arrow objects
     private void createThrowArrow()
     {
         throwArcObj = new GameObject(gameObject.name + "_throwArc");
-        throwArcObj.transform.localPosition = new Vector3(0, 0, 0);
+        throwArcObj.transform.localPosition = new Vector3(0,0,0);
         throwArc = throwArcObj.AddComponent<lineArrow>() as lineArrow;
         throwArc.follow(gameObject.transform);
+		throwArc.offset = aimOriginOffset;
         throwArc.hide();
     }
     private void createActionArrow()
     {
         actionAimObj = new GameObject(gameObject.name + "_actionAimObj");
-        actionAimObj.transform.localPosition = new Vector3(0, 0, 0);
+        actionAimObj.transform.localPosition = new Vector3(0,0,0);
         actionAimArc = actionAimObj.AddComponent<lineArrow>() as lineArrow;
         actionAimArc.follow(gameObject.transform);
+		actionAimArc.offset = aimOriginOffset;
         actionAimArc.reticleMode = true;
         actionAimArc.setAngle(0);
         actionAimArc.hide();
@@ -222,6 +244,7 @@ public class pickupObject : actionInRange
             throwArc.setAngle(throwArc.angle += (flippedX ? -v : v));
             throwArc.setLength(throwArc.length + h);
         }
+	
     }
 
     //These can be used to set aim arc directly to look at the point (world coord) and the function was primarily implemented for mouse aiming. They are intended to be called right before calling Aim() and actionAim() to adjust the angle with the mouse. Called in characterControllers
@@ -277,12 +300,21 @@ public class pickupObject : actionInRange
     {
         if (!spawnProjectilePrefab) return;
         Vector3 spawnPos;
-        if (hasActionAim) spawnPos = gameObject.transform.position + actionAimArc.getPointAlongAngle(spawnProjectileDistance) + (Vector3)offset + (Vector3)spawnProjectileOffset;
-        else
-        {
-            spawnPos = gameObject.transform.position + (Vector3)offset + (Vector3)spawnProjectileOffset;
-            spawnPos.x += spawnProjectileDistance * (flippedX ? -1 : 1);
-        }
+		
+		if (!projectileSpawnTransform)
+		{
+			if (hasActionAim) spawnPos = gameObject.transform.position + actionAimArc.getPointAlongAngle(spawnProjectileDistance) + (Vector3)offset + (Vector3)spawnProjectileOffset;
+			else
+			{
+				spawnPos = gameObject.transform.position + (Vector3)offset + (Vector3)spawnProjectileOffset;
+				spawnPos.x += spawnProjectileDistance * (flippedX ? -1 : 1);
+			}
+		}
+		else
+		{
+			spawnPos = projectileSpawnTransform.position + (Vector3)spawnProjectileOffset;
+		}
+
         GameObject projectile = Instantiate(spawnProjectilePrefab, spawnPos, Quaternion.identity);
         if (sceneSettingsGO != null) sceneSettingsGO.objectCreated(projectile);
         GameObject particles=null;
@@ -302,6 +334,11 @@ public class pickupObject : actionInRange
             cameraFollowPlayer cfp = Camera.main.GetComponent<cameraFollowPlayer>();
             if (cfp) cfp.TriggerShakeExt(projectileCamshakeIntensity, projectileCamshakeDuration);
         }
+
+		if (spawnProjectileForce!=0)
+		{
+			projectile.GetComponent<Rigidbody2D>().AddForce(spawnProjectileForce*projectile.transform.right,ForceMode2D.Impulse);
+		}
 
         if (sndSpawnProjectile) global.audio.Play(sndSpawnProjectile);
     }
@@ -372,6 +409,8 @@ public class pickupObject : actionInRange
     public void pickMeUp(GameObject character, Transform top, Transform front)
     {
         justPickedUp = 2;
+		
+		initialScale = transform.localScale;
 
         this.setRangeActive(false);
         rb.mass = carryMass;
@@ -408,6 +447,11 @@ public class pickupObject : actionInRange
             if (holder.GetComponent<CharacterController2D>().isFacingRight()) gameObject.SendMessage("FaceRight", SendMessageOptions.DontRequireReceiver);
             else gameObject.SendMessage("FaceLeft", SendMessageOptions.DontRequireReceiver);
         }
+		
+		if (hideCharacterDress)
+		{
+			holder.SendMessage("hideNonessentialDresses", SendMessageOptions.DontRequireReceiver);
+		}
 
         if (resetRotationOnPickup)
             gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x, gameObject.transform.eulerAngles.y, initialZRotation);
@@ -509,9 +553,16 @@ public class pickupObject : actionInRange
             if (mCarryType == carryType.exactPlayerPosition)
             {
                 gameObject.transform.localPosition = new Vector3(offset.x, offset.y, 0);
+				
             }
             else
                 gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
+
+			if (pushOutOnRotate!=0)
+			{
+				float magnitude = gameObject.transform.rotation.z*pushOutOnRotate;
+				gameObject.transform.localPosition = (flippedX ? new Vector3(-1f,1f,0f) : new Vector3(1f,1f,0f)) * magnitude;
+			}
 
             if (releaseTimer > 0)
             {
@@ -566,6 +617,11 @@ public class pickupObject : actionInRange
 
     public void releaseFromHolder()
     {
+		if (hideCharacterDress)
+		{
+			holder.SendMessage("showNonessentialDresses", SendMessageOptions.DontRequireReceiver);
+		}
+
         if (mCarryType == carryType.exactPlayerPosition)
         {
             enablePhysics();
@@ -617,6 +673,8 @@ public class pickupObject : actionInRange
         rb.mass = initialMass;
         if (disableCollider)
             gameObject.GetComponent<Collider2D>().isTrigger = false;
+		
+		if (resetScaleOnRelease) transform.localScale = initialScale;
 
         if (sndLoopOnPickup) global.audio.StopFXLoop(sndLoopOnPickup);
 
@@ -645,11 +703,25 @@ public class pickupObject : actionInRange
         {
             offset.x = initialOffset.x * (flipX ? -1 : 1);
             
-            if (!swapXFlip) gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
-            else gameObject.GetComponent<SpriteRenderer>().flipX = !flipX;
+			if (!flipWithScale)
+			{
+				if (!swapXFlip) gameObject.GetComponent<SpriteRenderer>().flipX = flipX;
+				else gameObject.GetComponent<SpriteRenderer>().flipX = !flipX;
+			}
+			else
+			{
+				float neg = -Mathf.Abs(transform.localScale.x);
+				float pos = Mathf.Abs(transform.localScale.x);
+				if (swapXFlip) 
+				{
+					neg = -neg;
+					pos = -pos;
+				}
+				transform.localScale = new Vector3((flipX ? neg : pos), transform.localScale.y, transform.localScale.z);
+			}
         }
 
-        flippedX = flipX;//!flipX;
+        flippedX = flipX;
 
         //We still want to change the throw arc to the direction we're facing, even if we're not flipping the sprite.
         checkForArrows();
@@ -686,7 +758,15 @@ public class pickupObject : actionInRange
         {
             offset.y = initialOffset.y * (flipY ? -1 : 1);
             //offset.y= -offset.y;
-            gameObject.GetComponent<SpriteRenderer>().flipY = flipY;
+            
+			if (!flipWithScale)
+				gameObject.GetComponent<SpriteRenderer>().flipY = flipY;
+			else
+			{
+				float neg = -Mathf.Abs(transform.localScale.y);
+				float pos = Mathf.Abs(transform.localScale.y);
+				transform.localScale = new Vector3(transform.localScale.x, (flipY ? neg : pos), transform.localScale.z);
+			}
         }
     }
 

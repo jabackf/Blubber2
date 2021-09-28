@@ -55,6 +55,12 @@ public class ConveyorSegmented : MonoBehaviour
         smoothdampOnCommand,
         stationary
     }
+	public enum movementFunctions
+    {
+        MovePosition,
+		Position,
+		Velocity
+    }
     [System.Serializable]
     public enum directions
     {
@@ -106,6 +112,7 @@ public class ConveyorSegmented : MonoBehaviour
 
     public List<NthSegment> NthSegments = new List<NthSegment>();
     public movementTypes movementType = movementTypes.speed;
+	public movementFunctions movementFunction = movementFunctions.MovePosition;	//This is the type of function used to move the segments. 
     public int maxSegments = 800; //The maximum number of segments we are allowed to have. Primarily used in case a glitch happens during segment instantiation and the segments try to go on forever, getting us stuck in an infinite loop. 
 
     public GameObject beltCaps; //If an object is specified (and the belt is open ended), this object will be duplicated and placed at each end of the belt.
@@ -142,6 +149,7 @@ public class ConveyorSegmented : MonoBehaviour
 
     [Header("Segment Rotation")]
     public bool rotateSegments = false; //If false, the only rotation applied will be segmentRotationOffset
+	public float rotateSegmentInDirection = 0f; //Adds or subtracts this rotation to each segment depending on direction. This will allow you to, for example, make the segments tilt backwards when the belt moves forward.
     public bool lerpSegmentRotation = true; //If true, then segment rotation will lerp to the belt normal by segmentLerpRotSpeed
     public float segmentLerpRotSpeed = 200f; //How fast we rotate, if lerpSegmentRotation is true
     public float segmentRotationOffset = -90; //This is added to the rotation of the segment. Our rotation will be the belt normal plus this value.
@@ -371,6 +379,11 @@ public class ConveyorSegmented : MonoBehaviour
             float motion = Vector3.Distance(Segments[1].gameObject.transform.position, Segments[1].prevPos);
             foreach (var r in Rotors) r.transform.Rotate(0f, 0f, (direction == directions.right ? -motion : motion) * Time.fixedDeltaTime * 1000 * rotorSpinMultiplier, Space.Self);
         }
+		
+		if (movementFunction==movementFunctions.Velocity)
+		{
+			foreach(var s in Segments)  s.rb.velocity = new Vector3(0f,0f,0f);
+		}
 
         //Apply segment motion
         if (movementType == movementTypes.speed) movementSpeed();
@@ -413,10 +426,15 @@ public class ConveyorSegmented : MonoBehaviour
     {
         var s = Segments[i];
         s.targetRotation = getSegmentRotation(s);
+		
+		s.targetRotation.z += direction==directions.left ? -rotateSegmentInDirection : rotateSegmentInDirection;
+		
         if (lerpSegmentRotation)
             s.gameObject.transform.rotation = Quaternion.RotateTowards(s.gameObject.transform.rotation, s.targetRotation, Time.fixedDeltaTime * segmentLerpRotSpeed);
         else
             s.gameObject.transform.rotation = s.targetRotation;
+		
+
     }
 
     //Returns the quaternion rotation for the specified segment, based on segment distance, rotation type, and rotation offset
@@ -454,13 +472,14 @@ public class ConveyorSegmented : MonoBehaviour
             var spd = speed * 0.001f;
             s.distance += (direction == directions.right ? spd : -spd);
 
-            s.rb.MovePosition(pathCreator.path.GetPointAtDistance(s.distance));
+			move (s.rb, pathCreator.path.GetPointAtDistance(s.distance));
 
             float distance = getSegmentExceededPathLength(i);
             if (distance != -1) //exceeded path distance
             {
                 s.gameObject.transform.position = pathCreator.path.GetPointAtDistance(distance);
                 s.distance = distance;
+				if (movementFunction==movementFunctions.Velocity) s.rb.velocity = new Vector3(0f,0f,0f);
             }
         }
     }
@@ -499,7 +518,7 @@ public class ConveyorSegmented : MonoBehaviour
             lerpSourceDistance = distanceMoved;
 
             Vector3 newpos = pathCreator.path.GetPointAtDistance(s.distance, EndOfPathInstruction.Loop);
-            s.rb.MovePosition(newpos);
+			move(s.rb, newpos);
 
             //Check if we are close to our destination
             if (Math.Abs(lerpTargetDistance - lerpSourceDistance) <= Math.Abs(finishLerpBuffer))
@@ -525,11 +544,14 @@ public class ConveyorSegmented : MonoBehaviour
                 //Time to actually move the segment.
                 //If the loop is open then we have a wierd thing where the segments kind of float between the two ends of the path. So IF we're at the end of the path and it's an open path, move the segment with the transform to avoid floaty crap.
                 if (Math.Abs(s.distance - prevDistance) >= pathCreator.path.length*0.6f && !pathCreator.path.isClosedLoop)
-                    s.gameObject.transform.position = pathCreator.path.GetPointAtDistance(s.distance);
+                {
+					s.gameObject.transform.position = pathCreator.path.GetPointAtDistance(s.distance);
+					if (movementFunction==movementFunctions.Velocity) s.rb.velocity = new Vector3(0f,0f,0f);
+				}
                 else
                 {
                     //Advance the segment to it's new destination. We already moved segment 0, so we don't need to move it again.
-                    if (i!=0) s.rb.MovePosition(pathCreator.path.GetPointAtDistance(s.distance, EndOfPathInstruction.Loop));
+                    if (i!=0) move(s.rb, pathCreator.path.GetPointAtDistance(s.distance, EndOfPathInstruction.Loop));
                 }
 
             }
@@ -590,13 +612,14 @@ public class ConveyorSegmented : MonoBehaviour
             }
 
             s.prevPos = s.gameObject.transform.position;
-            s.rb.MovePosition(pathCreator.path.GetPointAtDistance(s.distance));
+			move(s.rb, pathCreator.path.GetPointAtDistance(s.distance));
 
             float distance = getSegmentExceededPathLength(i);
             if (distance != -1)
             {
                 s.gameObject.transform.position = pathCreator.path.GetPointAtDistance(distance);
                 s.distance = distance;
+				if (movementFunction==movementFunctions.Velocity) s.rb.velocity = new Vector3(0f,0f,0f);
             }
         }
     }
@@ -649,8 +672,15 @@ public class ConveyorSegmented : MonoBehaviour
             RotorContainer.SetActive(rotorsActive);
         }
     }
-
-
+	
+	//This is called to move individual segments. It moves the specified object according to the movementFunction settings.
+	private void move(Rigidbody2D rb, Vector3 pos)
+	{
+		if (movementFunction==movementFunctions.MovePosition) rb.MovePosition(pos);
+		if (movementFunction==movementFunctions.Position) rb.gameObject.transform.position = pos;
+		if (movementFunction==movementFunctions.Velocity) 
+			rb.velocity = (pos-rb.gameObject.transform.position)/ Time.fixedDeltaTime;
+	}
 
     //USER FUNCTIONS for controlling the belt externally.
 

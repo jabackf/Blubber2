@@ -6,8 +6,8 @@ using UnityEngine.Experimental.Rendering.LWRP;
 public class lightPulseFade : MonoBehaviour
 {
     public Light2D light;
-    public float rate = 0.12f;
-    public float amplitude = 0.3f;
+    public float rate = 3;
+    public float amplitude = 35;
 
     private float defaultIntensity;
     private float frequency = 0f;
