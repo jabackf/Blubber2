@@ -17,6 +17,7 @@ public class DressObject : MonoBehaviour
     void Start()
     {
         renderer = gameObject.GetComponent <SpriteRenderer>() as SpriteRenderer;
+
     }
 
     // Update is called once per frame

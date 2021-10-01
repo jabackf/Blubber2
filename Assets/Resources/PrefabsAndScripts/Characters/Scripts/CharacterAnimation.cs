@@ -132,8 +132,8 @@ public class CharacterAnimation : MonoBehaviour
             else
             {
                 this.name = this.dressObject.name;
-                this.offset.x = this.dressObject.offset.x;
-                this.offset.y = this.dressObject.offset.y;
+                this.offset.x = this.dressObject.offset.x+this.dressObject.transform.localPosition.x;
+                this.offset.y = this.dressObject.offset.y+this.dressObject.transform.localPosition.y;
                 this.essentialDress = this.dressObject.essentialDress;
                 this.gameObject = this.dressObject.gameObject;
                 this.renderer = this.gameObject.GetComponent<SpriteRenderer>();

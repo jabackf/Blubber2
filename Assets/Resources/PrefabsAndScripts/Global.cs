@@ -41,6 +41,7 @@ public class Global : MonoBehaviour
 	[System.NonSerialized] public string dirCharacterDress = "Sprites/Dress/";
 	[System.NonSerialized] public string dirDialogSystem = "PrefabsAndScripts/MenusAndDialogs/Dialog/";
 	[System.NonSerialized] public string dirRangeIconSystem = "PrefabsAndScripts/RangeIconSystem/";
+	[System.NonSerialized] public string dirInputCapture = "InputCapture/";
 	
 
     // Start is called before the first frame update

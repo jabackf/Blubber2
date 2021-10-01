@@ -48,6 +48,7 @@ public class React : MonoBehaviour
         [HideInInspector] public GameObject initiator; //Stores the most recently detected initiator. This gets cleared after initiatorMessages are sent.
 
         public List<string> sayStrings = new List<string>();
+		public string animation;	//Name of an animation to play
         public List<UnityEvent> Callbacks = new List<UnityEvent>();
         public List<string> sendMessages = new List<string>();
         public List<string> delayedMessages = new List<string>(); //Like send messages, but these are delayed by delayedMessagesTime amount. E.g., you could send Angry at the start then Normal as a delay
@@ -61,6 +62,7 @@ public class React : MonoBehaviour
         private float def_delayedMessagesTime;
         private float def_initiatorMessagesTime;
         private float def_initiatorMessagesTwoTime;
+		private string def_animation; 
         private List<string> def_sayStrings;
         private List<UnityEvent> def_Callbacks;
         private List<string> def_sendMessages;
@@ -79,6 +81,7 @@ public class React : MonoBehaviour
             def_delayedMessagesTime = delayedMessagesTime;
             def_initiatorMessagesTime = initiatorMessagesTime;
             def_sayStrings = sayStrings;
+			def_animation = animation;
             def_Callbacks = Callbacks;
             def_sendMessages = sendMessages;
             def_delayedMessages = delayedMessages;
@@ -97,6 +100,7 @@ public class React : MonoBehaviour
             delayedMessagesTime = def_delayedMessagesTime;
             initiatorMessagesTime = def_initiatorMessagesTime;
             sayStrings = def_sayStrings;
+			animation = def_animation;
             Callbacks = def_Callbacks;
             sendMessages = def_sendMessages;
             delayedMessages = def_delayedMessages;
@@ -159,6 +163,14 @@ public class React : MonoBehaviour
     public void IShot(GameObject initiator) { rShot.initiator = initiator; execute(rShot); }
     public void PShot(Vector3 position) { rShot.data_position = position; execute(rShot); } //Carries the position that the shot took place.
     public void Shot() { rShot.initiator = null; execute(rShot); }
+	
+	public reaction rCustomA = new reaction("CustomA"); //A generic thing. Use for whatever fits your fancy.
+    public void ICustomA(GameObject initiator) { rCustomA.initiator = initiator; execute(rCustomA); }
+    public void CustomA() { rCustomA.initiator = null;  execute(rCustomA); }
+	
+	public reaction rCustomB = new reaction("CustomB"); //Another generic thing
+    public void ICustomB(GameObject initiator) { rCustomB.initiator = initiator; execute(rCustomB); }
+    public void CustomB() { rCustomB.initiator = null;  execute(rCustomB); }
 
 
     CharacterController2D cont;
@@ -220,6 +232,11 @@ public class React : MonoBehaviour
         }
 
         if (r.playSound.Count > 0) global.audio.RandomSoundEffect(r.playSound.ToArray(), r.randomizePitchMin, r.randomizePitchMax);
+		
+		if (r.animation!="")
+		{
+			gameObject.GetComponent<Animator>().Play(r.animation);
+		}
 
     }
 

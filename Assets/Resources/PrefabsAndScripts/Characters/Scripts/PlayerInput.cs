@@ -12,39 +12,27 @@ public class PlayerInput : MonoBehaviour
     public CharacterController2D controller;
     private Global global;
     public bool requirePlayerTag = true; //If true, input will only function if this gameObject has the "Player" tag
-    float horizontalMove = 0f;
-    float aimAngleMove = 200f;    //Used in aiming the throw retical (angle)
-    float aimForceMove = 15f;    //Used in aiming the throw retical (force)
-    bool throwRelease = false;
+
     public float runSpeed = 35f;
     public float aimAngleSpeed = 200f; //Speed for aiming the angle of the throwing retical
     public float aimForceSpeed = 50f; //Speed for aiming the angle of the throwing retical
     public bool mouseAim = true; //Set to true to allow the mouse to aim the throw or action reticals
 
-    float aimActionAngleMove = 200f;    //Used in aiming the action retical (angle)
-    float aimActionForceMove = 15f;    //Used in aiming the action retical (force)
     public float aimActionAngleSpeed = 200f; //Speed for aiming the angle of the action retical
     public float aimActionForceSpeed = 50f; //Speed for aiming the angle of the action retical
 
-    bool jump = false;
-    bool crouch = false;
-    bool pickup = false;
-    bool dialog = false;    //Dialog button pressed
-    bool dropDown = false; //The action for dropping through platforms that have the dropDownPlatform script
-    bool useItemActionPressed = false; //If we're holding an object with an action, then this flag is triggered when we press the UseItemAction button
-    bool useItemActionHeld = false;
-    bool useItemActionReleased = false;
-    float climb = 0;
+
     public float climbSpeed = 5f;
-    bool holdingAction = false;
-    private bool isThrowing = false; //Set to true if we're throwing an object (changing the throw angle and velocity).
-    
+	
+	[HideInInspector] public BlubberInputData bid;
 
     // Start is called before the first frame update
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>();
         if (mouseAim) controller.setMouseAim(mouseAim);
+		
+		if (bid==null) bid = new BlubberInputData();
     }
 
     void Update()
@@ -58,70 +46,70 @@ public class PlayerInput : MonoBehaviour
                 if (Input.GetButtonDown("Pickup"))
                 {
                     if (!controller.holdingSomething())
-                        pickup = true;
+                        bid.pickup = true;
                 }
                 if (Input.GetButtonDown("Throw"))
                 {
                     if (controller.holdingSomething())
-                        isThrowing = true;
+                        bid.isThrowing = true;
                 }
             }
 
-            horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+            bid.horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-            if (!isThrowing) //Not in aiming mode
+            if (!bid.isThrowing) //Not in aiming mode
             {
                 if (Input.GetButtonDown("UseItemAction"))
                 {
-                    useItemActionPressed = true;
+                    bid.useItemActionPressed = true;
                 }
                 if (Input.GetButton("UseItemAction"))
                 {
-                    useItemActionHeld = true;
+                    bid.useItemActionHeld = true;
 
                     //Since we're not in throwing mode and we have the action button pressed, these controls are used for action aim instead
                     if (!Input.GetButton("throwAimHorizontal") )
                     {   //Changing the angle
-                        aimActionAngleMove = Input.GetAxisRaw("throwAimVertical") * aimActionAngleSpeed;
-                        aimActionForceMove = 0;
+                        bid.aimActionAngleMove = Input.GetAxisRaw("throwAimVertical") * aimActionAngleSpeed;
+                        bid.aimActionForceMove = 0;
                     }
                     else
                     {   //Changing the force
-                        aimActionForceMove = Input.GetAxisRaw("throwAimVertical") * aimActionForceSpeed;
-                        aimActionAngleMove = 0;
+                        bid.aimActionForceMove = Input.GetAxisRaw("throwAimVertical") * aimActionForceSpeed;
+                        bid.aimActionAngleMove = 0;
                     }
                 }
                 if (Input.GetButtonUp("UseItemAction"))
                 {
-                    useItemActionReleased = true;
+                    bid.useItemActionReleased = true;
                 }
 
                 if (Input.GetButtonDown("Jump"))
                 {
-                    jump = true;
+                    bid.jump = true;
 
                     //If we're using the actionAim system, then don't jump. This bit of code assumes jump is the same as action aim controls.
                     if (controller.holdingSomething() && controller.getHolding() != null)
                     {
                         if ( Input.GetButton("UseItemAction") && controller.getHolding().hasActionAim && !controller.currentlyMouseAiming )
-                            jump = false;
+                            bid.jump = false;
                     }
 
                 }
 
                 if (Input.GetButtonDown("Dialog"))
                 {
-                    dialog = true;
+                    bid.dialog = true;
                 }
 
                 if (Input.GetButtonDown("dropDown"))
                 {
-                    dropDown = true;
+                    bid.dropDown = true;
                 }
 
                 if (controller.getCanClimb())
                 {
-                    climb = Input.GetAxisRaw("Climb") * climbSpeed;
+                    bid.climb = Input.GetAxisRaw("Climb") * climbSpeed;
                 }
 
 
@@ -129,11 +117,11 @@ public class PlayerInput : MonoBehaviour
                 {
                     if (Input.GetButtonDown("Crouch"))
                     {
-                        crouch = true;
+                        bid.crouch = true;
                     }
                     else if (Input.GetButtonUp("Crouch"))
                     {
-                        crouch = false;
+                        bid.crouch = false;
                     }
 
                 }
@@ -146,28 +134,28 @@ public class PlayerInput : MonoBehaviour
                 if (Input.GetButtonDown("Jump"))
                 {
                     if (controller.currentlyMouseAiming)
-                        jump = true;
+                        bid.jump = true;
                 }
 
                 if (!Input.GetButton("Throw"))
                 {
-                    throwRelease = true;
+                    bid.throwRelease = true;
                 }
 
                 if (!Input.GetButton("throwAimHorizontal"))
                 {   //Changing the angle
-                    aimAngleMove = Input.GetAxisRaw("throwAimVertical") * aimAngleSpeed;
-                    aimForceMove = 0;
+                    bid.aimAngleMove = Input.GetAxisRaw("throwAimVertical") * aimAngleSpeed;
+                    bid.aimForceMove = 0;
                 }
                 else
                 {   //Changing the force
-                    aimForceMove = Input.GetAxisRaw("throwAimVertical") * aimForceSpeed;
-                    aimAngleMove = 0;
+                    bid.aimForceMove = Input.GetAxisRaw("throwAimVertical") * aimForceSpeed;
+                    bid.aimAngleMove = 0;
                 }
 
                 if (!Input.GetButtonDown("holdingAction"))
                 {
-                    holdingAction = true;
+                    bid.holdingAction = true;
                 }
             }
         }//END if (requirePlayerTag==false || gameObject.tag=="Player")
@@ -175,7 +163,7 @@ public class PlayerInput : MonoBehaviour
 
     public void setMouseAim(bool set)
     {
-        mouseAim = set;
+        bid.mouseAim = set;
         controller.setMouseAim(set);
     }
 
@@ -184,27 +172,27 @@ public class PlayerInput : MonoBehaviour
 
         if (!controller.pause && !controller.isCharacterDead() && !global.isSceneChanging()) //Not in dialog mode, not dead, scene isn't changing
         {
-            if (!isThrowing)
+            if (!bid.isThrowing)
             {
-                controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump, pickup, climb * Time.fixedDeltaTime, dropDown, dialog);
-                if (useItemActionPressed || useItemActionHeld || useItemActionReleased) controller.useItemAction(useItemActionPressed,useItemActionHeld,useItemActionReleased, aimActionForceMove * Time.fixedDeltaTime, aimActionAngleMove * Time.fixedDeltaTime);
+                controller.Move(bid.horizontalMove * Time.fixedDeltaTime, bid.crouch, bid.jump, bid.pickup, bid.climb * Time.fixedDeltaTime, bid.dropDown, bid.dialog);
+                if (bid.useItemActionPressed || bid.useItemActionHeld || bid.useItemActionReleased) controller.useItemAction(bid.useItemActionPressed,bid.useItemActionHeld,bid.useItemActionReleased, bid.aimActionForceMove * Time.fixedDeltaTime, bid.aimActionAngleMove * Time.fixedDeltaTime);
             }
             else
             {
-                controller.Aim(aimForceMove * Time.fixedDeltaTime, aimAngleMove * Time.fixedDeltaTime, throwRelease, holdingAction);
-                controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump, false, 0, false, false);
-                if (throwRelease) isThrowing = false;
+                controller.Aim(bid.aimForceMove * Time.fixedDeltaTime, bid.aimAngleMove * Time.fixedDeltaTime, bid.throwRelease, bid.holdingAction);
+                controller.Move(bid.horizontalMove * Time.fixedDeltaTime, false, bid.jump, false, 0, false, false);
+                if (bid.throwRelease) bid.isThrowing = false;
             }
         }
-        jump = false;
-        pickup = false;
-        holdingAction = false;
-        throwRelease = false;
-        dropDown = false;
-        dialog = false;
-        useItemActionPressed = false;
-        useItemActionHeld = false;
-        useItemActionReleased = false;
+        bid.jump = false;
+        bid.pickup = false;
+        bid.holdingAction = false;
+        bid.throwRelease = false;
+        bid.dropDown = false;
+        bid.dialog = false;
+        bid.useItemActionPressed = false;
+        bid.useItemActionHeld = false;
+        bid.useItemActionReleased = false;
     }
 
     public void OnLanding()

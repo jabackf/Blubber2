@@ -94,16 +94,18 @@ public class Dialog : MonoBehaviour
     public struct AnswerBranch
     {
         public string answer;
-        public int index; //The index to jump to if this.answer matches the user selected answer
+        public int index; //The index to jump to if this.answer matches the user selected answer. Enter -1 to not alter the index.
         public bool ignoreCase; //If true, it will ignore the case of the answer. Meaning, "stinkypants" will match "StInKyPaNtS"
         public string addToNextMessage; //If not empty, this will be added to the beginning of the next message. For example, "You didn't enter anything! " can be added to the beginning of a message asking for input
+        public UnityEvent answerCallback; //An optional callback for when this answer is given.
 
-        public AnswerBranch(string answer, int jumpto, bool ignoreCase=false, string addToNext="")
+        public AnswerBranch(string answer, int jumpto, bool ignoreCase=false, string addToNext="", UnityEvent answerCallback=null)
         {
             this.answer = answer;
             this.index = jumpto;
             this.ignoreCase = ignoreCase;
             this.addToNextMessage = addToNext;
+			this.answerCallback = answerCallback;
         }
     }
 
@@ -468,8 +470,12 @@ public class Dialog : MonoBehaviour
                 }
                 if (answer == lAnswer)
                 {
-                    addToNextMessageBeginning(a.addToNextMessage);
-                    return a.index;
+					if (a.index!=-1)
+					{
+						addToNextMessageBeginning(a.addToNextMessage);
+						return a.index;
+					}
+					if (a.answerCallback!=null) a.answerCallback.Invoke();
                 }
             }
 
@@ -478,8 +484,12 @@ public class Dialog : MonoBehaviour
             {
                 if (a.answer.ToLower() == "default")
                 {
-                    addToNextMessageBeginning(a.addToNextMessage);
-                    return a.index;
+					if (a.index!=-1)
+					{
+						addToNextMessageBeginning(a.addToNextMessage);
+						return a.index;
+					}
+					if (a.answerCallback!=null) a.answerCallback.Invoke();
                 }
             }
         }

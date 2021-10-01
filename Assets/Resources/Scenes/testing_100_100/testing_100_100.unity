@@ -2706,6 +2706,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1959228111}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: PlatformYellow
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2770,11 +2775,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: PlatformYellow
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656769, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -5747,6 +5747,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2057293190}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: PlatformYellow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5811,16 +5821,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: PlatformYellow
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Layer
-      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656769, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -8536,12 +8536,12 @@ PrefabInstance:
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.00030338764
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9993932
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}

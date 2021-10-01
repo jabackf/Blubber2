@@ -142,7 +142,7 @@ public class BlubberAnimation : CharacterAnimation
             }
 
             if (bii != null && jumping)
-                bii.jump = true;
+                bii.bid.jump = true;
         }
     }
 
