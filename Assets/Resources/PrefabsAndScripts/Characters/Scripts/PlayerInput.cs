@@ -24,21 +24,86 @@ public class PlayerInput : MonoBehaviour
 
     public float climbSpeed = 5f;
 	
-	[HideInInspector] public BlubberInputData bid;
+	[HideInInspector] public CharacterController2D_Input bid;
 
     // Start is called before the first frame update
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>();
-        if (mouseAim) controller.setMouseAim(mouseAim);
+        //if (mouseAim) controller.setMouseAim(mouseAim);
 		
-		if (bid==null) bid = new BlubberInputData();
+		if (bid==null) bid = new CharacterController2D_Input();
+		bid.Init(controller);
     }
+	
+	//Calls cc2d_input.init again. 
+	public void reInit()
+	{
+		if (bid==null) bid = new CharacterController2D_Input();
+		bid.Init(controller);
+	}
 
     void Update()
     {
+		//Get input
+		if (requirePlayerTag == false || gameObject.tag == "Player")
+		{
+			if (Input.GetButtonDown("Jump")) bid.jump = true;
 
+			if (Input.GetButtonDown("Pickup")) bid.pickup = true;
 
+			if (Input.GetButtonDown("Throw")) bid.isThrowing = true;
+			if (Input.GetButtonUp("Throw")) bid.throwRelease = true;
+			if (Input.GetButton("Throw"))
+			{
+				if (!Input.GetButton("throwAimHorizontal"))
+                {   //Changing the angle
+                    bid.aimAngleMove = Input.GetAxisRaw("throwAimVertical") * aimAngleSpeed;
+                    bid.aimForceMove = 0;
+                }
+                else
+                {   //Changing the force
+                    bid.aimForceMove = Input.GetAxisRaw("throwAimVertical") * aimForceSpeed;
+                    bid.aimAngleMove = 0;
+                }
+			}
+
+            bid.horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+			
+			if (Input.GetButtonDown("Dialog")) bid.dialog = true;
+
+            if (Input.GetButtonDown("dropDown")) bid.dropDown = true;
+			
+			bid.climb = Input.GetAxisRaw("Climb") * climbSpeed;
+
+			if (Input.GetButtonDown("holdingAction")) bid.holdingAction = true;
+			
+			
+			if (Input.GetButtonDown("UseItemAction")) bid.useItemActionPressed = true;
+			if (Input.GetButtonUp("UseItemAction")) bid.useItemActionReleased = true;
+			
+			//bid.aimActionAngleMove = 0;
+			//bid.aimActionForceMove = 0;
+			
+			if (Input.GetButton("UseItemAction"))
+			{
+				bid.useItemActionHeld = true;
+				//Since we're not in throwing mode and we have the action button pressed, these controls are used for action aim instead
+				if (!Input.GetButton("throwAimHorizontal") )
+				{   //Changing the angle
+					bid.aimActionAngleMove = Input.GetAxisRaw("throwAimVertical") * aimActionAngleSpeed;
+					bid.aimActionForceMove = 0;
+				}
+				else
+				{   //Changing the force
+					bid.aimActionForceMove = Input.GetAxisRaw("throwAimVertical") * aimActionForceSpeed;
+					bid.aimActionAngleMove = 0;
+				}
+			}
+		}
+	
+		bid.UpdateInputLogic();
+		/*
         if (requirePlayerTag == false || gameObject.tag == "Player")
         {
             if (controller.pickupEnabled())
@@ -159,17 +224,18 @@ public class PlayerInput : MonoBehaviour
                 }
             }
         }//END if (requirePlayerTag==false || gameObject.tag=="Player")
+			*/
     }
 
     public void setMouseAim(bool set)
     {
         bid.mouseAim = set;
-        controller.setMouseAim(set);
+        bid.controller.setMouseAim(set);
     }
 
     void FixedUpdate()
     {
-
+		/*
         if (!controller.pause && !controller.isCharacterDead() && !global.isSceneChanging()) //Not in dialog mode, not dead, scene isn't changing
         {
             if (!bid.isThrowing)
@@ -193,6 +259,9 @@ public class PlayerInput : MonoBehaviour
         bid.useItemActionPressed = false;
         bid.useItemActionHeld = false;
         bid.useItemActionReleased = false;
+		*/
+		
+		bid.UpdateCharacterController();
     }
 
     public void OnLanding()
@@ -203,4 +272,5 @@ public class PlayerInput : MonoBehaviour
     {
 
     }
+	
 }

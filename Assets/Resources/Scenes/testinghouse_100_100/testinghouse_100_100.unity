@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -282,11 +282,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7824296257769419215, guid: 6578271a7c2e99246ba98a77ed51c9e9,
-        type: 3}
-      propertyPath: m_Name
-      value: sprLadderTall_0
-      objectReference: {fileID: 0}
     - target: {fileID: 7824296257769419056, guid: 6578271a7c2e99246ba98a77ed51c9e9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -341,6 +336,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824296257769419215, guid: 6578271a7c2e99246ba98a77ed51c9e9,
+        type: 3}
+      propertyPath: m_Name
+      value: sprLadderTall_0
       objectReference: {fileID: 0}
     - target: {fileID: 7824296257632114847, guid: 6578271a7c2e99246ba98a77ed51c9e9,
         type: 3}
@@ -1333,6 +1333,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 423419969}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: sprPlatformYellow_0
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1387,11 +1392,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: sprPlatformYellow_0
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656799, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -1734,6 +1734,7 @@ MonoBehaviour:
     initiator: {fileID: 0}
     sayStrings:
     - WHOAH! Now I'm gonna need a bath. Thanks a lot!
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -1758,6 +1759,7 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -1781,6 +1783,7 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -1804,6 +1807,7 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -1827,6 +1831,55 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rCustomA:
+    isTalkingResponse: 2
+    name: CustomA
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    playSound: []
+    randomizePitchMin: 1
+    randomizePitchMax: 1
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    animation: 
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rCustomB:
+    isTalkingResponse: 2
+    name: CustomB
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    playSound: []
+    randomizePitchMin: 1
+    randomizePitchMax: 1
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -2076,26 +2129,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6143473746289090509, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: sndOpen
-      value: 
-      objectReference: {fileID: 8300000, guid: 4d400c9d27eb3ec498121b3836db6c24, type: 3}
-    - target: {fileID: 6143473746289090509, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: sndClose
-      value: 
-      objectReference: {fileID: 8300000, guid: 1d0eb91e0f3779d4eb96249a2c011014, type: 3}
-    - target: {fileID: 6143473746289090497, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: onCompleteCallbacks.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: itemSelected
-      objectReference: {fileID: 0}
-    - target: {fileID: 6836197683941134314, guid: 2a123ea57d5736442b1bc620b055f986,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a123ea57d5736442b1bc620b055f986, type: 3}
 --- !u!4 &906885693 stripped
@@ -2111,6 +2144,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 423419969}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: sprPlatformYellow_0
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2165,11 +2203,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: sprPlatformYellow_0
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656799, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -2801,6 +2834,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 423419969}
     m_Modifications:
+    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
+        type: 3}
+      propertyPath: m_Name
+      value: sprPlatformYellow_0 (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656771, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2855,11 +2893,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8543253619634656772, guid: 3923e061f6378d842875d6b20083b5d2,
-        type: 3}
-      propertyPath: m_Name
-      value: sprPlatformYellow_0 (1)
       objectReference: {fileID: 0}
     - target: {fileID: 8543253619634656799, guid: 3923e061f6378d842875d6b20083b5d2,
         type: 3}
@@ -7086,6 +7119,7 @@ MonoBehaviour:
     initiator: {fileID: 0}
     sayStrings:
     - I can't believe you've done this
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -7110,6 +7144,7 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -7133,6 +7168,7 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -7157,6 +7193,7 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -7180,6 +7217,55 @@ MonoBehaviour:
     initiatorSayDelay: 1
     initiator: {fileID: 0}
     sayStrings: []
+    animation: 
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rCustomA:
+    isTalkingResponse: 2
+    name: CustomA
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    playSound: []
+    randomizePitchMin: 1
+    randomizePitchMax: 1
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    animation: 
+    Callbacks: []
+    sendMessages: []
+    delayedMessages: []
+    initiatorMessages: []
+    initiatorSay: []
+  rCustomB:
+    isTalkingResponse: 2
+    name: CustomB
+    faceInitiator: 1
+    facingReturnBehavior: 1
+    previousIsFacingRight: 0
+    playSound: []
+    randomizePitchMin: 1
+    randomizePitchMax: 1
+    data_position: {x: 0, y: 0, z: 0}
+    data_gameObject: {fileID: 0}
+    data_string: 
+    sayTime: 6
+    delayedMessagesTime: 7
+    initiatorMessagesTime: 1
+    initiatorSayDelay: 1
+    initiator: {fileID: 0}
+    sayStrings: []
+    animation: 
     Callbacks: []
     sendMessages: []
     delayedMessages: []
@@ -7399,6 +7485,7 @@ MonoBehaviour:
   positionOffset: {x: 0, y: 0}
   randomizePosition: {x: 1, y: 0.3}
   particleColor: {r: 1, g: 1, b: 1, a: 1}
+  active: 1
   useStartForce: 1
   forceTransformMultiplier: 1
   mode: 1
@@ -7423,6 +7510,7 @@ MonoBehaviour:
   positionOffset: {x: 0, y: 0}
   randomizePosition: {x: 0, y: 0}
   particleColor: {r: 1, g: 1, b: 1, a: 1}
+  active: 1
   useStartForce: 0
   forceTransformMultiplier: 0
   mode: 1
@@ -7502,6 +7590,11 @@ MonoBehaviour:
   sndKillPitchRandomizeMax: 0.9
   sndShotPitchRandomizeMin: 1
   sndShotPitchRandomizeMax: 1
+  OnShotCallback:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &4635862336304548852
 MonoBehaviour:
   m_ObjectHideFlags: 0

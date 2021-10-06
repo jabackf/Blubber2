@@ -14,9 +14,14 @@ public class actionInRange : MonoBehaviour
     public float iconXOffset = -0.2f;
     public float iconYOffset = 0.5f;
 
-    //The requireParentTags are a list of tags required of the rangeCollider's parent in order to trigger this range icon. Leave this list empty to not check tags at all.
-    //This is primarily used to restrict range icons to the player so, for example, if an NPC gets close to a box we don't get a pickup object icon.
-    private List<string> requireParentTags = new List<string>() { "Player" }; 
+    //The requireParentTags are a list of tags required of the rangeCollider's parent in order to trigger this range object. Leave this list empty to not check tags at all.
+    //This is primarily used to restrict the characters that can and cannot interact with range objects.
+    private List<string> requireParentTags = new List<string>() { }; 
+	
+	//While the above is a list of items required for the character to interact with the range object, this is required only for the icon to be visible.
+	//If the character is not on this list, then the icon will not be visible but InRange will still be triggered and functional.
+	//Leave empty to ignore tags entirely.
+	private List<string> requireParentTagsVisibleIcon = new List<string>() { "Player" }; 
 
     private GameObject ActionIcon;
     private actionIcon iScript;
@@ -101,14 +106,23 @@ public class actionInRange : MonoBehaviour
             }
             if (goodToGo)
             {
+				bool visible = true;
+				if (requireParentTagsVisibleIcon.Count>0)
+				{
+					visible = false;
+					foreach(var t in requireParentTagsVisibleIcon)
+					{
+						if (t == other.transform.parent.gameObject.tag) visible = true;
+					}
+				}
                 CharacterController2D cont = other.gameObject.transform.parent.GetComponent<CharacterController2D>() as CharacterController2D;
                 if (cont != null)
                 {
                     if (!cont.isCharacterDead())
-                        setInRange(true, other.gameObject.transform.parent.gameObject);
+                        setInRange(true, other.gameObject.transform.parent.gameObject,visible);
                 }
                 else
-                    setInRange(true, other.gameObject.transform.parent.gameObject);
+                    setInRange(true, other.gameObject.transform.parent.gameObject,visible);
             }
         }
     }
@@ -140,10 +154,10 @@ public class actionInRange : MonoBehaviour
     {
         return rangeActive;
     }
-    public void setInRange(bool inRange, GameObject go)
+    public void setInRange(bool inRange, GameObject go, bool visible=true)
     {
         if (!iScript) iScript = ActionIcon.GetComponent<actionIcon>();
-        if (iScript) iScript.setVisible(inRange);
+        if (iScript && visible) iScript.setVisible(inRange);
         range = inRange;
 
         if (characterObject != null)

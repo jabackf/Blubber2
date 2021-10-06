@@ -45,9 +45,9 @@ public class BlubberAnimation : CharacterAnimation
 
     multiDress eyes;
 
-    BlubberInputInterface bii;
+    CPUInput bii;
 
-    bool jumping = false; //Set to true and the character will jump repeatedly, provided it has a BlubberInputInterface
+    bool jumping = false; //Set to true and the character will jump repeatedly, provided it has a CPUInput
 
     public bool normalOnRespawn = true; //If true, we will send a Normal() message to the character upon respawn.
 
@@ -74,7 +74,7 @@ public class BlubberAnimation : CharacterAnimation
     void Start()
     {
         global = GameObject.FindWithTag("global").GetComponent<Global>();
-        bii = gameObject.GetComponent<BlubberInputInterface>() as BlubberInputInterface;
+        bii = gameObject.GetComponent<CPUInput>() as CPUInput;
         base.Start();
 
     }

@@ -47,7 +47,7 @@ public class CharacterController2D : MonoBehaviour
 
     [Space]
     [Header("Item Pickup")]
-    [SerializeField] private bool canPickup = true;                             // Whether or not the player can push
+    [SerializeField] private bool canPickup = true;                             // Whether or not the character can pickup items
     [SerializeField] private bool pickupWithJump = false;                       // If "Jump" and "Pickup" inputs are the same, set this to true to prevent jumping when picking something up
     [SerializeField] private Transform m_pickupTop;                             // Where to attach objects if carrying them above your head
     [SerializeField] private Transform m_pickupL;                             // Where to attach objects if carrying them in front left
@@ -794,11 +794,18 @@ public class CharacterController2D : MonoBehaviour
         m_Rigidbody2D.WakeUp();
         m_Rigidbody2D.isKinematic = kinematicStateBeforeDeath;
         gameObject.layer = layerBeforeDeath;
-        if (spawnParticles) Instantiate(spawnParticles, gameObject.transform.position, Quaternion.identity);
+        if (spawnParticles) makeSpawnParticles();
         if (charAnim == null) charAnim = gameObject.GetComponent<CharacterAnimation>();
         if (spawnSound) global.audio.Play(spawnSound);
         charAnim.characterRespawned();
+		CPUInput cpu = GetComponent<CPUInput>();
+		if (cpu!=null) cpu.characterRespawned();
     }
+	
+	public void makeSpawnParticles()
+	{
+		Instantiate(spawnParticles, gameObject.transform.position, Quaternion.identity);
+	}
 
     public bool isCharacterDead()
     {
