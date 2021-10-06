@@ -49,13 +49,39 @@ public class CPUInput : MonoBehaviour
 		}
 	}
 	
+	//These are behaviors we can do when we arrive home during a "goingHome" state. This excludes incapGoingHome
+	[System.Serializable]
+	public enum arriveHomeBehaviors
+	{
+		none,
+		idle,
+		keepGoingHome, //This behavior will cause the character to continue tracking the homeMarker. Character will stand still, but if the homeMarker moves it will try to move with it.
+		restartIncap, //If currentIncap is set to something we restart it. Otherwise we go into idle.
+		playFirstIncap //Plays whatever incap animation is first in the list of incap animations.
+	}
+		
+	
 	//These are actions we can take if still stuck gets triggered.
 	[System.Serializable]
 	public enum stillStuckBehaviors
 	{
+		none,
 		idle, //Just go into idle state. Can optionally say a message by setting "stillStuckIdleMessage"
 		jumpHome, //Jump to the home position.
-		die //Triggers the character's death. Character will then obey the rules of respawnBehavior
+		die, //Triggers the character's death. Character will then obey the rules of respawnBehavior
+		goHome, //Switch to goHome mode and attempt to walk there in the hopes of not getting stuck again and ending up in an endless cycle.
+		goHomeJumpHome //Attempt one time to go home. If StillStuck gets triggered a second time, we'll do jump home.
+	}
+	
+	//These are actions we can take if we get stuck on a ladder
+	[System.Serializable]
+	public enum climbStuckBehaviors
+	{
+		none,
+		idle, //Just go into idle state. Can optionally say a message by setting "stillStuckIdleMessage"
+		jumpHome, //Jump to the home position.
+		die, //Triggers the character's death. Character will then obey the rules of respawnBehavior
+		goHome //Switch to goHome mode and attempt to walk there in the hopes of not getting stuck again and ending up in an endless cycle.
 	}
 	
 	[System.Serializable]
@@ -156,14 +182,14 @@ public class CPUInput : MonoBehaviour
 
     public float climbSpeed = 5f;
 
-    private float jumpCounter = 0; //Used to make sure we're not jumping repeatedly
+    //private float jumpCounter = 0; //Used to make sure we're not jumping repeatedly
 	
 	public float snapResolution = 0.4f; //Used for snapping the character in place on incap keyframes. If we are set to incapTrackingBehavior.move, then the character will try to move within this distance of the keyframe position
 	
 	private Vector2 target; //Used for various states, such as states.trackingIncap or states.goingHome. This is a target that we are trying to move to.
 	
 	[Space]
-    [Header("Behaviors")]
+    [Header("Stuck")]
 	//Stuck!
 	private bool stuck=false; //We detect when we have been trying to move horizontally for a bit, but we're not going anywhere.
 	public float stuckTime = 0.5f; //This is how long we try to move before setting stuck to true. Set to -1 to not use the stuck timer.
@@ -176,12 +202,33 @@ public class CPUInput : MonoBehaviour
 	private float stillStuckTimer=0f;
 	public stillStuckBehaviors stillStuckBehavior = stillStuckBehaviors.idle;
 	public string stillStuckMessage="Well, it would seem as though I can't get over there. Guess I'll just sit here."; //We can optionally say this message. Leave blank for no message.
+	private int goHomeJumpHomeCounter=0; //Used for the goHomeJumpHome stillStuckBehavior
 	
+	[Space]
+    [Header("on Respawn")]
+	//Respawn
 	public respawnBehaviors respawnBehavior = respawnBehaviors.idle;
 	public string respawnMessage = "Ouch."; //This optional message is said when we respawn.
-	public float ladderCheckDistance=14f; //If we are trying to go somewhere that is significantly higher or lower than where we are at, then we will do a raycast to look for a ladder. This is how far to the left or right we will look for a ladder. A ray is drawn in the inspector reflecting this value.
-	public LayerMask climbLayerMask;
 	
+	[Space]
+    [Header("Climbing")]
+	//Ladders and such
+	public float ladderCheckDistance=14f; //If we are trying to go somewhere that is significantly higher or lower than where we are at, then we will do a raycast to look for a ladder. This is how far to the left or right we will look for a ladder. A ray is drawn in the inspector reflecting this value.
+	public ContactFilter2D climbContactFilter;
+	private GameObject targetLadder; //If this is not null and we are set to goingHome, trackingIncap, or incapGoingHome, or any other mode that attempts to navigate to a target, then we will attempt to climb the ladder to reach our destination if necessary.
+	private float ladderEdgeX=0; //This holds the x position where the raycast hit RELATIVE to the ladder's x position. This is used to position us on the ladder when we arrive.
+	private bool climbStuck=false;
+	public float climbStuckTime = 4f; //A timer to determine if we get stuck climbing the ladder. -1 for none.
+	private float climbStuckTimer=0f;
+	public climbStuckBehaviors climbStuckBehavior = climbStuckBehaviors.die;
+	private float climbStuckPreviousY=0;
+	private float climbStuckPreviousClimb=0;
+	
+	
+	[Space]
+    [Header("Misc Behaviors")]
+	//Arrive Home
+	public arriveHomeBehaviors arriveHomeBehavior = arriveHomeBehaviors.idle;
 	
 	[Space]
     [Header("Debug")]
@@ -246,28 +293,33 @@ public class CPUInput : MonoBehaviour
 			
 			if (Mathf.Abs(transform.position.x-target.x) <= snapResolution) xIsGood=true;
 			
-			if (Mathf.Abs(transform.position.y-target.y) > snapResolution)
+			if (Mathf.Abs(transform.position.y-target.y) > snapResolution && targetLadder==null && bid.controller.getCanClimb())
 			{
-				float distance = Mathf.Abs(target.y-transform.position.y);
-				
-				if (distance>3f) //If the thing is higher or lower than this, then we'll check for a ladder.
+				if (Mathf.Abs(target.y-transform.position.y)>3f) //If the target is higher or lower than this number of units, then we'll check for a ladder.
 				{
-					Debug.DrawRay(new Vector2(transform.position.x-ladderCheckDistance,bid.controller.getBottomPosition().y), Vector2.right*ladderCheckDistance*2, Color.green);
-					RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x-ladderCheckDistance,bid.controller.getBottomPosition().y), Vector2.right, ladderCheckDistance*2,climbLayerMask);
-					if (hit != null)
+					Debug.DrawRay(new Vector2(transform.position.x-ladderCheckDistance,bid.controller.getBottomPosition().y), Vector2.right*ladderCheckDistance*2, Color.green, 2f);
+					List<RaycastHit2D> hits = new List<RaycastHit2D>();
+					Physics2D.Raycast(new Vector2(transform.position.x-ladderCheckDistance,bid.controller.getBottomPosition().y), Vector2.right, climbContactFilter, hits, ladderCheckDistance*2);
+					foreach(var h in hits)
 					{
-						Debug.Log(hit.collider.gameObject.name);
+						//The raycast hit a ladder. Let's check to see if it takes us closer to the target's y value.
+						Vector3 cp = h.collider.ClosestPoint(target);
+						if (Mathf.Abs(cp.y-target.y)<=1f)
+						{
+							//Looks close enough. Let's try using it!
+							targetLadder = h.collider.gameObject;
+							ladderEdgeX =  h.collider.ClosestPoint(transform.position).x - targetLadder.transform.position.x;
+							yIsGood=false;
+						}
 					}
 				}
 			}
-			if (xIsGood && yIsGood)
+			
+			if (xIsGood && yIsGood && targetLadder==null)
 			{
-				//GetComponent<Rigidbody2D>().velocity=Vector3.zero;
-				//if (snapY) Debug.Log("A: "+target.y +" - "+ transform.position.y);
+
 				bid.reset();
-				//GetComponent<Rigidbody2D>().MovePosition(new Vector3(target.x,transform.position.y ,0f));
 				transform.position = new Vector3(target.x,transform.position.y ,0f);
-				//if (snapY) Debug.Log("B: "+target.y +" - "+ transform.position.y);
 				if (state==states.trackingIncap) 
 				{
 					//We've snapped into place and are in the middle of an animation, so let's switch back to playing and move to the next keyframe.
@@ -276,17 +328,47 @@ public class CPUInput : MonoBehaviour
 				}
 				if (state==states.incapGoingHome) 
 					advanceIncapKeyframe();
-				//if (state==states.goingHome) goIdle();
+				if (state==states.goingHome) arrivedHome();
 			}
 			else
 			{
-				if (!xIsGood)
+				if (targetLadder!=null)
 				{
-					if (target.x<transform.position.x) bid.horizontalMove = -runSpeed;
-					if (target.x>transform.position.x) bid.horizontalMove = runSpeed;
-					if (target.y>transform.position.y && Mathf.Abs(target.y-transform.position.y)>snapResolution) bid.jump = true;
-					if (stuck) bid.jump = true;
+					SpriteRenderer r = GetComponent<SpriteRenderer>();
+					float characterOffset = (r.bounds.extents.x) * (targetLadder.transform.position.x<transform.position.x ? -1f : 1f);
+					Vector3 targetLadderPos = new Vector3(targetLadder.transform.position.x+ladderEdgeX+characterOffset,targetLadder.transform.position.y,targetLadder.transform.position.z);
+					Debug.DrawRay(targetLadderPos,Vector3.up,Color.red);
+					if (Mathf.Abs(targetLadderPos.x-transform.position.x)>snapResolution)
+					{
+						walkTowards(targetLadderPos);
+					}
+					else
+					{
+						walkTowards(targetLadderPos);
+						bid.climb = climbSpeed * (target.y<transform.position.y ? -1f : 1f);
+						//Check if the ladder took us to the target area.
+						if (transform.position.y>target.y+0.005f && transform.position.y<target.y+0.3f)
+						{
+							//We seem to be done climbing. Let's try going to the target now!
+							bid.reset();
+							targetLadder=null;
+						}
+					}
 				}
+				else
+				{
+					if (!xIsGood)
+						walkTowards(target);
+				}
+			}
+		}
+		else
+		{
+			if (targetLadder!=null)
+			{
+				bid.reset();
+				targetLadder=null;
+				bid.controller.stopClimbing();
 			}
 		}
 		
@@ -328,12 +410,39 @@ public class CPUInput : MonoBehaviour
 			stillStuckTimer-=Time.deltaTime;
 			if (stillStuckTimer<=0)
 			{
-				holyCrapWeAreStuckSomewhereAndCantGetOut();
+				goIdle();
+				Invoke("holyCrapWeAreStuckSomewhereAndCantGetOut",2f);
 			}
 		}
 		previousX = transform.position.x;
 		previousHMove=bid.horizontalMove;
-			
+		
+		//Detect if we get stuck on a ladder
+		if (climbStuckPreviousClimb==bid.climb && Mathf.Abs(transform.position.y-climbStuckPreviousY)<0.1f && bid.climb!=0 && targetLadder!=null)
+		{
+			climbStuckTimer-=Time.fixedDeltaTime;
+			if (climbStuckTimer<=0 && climbStuck!=true)
+			{
+				climbStuck=true;
+				targetLadder=null;
+				bid.controller.stopClimbing();
+				if (climbStuckBehavior==climbStuckBehaviors.idle) goIdle();
+				if (climbStuckBehavior==climbStuckBehaviors.goHome) goHome();
+				if (climbStuckBehavior==climbStuckBehaviors.die) 
+				{
+					bid.controller.die();
+					bid.reset();
+				}
+				if (climbStuckBehavior==climbStuckBehaviors.jumpHome) jumpCharacter(homeMarker.transform.position);
+			}
+		}
+		else
+		{
+			climbStuck=false;
+			climbStuckTimer=climbStuckTime;
+		}	
+		climbStuckPreviousY = transform.position.y;
+		climbStuckPreviousClimb=bid.climb;		
     }
 	
 	//Plays the first located incapAnimations entry specified by name. Returns false if the animation cannot be played.
@@ -558,9 +667,23 @@ public class CPUInput : MonoBehaviour
 		if (Vector2.Distance(transform.position,homeMarker.transform.position) <= snapResolution)
 		{
 			if (snap) transform.position=homeMarker.transform.position;
+			if (state==states.goingHome) arrivedHome();
 			return true;
 		}
 		return false;
+	}
+	
+	//This should be called anytime we arrive home and state is equal to goingHome.
+	public void arrivedHome()
+	{
+		if (state!=states.goingHome) return;
+		if (arriveHomeBehavior==arriveHomeBehaviors.idle) goIdle();
+		if (arriveHomeBehavior==arriveHomeBehaviors.playFirstIncap) playIncap(incapAnimations[0].name);
+		if (arriveHomeBehavior==arriveHomeBehaviors.restartIncap) 
+		{
+			if (currentIncap!=null) playIncap(currentIncap.name);
+			else goIdle();
+		}
 	}
 	
 	//Jumps the character to a new location spontaneously, creating pretty little sparkly warpy effecty thingies.
@@ -577,19 +700,31 @@ public class CPUInput : MonoBehaviour
 	public void holyCrapWeAreStuckSomewhereAndCantGetOut()
 	{
 		stuck=false; //We done with this being stuck nonsense.
-		if (stillStuckBehavior==stillStuckBehaviors.idle)
+		if (stillStuckBehavior==stillStuckBehaviors.goHomeJumpHome)
 		{
-			goIdle();
+			goHomeJumpHomeCounter+=1;
+			if (goHomeJumpHomeCounter==1) goHome();
+			if (goHomeJumpHomeCounter>1)
+			{
+				goHomeJumpHomeCounter=0;
+				bid.reset();
+				jumpCharacter(homeMarker.transform.position);
+			}
+				
 		}
+		else 
+			goHomeJumpHomeCounter=0;
+		if (stillStuckBehavior==stillStuckBehaviors.idle)
+			goIdle();
+		if (stillStuckBehavior==stillStuckBehaviors.goHome)
+			goHome();
 		if (stillStuckBehavior==stillStuckBehaviors.jumpHome)
 		{
 			bid.reset();
 			jumpCharacter(homeMarker.transform.position);
 		}
 		if (stillStuckBehavior==stillStuckBehaviors.die)
-		{
 			bid.controller.die();
-		}
 		bid.controller.Say(stillStuckMessage,4f);
 	}
 	
@@ -609,6 +744,15 @@ public class CPUInput : MonoBehaviour
 		}
 		if (respawnBehavior==respawnBehaviors.playFirstIncap) playIncap(incapAnimations[0].name);
 		bid.controller.Say(respawnMessage,4f);
+	}
+	
+	//Causes the character to walk horizontally towards the supplied position. If jumpToAvoid is true, then we will try to jump when we get stuck.
+	public void walkTowards(Vector2 pos, bool  jumpToAvoid=true)
+	{
+		if (pos.x<transform.position.x) bid.horizontalMove = -runSpeed;
+		if (pos.x>transform.position.x) bid.horizontalMove = runSpeed;
+		if (pos.y>transform.position.y && Mathf.Abs(pos.y-transform.position.y)>snapResolution) bid.jump = true;
+		if (stuck && jumpToAvoid) bid.jump = true;
 	}
 	
 	public void OnDrawGizmos() 
