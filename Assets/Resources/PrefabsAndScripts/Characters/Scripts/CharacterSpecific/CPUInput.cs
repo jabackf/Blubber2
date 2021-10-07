@@ -216,6 +216,7 @@ public class CPUInput : MonoBehaviour
 	public float ladderCheckDistance=14f; //If we are trying to go somewhere that is significantly higher or lower than where we are at, then we will do a raycast to look for a ladder. This is how far to the left or right we will look for a ladder. A ray is drawn in the inspector reflecting this value.
 	public ContactFilter2D climbContactFilter;
 	private GameObject targetLadder; //If this is not null and we are set to goingHome, trackingIncap, or incapGoingHome, or any other mode that attempts to navigate to a target, then we will attempt to climb the ladder to reach our destination if necessary.
+	private Collider2D targetLadderCollider;
 	private float ladderEdgeX=0; //This holds the x position where the raycast hit RELATIVE to the ladder's x position. This is used to position us on the ladder when we arrive.
 	private bool climbStuck=false;
 	public float climbStuckTime = 4f; //A timer to determine if we get stuck climbing the ladder. -1 for none.
@@ -223,6 +224,7 @@ public class CPUInput : MonoBehaviour
 	public climbStuckBehaviors climbStuckBehavior = climbStuckBehaviors.die;
 	private float climbStuckPreviousY=0;
 	private float climbStuckPreviousClimb=0;
+	private float ladderCharacterOffset=0; //Used to help us position the character on the ladder.
 	
 	
 	[Space]
@@ -237,6 +239,7 @@ public class CPUInput : MonoBehaviour
 	public bool printInputState=false;
 	public bool playTestIncap=false; //Attempts to play an incap titled "Test" when set to true.
 	public bool debugGoHome = false; //When set to true, the character stops what it's doing and goes home.
+	public bool debugGoIdle = false; //If you read the previous variable's comment, then I'm sure I don't need to explain to you what this one does.
 	public List<string> debugInputs = new List<string>(); //Enter the name of an input (for example, jump or horizontalMove) and the state will be drawn above the character.
 	public Color debugInputsColor = Color.red;
 	public bool drawTargetGizmo = false;
@@ -304,11 +307,28 @@ public class CPUInput : MonoBehaviour
 					{
 						//The raycast hit a ladder. Let's check to see if it takes us closer to the target's y value.
 						Vector3 cp = h.collider.ClosestPoint(target);
-						if (Mathf.Abs(cp.y-target.y)<=1f)
+						//if (Mathf.Abs(cp.y-target.y)<=1f)
+						if ( Mathf.Abs(Mathf.Abs(cp.y-target.y) - Mathf.Abs(target.y-transform.position.y))>2f && Mathf.Abs(cp.y-target.y) < Mathf.Abs(target.y-transform.position.y) )
 						{
 							//Looks close enough. Let's try using it!
 							targetLadder = h.collider.gameObject;
+							targetLadderCollider = h.collider;
 							ladderEdgeX =  h.collider.ClosestPoint(transform.position).x - targetLadder.transform.position.x;
+							
+							SpriteRenderer r = GetComponent<SpriteRenderer>();
+							ladderCharacterOffset = (r.bounds.extents.x) * (targetLadder.transform.position.x<transform.position.x ? -1f : 1f);
+							
+							//There is an edge case where everything goes all stupid if we're already standing in front of the ladder, so let's fix that.
+							List<RaycastHit2D> ch = new List<RaycastHit2D>();
+							GetComponent<Collider2D>().Cast(Vector2.zero, climbContactFilter, ch, 0f,true);
+							foreach (var o in ch)
+							{
+								if (o.collider.gameObject==targetLadder)
+								{
+									ladderEdgeX=0f; //If we are already colliding with the thing, let's just do the easy thing and climb right up the center of the ladder. Hopefully this works well really fat climb layers (like vines should I ever add those in)
+								}
+							}
+							
 							yIsGood=false;
 						}
 					}
@@ -334,9 +354,14 @@ public class CPUInput : MonoBehaviour
 			{
 				if (targetLadder!=null)
 				{
-					SpriteRenderer r = GetComponent<SpriteRenderer>();
-					float characterOffset = (r.bounds.extents.x) * (targetLadder.transform.position.x<transform.position.x ? -1f : 1f);
-					Vector3 targetLadderPos = new Vector3(targetLadder.transform.position.x+ladderEdgeX+characterOffset,targetLadder.transform.position.y,targetLadder.transform.position.z);
+					bid.dropDown=true; //This stops us from getting stuck on any platforms at the top of the ladder.
+					Vector3 targetLadderPos;
+					if (ladderEdgeX!=0)
+					{
+						targetLadderPos = new Vector3(targetLadder.transform.position.x+ladderEdgeX+ladderCharacterOffset,targetLadder.transform.position.y,targetLadder.transform.position.z);
+					}
+					else
+						targetLadderPos = targetLadder.transform.position;
 					Debug.DrawRay(targetLadderPos,Vector3.up,Color.red);
 					if (Mathf.Abs(targetLadderPos.x-transform.position.x)>snapResolution)
 					{
@@ -346,8 +371,9 @@ public class CPUInput : MonoBehaviour
 					{
 						walkTowards(targetLadderPos);
 						bid.climb = climbSpeed * (target.y<transform.position.y ? -1f : 1f);
-						//Check if the ladder took us to the target area.
-						if (transform.position.y>target.y+0.005f && transform.position.y<target.y+0.3f)
+						//Check if the ladder took us to the target area OR if we are reaching the end of the ladder.
+						float ladderEndY = (target.y<transform.position.y ? targetLadderCollider.bounds.min.y : targetLadderCollider.bounds.max.y);
+						if ((transform.position.y>target.y+0.005f && transform.position.y<target.y+0.3f) || Mathf.Abs(ladderEndY-transform.position.y)<0.1f)
 						{
 							//We seem to be done climbing. Let's try going to the target now!
 							bid.reset();
@@ -572,6 +598,11 @@ public class CPUInput : MonoBehaviour
 		{
 			debugGoHome=false;
 			goHome();
+		}
+		if(debugGoIdle)
+		{
+			debugGoIdle=false;
+			goIdle();
 		}
 		if (record && state!=states.recordInProgress)
 		{

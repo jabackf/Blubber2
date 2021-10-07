@@ -343,6 +343,12 @@ public class CharacterController2D : MonoBehaviour
 			}
         }
     }
+	
+	public void resetActionAim()
+	{
+		if (!isHolding || !canPickup || holding == null) return;
+		holding.resetActionAim();
+	}
 
     public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0, float vertical = 0)
     {

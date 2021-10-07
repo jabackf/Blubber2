@@ -59,6 +59,10 @@ public class CharacterController2D_Input
 		{
 			this.incapSetValue(i,this.initialValues[i]);
 		}
+		
+		//We had better send a button released message to useItem because if we were holding a button down when this was called the action could get stuck.
+		controller.useItemAction(false,false,true);
+		controller.resetActionAim();
 	}
 	
 	//This should be called in Update

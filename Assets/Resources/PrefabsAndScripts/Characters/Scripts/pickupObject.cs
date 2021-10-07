@@ -265,6 +265,15 @@ public class pickupObject : actionInRange
 
         actionAimArc.setAngle(angle);
     }
+	
+	public void resetActionAim()
+	{
+		if (hasActionAim && hasAction)
+        {
+            actionAimArc.setAngle(flippedX ? 180 : 0);
+			if (rotateWithAim) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle + 180 : actionAimArc.angle);
+        }
+	}
 
     //This function controls the actionAim arrow
     public void actionAim(float h, float v)
