@@ -113,6 +113,50 @@ public class CPUInput : MonoBehaviour
 	}
 	
 	[System.Serializable]
+	public enum keyframeActionTriggers //How will we trigger a particular keyframe action?
+	{
+		keyframe, //When the keyframe index equals this value
+		lastKeyframe, //When we hit the final keyframe of the animation
+		percent, //When this percent of the animation has completed (between 0 and 100, with 100 or over being the last frame)
+		time //When a timer hits this value. This time excludes time that was accrued while state was equal to something other that playingIncap (for example, trackingIncap)
+	}
+	[System.Serializable]
+	public class incapKeyframeAction //An incap keyframe action is a particular action that we can specify for a certain point in the animation.
+	{
+		public keyframeActionTriggers keyframeActionTrigger = keyframeActionTriggers.keyframe;
+		public float actionTriggerValue = 0f;
+		public GameObject sendTo; //All messages and say commands will apply to this GameObject. Leave blank if you want it to apply to this character.
+		[HideInInspector] public bool done=false;
+		
+		//Actions
+		public float randomizePitchMin=1f, randomizePitchMax=1f, sayTime = 3f;
+		public List<UnityEvent> callbacks = new List<UnityEvent>();
+		public List<string> sendMessages = new List<string>(); //Send all of the messages
+		public List<string> say = new List<string>(); //Play a random message from this list. If sendTo has a characterController, then sendTo will say it. If not, this character will say it.
+		public List<AudioClip> audioClips = new List<AudioClip>(); //Randomly play one of these sounds
+		[Range(-1, 9)] public int inventoryToggle=-1; //-1 for none. 0-9 to pull things out and put things in inventory slots.
+		
+		public void activate(GameObject gameObject, Global global)
+		{
+			if (this.done) return;
+			this.done=true;
+			
+			if (!sendTo) sendTo=gameObject;
+			
+			foreach (var c in callbacks) c.Invoke();
+			foreach (var m in sendMessages) sendTo.SendMessage(m, SendMessageOptions.DontRequireReceiver);
+			
+			CharacterController2D cont = sendTo.GetComponent<CharacterController2D>();
+			if (!cont) cont = gameObject.GetComponent<CharacterController2D>();
+			cont.Say(say.ToArray(),sayTime);
+			
+			if (audioClips.Count > 0) global.audio.RandomSoundEffect(audioClips.ToArray(), randomizePitchMin, randomizePitchMax);
+			
+			if (inventoryToggle!=-1) cont.inventoryToggleEquip(inventoryToggle);
+		}
+	}
+	
+	[System.Serializable]
 	public class incapAnimation
 	{
 		public string name=""; //The name that will be used to reference this animation
@@ -124,10 +168,8 @@ public class CPUInput : MonoBehaviour
 		public incapTrackingBehavior trackingBehavior = incapTrackingBehavior.snap;
 		public incapEndBehavior behaviorAtStart = incapEndBehavior.goHome; 
 		public incapEndBehavior behaviorAtEnd = incapEndBehavior.goHome;
-		//public UnityEvent startCallback; //Called when the animation begins (after going home, right at the incap start)
-		//public UnityEvent endCallback; //Called when the animation ends (after incap ends but BEFORE going home)
-		//public UnityEvent endHomeCallback; //Called when the animation ends (after incap ends AND after going home)
 		
+		public List<incapKeyframeAction> incapKeyframeActions = new List<incapKeyframeAction>();
 		
 		public void loadKeyframes()
 		{
@@ -145,6 +187,40 @@ public class CPUInput : MonoBehaviour
 			{
 				Debug.Log("KeyFrame: "+i+", Input: "+cont.incapIDToName(k.id)+", Value: "+k.val+", Time: "+k.time+", Pos: "+k.x+","+k.y);
 				i++;
+			}
+		}
+		
+		//Intended to be called for every frame that the animation is playing. currentKeyframe is the keyframe we are currently on. Time is the amount of time that the incap has been playing (exluding trackingIncap mode)
+		//GameObject is a reference to this gameObject character. We also need a global reference.
+		public void updateKeyframeActions(int currentKeyframe, float time, GameObject gameObject, Global global)
+		{
+			//First we reset all of the action done states if we are starting the animation over.
+			if (currentKeyframe==0)
+			{
+				foreach(var a in this.incapKeyframeActions) a.done=false;
+			}
+			
+			//Now we cycle through the actions, determining which ones we need to trigger.
+			foreach (var a in this.incapKeyframeActions)
+			{
+				switch(a.keyframeActionTrigger) 
+				{
+				  case keyframeActionTriggers.keyframe:
+					if (currentKeyframe>=a.actionTriggerValue && !a.done) a.activate(gameObject, global);
+					break;
+				  case keyframeActionTriggers.lastKeyframe:
+					if (currentKeyframe>=keyframes.Count-1 && !a.done) a.activate(gameObject, global);
+					break;
+				  case keyframeActionTriggers.percent:
+					float atv = a.actionTriggerValue;
+					if (atv>100) atv=100;
+					if (atv<0) atv=0;
+					if ( (currentKeyframe/(keyframes.Count-1)*100) >=atv && !a.done) a.activate(gameObject, global);
+					break;
+				  case keyframeActionTriggers.time:
+					if (time>=a.actionTriggerValue && !a.done) a.activate(gameObject, global);
+					break;
+				}
 			}
 		}
 	}
@@ -243,6 +319,12 @@ public class CPUInput : MonoBehaviour
 	public List<string> debugInputs = new List<string>(); //Enter the name of an input (for example, jump or horizontalMove) and the state will be drawn above the character.
 	public Color debugInputsColor = Color.red;
 	public bool drawTargetGizmo = false;
+
+	[Space]
+    [Header("Inspect Incap Playback")]
+	public bool keyframeWait = false; //If set to true, we will pause at every incap keyframe and print the current keyframe number and information to the console.
+	public bool keyframeNext = false; //If keygframeWait is true, this we will have to activate this variable every time we want to advance to the next keyframe.
+	private bool keyframeWaitWasOn=false; //Used to detect when keyframe wait goes from true to false.
 	
 	Global global;
 
@@ -278,7 +360,11 @@ public class CPUInput : MonoBehaviour
 		}
 		
 		
-		if (state==states.playingIncap) incapPlayTime+=Time.deltaTime;
+		if (state==states.playingIncap) 
+		{
+			if (!keyframeWait) incapPlayTime+=Time.deltaTime;
+			currentIncap.updateKeyframeActions(keyframeIndex, incapPlayTime, gameObject, global);
+		}
 
 		
 		//If we're recording, then a playerInput script should be managing the bid updating.
@@ -413,11 +499,11 @@ public class CPUInput : MonoBehaviour
 		}
 		else
 		{
-			bid.UpdateCharacterController(); //If we're recording the a playerInput script should be managing the bid updates.
+			bid.UpdateCharacterController(); //If we're recording then the playerInput script should be managing the bid updates.
 		}
 		
 		//Detect when stuck
-		if (previousHMove==bid.horizontalMove && Mathf.Abs(transform.position.x-previousX)<0.1f && bid.horizontalMove!=0 && stuckTime!=-1)
+		if (previousHMove==bid.horizontalMove && Mathf.Abs(transform.position.x-previousX)<0.1f && bid.horizontalMove!=0 && stuckTime!=-1 && (!keyframeWait||state!=states.playingIncap) )
 		{
 			stuckTimer-=Time.fixedDeltaTime;
 			if (stuckTimer<=0 && stuck!=true)
@@ -444,7 +530,7 @@ public class CPUInput : MonoBehaviour
 		previousHMove=bid.horizontalMove;
 		
 		//Detect if we get stuck on a ladder
-		if (climbStuckPreviousClimb==bid.climb && Mathf.Abs(transform.position.y-climbStuckPreviousY)<0.1f && bid.climb!=0 && targetLadder!=null)
+		if (climbStuckPreviousClimb==bid.climb && Mathf.Abs(transform.position.y-climbStuckPreviousY)<0.1f && bid.climb!=0 && targetLadder!=null && (!keyframeWait||state!=states.playingIncap) )
 		{
 			climbStuckTimer-=Time.fixedDeltaTime;
 			if (climbStuckTimer<=0 && climbStuck!=true)
@@ -539,6 +625,26 @@ public class CPUInput : MonoBehaviour
 			if (currentIncap.trackingBehavior == incapTrackingBehavior.move || currentIncap.trackingBehavior == incapTrackingBehavior.snap) 
 				transform.position = new Vector3(currentIncap.keyframes[keyframeIndex].x,transform.position.y,0);
 			
+			if (keyframeWait && !keyframeNext) 
+			{	
+				if (!bid.isPaused())
+				{					
+					Debug.Log("Paused ["+currentIncap.name+"]. Awaiting keyframeNext to continue.");
+					Debug.Log("KEYFRAME: "+keyframeIndex +" OF "+(currentIncap.keyframes.Count-1));
+					Debug.Log("Input: "+bid.incapIDToName(currentIncap.keyframes[keyframeIndex].id)+", Value: "+currentIncap.keyframes[keyframeIndex].val+", Pos: "+currentIncap.keyframes[keyframeIndex].x+", "+currentIncap.keyframes[keyframeIndex].y+" PlayTime: "+incapPlayTime);
+					bid.pause(true);
+				}
+				return;
+			}
+			else 
+			{
+				if (keyframeWait)
+				{
+					bid.pause(false);
+					keyframeNext = false;
+				}
+			}
+			
 			bid.incapSetValue(currentIncap.keyframes[keyframeIndex].id,currentIncap.keyframes[keyframeIndex].val);
 			//Debug.Log("KEYFRAME: "+keyframeIndex +" OF "+(currentIncap.keyframes.Count-1));
 			keyframeIndex+=1;
@@ -548,6 +654,7 @@ public class CPUInput : MonoBehaviour
 				//Animation finished.
 				keyframeIndex=0;
 				currentIncap.complete=true;
+				incapPlayTime=0f;
 				if (currentIncap.behaviorAtEnd == incapEndBehavior.goHome) state=states.incapGoingHome;
 				else
 				{
@@ -578,6 +685,23 @@ public class CPUInput : MonoBehaviour
 	
 	public void OnValidate()
 	{
+		if (keyframeWait)
+		{
+			keyframeWaitWasOn=true;
+			if (keyframeNext && state==states.playingIncap) 
+				advanceIncapKeyframe();
+			keyframeNext=false;
+		}
+		else
+		{
+			if (keyframeWaitWasOn)
+			{
+				bid.pause(false);
+				if (state==states.playingIncap) 
+					advanceIncapKeyframe();
+				keyframeWaitWasOn=false;
+			}
+		}
 		showHome(showHomeBool);
 		if (printInputState)
 		{
@@ -616,7 +740,6 @@ public class CPUInput : MonoBehaviour
 			player.SendMessage("onControlTaken", SendMessageOptions.DontRequireReceiver);
 			Camera.main.SendMessage("findPlayer", SendMessageOptions.DontRequireReceiver);
 			pi = gameObject.AddComponent<PlayerInput>();
-			pi.controller = GetComponent<CharacterController2D>();
 			pi.aimAngleSpeed = aimAngleSpeed;
 			pi.aimForceSpeed = aimForceSpeed;
 			pi.runSpeed = runSpeed;
@@ -624,7 +747,7 @@ public class CPUInput : MonoBehaviour
 			pi.aimActionForceSpeed = aimActionForceSpeed;
 			pi.climbSpeed = climbSpeed;
 			pi.mouseAim=false;
-			pi.reInit();
+			pi.Init(bid.controller);
 			
 			showHome(true);
 			

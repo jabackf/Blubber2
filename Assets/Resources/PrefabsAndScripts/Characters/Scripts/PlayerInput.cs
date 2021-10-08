@@ -32,15 +32,15 @@ public class PlayerInput : MonoBehaviour
         global = GameObject.FindWithTag("global").GetComponent<Global>();
         //if (mouseAim) controller.setMouseAim(mouseAim);
 		
-		if (bid==null) bid = new CharacterController2D_Input();
-		bid.Init(controller);
+		if (controller!=null) Init(controller);
     }
 	
 	//Calls cc2d_input.init again. 
-	public void reInit()
+	public void Init(CharacterController2D cont)
 	{
 		if (bid==null) bid = new CharacterController2D_Input();
-		bid.Init(controller);
+		controller=cont;
+		bid.Init(cont);
 	}
 
     void Update()
@@ -100,6 +100,17 @@ public class PlayerInput : MonoBehaviour
 					bid.aimActionAngleMove = 0;
 				}
 			}
+			
+			if (Input.GetKeyDown(KeyCode.Alpha0)) bid.inventorySlot = 0;
+			if (Input.GetKeyDown(KeyCode.Alpha1)) bid.inventorySlot = 1;
+			if (Input.GetKeyDown(KeyCode.Alpha2)) bid.inventorySlot = 2;
+			if (Input.GetKeyDown(KeyCode.Alpha3)) bid.inventorySlot = 3;
+			if (Input.GetKeyDown(KeyCode.Alpha4)) bid.inventorySlot = 4;
+			if (Input.GetKeyDown(KeyCode.Alpha5)) bid.inventorySlot = 5;
+			if (Input.GetKeyDown(KeyCode.Alpha6)) bid.inventorySlot = 6;
+			if (Input.GetKeyDown(KeyCode.Alpha7)) bid.inventorySlot = 7;
+			if (Input.GetKeyDown(KeyCode.Alpha8)) bid.inventorySlot = 8;
+			if (Input.GetKeyDown(KeyCode.Alpha9)) bid.inventorySlot = 9;
 		}
 	
 		bid.UpdateInputLogic();

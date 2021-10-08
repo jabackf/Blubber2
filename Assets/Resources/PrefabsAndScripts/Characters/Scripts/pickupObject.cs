@@ -13,6 +13,7 @@ public class pickupObject : actionInRange
     private FixedJoint2D joint; //This is the joint used to connect the object to the character
     private Transform carryTrans;  //The transform used for carrying objects
     public Vector2 offset = new Vector2(0, 0.4f);  //The offset for carrying objects on top
+	public bool canPutInInventory = true; //Set to true for the ability to place the item in your inventory.
     private Vector2 initialOffset;
     public bool disableCollider = true; //if true, the collider will be changed to a trigger when the object is carried.
 	public bool resetScaleOnRelease = true; //If true, the transform scale will be set back to what it initially was before it was picked up after release.

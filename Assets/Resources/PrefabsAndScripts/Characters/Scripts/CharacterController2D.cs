@@ -53,12 +53,82 @@ public class CharacterController2D : MonoBehaviour
     [SerializeField] private Transform m_pickupL;                             // Where to attach objects if carrying them in front left
     [SerializeField] private Transform m_pickupR;                             // Where to attach objects if carrying them in front right
 
+	[Space]
+    [Header("Inventory")]
+	//We can have a very basic inventory system. 
+	public bool hasInventory=true;
+	private const int inventorySlotCount=10;
+	public GameObject inventoryContainer;
+	[System.Serializable]
+	public class inventoryClass
+	{
+		public GameObject slotZero, slotOne, slotTwo, slotThree, slotFour, slotFive, slotSix, slotSeven, slotEight, slotNine;
+
+		public GameObject getObject(int slotNumber)
+		{
+			switch(slotNumber)
+			{
+				case 0: return slotZero; break;
+				case 1: return slotOne; break;
+				case 2: return slotTwo; break;
+				case 3: return slotThree; break;
+				case 4: return slotFour; break;
+				case 5: return slotFive; break;
+				case 6: return slotSix; break;
+				case 7: return slotSeven; break;
+				case 8: return slotEight; break;
+				case 9: return slotNine; break;
+				default: return null;
+			}
+		}
+		public void setObject(int slotNumber, GameObject go)
+		{
+			switch(slotNumber)
+			{
+				case 0:  slotZero=go; break;
+				case 1:  slotOne=go; break;
+				case 2:  slotTwo=go; break;
+				case 3:  slotThree=go; break;
+				case 4:  slotFour=go; break;
+				case 5:  slotFive=go; break;
+				case 6:  slotSix=go; break;
+				case 7:  slotSeven=go; break;
+				case 8:  slotEight=go; break;
+				case 9:  slotNine=go; break;
+			}
+		}
+		public bool isEmpty(int slotNumber)
+		{
+			switch(slotNumber)
+			{
+				case 0: return (slotZero==null); break;
+				case 1: return (slotOne==null); break;
+				case 2: return (slotTwo==null); break;
+				case 3: return (slotThree==null); break;
+				case 4: return (slotFour==null); break;
+				case 5: return (slotFive==null); break;
+				case 6: return (slotSix==null); break;
+				case 7: return (slotSeven==null); break;
+				case 8: return (slotEight==null); break;
+				case 9: return (slotNine==null); break;
+				default: return true;
+			}
+		}
+	}
+	
+	public inventoryClass inventory = new inventoryClass();
+	
+	private bool isHoldingInventoryItem=false;
+
+
     [Space]
     [Header("Climbing")]
     [SerializeField] private bool canClimb = true;                             // Whether or not the player can climb
     [SerializeField] private bool canCarryWhileClimbing = true;                // Whether or not the player can climb while holding something
     [SerializeField] private bool climbWithJump = false;                       // If "Jump" and "Climb" inputs are the same, set this to true to prevent jumping when climbing
     [SerializeField] private LayerMask m_WhatIsClimb;                          // A mask determining what is ground to the character
+
+	
 
     [Space]
     [Header("Other")]
@@ -106,7 +176,9 @@ public class CharacterController2D : MonoBehaviour
     private dropDownPlatform onDropPlatformScript = null;
     public bool isTalking = false;       //Set to true when we are in dialog. 
     public bool pause = false;       //Set to true when we are selecting something from a menu like a color picker, in non-auto dialog, or the pause menu, ect. This freezes all input. 
-    private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
+    private RigidbodyType2D bodyTypeBeforePause;
+	private Vector3 velocityBeforePause;
+	private Transform holdingParentPrevious = null; //Used for transferring the a object to the next scene when scene changing
     private bool controlTaken = false;
 
 
@@ -412,7 +484,6 @@ public class CharacterController2D : MonoBehaviour
 
     public void Move(float move, bool crouch, bool jump, bool pickup = false, float climb = 0, bool dropDown = false, bool dialog = false)
     {
-
         if (isDead || controlTaken || pause) return;
 
         bool justPickedUp = false;
@@ -830,10 +901,16 @@ public class CharacterController2D : MonoBehaviour
     }
     public void unpauseCharacter()
     {
+		m_Rigidbody2D.bodyType = bodyTypeBeforePause;
+		m_Rigidbody2D.velocity = velocityBeforePause;
         pause = false;
     }
     public void pauseCharacter()
     {
+		bodyTypeBeforePause = m_Rigidbody2D.bodyType;
+		velocityBeforePause = m_Rigidbody2D.velocity;
+		m_Rigidbody2D.velocity = Vector3.zero;
+		m_Rigidbody2D.bodyType=RigidbodyType2D.Kinematic;
         pause = true;
     }
     public void setIsOnConveyor(bool val)
@@ -971,6 +1048,7 @@ public class CharacterController2D : MonoBehaviour
 
         currentlyMouseAiming = false;
         isHolding = false;
+		isHoldingInventoryItem=false;
         if (heldObjectChangedScenes)
         {
             global.map.destroyOnSceneChange(holding.gameObject);
@@ -1138,4 +1216,72 @@ public class CharacterController2D : MonoBehaviour
     {
         controlTaken = false;
     }
+	
+	public void inventoryToggleEquip(int slotNumber)
+	{
+		if (isDead || controlTaken || pause) return;
+		if (slotNumber<0 || slotNumber>=inventorySlotCount) return;
+		if (!hasInventory || !canPickup || inventoryContainer==null || isClimbing) return;
+		
+		GameObject slot;
+		if (inventory.isEmpty(slotNumber))
+			slot=null;
+		else
+			slot = inventory.getObject(slotNumber);
+		
+				
+		Debug.Log(slotNumber);
+		
+		if (isHolding && slot==null) 
+		{
+			if (holding.canPutInInventory)
+			{
+				GameObject go = holding.gameObject;
+				holding.releaseFromHolder();
+				inventory.setObject(slotNumber,go);
+				SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+				sr.enabled=false; //We set the sprite renderer to disabled so the drop shadow no longer shows up.
+				go.transform.parent=inventoryContainer.transform;
+				go.SetActive(false);
+			}
+		}
+		else
+		{
+			if (!isHolding) retrieveInventoryItem(slotNumber);
+		}
+	}
+	
+	//This is the function that actually pulls the item out of the inventory. Use inventoryToggleEquip to actually operate the inventory externally
+	private void retrieveInventoryItem(int slotNumber)
+	{
+		if (isDead || controlTaken || pause) return;
+		if (!hasInventory || !canPickup || inventoryContainer==null || isClimbing ) return;
+		if (slotNumber<0 || slotNumber>=inventorySlotCount) return;
+		
+		if (inventory.isEmpty(slotNumber)) return;
+		GameObject slot = inventory.getObject(slotNumber);
+		
+		if (isHolding) 
+			holding.throwItem();
+
+
+		slot.gameObject.SetActive(true);
+		SpriteRenderer sr = slot.gameObject.GetComponent<SpriteRenderer>();
+		sr.enabled=true;
+		slot.gameObject.transform.position=m_pickupTop.position;
+		slot.transform.parent=null;
+		
+
+		holding = slot.GetComponent<pickupObject>();
+		currentlyMouseAiming = false;
+		holding.pickMeUp(gameObject, m_pickupTop, m_FacingRight ? m_pickupR : m_pickupL);
+		isHolding = true;
+		setHoldingUIText(holding.name);
+		setActionObjectInRange(null);
+		if (charAnim != null) charAnim.pickingUp = true;
+		holding.SendMessage("flipSpriteX", !m_FacingRight); //Update the held object's facing direction
+		
+		inventory.setObject(slotNumber,null);
+		isHoldingInventoryItem=true;
+	}
 }

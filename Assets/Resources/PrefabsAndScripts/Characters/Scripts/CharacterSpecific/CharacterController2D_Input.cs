@@ -30,7 +30,10 @@ public class CharacterController2D_Input
     public bool holdingAction = false; //IncapID = 16
     public bool isThrowing = false; //Set to true if we're throwing an object (changing the throw angle and velocity). IncapID = 17
 	
-	public int incapCount = 18; //The number of unique inputs with incap IDs.
+	//Inventory slots
+	public float inventorySlot=-1; //This is used for inventory management. -1 means no inventory slot was selected, any other number corresponds to a slot. IncapID = 18
+	
+	public int incapCount = 19; //The number of unique inputs with incap IDs.
 	
 	public List<float> initialValues = new List<float>();	//This stores the initial state of the input controller. This is used when the input controller is reset.
 	
@@ -120,12 +123,15 @@ public class CharacterController2D_Input
 	//This should get called in FixedUpdate
 	public void UpdateCharacterController()
 	{
+
 		if (!controller.pause && !controller.isCharacterDead() && !global.isSceneChanging()) //Not in dialog mode, not dead, scene isn't changing
         {
             if (!this.isThrowing)
             {
                 controller.Move(this.horizontalMove * Time.fixedDeltaTime, this.crouch, this.jump, this.pickup, this.climb * Time.fixedDeltaTime, this.dropDown, this.dialog);
                 if (this.useItemActionPressed || this.useItemActionHeld || this.useItemActionReleased) controller.useItemAction(this.useItemActionPressed,this.useItemActionHeld,this.useItemActionReleased, this.aimActionForceMove * Time.fixedDeltaTime, this.aimActionAngleMove * Time.fixedDeltaTime);
+				controller.inventoryToggleEquip((int)Mathf.Floor(inventorySlot));
+				if (inventorySlot!=-1) Debug.Log("inv");
             }
             else
             {
@@ -142,6 +148,22 @@ public class CharacterController2D_Input
         this.dialog = false;
         this.useItemActionPressed = false;
         this.useItemActionReleased = false;
+		this.inventorySlot=-1f;
+	}
+	
+	public void pause(bool p=true)
+	{
+		if (p) controller.pauseCharacter();
+		else controller.unpauseCharacter();
+	}
+	public void pauseToggle()
+	{
+		if (controller.pause==false) controller.pauseCharacter();
+		else controller.unpauseCharacter();
+	}
+	public bool isPaused()
+	{
+		return controller.pause;
 	}
 
 	//Returns the value (converted to a float) stored in the input with the corresponding incap id.
@@ -204,12 +226,19 @@ public class CharacterController2D_Input
 			case 17:
 				return (this.isThrowing ? 1f : 0f);
 				break;
+			case 18:
+				return this.inventorySlot;
+				break;
 		}
 		return -1;
 	}
 	
 	public void incapSetValue(int incapID, float newValue)
 	{
+		if (controller!=null)
+		{
+			if (controller.getIsPaused()) return;
+		}
 		switch (incapID)
 		{
 			case 0:
@@ -266,6 +295,9 @@ public class CharacterController2D_Input
 			case 17:
 				this.isThrowing  = (newValue==1f ? true : false);
 				break;
+			case 18:
+				this.inventorySlot  = newValue;
+			break;
 		}
 	}
 	
@@ -327,6 +359,9 @@ public class CharacterController2D_Input
 				break;
 			case 17:
 				return "isThrowing";
+				break;
+			case 18:
+				return "inventorySlot";
 				break;
 		}
 		return "none";
@@ -390,6 +425,9 @@ public class CharacterController2D_Input
 				break;
 			case "isThrowing":
 				return 17;
+				break;
+			case "inventorySlot":
+				return 18;
 				break;
 		}
 		return -1;
