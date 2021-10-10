@@ -12,7 +12,10 @@ public class sceneSettings : MonoBehaviour
 {
     Global global;
 
-    [Header("Message")]
+	
+
+    [Header("Names and Messages")]
+	public string sceneName = "";
     public string bottomMessage = "";
 
     [Header("Background Music")]
@@ -182,4 +185,9 @@ public class sceneSettings : MonoBehaviour
         }
         return copy as T;
     }
+	
+	public string getSceneName()
+	{
+		return sceneName;
+	}
 }

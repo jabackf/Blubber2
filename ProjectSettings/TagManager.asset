@@ -40,6 +40,10 @@ TagManager:
   - crystal
   - TNT_DestroyTrigger
   - Conveyor
+  - NPCTagOne
+  - NPCTagTwo
+  - NPCTagThree
+  - NPCTagFour
   layers:
   - Default
   - TransparentFX

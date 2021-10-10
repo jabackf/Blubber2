@@ -8,7 +8,9 @@ public class cameraFollowPlayer : MonoBehaviour
     public bool active = true; //When set to false everything in the script functions except for the actions that move the camera to follow the player
 
     public string followTag = "Player"; //The tag of the object to follow
-    public string sceneBoundaryTag = "sceneBoundary"; //OPTIONAL The tag of the sceneBoundary object to prevent the camera from moving outside of the scene boundaries
+	private bool focusTaken=false; //Focus can be taken off of the player and put elsewhere for cutscenes and stuff. Do this by calling takeFocus(Transform T) and returnFocus(). When that has happened, this is set to true.
+    private Transform previousTransform; //Used to return focus after focus was taken.
+	public string sceneBoundaryTag = "sceneBoundary"; //OPTIONAL The tag of the sceneBoundary object to prevent the camera from moving outside of the scene boundaries
     public float offset = 2;
     private sceneBoundary boundary;
     private Vector3 playerPosition;
@@ -308,6 +310,24 @@ public class cameraFollowPlayer : MonoBehaviour
         }
        
     }
+	
+	public void takeFocus(Transform T)
+	{
+		if (focusTaken) return;
+		if (T!=null)
+		{
+			previousTransform=playerT;
+			playerT=T;
+			focusTaken=true;
+		}
+	}
+	
+	public void returnFocus()
+	{
+		if (!focusTaken) return;
+		focusTaken=false;
+		playerT = previousTransform;
+	}
 
     //Use these functions to trigger shakes of various magnitudes and durations
     public void TriggerShake() //This uses default settings

@@ -118,6 +118,7 @@ public class CharacterController2D_Input
 			}
 
 		} //end !isThrowing
+		
 	}
 	
 	//This should get called in FixedUpdate
@@ -131,7 +132,7 @@ public class CharacterController2D_Input
                 controller.Move(this.horizontalMove * Time.fixedDeltaTime, this.crouch, this.jump, this.pickup, this.climb * Time.fixedDeltaTime, this.dropDown, this.dialog);
                 if (this.useItemActionPressed || this.useItemActionHeld || this.useItemActionReleased) controller.useItemAction(this.useItemActionPressed,this.useItemActionHeld,this.useItemActionReleased, this.aimActionForceMove * Time.fixedDeltaTime, this.aimActionAngleMove * Time.fixedDeltaTime);
 				controller.inventoryToggleEquip((int)Mathf.Floor(inventorySlot));
-				if (inventorySlot!=-1) Debug.Log("inv");
+				//if (inventorySlot!=-1) Debug.Log("inv");
             }
             else
             {
@@ -235,6 +236,7 @@ public class CharacterController2D_Input
 	
 	public void incapSetValue(int incapID, float newValue)
 	{
+		if (incapID==-1) return;
 		if (controller!=null)
 		{
 			if (controller.getIsPaused()) return;

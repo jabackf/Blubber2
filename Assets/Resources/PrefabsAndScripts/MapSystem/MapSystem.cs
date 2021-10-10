@@ -271,6 +271,8 @@ public class MapSystem
         settings = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>() as sceneSettings;
 
         global.sceneChanging = false;
+		
+		global.onSceneChanged();
     }
 
     //Removes any objects matching the specified resource from instantiateOnLoadList. Does not destroy instantiated objects!
@@ -347,4 +349,9 @@ public class MapSystem
         string[] m = map.Split(splitter);
         return m[0];
     }
+	
+	public string getCurrentMap()
+	{
+		return currentMap;
+	}
 }

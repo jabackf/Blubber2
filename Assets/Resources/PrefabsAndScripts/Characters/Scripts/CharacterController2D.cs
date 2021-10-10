@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public class CharacterController2D : MonoBehaviour
@@ -57,6 +58,7 @@ public class CharacterController2D : MonoBehaviour
     [Header("Inventory")]
 	//We can have a very basic inventory system. 
 	public bool hasInventory=true;
+	public bool infiniteInventory=false; //If set to true, pulling an item out of the inventory will make a duplicate instead of actually removing it. So the item can be pulled out repeatedly indefinitely and the slot will never be empty. Might be useful for NPCs.
 	private const int inventorySlotCount=10;
 	public GameObject inventoryContainer;
 	[System.Serializable]
@@ -901,18 +903,25 @@ public class CharacterController2D : MonoBehaviour
     }
     public void unpauseCharacter()
     {
+		if (!pause) return;
 		m_Rigidbody2D.bodyType = bodyTypeBeforePause;
 		m_Rigidbody2D.velocity = velocityBeforePause;
         pause = false;
     }
     public void pauseCharacter()
     {
+		if (pause) return;
 		bodyTypeBeforePause = m_Rigidbody2D.bodyType;
 		velocityBeforePause = m_Rigidbody2D.velocity;
 		m_Rigidbody2D.velocity = Vector3.zero;
 		m_Rigidbody2D.bodyType=RigidbodyType2D.Kinematic;
         pause = true;
     }
+	public void setPause(bool p)
+	{
+		if (p) pauseCharacter();
+		else unpauseCharacter();
+	}
     public void setIsOnConveyor(bool val)
     {
         isOnConveyor = val;
@@ -967,6 +976,21 @@ public class CharacterController2D : MonoBehaviour
     public void FaceRight()
     {
         if (!m_FacingRight) Flip();
+    }
+	
+	//Looks for the first object with the supplied tag and and faces towards it
+	public void FaceTag(string tag)
+    {
+		GameObject go = GameObject.FindWithTag(tag);
+		if (go!=null)
+			FacePosition(go.transform.position);
+    }
+	
+	//Faces in the direction of the supplied position.
+	public void FacePosition(Vector3 pos)
+    {
+		if (pos.x<transform.position.x) FaceLeft();
+		if (pos.x>transform.position.x) FaceRight();
     }
 	
 	public void stopClimbing()
@@ -1258,8 +1282,18 @@ public class CharacterController2D : MonoBehaviour
 		if (!hasInventory || !canPickup || inventoryContainer==null || isClimbing ) return;
 		if (slotNumber<0 || slotNumber>=inventorySlotCount) return;
 		
+		GameObject slot;
+		
 		if (inventory.isEmpty(slotNumber)) return;
-		GameObject slot = inventory.getObject(slotNumber);
+		else
+		{
+			if (infiniteInventory) 
+			{
+				slot = Instantiate(inventory.getObject(slotNumber));
+				slot.name=inventory.getObject(slotNumber).name; //We don't want it to have the (Clone) thing at the end.
+			}
+			else slot = inventory.getObject(slotNumber);
+		}
 		
 		if (isHolding) 
 			holding.throwItem();
@@ -1273,6 +1307,16 @@ public class CharacterController2D : MonoBehaviour
 		
 
 		holding = slot.GetComponent<pickupObject>();
+		Invoke("inventoryDelayPickup",0.005f);
+		
+		if (!infiniteInventory) inventory.setObject(slotNumber,null);
+		isHoldingInventoryItem=true;
+	}
+	
+	//If we're using infiniteInventory, then a clone will be made of the item. Since the item was just instantiated and not fully initialized, glitches happen if we pick it up immediately.
+	//This is my pathetically lazy work around.
+	private void inventoryDelayPickup()
+	{
 		currentlyMouseAiming = false;
 		holding.pickMeUp(gameObject, m_pickupTop, m_FacingRight ? m_pickupR : m_pickupL);
 		isHolding = true;
@@ -1280,8 +1324,32 @@ public class CharacterController2D : MonoBehaviour
 		setActionObjectInRange(null);
 		if (charAnim != null) charAnim.pickingUp = true;
 		holding.SendMessage("flipSpriteX", !m_FacingRight); //Update the held object's facing direction
-		
-		inventory.setObject(slotNumber,null);
-		isHoldingInventoryItem=true;
+	}
+	
+	//Checks the inventory for an object with the supplied name.
+	public bool hasInInventory(string name)
+	{
+		for (int i=0; i<inventorySlotCount; i++)
+		{
+			if (!inventory.isEmpty(i))
+			{
+				if (inventory.getObject(i).name==name) return true;
+			}
+		}
+		return false;
+	}
+	
+	//Returns a string list of gameObject.name for all items in inventory.
+	public List<string> getInventoryList()
+	{
+		List<string> list = new List<string>();
+		for (int i=0; i<inventorySlotCount; i++)
+		{
+			if (!inventory.isEmpty(i))
+			{
+				list.Add(inventory.getObject(i).name);
+			}
+		}
+		return list;
 	}
 }

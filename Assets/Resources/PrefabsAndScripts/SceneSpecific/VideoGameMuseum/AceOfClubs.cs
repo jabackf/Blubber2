@@ -9,11 +9,17 @@ public class AceOfClubs : MonoBehaviour
 	private Vector2 vel;
 	float gravity=-0.7f;
 	public GameObject museumCurator;
+	public AudioClip activateSound;
+	Global global;
 	
-	float dummyTime = 0.009f;	//How frequently the card creates a dummy card. The lower the number, the more dummy cards.
-	float dummyTimer=0f;
+	/*float dummyTime = 0.009f;	//How frequently the card creates a dummy card. The lower the number, the more dummy cards.
+	float dummyTimer=0f;*/
+	
+	public float dummyDistance = 0.12f; //The distance that dummy cards are spaced out. A larger value mores more space between cards and fewer cards.
+	float distanceTraveled=0;
+	Vector3 positionPrevious;
+	
 	int dummyCounter=0;
-	
 	public GameObject dummyCard;
 	public Transform floorTransform;	//Used to mark the floor and far left boundaries
 	Vector3 boundaries;	//Actually stores the values of the supplied transform at the start.
@@ -29,6 +35,7 @@ public class AceOfClubs : MonoBehaviour
 		boundaries = floorTransform.position;
 		initialPosition=transform.position;
 		renderer=GetComponent<SpriteRenderer>();
+		global = GameObject.FindWithTag("global").GetComponent<Global>();
     }
 
 	void Update()
@@ -42,6 +49,18 @@ public class AceOfClubs : MonoBehaviour
 				vel.y*=-0.8f;
 			}
 			
+			distanceTraveled += Vector3.Distance(positionPrevious,transform.position);
+			if (distanceTraveled>=dummyDistance)
+			{
+				dummyCounter+=1;
+				GameObject go = GameObject.Instantiate(dummyCard, null);
+				go.transform.position = transform.position;
+				distanceTraveled = 0;
+				go.SetActive(true);
+				go.GetComponent<SpriteRenderer>().sortingOrder = renderer.sortingOrder+dummyCounter;
+			}
+			
+			/*
 			if (dummyTimer<=0)
 			{
 				dummyCounter+=1;
@@ -52,11 +71,11 @@ public class AceOfClubs : MonoBehaviour
 				dummyTimer=dummyTime;
 				
 			}
-			dummyTimer-=Time.deltaTime;
+			dummyTimer-=Time.deltaTime;*/
 			
 			if (transform.position.x<boundaries.x)
 			{
-				dummyTimer=0;
+				//dummyTimer=0;
 				transform.position = initialPosition;
 				vel = new Vector2(0,0);
 				active = false;
@@ -64,6 +83,7 @@ public class AceOfClubs : MonoBehaviour
 				
 			}
 			
+			positionPrevious=transform.position;
 			transform.position = new Vector3(transform.position.x+vel.x*Time.deltaTime, transform.position.y+vel.y*Time.deltaTime, transform.position.z);
 
 		}
@@ -75,9 +95,11 @@ public class AceOfClubs : MonoBehaviour
 	{
 		if (active) return;
 		transform.position = initialPosition;
+		distanceTraveled = 0;
+		positionPrevious=transform.position;
 		vel = new Vector2(-5f,14f);
 		active = true;
-		
+		global.audio.Play(activateSound);
 		Invoke("notifyCurator",1f);
 	}
 

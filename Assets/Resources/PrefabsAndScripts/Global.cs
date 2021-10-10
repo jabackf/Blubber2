@@ -15,8 +15,12 @@ public class Global : MonoBehaviour
     public MapSystem map;
     [HideInInspector] public bool sceneChanging = false; //This is set to true/false by the mapsystem. As soon as a scene change is triggered and a transition starts, this is marked true. It is marked false at the start of the new scene
 
+	//Some useful handles
     public AudioManager audio;
     public AudioSource audioEffectsSource, audioMusicSource;
+	
+	public cameraFollowPlayer camera_follow_player;
+	public sceneSettings scene_settings;
 
     [Space]
     [Header("Directories")]
@@ -66,6 +70,9 @@ public class Global : MonoBehaviour
         audio.EffectsSource = audioEffectsSource;
         audio.MusicSource = audioMusicSource;
         audio.Start(gameObject);
+		
+		scene_settings = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>();
+		camera_follow_player = GameObject.FindWithTag("MainCamera").GetComponent<cameraFollowPlayer>();
     }
 
     private void Start()
@@ -90,6 +97,52 @@ public class Global : MonoBehaviour
     {
         audio.onSceneChanging();
     }
+	
+	//Called by map system when the scene has finished changing.
+	public void onSceneChanged()
+	{
+		scene_settings = GameObject.FindWithTag("SceneSettings").GetComponent<sceneSettings>();
+		camera_follow_player = GameObject.FindWithTag("MainCamera").GetComponent<cameraFollowPlayer>();
+	}
+	
+	//Returns the name of the map. If getFullName is false, we only return the mapname portion of mapname_xpos_ypos. Otherwise we return the whole string.
+	public string getMapName(bool getFullName=false)
+	{
+		if (getFullName) return map.getCurrentMap();
+		else return map.getMapName(map.getCurrentMap());
+	}
+	
+	//The scene name is not the same as the map name. The map name is the actual file (mapnam_x_y). The scene name is stored in the sceneSettings object. It is a more end user friendly name for the scene.
+	public string getSceneName()
+	{
+		if (scene_settings!=null) return scene_settings.getSceneName();
+		else return "";
+	}
+	
+	public GameObject getPlayer()
+	{
+		return GameObject.FindWithTag("Player");
+	}
+	public CharacterController2D getPlayerController()
+	{
+		GameObject p = getPlayer();
+		if (p) return p.GetComponent<CharacterController2D>();
+		return null;
+	}
+	
+	public bool pausePlayer(bool paused=true)
+	{
+		GameObject p = GameObject.FindWithTag("Player");
+		CharacterController2D cc2d;
+		
+		if (p!=null) cc2d = p.GetComponent<CharacterController2D>();
+		else return false;
+		
+		if (cc2d!=null) cc2d.setPause(paused);
+		else return false;
+		
+		return true;
+	}
 
     //Called when a field in the editor is changed
     private void OnValidate()
