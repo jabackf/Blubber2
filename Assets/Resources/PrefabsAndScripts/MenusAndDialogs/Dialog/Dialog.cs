@@ -397,6 +397,10 @@ public class Dialog : MonoBehaviour
         {
             onScreenTimer = entries[index].timeOnScreen > 0 ? (entries[index].timeOnScreen+addToTimer) * autoOnTimeMultiplier : (defaultOnScreenTime+addToTimer) * autoOnTimeMultiplier;
         }
+		
+		//CPUInput might want to know, so let's notify it (if we have one)
+		CPUInput cpu = gameObject.GetComponent<CPUInput>();
+		if (cpu!=null) cpu.onDialogInitiate();
     }
 
     //Returns a list of all unique group id's in the entry list
@@ -585,6 +589,10 @@ public class Dialog : MonoBehaviour
         {
             c.Invoke(lastAnswer);
         }
+		
+		//CPUInput might want to know, so let's notify it (if we have one)
+		CPUInput cpu = gameObject.GetComponent<CPUInput>();
+		if (cpu!=null) cpu.onDialogComplete();
     }
 
     //Ends the conversation, but also calls KillBox so the conversation stops immediately and the dbox timers are cancelled.

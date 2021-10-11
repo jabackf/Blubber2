@@ -8,6 +8,8 @@ using UnityEngine;
 public class actionInRange : MonoBehaviour
 {
     public bool rangeActive = true;
+	
+	public bool deactivate=false; //Set to true to turn the whole range system off.
 
     public GameObject ActionIconPrefab; //A prefab object for the action icon
     public string rangeColliderTag = "RangeCollider";  //This is the tag that any range colliders should have
@@ -156,6 +158,7 @@ public class actionInRange : MonoBehaviour
     }
     public void setInRange(bool inRange, GameObject go, bool visible=true)
     {
+		if (deactivate) return;
         if (!iScript) iScript = ActionIcon.GetComponent<actionIcon>();
         if (iScript && visible) iScript.setVisible(inRange);
         range = inRange;

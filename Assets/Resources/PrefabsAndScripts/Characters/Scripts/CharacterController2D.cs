@@ -61,6 +61,11 @@ public class CharacterController2D : MonoBehaviour
 	public bool infiniteInventory=false; //If set to true, pulling an item out of the inventory will make a duplicate instead of actually removing it. So the item can be pulled out repeatedly indefinitely and the slot will never be empty. Might be useful for NPCs.
 	private const int inventorySlotCount=10;
 	public GameObject inventoryContainer;
+	
+	[System.Serializable]
+	public enum equiptAtStartOptions {none, SlotZero, SlotOne, SlotTwo, SlotThree, SlotFour, SlotFive, SlotSix, SlotSeven, SlotEight, SlotNine}
+	public equiptAtStartOptions equiptAtStart = equiptAtStartOptions.none;
+	
 	[System.Serializable]
 	public class inventoryClass
 	{
@@ -268,6 +273,25 @@ public class CharacterController2D : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
 
         if (startFlipped) Flip();
+		
+		if (hasInventory && inventoryContainer!=null && equiptAtStart!=equiptAtStartOptions.none)
+		{
+			int slot = 0;
+			switch (equiptAtStart)
+			{
+				case equiptAtStartOptions.SlotZero: slot=0; break;
+				case equiptAtStartOptions.SlotOne: slot=1; break;
+				case equiptAtStartOptions.SlotTwo: slot=2; break;
+				case equiptAtStartOptions.SlotThree: slot=3; break;
+				case equiptAtStartOptions.SlotFour: slot=4; break;
+				case equiptAtStartOptions.SlotFive: slot=5; break;
+				case equiptAtStartOptions.SlotSix: slot=6; break;
+				case equiptAtStartOptions.SlotSeven: slot=7; break;
+				case equiptAtStartOptions.SlotEight: slot=8; break;
+				case equiptAtStartOptions.SlotNine: slot=9; break;
+			}
+			retrieveInventoryItem(slot);
+		}
     }
 
     void LateUpdate()
@@ -422,6 +446,18 @@ public class CharacterController2D : MonoBehaviour
 	{
 		if (!isHolding || !canPickup || holding == null) return;
 		holding.resetActionAim();
+	}
+	
+	//Move the aiming reticle to point at a supplied position.
+	public void actionAimAtPosition(Vector3 pos)
+	{
+		if (isDead) return;
+        if (!isHolding || !canPickup || holding == null) return;
+		
+		holding.setActionAimAngleTowardsPoint(pos);
+		
+		if (pos.x < transform.position.x) FaceLeft();
+		if (pos.x > transform.position.x) FaceRight();
 	}
 
     public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0, float vertical = 0)
@@ -1253,8 +1289,6 @@ public class CharacterController2D : MonoBehaviour
 		else
 			slot = inventory.getObject(slotNumber);
 		
-				
-		Debug.Log(slotNumber);
 		
 		if (isHolding && slot==null) 
 		{

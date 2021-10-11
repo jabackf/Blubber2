@@ -22,12 +22,15 @@ public class CPUInput : MonoBehaviour
 		recordInProgress,
 		trackingIncap, //We're playing an incap, but we're pausing for a second to get back on track between keyframes.
 		goingHome,
-		incapGoingHome //We're at the start or end of an animation and have to go home before continuing.
+		incapGoingHome, //We're at the start or end of an animation and have to go home before continuing.
+		dialogIncap //We're in the middle of an incap playback, but a dialog has been triggered and we are waiting for it to finish.
 	}
 	public states state=states.idle;
 	public CharacterController2D controller;
 	public Transform homeTransform; //This is the transform used for the homeMarker. If null, we will just use the character's start position.
 	[HideInInspector] public CharacterController2D_Input bid;
+	[HideInInspector] public Dialog dialog;
+	[HideInInspector] public DialogRange dialogRange;
 	
 	//An incap animation is just a list of incapKeyframes. A keyframe is created for every instance when a CharacterController2D_Input field changes.
 	[System.Serializable]
@@ -99,7 +102,8 @@ public class CPUInput : MonoBehaviour
 		//What should we do at the start or end of the incap animation?
 		goHome, //Move towards home.
 		jumpHome, //Instantaneously jump home
-		none //Just stay where you're at
+		goIdle, //Calls goIdle.
+		none //Doesn't do anything. More than likely the same result as goIdle.
 	}
 	
 	[System.Serializable]
@@ -145,6 +149,17 @@ public class CPUInput : MonoBehaviour
 		none,
 		takeFocus,
 		returnFocus
+	}
+	
+	[System.Serializable]
+	public enum dialogOptions //Options for how to manage an attached Dialog script while an incap is playing.
+	{
+		none, //Take no action. Just let the dialog and animation do their thing without interference from one another.
+		noDialog, //Prevent the dialog script from being initiated while the animation is playing.
+		pauseAnimation, //Pause the animation to finish the dialog, then resume at the last keyframe.
+		restartAnimation, //After the dialog completes, restart the animation from the start.
+		goIdle, //Stops the animation entirely and stays in idle mode after dialog completes
+		goHome //Stops the animation entirely and goes home after dialog completes.
 	}
 	
 	[System.Serializable]
@@ -201,6 +216,7 @@ public class CPUInput : MonoBehaviour
 		[HideInInspector] public List<incapKeyframe> keyframes;
 		[HideInInspector] public bool loaded=false; //Set to true after the keyframes have been loaded.
 		public TextAsset incapFile;
+		public bool testIncap = false; //Set to true to play the incap. This is just a useful way to test the incap from the inspector.
 		public bool loop=true;
 		public bool freezePlayer=false; //Freezes the player for the duration of the animation, or until a keyframe action unfreezes him.
 		public bool takeFocus=false;	//Takes camera focus away from the player and puts it on this character for the duration of the animation, or until a keyframe action returns focus.
@@ -210,6 +226,7 @@ public class CPUInput : MonoBehaviour
 		public incapEndBehavior behaviorAtEnd = incapEndBehavior.goHome;
 		public bool facePlayerTowardsCharacter = false; //If set to true, the player's facing direction will be set to face this character at the start of the animation.
 		public facingDirectionOptions facingAtEnd = facingDirectionOptions.noChange; //This is what direction the character will turn to at the end of the animation.
+		public dialogOptions onDialogTrigger = dialogOptions.none;
 		public bool startFrameZeroImmediately=false; //If set to true we won't wait for keyframes[0].time. We will just immediately start with keyframes[0] at the start of the animation. We WILL still wait for startTimeDelay though.
 		public float startTimeDelay=0f;	//This is a delay that can be added at the start after going home, before hitting play on the animation.
 		public float addTimeToEnd = 0f; //If this is greater than zero, then an additional keyframe will be added this amount of time after the last. The keyframe will contain no actions and only acts as padding for the end of the animation. If you change this value at runtime then it will have no effect unless you call loadKeyframes again to reload the keyframes.
@@ -450,6 +467,7 @@ public class CPUInput : MonoBehaviour
 	int keyframeIndex=0; //This stores the index of the keyframe list that we are on for the currently playing incap. It's like the playhead.
 	public List<incapAnimation> incapAnimations; //These are all of the incap animations for this character
 	private bool startTimeDelayWait=false;	//Incaps have an optional startTimeDelay. This is set to true after we call playIncap and before the delay has finished.
+	private states stateBeforeDialogInteruption=states.playingIncap; //Used to return to our prior state if we were playing an incap, tracking, or going home to play an incap and we got interupted with a dialog.
 	
 	[Space]
     [Header("Triggers")]
@@ -516,14 +534,24 @@ public class CPUInput : MonoBehaviour
 	//Arrive Home
 	public arriveHomeBehaviors arriveHomeBehavior = arriveHomeBehaviors.idle;
 	
+	public Transform actionAimAtTransform; //If set, the character's action aim will track this object.
+	public string actionAimAtTag=""; //If actionAimAtTransform is null and actionAimAtTag is not empty, then we will find the object with this tag and set actionAimAtTransform to it's transform.
+	
+	public Transform actionOnDistanceTransform; //If specified and actionOnDistance > 0,  the action keys will be held down as long as this transform is in range.
+	public string actionOnDistanceTag = ""; //If actionAimAtTransform is null, then we can check this tag (if it's not empty) to find actionAimAtTransform
+	public float actionOnDistanceValue=0; //The distance value used for the previous two variables.
+	private bool actionOnDistanceTriggered = false; //Used to determine when actionOnDistance has been triggered.
+	
+	public Transform faceTowardsTransform; //If set, the character's facing direction will point towards this transform
+	public string faceTowardsTag=""; //If faceTowardsTransform is null and this tag is not empty, then we will find the object with this tag and set faceTowardsTransform to it.
+	public bool faceTowardsOnIdleOnly=false; //If true, the faceTowards feature only works when the character is in idle mode. If false, it works at all times.
+	
 	[Space]
     [Header("Debug")]
 	public bool showHomeBool=false;
 	public bool printCurrentIncapFrames=false;
 	public bool printInputState=false;
 	public bool printKeyframeNumber=false;
-	public bool playTestIncap=false; //Plays the specified incap
-	public string testIncapName="";
 	public bool debugGoHome = false; //When set to true, the character stops what it's doing and goes home.
 	public bool debugGoIdle = false; //If you read the previous variable's comment, then I'm sure I don't need to explain to you what this one does.
 	public List<string> debugInputs = new List<string>(); //Enter the name of an input (for example, jump or horizontalMove) and the state will be drawn above the character.
@@ -558,6 +586,9 @@ public class CPUInput : MonoBehaviour
 		r.color=myr.color;
 		homeMarker.SetActive(showHomeBool);
 		
+		dialog = gameObject.GetComponent<Dialog>();
+		dialogRange = gameObject.GetComponent<DialogRange>();
+		
 		foreach (var a in incapAnimations) a.loadKeyframes();
 		
     }
@@ -575,11 +606,77 @@ public class CPUInput : MonoBehaviour
 			if (!keyframeWait) incapPlayTime+=Time.deltaTime;
 			if (!startTimeDelayWait)currentIncap.updateKeyframeActions(keyframeIndex, incapPlayTime, gameObject, global);
 		}
-
 		
-		//If we're recording, then a playerInput script should be managing the bid updating.
 		if (state!=states.recordInProgress)
-			bid.UpdateInputLogic();
+		{
+			if (bid.controller.holdingSomething())
+			{
+				if (actionOnDistanceValue>0)
+				{
+					if (actionOnDistanceTag!="" && actionOnDistanceTransform==null)
+					{
+						GameObject go = GameObject.FindWithTag(actionOnDistanceTag);
+						if (go) actionOnDistanceTransform = go.transform;
+					}
+					if (actionOnDistanceTransform!=null)
+					{
+						if (Vector2.Distance(actionOnDistanceTransform.position,gameObject.transform.position)<=actionOnDistanceValue)
+						{
+							actionOnDistanceTriggered=true;
+							if (!bid.useItemActionHeld) 
+								bid.useItemActionPressed=true;
+						}
+						else
+						{
+							if (actionOnDistanceTriggered)
+							{
+								actionOnDistanceTriggered=false;
+								if (bid.useItemActionHeld) 
+									bid.useItemActionReleased=true;
+							}
+						}
+					}
+					else
+					{
+						if (actionOnDistanceTriggered)
+						{
+							actionOnDistanceTriggered=false;
+							if (bid.useItemActionHeld) 
+								bid.useItemActionReleased=true;
+						}
+					}
+				}
+			}
+			
+			if (actionAimAtTag!="" && actionAimAtTransform==null)
+			{
+				GameObject go = GameObject.FindWithTag(actionAimAtTag);
+				if (go) actionAimAtTransform = go.transform;
+			}
+			if (actionAimAtTransform!=null)
+			{
+				bid.controller.actionAimAtPosition(actionAimAtTransform.position);
+			}
+			
+			
+			if (faceTowardsTag!="" && faceTowardsTransform==null)
+			{
+				GameObject go = GameObject.FindWithTag(faceTowardsTag);
+				if (go) faceTowardsTransform = go.transform;
+			}
+			if (faceTowardsTransform!=null)
+			{
+				if (faceTowardsOnIdleOnly)
+				{
+					if (state==states.idle) bid.controller.FacePosition(faceTowardsTransform.position);
+				}
+				else
+					bid.controller.FacePosition(faceTowardsTransform.position);
+			}
+			
+			
+			bid.UpdateInputLogic(); //If we're recording, then a playerInput script should be managing the bid updating, which is why we have placed it in the block that it's in.
+		}
 
     }
 
@@ -789,6 +886,7 @@ public class CPUInput : MonoBehaviour
 					startTimeDelayWait=true;
 					if (currentIncap.behaviorAtStart==incapEndBehavior.jumpHome) jumpCharacter(homeMarker.transform.position);
 					currentIncap.startOfAnimation(gameObject, global);
+					if (currentIncap.onDialogTrigger==dialogOptions.noDialog) dialogRange.deactivate=true;
 					Invoke("advanceIncapKeyframe",(currentIncap.startFrameZeroImmediately ? currentIncap.startTimeDelay+ currentIncap.getCurrentFrameTimeModifier() : currentIncap.keyframes[keyframeIndex].time+currentIncap.startTimeDelay + currentIncap.getCurrentFrameTimeModifier()));
 				}
 				return true;
@@ -870,15 +968,14 @@ public class CPUInput : MonoBehaviour
 				keyframeIndex=0;
 				currentIncap.complete=true;
 				incapPlayTime=0f;
+				if (currentIncap.onDialogTrigger==dialogOptions.noDialog) dialogRange.deactivate=false;
+				
 				if (currentIncap.behaviorAtEnd == incapEndBehavior.goHome) goHome();
-				else
-				{
-					if (currentIncap.behaviorAtEnd == incapEndBehavior.jumpHome) jumpCharacter(homeMarker.transform.position);
-					if (currentIncap.loop) 
-						playIncap(currentIncap.name);
-					else 
-						goIdle();
-				}
+				if (currentIncap.behaviorAtEnd == incapEndBehavior.goIdle) goIdle();
+				if (currentIncap.behaviorAtEnd == incapEndBehavior.jumpHome) jumpCharacter(homeMarker.transform.position);
+				
+				if (currentIncap.loop) 
+					playIncap(currentIncap.name);
 				
 				return;
 			}
@@ -932,10 +1029,13 @@ public class CPUInput : MonoBehaviour
 			printCurrentIncapFrames=false;
 			currentIncap.printKeyFrameData(bid);
 		}
-		if(playTestIncap)
+		foreach(var a in incapAnimations)
 		{
-			playTestIncap=false;
-			playIncap(testIncapName);
+			if (a.testIncap==true)
+			{
+				playIncap(a.name);
+				a.testIncap=false;
+			}
 		}
 		if(debugGoHome)
 		{
@@ -1184,5 +1284,41 @@ public class CPUInput : MonoBehaviour
 	public string getCharacterName()
 	{
 		return bid.controller.name;
+	}
+	
+	//These two functions are called by the Dialog script.
+	public void onDialogInitiate()
+	{
+		if (state==states.playingIncap || state==states.trackingIncap || state==states.incapGoingHome)
+		{
+			if (currentIncap.onDialogTrigger != dialogOptions.none && currentIncap.onDialogTrigger != dialogOptions.noDialog)
+			{
+				stateBeforeDialogInteruption=state;
+				goIdle();
+				state=states.dialogIncap;
+			}
+		}
+	}
+	public void onDialogComplete()
+	{
+		if (state==states.dialogIncap)
+		{
+			switch(currentIncap.onDialogTrigger)
+			{
+				case dialogOptions.pauseAnimation:
+					state=stateBeforeDialogInteruption;
+					advanceIncapKeyframe();
+				break;
+				case dialogOptions.restartAnimation:
+					playIncap(currentIncap.name);
+				break;
+				case dialogOptions.goIdle:
+					goIdle();
+				break;
+				case dialogOptions.goHome:
+					goHome();
+				break;
+			}
+		}
 	}
 }

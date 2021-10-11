@@ -769,6 +769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeActive: 1
+  deactivate: 0
   ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
     type: 3}
   rangeColliderTag: RangeCollider
@@ -2122,7 +2123,9 @@ MonoBehaviour:
   state: 0
   controller: {fileID: 474771858}
   homeTransform: {fileID: 0}
-  saveFileName: eugene_dont_throw_poop
+  dialog: {fileID: 0}
+  dialogRange: {fileID: 0}
+  saveFileName: eugene_testing
   record: 0
   cancelRecording: 0
   incapAnimations:
@@ -2130,6 +2133,7 @@ MonoBehaviour:
     keyframes: []
     loaded: 0
     incapFile: {fileID: 4900000, guid: f1c98d416843e4a46ab2e631e5de907a, type: 3}
+    testIncap: 0
     loop: 0
     freezePlayer: 1
     takeFocus: 1
@@ -2139,6 +2143,7 @@ MonoBehaviour:
     behaviorAtEnd: 0
     facePlayerTowardsCharacter: 1
     facingAtEnd: 3
+    onDialogTrigger: 1
     startFrameZeroImmediately: 0
     startTimeDelay: 0
     addTimeToEnd: 0
@@ -2210,6 +2215,26 @@ MonoBehaviour:
       - SERIOUSLY?! Did you really just do that?!
       audioClips: []
       inventoryToggle: -1
+  - name: eugene_testing
+    keyframes: []
+    loaded: 0
+    incapFile: {fileID: 4900000, guid: d6ab3a1a0a51ecd4a995fab02fc9e2b2, type: 3}
+    testIncap: 0
+    loop: 1
+    freezePlayer: 0
+    takeFocus: 0
+    complete: 0
+    trackingBehavior: 2
+    behaviorAtStart: 0
+    behaviorAtEnd: 0
+    facePlayerTowardsCharacter: 1
+    facingAtEnd: 3
+    onDialogTrigger: 2
+    startFrameZeroImmediately: 1
+    startTimeDelay: 0
+    addTimeToEnd: 0
+    currentFrameTimeModifier: 0
+    incapKeyframeActions: []
   triggers:
   - name: PoopYeet
     sendTo: {fileID: 0}
@@ -2254,12 +2279,18 @@ MonoBehaviour:
   climbStuckTime: 4
   climbStuckBehavior: 3
   arriveHomeBehavior: 0
+  actionAimAtTransform: {fileID: 0}
+  actionAimAtTag: 
+  actionOnDistanceTransform: {fileID: 0}
+  actionOnDistanceTag: 
+  actionOnDistanceValue: 0
+  faceTowardsTransform: {fileID: 0}
+  faceTowardsTag: Player
+  faceTowardsOnIdleOnly: 1
   showHomeBool: 0
   printCurrentIncapFrames: 0
   printInputState: 0
   printKeyframeNumber: 0
-  playTestIncap: 0
-  testIncapName: eugene_dont_throw_poop
   debugGoHome: 0
   debugGoIdle: 0
   debugInputs: []
@@ -2280,6 +2311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeActive: 1
+  deactivate: 0
   ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
     type: 3}
   rangeColliderTag: RangeCollider
@@ -2403,10 +2435,11 @@ MonoBehaviour:
   hasInventory: 1
   infiniteInventory: 1
   inventoryContainer: {fileID: 760672365}
+  equiptAtStart: 0
   inventory:
     slotZero: {fileID: 1835168229325473723}
     slotOne: {fileID: 0}
-    slotTwo: {fileID: 0}
+    slotTwo: {fileID: 1270536731}
     slotThree: {fileID: 0}
     slotFour: {fileID: 0}
     slotFive: {fileID: 0}
@@ -2948,6 +2981,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeActive: 1
+  deactivate: 0
   ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
     type: 3}
   rangeColliderTag: RangeCollider
@@ -3197,6 +3231,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 260363456847616048}
+  - {fileID: 1270536732}
   m_Father: {fileID: 474771866}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4819,6 +4854,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1270536731 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8245735589642376710, guid: b549db9b08e87194c880ea6de7f21092,
+    type: 3}
+  m_PrefabInstance: {fileID: 1316681773}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1270536732 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+    type: 3}
+  m_PrefabInstance: {fileID: 1316681773}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1280417478
 GameObject:
   m_ObjectHideFlags: 0
@@ -4973,6 +5020,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5087d190a3dd8da4699ad3b9f69d7212, type: 3}
+--- !u!1001 &1316681773
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 760672366}
+    m_Modifications:
+    - target: {fileID: 8245735589642376710, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_Name
+      value: AK47
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.17882252
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5753443
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245735589642376705, guid: b549db9b08e87194c880ea6de7f21092,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b549db9b08e87194c880ea6de7f21092, type: 3}
 --- !u!1 &1390268962
 GameObject:
   m_ObjectHideFlags: 0
@@ -5489,6 +5605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeActive: 1
+  deactivate: 0
   ActionIconPrefab: {fileID: 2974339983681813189, guid: 34f2c42d8141d564a94613c689f1cc64,
     type: 3}
   rangeColliderTag: RangeCollider
@@ -6962,12 +7079,12 @@ PrefabInstance:
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.y
-      value: 0.0003811121
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9992378
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7437196726464237260, guid: 2893a7d494550224f822cf843e996621,
         type: 3}
@@ -9084,6 +9201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rangeActive: 1
+  deactivate: 0
   ActionIconPrefab: {fileID: 571698414639169121, guid: 0abbc03f1ae53f842a19f8b2d823fbba,
     type: 3}
   rangeColliderTag: RangeCollider
