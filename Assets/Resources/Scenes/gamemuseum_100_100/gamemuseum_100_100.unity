@@ -2134,6 +2134,7 @@ MonoBehaviour:
     loaded: 0
     incapFile: {fileID: 4900000, guid: f1c98d416843e4a46ab2e631e5de907a, type: 3}
     testIncap: 0
+    canInterupt: 0
     loop: 0
     freezePlayer: 1
     takeFocus: 1
@@ -2165,6 +2166,7 @@ MonoBehaviour:
       say: []
       audioClips: []
       inventoryToggle: -1
+      setHomeMarker: 0
     - keyframeActionTrigger: 0
       actionTriggerValue: 12
       sendTo: {fileID: 0}
@@ -2181,6 +2183,7 @@ MonoBehaviour:
       say: []
       audioClips: []
       inventoryToggle: -1
+      setHomeMarker: 0
     - keyframeActionTrigger: 1
       actionTriggerValue: 0
       sendTo: {fileID: 0}
@@ -2198,6 +2201,7 @@ MonoBehaviour:
       - I can't believe I finally found a use for that sign.
       audioClips: []
       inventoryToggle: -1
+      setHomeMarker: 0
     - keyframeActionTrigger: 0
       actionTriggerValue: 0
       sendTo: {fileID: 0}
@@ -2215,12 +2219,14 @@ MonoBehaviour:
       - SERIOUSLY?! Did you really just do that?!
       audioClips: []
       inventoryToggle: -1
+      setHomeMarker: 0
   - name: eugene_testing
     keyframes: []
     loaded: 0
     incapFile: {fileID: 4900000, guid: d6ab3a1a0a51ecd4a995fab02fc9e2b2, type: 3}
     testIncap: 0
-    loop: 1
+    canInterupt: 1
+    loop: 0
     freezePlayer: 0
     takeFocus: 0
     complete: 0
@@ -2235,6 +2241,9 @@ MonoBehaviour:
     addTimeToEnd: 0
     currentFrameTimeModifier: 0
     incapKeyframeActions: []
+  playOnIdle: []
+  randomizePlayOnIdle: 0
+  playOnIdleDelay: 3
   triggers:
   - name: PoopYeet
     sendTo: {fileID: 0}
@@ -2261,6 +2270,7 @@ MonoBehaviour:
   stillStuckMessage: 
   respawnBehavior: 0
   respawnMessage: Ouch.
+  checkForLadders: 1
   ladderCheckDistance: 14
   climbContactFilter:
     useTriggers: 1
@@ -2278,7 +2288,12 @@ MonoBehaviour:
     maxNormalAngle: 0
   climbStuckTime: 4
   climbStuckBehavior: 3
-  arriveHomeBehavior: 0
+  followObjectActive: 1
+  followObjectTransform: {fileID: 0}
+  followObjectTag: Player
+  followObjectDistanceMin: 2
+  followObjectDistanceMax: -1
+  arriveHomeBehavior: 1
   actionAimAtTransform: {fileID: 0}
   actionAimAtTag: 
   actionOnDistanceTransform: {fileID: 0}
@@ -2287,7 +2302,7 @@ MonoBehaviour:
   faceTowardsTransform: {fileID: 0}
   faceTowardsTag: Player
   faceTowardsOnIdleOnly: 1
-  showHomeBool: 0
+  showHomeBool: 1
   printCurrentIncapFrames: 0
   printInputState: 0
   printKeyframeNumber: 0

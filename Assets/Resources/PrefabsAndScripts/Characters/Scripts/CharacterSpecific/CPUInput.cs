@@ -22,6 +22,7 @@ public class CPUInput : MonoBehaviour
 		recordInProgress,
 		trackingIncap, //We're playing an incap, but we're pausing for a second to get back on track between keyframes.
 		goingHome,
+		followingTarget, //We are following a target, trying to walk towards it.
 		incapGoingHome, //We're at the start or end of an animation and have to go home before continuing.
 		dialogIncap //We're in the middle of an incap playback, but a dialog has been triggered and we are waiting for it to finish.
 	}
@@ -181,7 +182,7 @@ public class CPUInput : MonoBehaviour
 		public List<string> say = new List<string>(); //Play a random message from this list. If sendTo has a characterController, then sendTo will say it. If not, this character will say it.
 		public List<AudioClip> audioClips = new List<AudioClip>(); //Randomly play one of these sounds
 		[Range(-1, 9)] public int inventoryToggle=-1; //-1 for none. 0-9 to pull things out and put things in inventory slots.
-		
+		public bool setHomeMarker=false; //If set to true, we will set the homeMarker to the gameObject's current location.
 		
 		//GameObject is THIS character gameObject. It has nothing to do with the sendTo object.
 		public void activate(GameObject gameObject, Global global)
@@ -201,6 +202,12 @@ public class CPUInput : MonoBehaviour
 			if (audioClips.Count > 0) global.audio.RandomSoundEffect(audioClips.ToArray(), randomizePitchMin, randomizePitchMax);
 			
 			if (inventoryToggle!=-1) cont.inventoryToggleEquip(inventoryToggle);
+			
+			if (setHomeMarker)
+			{
+				CPUInput cpu = gameObject.GetComponent<CPUInput>();
+				if (cpu) cpu.moveHomeLocation(gameObject.transform.position);
+			}
 		}
 		
 		public float getFrameTimeModifier()
@@ -217,6 +224,7 @@ public class CPUInput : MonoBehaviour
 		[HideInInspector] public bool loaded=false; //Set to true after the keyframes have been loaded.
 		public TextAsset incapFile;
 		public bool testIncap = false; //Set to true to play the incap. This is just a useful way to test the incap from the inspector.
+		public bool canInterupt=true; //This determines what happens if we attempt to play a different incap while this one is playing. True will make this animation stop and the new one will play. False will ignore the animation that we were attempting to play and continue to play this one.
 		public bool loop=true;
 		public bool freezePlayer=false; //Freezes the player for the duration of the animation, or until a keyframe action unfreezes him.
 		public bool takeFocus=false;	//Takes camera focus away from the player and puts it on this character for the duration of the animation, or until a keyframe action returns focus.
@@ -459,15 +467,21 @@ public class CPUInput : MonoBehaviour
 	private CharacterController2D_Input previousBid; //Used for recording to detect when an input value has changed.
 	private List<incapKeyframe> recordFrames; //This list stores the current keyframes that we are recording when recordInProgress is true.
 	
-	
 	[Space]
     [Header("Input Playback")]
+	public List<incapAnimation> incapAnimations; //These are all of the incap animations for this character
 	private incapAnimation currentIncap; //The incap that we are currently playing if playingIncap is true
 	float incapPlayTime=0; //The amount of time that has elapsed since the start of the playback.
 	int keyframeIndex=0; //This stores the index of the keyframe list that we are on for the currently playing incap. It's like the playhead.
-	public List<incapAnimation> incapAnimations; //These are all of the incap animations for this character
 	private bool startTimeDelayWait=false;	//Incaps have an optional startTimeDelay. This is set to true after we call playIncap and before the delay has finished.
 	private states stateBeforeDialogInteruption=states.playingIncap; //Used to return to our prior state if we were playing an incap, tracking, or going home to play an incap and we got interupted with a dialog.
+	
+	//Play On Idle
+	public List<string> playOnIdle = new List<string>(); //If there are animations in this queue, then they will be played anytime we go in idle mode.
+	public bool randomizePlayOnIdle=false; //If true, then playOnIdle animations will be selected at random. If false, they will be played in order from start to finish, then loop back to the start.
+	private int playOnIdleIndex=-1;
+	public float playOnIdleDelay=1f; //If playOnIdle animations are used, then we will need to be in idle mode for this long before the animation is played.
+	private float playOnIdleTimer=-1f; 
 	
 	[Space]
     [Header("Triggers")]
@@ -493,8 +507,8 @@ public class CPUInput : MonoBehaviour
 	[Space]
     [Header("Stuck")]
 	//Stuck!
-	private bool stuck=false; //We detect when we have been trying to move horizontally for a bit, but we're not going anywhere.
 	public float stuckTime = 0.5f; //This is how long we try to move before setting stuck to true. Set to -1 to not use the stuck timer.
+	private bool stuck=false; //We detect when we have been trying to move horizontally for a bit, but we're not going anywhere.
 	private float stuckTimer=0f;
 	private float previousHMove=0;
 	private float previousX = 0;
@@ -515,6 +529,7 @@ public class CPUInput : MonoBehaviour
 	[Space]
     [Header("Climbing")]
 	//Ladders and such
+	public bool checkForLadders=true; //If true, then we will look around for ladders anytime our target is higher or lower than a certain amount. We will try to use any ladder that takes us closer to our goal.
 	public float ladderCheckDistance=14f; //If we are trying to go somewhere that is significantly higher or lower than where we are at, then we will do a raycast to look for a ladder. This is how far to the left or right we will look for a ladder. A ray is drawn in the inspector reflecting this value.
 	public ContactFilter2D climbContactFilter;
 	private GameObject targetLadder; //If this is not null and we are set to goingHome, trackingIncap, or incapGoingHome, or any other mode that attempts to navigate to a target, then we will attempt to climb the ladder to reach our destination if necessary.
@@ -528,6 +543,13 @@ public class CPUInput : MonoBehaviour
 	private float climbStuckPreviousClimb=0;
 	private float ladderCharacterOffset=0; //Used to help us position the character on the ladder.
 	
+	[Space]
+    [Header("Follow an Object")]
+	public bool followObjectActive=false; //Turn this on to active followObject
+	public Transform followObjectTransform; //If set and followObjectActive is true, the will attempt to walk towards this object, climbing ladders and avoiding obstacles. State will be states.followingTarget. This feature is over-riden by incap animations, meaning we will stop following when we playIncap and resume when the incap is done. It is also over-riden by goingHome.
+	public string followObjectTag=""; //If followObjectTransform is null and this tag is not empty and followObjectActive is true, then the followObjectTransform will try to be found with this tag.
+	public float followObjectDistanceMin = 2; //How close we get to the target object before say "That's good enough" and stop trying to move closer.
+	public float followObjectDistanceMax = -1; //If the object if futher than this, we won't try to follow it. Set to -1 for infinity.
 	
 	[Space]
     [Header("Misc Behaviors")]
@@ -674,6 +696,46 @@ public class CPUInput : MonoBehaviour
 					bid.controller.FacePosition(faceTowardsTransform.position);
 			}
 			
+			if (followObjectActive && !currentlyPlayingIncap() && state!=states.goingHome)
+			{
+				if (followObjectTag!="" && followObjectTransform==null)
+				{
+					GameObject go = GameObject.FindWithTag(followObjectTag);
+					if (go) followObjectTransform = go.transform;
+				}
+				if (followObjectTransform!=null)
+				{
+					bool dontFollow=false;
+					if (followObjectDistanceMax!=-1)
+					{
+						if (Mathf.Abs(transform.position.x-followObjectTransform.position.x) > followObjectDistanceMax) dontFollow=true;
+					}
+					
+					if (dontFollow==false)
+					{
+						state=states.followingTarget;
+						target=followObjectTransform.position;
+					}
+				}
+			}
+			
+			if (state!=states.idle) playOnIdleTimer=-1;
+			if (playOnIdle.Count>0 && state==states.idle)
+			{
+				if (playOnIdleTimer==-1) playOnIdleTimer=playOnIdleDelay;
+				playOnIdleTimer-=Time.deltaTime;
+				if (playOnIdleTimer<=0)
+				{
+					playOnIdleTimer=-1;
+					if (randomizePlayOnIdle) playOnIdleIndex=(int)Mathf.Floor(Random.Range(0,playOnIdle.Count));
+					else 
+					{
+						playOnIdleIndex+=1;
+						if (playOnIdleIndex>=playOnIdle.Count) playOnIdleIndex=0;
+					}
+					playIncap(playOnIdle[playOnIdleIndex]);
+				}
+			}
 			
 			bid.UpdateInputLogic(); //If we're recording, then a playerInput script should be managing the bid updating, which is why we have placed it in the block that it's in.
 		}
@@ -682,12 +744,16 @@ public class CPUInput : MonoBehaviour
 
     void FixedUpdate()
     {
-		if (state==states.trackingIncap || state==states.goingHome || state==states.incapGoingHome)
+		if (state==states.trackingIncap || state==states.goingHome || state==states.incapGoingHome || state==states.followingTarget)
 		{
 			bool xIsGood=false;
 			bool yIsGood=true; //We're going to worry less about the y position than the x position. We might check for a ladder and attempt to make it to y, but if we get to X then good enough.
 			
 			if (Mathf.Abs(transform.position.x-target.x) <= snapResolution) xIsGood=true;
+			if (state==states.followingTarget && followObjectDistanceMin!=0)
+			{
+				if (Mathf.Abs(transform.position.x-target.x) <= followObjectDistanceMin) xIsGood=true;
+			}
 			
 			if (Mathf.Abs(transform.position.y-target.y) > snapResolution && targetLadder==null && bid.controller.getCanClimb())
 			{
@@ -732,7 +798,8 @@ public class CPUInput : MonoBehaviour
 			{
 
 				bid.reset();
-				transform.position = new Vector3(target.x,transform.position.y ,0f);
+				if ((state==states.followingTarget && followObjectDistanceMin==0) || state!=states.followingTarget) 
+					transform.position = new Vector3(target.x,transform.position.y ,0f);
 				if (state==states.trackingIncap) 
 				{
 					//We've snapped into place and are in the middle of an animation, so let's switch back to playing and move to the next keyframe.
@@ -864,10 +931,21 @@ public class CPUInput : MonoBehaviour
 		climbStuckPreviousClimb=bid.climb;		
     }
 	
+	//Returns true if we are currently in a state where we are playing an animation.
+	public bool currentlyPlayingIncap()
+	{
+		return (state==states.playingIncap || state==states.trackingIncap || state==states.incapGoingHome || state==states.dialogIncap);
+	}
+	
 	//Plays the first located incapAnimations entry specified by name. Returns false if the animation cannot be played.
 	public bool playIncap(string name)
 	{
 		if (state==states.recordInProgress) return false;
+		
+		if (currentlyPlayingIncap())
+		{
+			if (!currentIncap.canInterupt) return false; //Ignore this call, because appearently the incap we are currently playing is too important to be interupted.
+		}
 		
 		foreach(var a in incapAnimations)
 		{
