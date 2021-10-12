@@ -2291,14 +2291,15 @@ MonoBehaviour:
   followObjectActive: 1
   followObjectTransform: {fileID: 0}
   followObjectTag: Player
-  followObjectDistanceMin: 2
+  followObjectDistanceMin: 3
   followObjectDistanceMax: -1
   arriveHomeBehavior: 1
   actionAimAtTransform: {fileID: 0}
-  actionAimAtTag: 
+  actionAimAtTag: Player
+  actionAimAtOffset: {x: 0, y: 0.5}
   actionOnDistanceTransform: {fileID: 0}
-  actionOnDistanceTag: 
-  actionOnDistanceValue: 0
+  actionOnDistanceTag: Player
+  actionOnDistanceValue: 8
   faceTowardsTransform: {fileID: 0}
   faceTowardsTag: Player
   faceTowardsOnIdleOnly: 1
@@ -2450,7 +2451,7 @@ MonoBehaviour:
   hasInventory: 1
   infiniteInventory: 1
   inventoryContainer: {fileID: 760672365}
-  equiptAtStart: 0
+  equiptAtStart: 3
   inventory:
     slotZero: {fileID: 1835168229325473723}
     slotOne: {fileID: 0}
@@ -3265,12 +3266,12 @@ PrefabInstance:
     - target: {fileID: 8675872301201172591, guid: f97f6d9d06425c048ba954c6e7f2bd43,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.67
+      value: -6.09
       objectReference: {fileID: 0}
     - target: {fileID: 8675872301201172591, guid: f97f6d9d06425c048ba954c6e7f2bd43,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.38
+      value: 3.12
       objectReference: {fileID: 0}
     - target: {fileID: 8675872301201172591, guid: f97f6d9d06425c048ba954c6e7f2bd43,
         type: 3}

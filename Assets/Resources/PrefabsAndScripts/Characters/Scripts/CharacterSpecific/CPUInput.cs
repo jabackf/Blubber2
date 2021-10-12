@@ -558,6 +558,7 @@ public class CPUInput : MonoBehaviour
 	
 	public Transform actionAimAtTransform; //If set, the character's action aim will track this object.
 	public string actionAimAtTag=""; //If actionAimAtTransform is null and actionAimAtTag is not empty, then we will find the object with this tag and set actionAimAtTransform to it's transform.
+	public Vector2 actionAimAtOffset=Vector2.zero; //This is added to the position of the actionAimAt object to adjust the target.
 	
 	public Transform actionOnDistanceTransform; //If specified and actionOnDistance > 0,  the action keys will be held down as long as this transform is in range.
 	public string actionOnDistanceTag = ""; //If actionAimAtTransform is null, then we can check this tag (if it's not empty) to find actionAimAtTransform
@@ -677,7 +678,7 @@ public class CPUInput : MonoBehaviour
 			}
 			if (actionAimAtTransform!=null)
 			{
-				bid.controller.actionAimAtPosition(actionAimAtTransform.position);
+				bid.controller.actionAimAtPosition(new Vector2(actionAimAtTransform.position.x+actionAimAtOffset.x, actionAimAtTransform.position.y+actionAimAtOffset.y));
 			}
 			
 			
