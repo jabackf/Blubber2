@@ -314,6 +314,7 @@ public class cameraFollowPlayer : MonoBehaviour
 	public void takeFocus(Transform T)
 	{
 		if (focusTaken) return;
+		if (!playerT) Initialize();
 		if (T!=null)
 		{
 			previousTransform=playerT;

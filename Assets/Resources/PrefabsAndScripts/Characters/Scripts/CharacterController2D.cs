@@ -916,6 +916,41 @@ public class CharacterController2D : MonoBehaviour
 		CPUInput cpu = GetComponent<CPUInput>();
 		if (cpu!=null) cpu.characterRespawned();
     }
+
+	//Checks if the supplied object is colliding with one of this character's range colliders. Range colliders are found by checking all child objects of this character for RangeCollider tags, so all range colliders childed directly to this character will be checked. Children of children are NOT checked.
+	public bool isObjectInRange(GameObject checkFor)
+	{
+		if (!checkFor) return false;
+		//Get child objects with RangeCollider tag        
+		List<GameObject> rc = new List<GameObject>();
+		for (int i = 0; i < transform.childCount; i++)
+         {
+			 Transform child = transform.GetChild(i);
+			 if (child.tag == "RangeCollider")
+			 {
+				 rc.Add(child.gameObject);
+			 }
+		}
+		
+		foreach (var go in rc)
+		{
+			Collider2D col = go.GetComponent<Collider2D>();
+			if (col!=null)
+			{
+				var hits  = new RaycastHit2D[20];
+				col.Cast(Vector2.zero, hits);
+				if (hits[0])
+				{
+					foreach (var hit in hits)
+					{
+						if (hit.collider)
+							if (GameObject.ReferenceEquals(hit.collider.gameObject, checkFor)) return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
 	
 	public void makeSpawnParticles()
 	{
@@ -1385,5 +1420,30 @@ public class CharacterController2D : MonoBehaviour
 			}
 		}
 		return list;
+	}
+	
+	//Call this to pickup a specific object, regardless of the object's distance. The object must have a pickupObject script!
+	public void pickupSpecificObject(GameObject go)
+	{
+		if (!go) return;
+		holding = go.GetComponent<pickupObject>();
+		if (!holding) return;
+		holding.pickMeUp(gameObject, m_pickupTop, m_FacingRight ? m_pickupR : m_pickupL);
+		isHolding = true;
+		setHoldingUIText(holding.name);
+		setActionObjectInRange(null);
+		if (charAnim != null) charAnim.pickingUp = true;
+		holding.SendMessage("flipSpriteX", !m_FacingRight); //Update the held object's facing direction
+	}
+	
+	//Pass a gameObject, and this function will tell you if we are holding it or not.
+	public bool isHoldingSpecificObject(GameObject go)
+	{
+		if (!isHolding) return false;
+		if (!go) return false;
+		pickupObject test = go.GetComponent<pickupObject>();
+		if (!test) return false;
+		 if(GameObject.ReferenceEquals(holding.gameObject, test.gameObject)) return true;
+		 else return false;
 	}
 }

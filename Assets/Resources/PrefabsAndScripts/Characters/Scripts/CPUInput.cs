@@ -23,10 +23,12 @@ public class CPUInput : MonoBehaviour
 		trackingIncap, //We're playing an incap, but we're pausing for a second to get back on track between keyframes.
 		goingHome,
 		followingTarget, //We are following a target, trying to walk towards it.
+		placingItem, //We are taking an item somewhere to place it.
 		incapGoingHome, //We're at the start or end of an animation and have to go home before continuing.
 		dialogIncap //We're in the middle of an incap playback, but a dialog has been triggered and we are waiting for it to finish.
 	}
 	public states state=states.idle;
+	private states previousState=states.idle;
 	public CharacterController2D controller;
 	public Transform homeTransform; //This is the transform used for the homeMarker. If null, we will just use the character's start position.
 	[HideInInspector] public CharacterController2D_Input bid;
@@ -485,6 +487,7 @@ public class CPUInput : MonoBehaviour
 	
 	[Space]
     [Header("Triggers")]
+	public bool useTriggers = true; //If false, any trigger calls will be ignored.
 	public List<triggerClass> triggers = new List<triggerClass>();
 	
 	[Space]
@@ -542,14 +545,22 @@ public class CPUInput : MonoBehaviour
 	private float climbStuckPreviousY=0;
 	private float climbStuckPreviousClimb=0;
 	private float ladderCharacterOffset=0; //Used to help us position the character on the ladder.
+	private int climbFixTries=4;
+	private int climbFixCounter; //When we get stuck on a ladder, we can attempt to fix it by moving towards the center of the ladder before triggering climb stuck. This is useful if we're just snagged on a tile and there is still room to get up. This variable is a counter that helps by telling us how long we have been attempting to adjust.
 	
 	[Space]
     [Header("Follow an Object")]
 	public bool followObjectActive=false; //Turn this on to active followObject
+	public dialogOptions followDialogOption = dialogOptions.none;	//This is how we will respond to user prompted dialog while following or placing an object.
 	public Transform followObjectTransform; //If set and followObjectActive is true, the will attempt to walk towards this object, climbing ladders and avoiding obstacles. State will be states.followingTarget. This feature is over-riden by incap animations, meaning we will stop following when we playIncap and resume when the incap is done. It is also over-riden by goingHome.
 	public string followObjectTag=""; //If followObjectTransform is null and this tag is not empty and followObjectActive is true, then the followObjectTransform will try to be found with this tag.
 	public float followObjectDistanceMin = 2; //How close we get to the target object before say "That's good enough" and stop trying to move closer.
 	public float followObjectDistanceMax = -1; //If the object if futher than this, we won't try to follow it. Set to -1 for infinity.
+	public bool pickupOnArrival=false; //If true, we will attempt to pickup the object once we arrive there. Selecting this option also means that we will drop any objects that we are holding when we set off on our object-following journey.
+	private Vector3 placeItemPosition = Vector3.zero;	//If we are in states.placingItem, then this vector will store the place that we are trying to take it.
+	public float placeItemDistance = 1f; //If we are placing an item, then this is how close we need to be to the target position before we actually release the object and move it into position.
+	public List<UnityEvent> onFollowPickupCallbacks = new List<UnityEvent>(); 	//If pickupOnArrival is used, these callbacks will be triggered when we pick the item up.
+	public List<UnityEvent> onPlaceItemCallbacks = new List<UnityEvent>(); 	//If we use placeItem, then these callbacks will be triggered when the item reaches it's destination.
 	
 	[Space]
     [Header("Misc Behaviors")]
@@ -568,6 +579,7 @@ public class CPUInput : MonoBehaviour
 	public Transform faceTowardsTransform; //If set, the character's facing direction will point towards this transform
 	public string faceTowardsTag=""; //If faceTowardsTransform is null and this tag is not empty, then we will find the object with this tag and set faceTowardsTransform to it.
 	public bool faceTowardsOnIdleOnly=false; //If true, the faceTowards feature only works when the character is in idle mode. If false, it works at all times.
+	private float faceTowardsIdleCounter=0; //A lot of transitions start by going into idle then going into a different state on the next frame. Let's use this variable to make sure that we've been in idle for a couple frames before we start changing directions.
 	
 	[Space]
     [Header("Debug")]
@@ -611,6 +623,8 @@ public class CPUInput : MonoBehaviour
 		
 		dialog = gameObject.GetComponent<Dialog>();
 		dialogRange = gameObject.GetComponent<DialogRange>();
+		
+		climbFixCounter=climbFixTries;
 		
 		foreach (var a in incapAnimations) a.loadKeyframes();
 		
@@ -691,13 +705,20 @@ public class CPUInput : MonoBehaviour
 			{
 				if (faceTowardsOnIdleOnly)
 				{
-					if (state==states.idle) bid.controller.FacePosition(faceTowardsTransform.position);
+					if (state==states.idle)
+					{
+						if (faceTowardsIdleCounter<2)
+							faceTowardsIdleCounter+=1;
+						else
+							bid.controller.FacePosition(faceTowardsTransform.position);
+					}
 				}
 				else
 					bid.controller.FacePosition(faceTowardsTransform.position);
+
 			}
 			
-			if (followObjectActive && !currentlyPlayingIncap() && state!=states.goingHome)
+			if (followObjectActive && !currentlyPlayingIncap() && state!=states.goingHome && state!=states.placingItem)
 			{
 				if (followObjectTag!="" && followObjectTransform==null)
 				{
@@ -714,13 +735,18 @@ public class CPUInput : MonoBehaviour
 					
 					if (dontFollow==false)
 					{
+						if (pickupOnArrival) bid.controller.dropObject(); //If we are going to pick something up, then let's drop whatever we are holding.
 						state=states.followingTarget;
 						target=followObjectTransform.position;
 					}
 				}
 			}
 			
-			if (state!=states.idle) playOnIdleTimer=-1;
+			if (state!=states.idle) 
+			{
+				playOnIdleTimer=-1;
+				faceTowardsIdleCounter=0;
+			}
 			if (playOnIdle.Count>0 && state==states.idle)
 			{
 				if (playOnIdleTimer==-1) playOnIdleTimer=playOnIdleDelay;
@@ -745,15 +771,58 @@ public class CPUInput : MonoBehaviour
 
     void FixedUpdate()
     {
-		if (state==states.trackingIncap || state==states.goingHome || state==states.incapGoingHome || state==states.followingTarget)
+		if (state==states.followingTarget && pickupOnArrival==true && followObjectTransform!=null)
+		{
+			if (bid.controller.isObjectInRange(followObjectTransform.gameObject))
+			{
+				if (bid.controller.holdingSomething() && !bid.controller.isHoldingSpecificObject(followObjectTransform.gameObject)) bid.controller.dropObject();
+				if (!bid.controller.isHoldingSpecificObject(followObjectTransform.gameObject))
+				{
+					bid.controller.pickupSpecificObject(followObjectTransform.gameObject);
+					foreach (var c in onFollowPickupCallbacks) c.Invoke();
+				}
+			}
+		}
+		
+		if (state==states.placingItem)
+		{
+			if (!bid.controller.holdingSomething()) state=states.idle;
+			else
+			{
+				target = placeItemPosition;
+				if (Vector2.Distance(gameObject.transform.position,placeItemPosition)<=placeItemDistance) //We are close enough to go ahead and place the item.
+				{
+					pickupObject po = bid.controller.getHolding();
+					if (po) 
+					{
+						moveIntoPosition mip = po.gameObject.AddComponent<moveIntoPosition>() as moveIntoPosition;
+						mip.targetPosition = placeItemPosition;
+						mip.selfDestructScript = true;
+						mip.turnOffPhysicsOnEmbark=true;
+						mip.turnOffCollidersOnEmbark=true;
+						mip.turnOnPhysicsOnArrival=true;
+						mip.turnOnCollidersOnArrival=true;
+						mip.speed=0.08f;
+						mip.arrivalCallbacks = onPlaceItemCallbacks;
+						mip.arrivalDelayTimer=1f; 
+						mip.setVelocityToZero=true;
+					}
+					bid.controller.dropObject();
+					
+				}
+			}
+		}
+		
+		if (state==states.trackingIncap || state==states.goingHome || state==states.incapGoingHome || (state==states.followingTarget&&followObjectActive)  || (state==states.placingItem&&followObjectActive))
 		{
 			bool xIsGood=false;
 			bool yIsGood=true; //We're going to worry less about the y position than the x position. We might check for a ladder and attempt to make it to y, but if we get to X then good enough.
 			
 			if (Mathf.Abs(transform.position.x-target.x) <= snapResolution) xIsGood=true;
-			if (state==states.followingTarget && followObjectDistanceMin!=0)
+			if ( (state==states.followingTarget||state==states.placingItem) && followObjectDistanceMin!=0)
 			{
-				if (Mathf.Abs(transform.position.x-target.x) <= followObjectDistanceMin) xIsGood=true;
+				if (Mathf.Abs(transform.position.x-target.x) <= followObjectDistanceMin) 
+					xIsGood=true;
 			}
 			
 			if (Mathf.Abs(transform.position.y-target.y) > snapResolution && targetLadder==null && bid.controller.getCanClimb())
@@ -799,7 +868,7 @@ public class CPUInput : MonoBehaviour
 			{
 
 				bid.reset();
-				if ((state==states.followingTarget && followObjectDistanceMin==0) || state!=states.followingTarget) 
+				if (( (state==states.followingTarget||state==states.placingItem) && followObjectDistanceMin==0) || state!=states.followingTarget) 
 					transform.position = new Vector3(target.x,transform.position.y ,0f);
 				if (state==states.trackingIncap) 
 				{
@@ -859,6 +928,11 @@ public class CPUInput : MonoBehaviour
 			}
 		}
 		
+		if ( (state==states.followingTarget || state==states.placingItem) && followDialogOption==dialogOptions.noDialog) dialogRange.deactivate=true;
+		if ( (state!=states.followingTarget && state!=states.placingItem) && (previousState==states.followingTarget || previousState==states.placingItem) && followDialogOption==dialogOptions.noDialog) 
+			dialogRange.deactivate=false;
+		
+		
 		if (state==states.recordInProgress)
 		{
 			recordTime+=Time.deltaTime;
@@ -910,26 +984,38 @@ public class CPUInput : MonoBehaviour
 			climbStuckTimer-=Time.fixedDeltaTime;
 			if (climbStuckTimer<=0 && climbStuck!=true)
 			{
-				climbStuck=true;
-				targetLadder=null;
-				bid.controller.stopClimbing();
-				if (climbStuckBehavior==climbStuckBehaviors.idle) goIdle();
-				if (climbStuckBehavior==climbStuckBehaviors.goHome) goHome();
-				if (climbStuckBehavior==climbStuckBehaviors.die) 
+				climbFixCounter-=1;
+				if (climbFixCounter<=0)
 				{
-					bid.controller.die();
-					bid.reset();
+					climbStuck=true;
+					targetLadder=null;
+					climbFixCounter=climbFixTries;
+					bid.controller.stopClimbing();
+					if (climbStuckBehavior==climbStuckBehaviors.idle) goIdle();
+					if (climbStuckBehavior==climbStuckBehaviors.goHome) goHome();
+					if (climbStuckBehavior==climbStuckBehaviors.die) 
+					{
+						bid.controller.die();
+						bid.reset();
+					}
+					if (climbStuckBehavior==climbStuckBehaviors.jumpHome) jumpCharacter(homeMarker.transform.position);
 				}
-				if (climbStuckBehavior==climbStuckBehaviors.jumpHome) jumpCharacter(homeMarker.transform.position);
+				else
+				{
+					walkTowards(targetLadder.transform.position,false); //Attempt to adjust our position and see if that fixes it.
+				}
 			}
 		}
 		else
 		{
+			climbFixCounter=climbFixTries;
 			climbStuck=false;
 			climbStuckTimer=climbStuckTime;
 		}	
 		climbStuckPreviousY = transform.position.y;
 		climbStuckPreviousClimb=bid.climb;		
+		
+		previousState=state;
     }
 	
 	//Returns true if we are currently in a state where we are playing an animation.
@@ -1043,19 +1129,7 @@ public class CPUInput : MonoBehaviour
 			if (keyframeIndex>=currentIncap.keyframes.Count)
 			{
 				//Animation finished.
-				currentIncap.endOfAnimation(gameObject, global);
-				keyframeIndex=0;
-				currentIncap.complete=true;
-				incapPlayTime=0f;
-				if (currentIncap.onDialogTrigger==dialogOptions.noDialog) dialogRange.deactivate=false;
-				
-				if (currentIncap.behaviorAtEnd == incapEndBehavior.goHome) goHome();
-				if (currentIncap.behaviorAtEnd == incapEndBehavior.goIdle) goIdle();
-				if (currentIncap.behaviorAtEnd == incapEndBehavior.jumpHome) jumpCharacter(homeMarker.transform.position);
-				
-				if (currentIncap.loop) 
-					playIncap(currentIncap.name);
-				
+				stopIncap(false);
 				return;
 			}
 		}
@@ -1067,6 +1141,25 @@ public class CPUInput : MonoBehaviour
 		if (!startTimeDelayWait)currentIncap.updateKeyframeActions(keyframeIndex, incapPlayTime, gameObject, global);
 		Invoke("advanceIncapKeyframe",currentIncap.keyframes[keyframeIndex].time-time + currentIncap.getCurrentFrameTimeModifier());
 		currentIncap.currentFrameTimeModifier=0;
+	}
+	
+	//Stops the animation. If ignoreLoop is true, then we will ignore rather the current incap should loop or not and just stop it.
+	public void stopIncap(bool ignoreLoop)
+	{
+		if (!currentlyPlayingIncap()) return;
+		currentIncap.endOfAnimation(gameObject, global);
+		keyframeIndex=0;
+		currentIncap.complete=true;
+		incapPlayTime=0f;
+		if (currentIncap.onDialogTrigger==dialogOptions.noDialog) dialogRange.deactivate=false;
+		
+		if (currentIncap.behaviorAtEnd == incapEndBehavior.goHome) goHome();
+		if (currentIncap.behaviorAtEnd == incapEndBehavior.goIdle) goIdle();
+		if (currentIncap.behaviorAtEnd == incapEndBehavior.jumpHome) jumpCharacter(homeMarker.transform.position);
+		
+		if (currentIncap.loop && !ignoreLoop) 
+			playIncap(currentIncap.name);
+		
 	}
 
     public void OnLanding()
@@ -1254,6 +1347,19 @@ public class CPUInput : MonoBehaviour
 		}
 	}
 	
+	//If we are holding an item, we can call this function to take the item to the specified location and place it there.
+	public bool placeItem(Vector3 position)
+	{
+		if (!bid.controller.holdingSomething()) return false;
+		placeItemPosition=position;
+		state=states.placingItem;
+		return true;
+	}
+	public void placeItem(Transform T)
+	{
+		placeItem(T.position);
+	}
+	
 	//Jumps the character to a new location spontaneously, creating pretty little sparkly warpy effecty thingies.
 	public void jumpCharacter(Vector3 newpos)
 	{
@@ -1354,6 +1460,7 @@ public class CPUInput : MonoBehaviour
 	
 	public void trigger(string triggerName)
 	{
+		if (!useTriggers) return;
 		foreach (var t in triggers)
 		{
 			if (t.name==triggerName) t.activate(gameObject, global);
@@ -1365,9 +1472,11 @@ public class CPUInput : MonoBehaviour
 		return bid.controller.name;
 	}
 	
+
 	//These two functions are called by the Dialog script.
 	public void onDialogInitiate()
 	{
+		stateBeforeDialogInteruption=states.idle;
 		if (state==states.playingIncap || state==states.trackingIncap || state==states.incapGoingHome)
 		{
 			if (currentIncap.onDialogTrigger != dialogOptions.none && currentIncap.onDialogTrigger != dialogOptions.noDialog)
@@ -1375,6 +1484,15 @@ public class CPUInput : MonoBehaviour
 				stateBeforeDialogInteruption=state;
 				goIdle();
 				state=states.dialogIncap;
+			}
+		}
+		if ( (state==states.followingTarget || state==states.placingItem) && followObjectActive)
+		{
+			if (followDialogOption != dialogOptions.none && followDialogOption != dialogOptions.noDialog)
+			{
+				followObjectActive=false;
+				stateBeforeDialogInteruption=state;
+				goIdle();
 			}
 		}
 	}
@@ -1395,6 +1513,28 @@ public class CPUInput : MonoBehaviour
 					goIdle();
 				break;
 				case dialogOptions.goHome:
+					goHome();
+				break;
+			}
+		}
+		
+		if (stateBeforeDialogInteruption==states.followingTarget || stateBeforeDialogInteruption==states.placingItem)
+		{
+			switch(followDialogOption)
+			{
+				case dialogOptions.pauseAnimation:
+					state=stateBeforeDialogInteruption;
+					followObjectActive=true;
+				break;
+				case dialogOptions.restartAnimation:
+					state=stateBeforeDialogInteruption;
+					followObjectActive=true;
+				break;
+				case dialogOptions.goIdle:
+					goIdle();
+				break;
+				case dialogOptions.goHome:
+					followObjectActive=true;
 					goHome();
 				break;
 			}

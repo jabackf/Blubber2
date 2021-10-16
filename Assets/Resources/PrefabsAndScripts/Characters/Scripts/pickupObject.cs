@@ -79,6 +79,8 @@ public class pickupObject : actionInRange
     public Sprite heldSprite, unheldSprite;
     public bool hasFacingDirections = false;
     public Sprite sideSprite, frontSprite, backSprite;
+	public string sideSortingLayer="", frontSortingLayer="", backSortingLayer="";
+	
 
     [Space]
     [Header("Sounds")]
@@ -789,6 +791,10 @@ public class pickupObject : actionInRange
             if (dir == 0 && sideSprite != null) renderer.sprite = sideSprite;
             if (dir == 1 && frontSprite != null) renderer.sprite = frontSprite;
             if (dir == 2 && backSprite != null) renderer.sprite = backSprite;
+			
+            if (dir == 0 && sideSortingLayer!="") renderer.sortingLayerName = sideSortingLayer;
+            if (dir == 1 && frontSortingLayer != "") renderer.sortingLayerName = frontSortingLayer;
+            if (dir == 2 && backSortingLayer != "") renderer.sortingLayerName = backSortingLayer;
         }
     }
 
