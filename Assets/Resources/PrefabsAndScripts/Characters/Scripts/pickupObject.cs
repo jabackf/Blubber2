@@ -354,6 +354,13 @@ public class pickupObject : actionInRange
 
         if (sndSpawnProjectile) global.audio.Play(sndSpawnProjectile);
     }
+	
+	//If the item action button is held down, this function will send a command to release it.
+	public void releaseItemAction()
+	{
+		if (!hasAction) return;
+		if (actionKeyPressed) useItemAction(false,false,true);
+	}
 
     //First three variables indicate the state of the action button (pressed, held, released). Last two variables are for aiming the useAction reticle (if there is one)
     public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0f, float vertical = 0f)
@@ -629,6 +636,8 @@ public class pickupObject : actionInRange
 
     public void releaseFromHolder()
     {
+		if (holder==null) return;
+		
 		if (hideCharacterDress)
 		{
 			holder.SendMessage("showNonessentialDresses", SendMessageOptions.DontRequireReceiver);
@@ -806,6 +815,6 @@ public class pickupObject : actionInRange
 
     void OnDestroy()
     {
-        if (holder != null) releaseFromHolder();
+        releaseFromHolder();
     }
 }

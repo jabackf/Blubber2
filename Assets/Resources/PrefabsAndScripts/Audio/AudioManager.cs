@@ -33,6 +33,7 @@ public class AudioManager
         public float dropSpeed;
         public float endPitch;
         public bool pitchGoesUp = false;
+		public bool stopSoundOnDone = true; //When true, the sound will be stopped when we reach the done state. If false, the sound will just continue playing at it's new destination pitch.
         public bool done = false; //Set to true when we have finished dropping the pitch. Used when stopping a sound from this list to remove it from the list.
     }
     List<fxLoopPitchDrop> fxLoopPitchDropList = new List<fxLoopPitchDrop>();
@@ -140,7 +141,7 @@ public class AudioManager
     {
         if (speed <= 0)
         {
-            Debug.Log("You passed an endingPitch that was <= 0 to AudioManager.StopFXLoopPitchDrop. You can't do that, you jerk! We need a positive speed or else the pitch change would never reach its destination! The pitch change can go in either direciton, but you set that with endingPitch and NOT with speed. The next log will contain the offending AudioClip, then we will abort this function call without doing anything else!");
+            Debug.Log("You passed a speed that was <= 0 to AudioManager.StopFXLoopPitchDrop. You can't do that, you jerk! We need a positive speed or else the pitch change would never reach its destination! The pitch change can go in either direciton, but you set that with endingPitch and NOT with speed. The next log will contain the offending AudioClip, then we will abort this function call without doing anything else!");
             Debug.Log(clip);
             return;
         }
@@ -148,25 +149,107 @@ public class AudioManager
         {
             if (effectsBuffer[i].clip == clip) //Found it. Lets make sure we've not already added this thing to the pitch drop list 
             {
-                bool alreadyOnList = false;
+
+				fxLoopPitchDrop p = new fxLoopPitchDrop();
+				bool onList=false;
                 if (fxLoopPitchDropList.Count > 0)
                 {
-                    foreach (var p in fxLoopPitchDropList)
+                    foreach (var l in fxLoopPitchDropList)
                     {
-                        if (p.bufferIndex == i) alreadyOnList = true;
+                        if (l.bufferIndex == i) 
+						{
+							p=l;
+							onList=true;
+						}
                     }
                 }
+				
+				p.dropSpeed = speed;
+				p.endPitch = endingPitch;
+				p.stopSoundOnDone=true;
+				if (effectsBuffer[i].pitch < endingPitch) p.pitchGoesUp = true;
+				else p.pitchGoesUp=false;
+				
+				if (!onList) 
+				{
+					p.bufferIndex = i;
+					p.clip = clip;
+					fxLoopPitchDropList.Add(p);
+				}
+            }
+        }
+    }
+	
+	//Plays a looping effect, starting it out with a gliding pitch.
+	//Most commonly this would be used for rising pitch, but can be used with descending pitch if the startingPitch is higher than endingPitch.
+	//Speed must be positive in either case though.
+	public void PlayFXLoopPitchRise(AudioClip clip, float startingPitch = 0.5f, float endingPitch=1f, float speed = 0.7f)
+    {
+		if (speed <= 0)
+        {
+            Debug.Log("You passed a speed that was <= 0 to AudioManager.PlayFXLoopPitchRise. You can't do that, you jerk! We need a positive speed or else the pitch change would never reach its destination! The pitch change can go in either direciton, but you set that with endingPitch and NOT with speed. The next log will contain the offending AudioClip, then we will abort this function call without doing anything else!");
+            Debug.Log(clip);
+            return;
+        }
+		
+		StopFXLoop(clip); //Stop it in case it's already playing.
+		
+        int sourceIndex = getEffectsBufferIndex();
+        effectsBuffer[sourceIndex].clip = clip;
+        effectsBuffer[sourceIndex].loop = true;
+        effectsBuffer[sourceIndex].pitch = startingPitch;
+        effectsBuffer[sourceIndex].Play();
+		
+		fxLoopPitchDrop p = new fxLoopPitchDrop();
+		p.bufferIndex = sourceIndex;
+		p.clip = clip;
+		p.dropSpeed = speed;
+		p.endPitch = endingPitch;
+		p.stopSoundOnDone=false;
+		if (effectsBuffer[sourceIndex].pitch < endingPitch) p.pitchGoesUp = true;
+		fxLoopPitchDropList.Add(p);
+	}
+	
+	//Glides the pitch up or down by amount pitchChange (positive or negative). The sound will continue to play at the end.
+	public void fxPitchGlide(AudioClip clip, float pitchChange, float speed = 0.7f)
+    {
+        if (speed <= 0)
+        {
+            Debug.Log("You passed a speed that was <= 0 to AudioManager.fxPitchGlide. You can't do that, you jerk! We need a positive speed or else the pitch change would never reach its destination! The pitch change can go in either direciton, but you set that with endingPitch and NOT with speed. The next log will contain the offending AudioClip, then we will abort this function call without doing anything else!");
+            Debug.Log(clip);
+            return;
+        }
+        for (int i = 0; i < effectBufferCount; i++)
+        {
+            if (effectsBuffer[i].clip == clip) //Found it. Lets make sure we've not already added this thing to the pitch drop list. If we have, we'll just change the one that's on there.
+            {
 
-                if (!alreadyOnList)
+				fxLoopPitchDrop p = new fxLoopPitchDrop();
+				bool onList=false;
+                if (fxLoopPitchDropList.Count > 0)
                 {
-                    fxLoopPitchDrop p = new fxLoopPitchDrop();
-                    p.bufferIndex = i;
-                    p.clip = clip;
-                    p.dropSpeed = speed;
-                    p.endPitch = endingPitch;
-                    if (effectsBuffer[i].pitch < endingPitch) p.pitchGoesUp = true;
-                    fxLoopPitchDropList.Add(p);
+                    foreach (var l in fxLoopPitchDropList)
+                    {
+                        if (l.bufferIndex == i) 
+						{
+							p=l;
+							onList=true;
+						}
+                    }
                 }
+				
+				p.dropSpeed = speed;
+				p.endPitch = effectsBuffer[i].pitch+pitchChange;
+				p.stopSoundOnDone=false;
+				if (effectsBuffer[i].pitch < p.endPitch) p.pitchGoesUp = true;
+				else p.pitchGoesUp=false;
+				
+				if (!onList) 
+				{
+					p.bufferIndex = i;
+					p.clip = clip;
+					fxLoopPitchDropList.Add(p);
+				}
             }
         }
     }
@@ -361,7 +444,7 @@ public class AudioManager
             }
         }
 
-        //Process any looping effects that are currently shutting off with the wind-down pitch drop effect
+        //Process any gliding pitch changes that are currently happening
         if (fxLoopPitchDropList.Count > 0)
         {
             foreach (var p in fxLoopPitchDropList)
@@ -372,7 +455,9 @@ public class AudioManager
                 if (!p.pitchGoesUp && effectsBuffer[p.bufferIndex].pitch < p.endPitch) done = true;
                 if (done)
                 {
-                    StopFXLoop(p.clip);
+					p.done=true;
+					if (p.stopSoundOnDone)
+						StopFXLoop(p.clip);
                 }
             }
             removeDoneSoundsFromPitchDropList();

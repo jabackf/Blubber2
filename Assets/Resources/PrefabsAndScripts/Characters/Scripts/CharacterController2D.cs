@@ -986,6 +986,7 @@ public class CharacterController2D : MonoBehaviour
 		velocityBeforePause = m_Rigidbody2D.velocity;
 		m_Rigidbody2D.velocity = Vector3.zero;
 		m_Rigidbody2D.bodyType=RigidbodyType2D.Kinematic;
+		if (isHolding) holding.releaseItemAction();
         pause = true;
     }
 	public void setPause(bool p)
@@ -1306,6 +1307,7 @@ public class CharacterController2D : MonoBehaviour
     {
         controlTaken = true;
         m_Rigidbody2D.velocity = new Vector3(0f, m_Rigidbody2D.velocity.y, 0f);
+		if (isHolding) holding.releaseItemAction();
     }
     public void onControlResumed()
     {
