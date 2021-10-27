@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class pickupObject : actionInRange
 {
-    public string name = "";
+    public string name = ""; //The name that displays by ui.holdingtext when the object is picked up. If you want to change this name and refresh ui text, call changeName(string newName)
 
     Global global;
 
@@ -31,7 +31,7 @@ public class pickupObject : actionInRange
     public bool flipCharacterWithMouseAim = true; //If set to true and the character controller is aiming with the mouse, then the character will flip to face the mouse direction when throw or action button is held down. Flipping is handled in the character controller! This merely tells the character controller how it should behave with this object.
     public bool freezeRotationOnPickup = true; //If true, the object's ability to rotate on the Z axis will freeze when picked up. When dropped, it's ability to rotate will be reset to whatever it was previously
     public bool resetRotationOnPickup = true; //If true, the object's Z rotation will be set to whatever it was at initialization when picked up
-    public float pushOutOnRotate=0f;	//This will scale the object out as it is rotated closer to vertical. For example, if set to some magnitude then the object will move outward (away from the character) as it is rotated upwards. Can be used to adjust rotation.
+	public float pushOutOnRotate=0f;	//This will scale the object out as it is rotated closer to vertical. For example, if set to some magnitude then the object will move outward (away from the character) as it is rotated upwards. Can be used to adjust rotation.
 	public Vector2 aimOriginOffset = new Vector2(0f,0f);	//This is added to the position of the throw and aim reticles.
 	private float initialMass;  //Stores the intial mass so we can change the mass back when we release it.
     private Rigidbody2D rb;
@@ -43,7 +43,8 @@ public class pickupObject : actionInRange
     private bool undroppable = false; //Used to prevent the item from being dropped. Doesn't prevent an item from being thrown. This should be set using makeUndroppable!
     private GameObject recentlyThrownBy; //This gets set to the most recent holder for a few seconds after being thrown. It then gets set to null. Can be useful to tell which character threw it.
     private float recentlyThrownByTimer = 3f; //The amount of time before the recentlyThrownBy object gets cleared to null
-
+	private int lastFacingDirection=0;	//This is set in setFacingDirection. It simply holds the most recent direction that was passed by this function (which is called whenever the character's facing direction changes.)
+	
     public float minAimNotFlipped = -20f;
     public float maxAimNotFlipped = 90f;
     public float minAimFlipped = 90f;
@@ -97,6 +98,10 @@ public class pickupObject : actionInRange
     public bool hasAction = false;
     public bool hasActionAim = false;     //If set to true, an aiming reticle will be displayed when the useAction button is held
     public bool rotateWithAim = true;   //If set to true and hasActionAim is true, then the gameObject will be rotated with the aim reticle
+	public bool onlyActionOnCharSideFacing=false; //If true, we will not be able to use actions or action aim if THE HOLDING CHARACTER is facing front or back. This option does not pay attention to the pickupObject's facing direction, so if this object doesn't have facing directions then you can still use this option.
+	public bool resetActionAimOnCharFacingChange=false; //If true, the action aim will reset when the character's facing direction (side, front, or back, NOT left of right) changes.
+	public bool resetActionAimOnActionRelease = false; //If true, the action aim will reset when the action key is released.
+	public bool resetActionAimOnRelease = false; //Resets action aim rotation when the object is released by the holder
 
     private GameObject actionAimObj;
     public lineArrow actionAimArc;
@@ -259,8 +264,19 @@ public class pickupObject : actionInRange
 
         throwArc.setAngle(angle);
     }
+	
+	
     public void setActionAimAngleTowardsPoint(Vector3 point)
     {
+			if (onlyActionOnCharSideFacing)
+			{
+				if (getHolderFacingDirection()!=0)
+				{
+					return;
+				}
+			}
+			
+		
         if (!hasAction || !hasActionAim) return;
         actionAimArc.setMinMax(flippedX ? minAimFlipped : minAimNotFlipped, flippedX ? maxAimFlipped : maxAimNotFlipped);
         float angle = Mathf.Atan2(point.y - transform.position.y + offset.y, point.x - transform.position.x + offset.x) * 180 / Mathf.PI;
@@ -269,6 +285,7 @@ public class pickupObject : actionInRange
         actionAimArc.setAngle(angle);
     }
 	
+
 	public void resetActionAim()
 	{
 		if (hasActionAim && hasAction)
@@ -293,6 +310,15 @@ public class pickupObject : actionInRange
         }
         else
         {
+			if (onlyActionOnCharSideFacing)
+			{
+				if (getHolderFacingDirection()!=0)
+				{
+					actionAimArc.hide();
+					return;
+				}
+			}
+			
             if (!actionAimArc.isShowing())
             {
                 actionAimArc.show();
@@ -306,6 +332,20 @@ public class pickupObject : actionInRange
             if (rotateWithAim) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle + 180 : actionAimArc.angle);
         }
     }
+	
+	//If holding, returns an int specifying the holder character facing direction. 0=side, 1=front, 2=back, -1 no holder.
+	public int getHolderFacingDirection()
+	{
+		if (holder!=null)
+		{
+			CharacterController2D cc = holder.GetComponent<CharacterController2D>();
+			if (cc)
+			{
+				return cc.getFacingDirection();
+			}
+		}
+		return -1;
+	}
 
     //This function spawns a projectile based on all of the projectile settings. Typically called from useItemAction
     public void spawnProjectile()
@@ -366,6 +406,16 @@ public class pickupObject : actionInRange
     public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0f, float vertical = 0f)
     {
         if (!hasAction) return;
+		
+		if (onlyActionOnCharSideFacing)
+		{
+			if (getHolderFacingDirection()!=0)
+			{
+				actionAimArc.hide();
+				return;
+			}
+		}
+		
 
         if (pressed)
         {
@@ -389,7 +439,11 @@ public class pickupObject : actionInRange
         }
         else if (released)
         {
-            
+            if (resetActionAimOnActionRelease && hasActionAim) 
+			{
+				resetActionAim();
+			}
+			
             if (ActionReleasedCallback != null) ActionReleasedCallback.Invoke();
             if (actionReleasedMessageReceiver != null && actionReleasedSendMessage != "")
             {
@@ -552,6 +606,18 @@ public class pickupObject : actionInRange
             actionAimArc.setAngle(flippedX ? 0 : 180);
         }
     }
+	
+	//Change the name of the object. If it is being held, refresh the holding text.
+	public void changeName(string newName)
+	{
+		name = newName;
+		if (holder!=null)
+		{
+			CharacterController2D cc = holder.GetComponent<CharacterController2D>();
+			if (cc)
+				cc.refreshHoldingText();
+		}
+	}
 
     //This function will suspend the physics movements of the object
     public void disablePhysics()
@@ -562,6 +628,25 @@ public class pickupObject : actionInRange
     {
         rb.isKinematic = false;  // Activated
     }
+	
+	//This function is called to update the object's position based on the holder. It is called in fixed update when it is held. It might also be called anytime the object's positioning needs an immediate update, such as when the object's facing direction has changed.
+	void updatePosition()
+	{
+		if (holder == null) return;
+		if (mCarryType == carryType.exactPlayerPosition)
+		{
+			gameObject.transform.localPosition = new Vector3(offset.x, offset.y, 0);
+			
+		}
+		else
+			gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
+
+		if (pushOutOnRotate!=0)
+		{
+			float magnitude = gameObject.transform.rotation.z*pushOutOnRotate;
+			gameObject.transform.localPosition = (flippedX ? new Vector3(-1f,1f,0f) : new Vector3(1f,1f,0f)) * magnitude;
+		}
+	}
 
     void FixedUpdate()
     {
@@ -569,19 +654,7 @@ public class pickupObject : actionInRange
 
         if (holder != null)
         {
-            if (mCarryType == carryType.exactPlayerPosition)
-            {
-                gameObject.transform.localPosition = new Vector3(offset.x, offset.y, 0);
-				
-            }
-            else
-                gameObject.transform.position = Vector3.SmoothDamp(gameObject.transform.position, carryTrans.position + new Vector3(offset.x, offset.y, 0), ref refVelocity, 0.1f);
-
-			if (pushOutOnRotate!=0)
-			{
-				float magnitude = gameObject.transform.rotation.z*pushOutOnRotate;
-				gameObject.transform.localPosition = (flippedX ? new Vector3(-1f,1f,0f) : new Vector3(1f,1f,0f)) * magnitude;
-			}
+			updatePosition();
 
             if (releaseTimer > 0)
             {
@@ -679,6 +752,7 @@ public class pickupObject : actionInRange
             }
         }
 
+		if (resetActionAimOnRelease && hasActionAim) resetActionAim();
         if (freezeRotationOnPickup) rb.freezeRotation = initialRotationFreeze;
         Destroy(joint);
         this.setRangeActive(true);
@@ -771,7 +845,7 @@ public class pickupObject : actionInRange
         //if (rotateWithAim && hasActionAim && hasAction) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle : actionAimArc.angle + 180);
         if (rotateWithAim && hasActionAim && hasAction) gameObject.transform.eulerAngles = new Vector3(0f, 0f, flippedX ? actionAimArc.angle + 180 : actionAimArc.angle );
 
-
+		updatePosition();
     }
     public void flipSpriteY(bool flipY)
     {
@@ -789,6 +863,8 @@ public class pickupObject : actionInRange
 				transform.localScale = new Vector3(transform.localScale.x, (flipY ? neg : pos), transform.localScale.z);
 			}
         }
+		
+		updatePosition();
     }
 
     //Sets the facing direction of the object. 0=side, 1=front, 2=back. Called by the character controller that is currently holding it
@@ -805,6 +881,12 @@ public class pickupObject : actionInRange
             if (dir == 1 && frontSortingLayer != "") renderer.sortingLayerName = frontSortingLayer;
             if (dir == 2 && backSortingLayer != "") renderer.sortingLayerName = backSortingLayer;
         }
+		if (resetActionAimOnCharFacingChange && hasActionAim)
+		{
+			if (dir!=lastFacingDirection) resetActionAim();
+		}
+		lastFacingDirection=dir;
+		updatePosition();
     }
 
     public GameObject getHolder()

@@ -120,6 +120,7 @@ public class AudioManager
             }
         }
         markStopppedSoundsFromPitchDropListAsDone();
+		removeDoneSoundsFromPitchDropList();
     }
     //Stops any sound effects that are looping.
     public void StopFXLoopAll()

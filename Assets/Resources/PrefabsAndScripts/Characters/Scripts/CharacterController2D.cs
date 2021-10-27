@@ -815,6 +815,13 @@ public class CharacterController2D : MonoBehaviour
         inWater = false;
     }
 	
+	//This can be called to refresh the holding text. Might be called by the held object if pickupObject.changeName is called, for example.
+	public void refreshHoldingText()
+	{
+		if (!holding) return;
+		setHoldingUIText(holding.name);
+	}
+	
 	private void OnDrawGizmos()
 	{
 		if (d_showPlatformCheck)

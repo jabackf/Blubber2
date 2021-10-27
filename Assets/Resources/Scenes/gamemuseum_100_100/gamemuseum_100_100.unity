@@ -7644,6 +7644,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flipWithParentRenderer: 1
   isClogged: 0
+  nameOnClogged: Clogged Vacuum
   dontUseForceToMove: 1
   ignoreCharacters: 1
   suctionVel: 26
@@ -14244,6 +14245,10 @@ MonoBehaviour:
   hasAction: 1
   hasActionAim: 1
   rotateWithAim: 1
+  onlyActionOnCharSideFacing: 1
+  resetActionAimOnCharFacingChange: 1
+  resetActionAimOnActionRelease: 0
+  resetActionAimOnRelease: 0
   actionAimArc: {fileID: 0}
   actionPressedSendMessage: 
   actionPressedMessageReceiver: {fileID: 0}
@@ -14580,6 +14585,10 @@ MonoBehaviour:
   hasAction: 0
   hasActionAim: 0
   rotateWithAim: 1
+  onlyActionOnCharSideFacing: 0
+  resetActionAimOnCharFacingChange: 0
+  resetActionAimOnActionRelease: 0
+  resetActionAimOnRelease: 0
   actionAimArc: {fileID: 0}
   actionPressedSendMessage: 
   actionPressedMessageReceiver: {fileID: 0}

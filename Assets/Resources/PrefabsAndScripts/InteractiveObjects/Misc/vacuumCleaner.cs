@@ -23,7 +23,10 @@ public class vacuumCleaner : MonoBehaviour {
 	
 	public bool flipWithParentRenderer = true; //If set to true, the particle system will flip if the parent's sprite renderer flipX property is true.
 	SpriteRenderer parentRenderer;
+	bool parentFlipX=false; //Stores the most recent state of parent renderer's flip x (only if flipWithParentRenderer is true)
 	public bool isClogged = false;
+	public string nameOnClogged = "Clogged Vacuum"; //This will change the parent.pickupObject name when isClogged gets set to true. Leave empty for no change.
+	string nameBeforeClogged = ""; //Holds the initial name 
 	
 	public bool dontUseForceToMove = true; //When an object is stuck in a vortex, we can either move it via transform with MovePosition or rigidbody with add force.
 										   //When this option is false, we will always try to move objects with MovePosition (though they still require either a Rigidbody, or a relevant customTag like edibleByVacuum or movePositionByVacuum).
@@ -201,21 +204,53 @@ public class vacuumCleaner : MonoBehaviour {
 		
 		if (sndVacuumHum)
 		    global.audio.StopFXLoopPitchDrop(sndVacuumHum,0f,4f);
+		
+		if (nameOnClogged!="")
+		{
+			pickupObject po = transform.parent.GetComponent<pickupObject>();
+			if (po)
+			{
+				nameBeforeClogged = po.name;
+				po.changeName(nameOnClogged);
+			}
+		}
+	}
+	
+	//Changes the vacuum from clogged to unclogged state.
+	public void unclogVacuum()
+	{
+		if (!isClogged) return;
+		
+		if (nameOnClogged!="")
+		{
+			pickupObject po = transform.parent.GetComponent<pickupObject>();
+			if (po)
+			{
+				po.changeName(nameBeforeClogged);
+			}
+		}
+		CancelInvoke("clogKillVacuum"); //Just in case this happens to be in the process of being invoked.
+		isClogged=false;
+	}
+	
+	//Changes the vacuum state to clogged.
+	public void clogVacuum()
+	{
+		if (isClogged) return;
+		
+		if (electricalFailure) electricalFailure.activate(2f);
+		if (sndVacuumHum) global.audio.fxPitchGlide(sndVacuumHum,1f,1.2f);
+		Invoke("clogKillVacuum",1.5f);
+		partSys.Stop();
+		isClogged = true;
 	}
 	
 	//This is called when the vacuum eats an object. It is assumed when this is called that the object is within innerVortexRadius around suctionPosition.
 	//Clog specifies rather this object should clog the vacuum or not.
 	public void eatObject(GameObject o, bool clog=false, bool playEatSound=true)
 	{
-		isClogged = clog;
-		
-		if (isClogged)
-		{
-			if (electricalFailure) electricalFailure.activate(2f);
-			if (sndVacuumHum) global.audio.fxPitchGlide(sndVacuumHum,1f,1.2f);
-			Invoke("clogKillVacuum",1.5f);
-			partSys.Stop();
-		}
+		if (clog)
+			clogVacuum();
 		
 		GameObject p=null;
         if (eatObjectParticles) p = Instantiate(eatObjectParticles, o.transform.position, Quaternion.identity);
@@ -239,6 +274,12 @@ public class vacuumCleaner : MonoBehaviour {
 				parentRenderer = transform.parent.gameObject.GetComponent<SpriteRenderer>();
 			if (parentRenderer)
 				transform.localScale = new Vector3(initialScaleX * (parentRenderer.flipX ? -1f: 1f), transform.localScale.y, transform.localScale.z);
+			
+			//Sometimes when the thing flips we get particles in strange places. This is the easiest way that I found to fix it. If we flipped, clear the particle system and start with fresh particles.
+			if (parentFlipX!= parentRenderer.flipX)
+				partSys.Clear();
+			
+			parentFlipX = parentRenderer.flipX;
 		}
 		
 		shape.position = Vector2.right * shapeX;
@@ -248,11 +289,12 @@ public class vacuumCleaner : MonoBehaviour {
 
         Vector3 pDelta, vel;
         float uD;
-        for (int i=0; i<numParts; i++) {
+        for (int i=0; i<numParts; i++) 
+		{
 
             if (Vector2.Distance(particles[i].position,suctionPosition)<=innerVortexRadius ) {
                 particles[i].velocity=Vector3.zero;
-				particles[i].remainingLifetime=0.01f;
+				particles[i].remainingLifetime=0.001f;
                 continue;
             }
 

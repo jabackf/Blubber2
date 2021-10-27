@@ -35,7 +35,7 @@ public class psElectricalFailure : MonoBehaviour
 			o.transform.position = transform.position;
 			o.transform.parent=gameObject.transform;
 
-			if (sndSpark) global.audio.Play(sndSpark);
+			if (sndSpark) global.audio.Play(sndSpark,0.8f,1.2f);
 			stage=1;
 			Invoke("triggerParticles", 0.5f);
 			return;
@@ -47,7 +47,7 @@ public class psElectricalFailure : MonoBehaviour
 			o.transform.position = transform.position;
 			o.transform.parent=gameObject.transform;
 
-			if (sndSpark) global.audio.Play(sndSpark);
+			if (sndSpark) global.audio.Play(sndSpark,0.8f,1.2f);
 			stage=2;
 			Invoke("triggerParticles", 0.2f);
 			return;
@@ -59,7 +59,7 @@ public class psElectricalFailure : MonoBehaviour
 			o.transform.position = transform.position;
 			o.transform.parent=gameObject.transform;
 		
-			if (sndSpark) global.audio.Play(sndSpark);
+			if (sndSpark) global.audio.Play(sndSpark,0.8f,1.2f);
 			stage=3;
 			Invoke("triggerParticles", 0.1f);
 			return;
