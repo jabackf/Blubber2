@@ -406,19 +406,18 @@ public class pickupObject : actionInRange
     public void useItemAction(bool pressed, bool held, bool released, float horizontal = 0f, float vertical = 0f)
     {
         if (!hasAction) return;
-		
-		if (onlyActionOnCharSideFacing)
-		{
-			if (getHolderFacingDirection()!=0)
-			{
-				actionAimArc.hide();
-				return;
-			}
-		}
-		
 
         if (pressed)
         {
+			if (onlyActionOnCharSideFacing)
+			{
+				if (getHolderFacingDirection()!=0)
+				{
+					actionAimArc.hide();
+					return;
+				}
+			}
+			
             actionKeyPressed = true;
             if (ActionPressedCallback != null) ActionPressedCallback.Invoke();
             if (actionPressedMessageReceiver != null && actionPressedSendMessage != "")
@@ -468,6 +467,15 @@ public class pickupObject : actionInRange
         }
         else if (held)
         {
+			if (onlyActionOnCharSideFacing)
+			{
+				if (getHolderFacingDirection()!=0)
+				{
+					actionAimArc.hide();
+					return;
+				}
+			}
+
             if (ActionHeldCallback != null) ActionHeldCallback.Invoke();
             if (actionHeldMessageReceiver != null && actionHeldSendMessage != "")
             {
@@ -885,6 +893,11 @@ public class pickupObject : actionInRange
 		{
 			if (dir!=lastFacingDirection) resetActionAim();
 		}
+		if (onlyActionOnCharSideFacing && hasAction && getHolderFacingDirection()!=0)
+		{
+			releaseItemAction();
+		}
+		
 		lastFacingDirection=dir;
 		updatePosition();
     }

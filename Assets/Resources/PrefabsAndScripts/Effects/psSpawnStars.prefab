@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   light: {fileID: 6217384204005859402}
   fadeSpeed: 4
+  destroyWhenDone: 1
 --- !u!1 &6217384204595390337
 GameObject:
   m_ObjectHideFlags: 0
@@ -4914,8 +4915,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1319655185
-  m_SortingLayer: 4
+  m_SortingLayerID: -1211953527
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_RenderMode: 0
   m_SortMode: 0

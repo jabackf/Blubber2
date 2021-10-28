@@ -1368,6 +1368,7 @@ GameObject:
   - component: {fileID: 388048685}
   - component: {fileID: 388048684}
   - component: {fileID: 388048686}
+  - component: {fileID: 388048687}
   m_Layer: 12
   m_Name: AceOfClubs
   m_TagString: Untagged
@@ -1433,7 +1434,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388048683}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.013, y: 1.41, z: 0.25}
+  m_LocalPosition: {x: 0.06, y: 1.39, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1961290447}
@@ -1453,12 +1454,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a95f692408bd5ab419e8fde1e44ce68e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  advanceCardTime: 0.018
+  gravity: -0.068
+  bounceMultiplier: -0.85
+  triggerVelocity: {x: -0.17, y: 0.4}
   museumCurator: {fileID: 474771852}
+  respawnParticles: {fileID: 6217384204595390337, guid: 318c6b49e832fbf438f55e502dc45776,
+    type: 3}
   activateSound: {fileID: 8300000, guid: d06cd16d6d22fc843add68a1c455747c, type: 3}
-  dummyDistance: 0.15
+  layerWhileInactive: Default
+  layerWhileActive: ObjectInFronofCharacter
   dummyCard: {fileID: 1642661666}
   floorTransform: {fileID: 1961290447}
   manualTrigger: 0
+  manualClear: 0
+--- !u!114 &388048687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 388048683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1540fd74b4018734386fb80e23e08540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullRadius: 0.3
+  friction: 0.4
+  speed: 1200
+  startAngle: 0
+  squishXAxis: 1
+  squishYAxis: 1
+  squishZAxis: 0
+  sprung: 0
+  angle: 0
+  radius: 0.1
 --- !u!1 &405381893
 GameObject:
   m_ObjectHideFlags: 0
